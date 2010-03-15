@@ -1,0 +1,10 @@
+<result>
+	<unique id></unique id>//client make it,server return the result file by name the file of this id
+	<data type = "list">
+
+	</data>
+	
+	<data type = "detail">
+
+	</data>
+</result>

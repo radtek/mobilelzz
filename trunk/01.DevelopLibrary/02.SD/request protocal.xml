@@ -1,0 +1,81 @@
+<request>
+	<unique id></unique id>//client make it,server return the result file by name the file of this id
+	<data type = "group">
+		<operation type = "list">
+			<condition name = "sort" value = "name"></condition>
+		</operation>
+		<operation type = "add">
+			<content>
+				<name></name>
+				<ring></ring>
+			</content>
+		</operation>
+		<operation type = "delete">
+			<content>
+				<id></id>
+			</content>
+		</operation>
+		<operation type = "edit">
+			<content>
+				<id></id>//server make it,client get it by list info
+				<name></name>
+				<ring></ring>
+			</content>
+		</operation>
+	</data>
+	
+	<data type = "contactors">
+		<operation type = "list">
+			<condition name = "sort" value = "name"></condition>
+		</operation>
+		<operation type = "add">
+			<content>
+				<basic info>
+					<name></name>
+					<ring></ring>
+					<birthday></birthday>
+					<icon></icon>
+				</basic info>
+				<phone>
+					<default>1</default>
+					<key1 value = ""></key1>
+					<key2 value = ""></key2>
+					<key3 value = ""></key3>
+					<key4 value = ""></key4>
+					<key5 value = ""></key5>
+				</phone>
+				<function>
+					<notify birthday></notify birthday>
+					<notify long time miss contact></notify long time miss contact>
+				</function>
+			</content>
+		</operation>
+		<operation type = "delete">
+			<id></id>
+		</operation>
+		<operation type = "edit">
+			<id></id>//server make it,client get it by list info
+			<content>
+				<basic info>
+					<name></name>
+					<ring></ring>
+					<birthday></birthday>
+					<icon></icon>
+				</basic info>
+				<phone>
+					<default>1</default>
+					<key1 value = ""></key1>
+					<key2 value = ""></key2>
+					<key3 value = ""></key3>
+					<key4 value = ""></key4>
+					<key5 value = ""></key5>
+				</phone>
+				<function>
+					<notify birthday></notify birthday>
+					<notify long time miss contact></notify long time miss contact>
+				</function>
+			</content>
+		</operation>
+	</data>
+
+</request>

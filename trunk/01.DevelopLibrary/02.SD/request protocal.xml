@@ -76,6 +76,9 @@
 				</function>
 			</content>
 		</operation>
+		<operation type = "detail">
+			<id></id>//server make it,client get it by list info
+		</operation>
 	</data>
 
 </request>

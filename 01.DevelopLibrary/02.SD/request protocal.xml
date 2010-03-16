@@ -61,6 +61,7 @@
 					<ring></ring>
 					<birthday></birthday>
 					<icon></icon>
+					<group></group>
 				</basic info>
 				<phone>
 					<default>1</default>
@@ -80,5 +81,13 @@
 			<id></id>//server make it,client get it by list info
 		</operation>
 	</data>
-
+	<data type = "call">
+		<no></no>
+	</data>
+	<data type = "count">
+		<no></no>
+	</data>
+	<data type = "Í¬²½">
+		<no></no>
+	</data>
 </request>

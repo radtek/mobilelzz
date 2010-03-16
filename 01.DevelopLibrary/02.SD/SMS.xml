@@ -1,0 +1,118 @@
+<request>
+	//共通
+	<data type = "common">
+		//发送短信
+		<operation type = "send">
+			<phone_no_array>
+				<no>	……	</no>
+				……	……	……
+				<no>	……	</no>
+			</phone_no_array>	
+			<message_info>	……	</message_info>	
+		</operation>	
+		//拨打电话
+	</data>
+	//短信功能
+	<data type = "smsg">
+		//取得结果ID
+		<operation type = "list_by_no">
+			<no>	……	</no>
+		</operation>
+		//根据ID取得短信摘要信息
+		<operation type = "list_by_id">
+			<id>	……	</id>
+		</operation>
+		//根据ID取得短信详细信息
+		<operation type = "detail_by_id">
+			<id>	……	</id>
+		</operation>
+		//保存编辑后的短信
+		<operation type = "save_edit">
+			<id>	……	</id>
+			<message_info>		……	</message_info>	
+		</operation>
+		//将短信保存至收藏
+		<operation type = "save_to_favorite">
+			<id>	……	</id>
+		</operation>
+		//备份短信到指定路径
+		<operation type = "export">
+			<path>…………</path>
+		</operation>
+		//从指定路径恢复短信
+		<operation type = "import">
+			<path>…………</path>
+		</operation>
+		//取得短信数量
+		<operation type = "count">
+			<no>	……	</no>
+		</operation>
+	</data>	
+	//收藏夹短信功能
+	<data type = "favorite_msg">
+		//取得结果ID
+		<operation type = "list_by_no">
+			<No>	……	</No>
+		</operation>
+		//根据ID取得短信摘要信息
+		<operation type = "list_by_id">
+			<id>	……	</id>
+		</operation>
+		//根据ID取得短信详细信息
+		<operation type = "detail_by_id">
+			<id>	……	</id>
+		</operation>
+		//保存编辑后的短信
+		<operation type = "save_edit">
+			<id>	……	</id>
+			<message_info>	……	</message_info>	
+		</operation>	
+		//取得短信数量
+		<operation type = "count">
+			<No>	……	</No>
+		</operation>		
+	</data>
+</request>
+
+<result>
+	//一般短信
+	<data type = "smsg">
+		<operation type = "list_by_no">
+				<id>	……	</id>
+				……	……	……
+				<id>	……	</id>
+		</operation>
+		<operation type = "list_by_id">
+			<list>
+				<abstract>	……	</abstract>
+				<icon_id>	……	</icon_id>
+			</list>			
+		</operation>
+		<operation type = "detail_by_id">
+			<message_info>	……	</message_info>	
+		</operation>
+		<operation type = "count">
+			<count>	……	</count>
+		</operation>
+	</data>
+	//收藏夹短信
+	<data type = "favorite_msg">
+		<operation type = "list_by_no">
+				<id>	……	</id>
+				……	……	……
+				<id>	……	</id>
+		</operation>
+		<operation type = "list_by_id">
+			<list>
+				<abstract>	……	</abstract>
+				<icon_id>	……	</icon_id>
+			</list>			
+		</operation>
+		<operation type = "detail_by_id">
+			<message_info>	……	</message_info>	
+		</operation>
+		<operation type = "count">
+			<count>	……	</count>
+		</operation>
+	</data>	
+</result>

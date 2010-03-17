@@ -1,10 +1,86 @@
 <result>
 	<unique id></unique id>//client make it,server return the result file by name the file of this id
-	<data type = "list">
-
+	<data type = "group">
+		<data type = "list" count = "">
+			<rec>
+				<id></id>
+				<name></name>
+				<ring></ring>
+			</rec>
+			<rec>
+				<id></id>
+				<name></name>
+				<ring></ring>
+			</rec>
+			<rec>
+				<id></id>
+				<name></name>
+				<ring></ring>
+			</rec>
+		</data>
 	</data>
 	
-	<data type = "detail">
+	<data type = "contactors">
+		<data type = "list" count = "" kind = "phoneno">
+			// for phone no list
+			<default>key-id</default>
+			<rec>
+				// for contactors list
+				<id></id>
+				<name></name>
+				<icon></icon>
+				
+				// for phone no list
+				<key id = "" value = ""></key>
+			</rec>
 
+		</data>
+		<data type = "detail" count = "">
+			<rec>
+				<basicinfo>
+					<name></name>
+					<ring></ring>
+					<birthday></birthday>
+					<icon></icon>
+					<group></group>
+				</basicinfo>
+				<phone>
+					<default>key-id</default>
+					<key id = "" value = ""></key>
+					<key id = "" value = ""></key>
+					<key id = "" value = ""></key>
+				</phone>
+				<function>
+					<notify birthday></notify birthday>
+					<notifymiss></notifymiss>
+				</function>
+			</rec>
+		</data>				
+	</data>
+	<data type = "owner">
+		<data type = "favorite">
+			<data type = "list" count = "">
+				<rec>
+					<id></id>
+					<type></type>
+					<abstract></abstract>
+					<data type = "contactor">
+						<id></id>
+						<name></name>
+					</data>
+				</rec>
+			</data>
+			<data type = "detail" count = "">
+				<rec>
+					<id></id>
+					<type></type>
+					<detail></detail>
+					<data type = "contactor">
+						<id></id>
+						<name></name>
+					</data>
+				</rec>
+			</data>
+		</data>
 	</data>
 </result>

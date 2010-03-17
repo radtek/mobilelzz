@@ -25,55 +25,48 @@
 	</data>
 	
 	<data type = "contactors">
-		<operation type = "list">
+		<operation type = "list" kind = "phoneno">
 			<condition name = "sort" value = "name"></condition>
 		</operation>
 		<operation type = "add">
 			<content>
-				<basic info>
+				<basicinfo>
 					<name></name>
 					<ring></ring>
 					<birthday></birthday>
 					<icon></icon>
-				</basic info>
+				</basicinfo>
 				<phone>
-					<default>1</default>
-					<key1 value = ""></key1>
-					<key2 value = ""></key2>
-					<key3 value = ""></key3>
-					<key4 value = ""></key4>
-					<key5 value = ""></key5>
+					<default>key-id</default>
+					<key value = ""></key>
 				</phone>
 				<function>
-					<notify birthday></notify birthday>
-					<notify long time miss contact></notify long time miss contact>
+					<notifybirthday></notify birthday>
+					<notifymiss></notifymiss>
 				</function>
 			</content>
 		</operation>
-		<operation type = "delete">
+		<operation type = "delete" kind = "phoneno">
 			<id></id>
+			<key>key-id</key>
 		</operation>
 		<operation type = "edit">
 			<id></id>//server make it,client get it by list info
 			<content>
-				<basic info>
+				<basicinfo>
 					<name></name>
 					<ring></ring>
 					<birthday></birthday>
 					<icon></icon>
 					<group></group>
-				</basic info>
+				</basicinfo>
 				<phone>
-					<default>1</default>
-					<key1 value = ""></key1>
-					<key2 value = ""></key2>
-					<key3 value = ""></key3>
-					<key4 value = ""></key4>
-					<key5 value = ""></key5>
+					<default>key-id</default>
+					<key id = "" value = ""></key>
 				</phone>
 				<function>
 					<notify birthday></notify birthday>
-					<notify long time miss contact></notify long time miss contact>
+					<notifymiss></notifymiss>
 				</function>
 			</content>
 		</operation>
@@ -81,13 +74,16 @@
 			<id></id>//server make it,client get it by list info
 		</operation>
 	</data>
-	<data type = "call">
-		<no></no>
+	
+	<data type = "owner">
+		<data type = "favorite">
+			<operation type = "list">
+				<condition name = "sort" value = "time"></condition>
+			</operation>
+			<operation type = "detail">
+				<id></id>
+			</operation>
+		</data>
 	</data>
-	<data type = "count">
-		<no></no>
-	</data>
-	<data type = "Í¬²½">
-		<no></no>
-	</data>
+
 </request>

@@ -29,6 +29,7 @@
 			<condition name = "sort" value = "name"></condition>
 		</operation>
 		<operation type = "add">
+			<id></id>
 			<content>
 				<basicinfo>
 					<name></name>

@@ -22,6 +22,7 @@
 	
 	<data type = "contactors">
 		<data type = "list" count = "" kind = "phoneno">
+			<rectype></rectype>
 			// for phone no list
 			<default>key-id</default>
 			<rec>
@@ -63,7 +64,9 @@
 				<rec>
 					<id></id>
 					<type></type>
+					<from></from>
 					<abstract></abstract>
+					<date></date>
 					<data type = "contactor">
 						<id></id>
 						<name></name>

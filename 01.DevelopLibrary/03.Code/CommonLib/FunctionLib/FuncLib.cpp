@@ -1,6 +1,6 @@
-#include "TrafficFuncLib.h"
+#include "FuncLib.h"
 
-long Traffic_wcscatn(wchar_t* pwstrDest, wchar_t* pwstrSrc, long sizeMax)
+long F_wcscatn(wchar_t* pwstrDest, wchar_t* pwstrSrc, long sizeMax)
 {
 	unsigned short			*pwcDest		=	pwstrDest;
 	const unsigned short	*pwcSrc			=	pwstrSrc;
@@ -33,7 +33,7 @@ long Traffic_wcscatn(wchar_t* pwstrDest, wchar_t* pwstrSrc, long sizeMax)
 	}
 	return lCatCount;
 }
-long Traffic_wcscatn_pos(wchar_t* pwstrDest, wchar_t* pwstrSrc, long sizeMax, long lBeginCount)
+long F_wcscatn_pos(wchar_t* pwstrDest, wchar_t* pwstrSrc, long sizeMax, long lBeginCount)
 {
 	unsigned short			*pwcDest		=	pwstrDest + lBeginCount - 1;
 	const unsigned short	*pwcSrc			=	pwstrSrc;
@@ -62,7 +62,7 @@ long Traffic_wcscatn_pos(wchar_t* pwstrDest, wchar_t* pwstrSrc, long sizeMax, lo
 	return lCatCount;
 }
 
-unsigned short* Traffic_wcscpyn( unsigned short *pwstrDest, const unsigned short *pwstrSrc, unsigned long sizeMax )
+unsigned short* F_wcscpyn( unsigned short *pwstrDest, const unsigned short *pwstrSrc, unsigned long sizeMax )
 {
 	if( sizeMax > 0 )
 	{
@@ -72,12 +72,11 @@ unsigned short* Traffic_wcscpyn( unsigned short *pwstrDest, const unsigned short
 	return pwstrDest;
 }
 
-long Traffic_MultiByte2WideChar( const char *pMultiByteStr, 
+long S_MultiByte2WideChar( const char *pMultiByteStr, 
 							    long lMultiByteCharSize, 
 								unsigned short *pusWideCharStr, 
 								long lWideCharSize )
 {
-	// modify by wang-lu at 2009/08/17
 	long	lRet	=	MultiByteToWideChar( 936, MB_PRECOMPOSED|MB_USEGLYPHCHARS, pMultiByteStr, 
 											 lMultiByteCharSize, pusWideCharStr, lWideCharSize );
 	return lRet;

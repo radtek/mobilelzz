@@ -31,7 +31,10 @@ class CXMLOperator
 		HRESULT		makeXML( string	&strPath, string &dataStream  );		
 
 
-	
+		//meeting
+		node SelectNode(in nodepath);
+		HRESULT GetNodeContent(in node, out value, out attribute);
+		HRESULT SetNodeContent(in node, in value, in attribute);
 	private:
 		
 		void		clear( vector<TiXmlElement*> &vecTiXml );

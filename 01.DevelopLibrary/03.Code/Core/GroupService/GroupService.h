@@ -8,9 +8,9 @@ public:
 	~CGroupService();
 	
 protected:
-	virtual HRESULT MakeParam();
-	virtual HRESULT ExcuteParam();
-	virtual HRESULT MakeResult();	
+	HRESULT MakeParam();
+	HRESULT ExcuteParam();
+	HRESULT MakeResult();	
 	
 	
 private:

@@ -1,5 +1,5 @@
 
-
+#include"stdafx.h"
 #include	"CSearch_SQL_base_common.h"
 
 

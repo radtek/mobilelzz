@@ -24,7 +24,7 @@ class  sqllock{
 
 
 
-class CSQL_query :public CNaviSystemObject
+class CSQL_query
 {
 	public:	
 		virtual	~CSQL_query();
@@ -91,7 +91,7 @@ class CSQL_query :public CNaviSystemObject
 //____________________________________________________________________________________
 //	CSQL_session_base.
 
-class CSQL_session_base :public CNaviSystemObject
+class CSQL_session_base
 {
 	public:
 		virtual	~CSQL_session_base();
@@ -164,7 +164,7 @@ class	CSQL_session : public CSQL_session_base
 
 		int						m_maxcount;
 		
-		CMark_CriticalSectionObject				m_cs;		
+//		CMark_CriticalSectionObject				m_cs;		
 		
 		
 	private:
@@ -200,7 +200,7 @@ class	CSQL_session : public CSQL_session_base
 //____________________________________________________________________________________
 //	CSQL_sessionManager.
 
-class	CSQL_sessionManager : public CNaviSystemObject
+class	CSQL_sessionManager
 {
 	private:
 		CSQL_sessionManager() : m_ref_count(0)
@@ -234,7 +234,7 @@ class	CSQL_sessionManager : public CNaviSystemObject
 		vector<CSQL_session*>	m_vec_session;
 		int						m_ref_count;
 		
-		CMark_CriticalSectionObject				m_cs;		
+//		CMark_CriticalSectionObject				m_cs;		
 		
 		
 	private:

@@ -1,5 +1,6 @@
 #include	"stdafx.h"
-//#include	"MarkCommon.h"
+#include<vector>
+using namespace std;
 #include	"CSearch_SQL_base_handler.h"
 /*
 #define SQLITE_OK           0    Successful result 
@@ -76,7 +77,7 @@ HRESULT CSQL_query::Prepare(const wchar_t* _pwcsQuery)
 		long	lr = 0;
 		lr	= sqlite3_prepare16_v2(m_pdb, _pwcsQuery, -1, &m_pstmt, 0);
 		if (lr != SQLITE_OK){
-			CMark_Error::set( lr, EN_ERR_SQLITE );
+//			CMark_Error::set( lr, EN_ERR_SQLITE );
 			assert(0);
 			break;
 		}
@@ -111,7 +112,7 @@ HRESULT CSQL_query::Reset()
 		lr	= sqlite3_reset( m_pstmt );
 		if (lr != SQLITE_OK)
 		{
-			CMark_Error::set( lr, EN_ERR_SQLITE );
+//			CMark_Error::set( lr, EN_ERR_SQLITE );
 			assert(0);
 			break;
 		}	
@@ -136,7 +137,7 @@ HRESULT CSQL_query::Finalize()
 		lr	= sqlite3_finalize( m_pstmt );
 		if (lr != SQLITE_OK)
 		{
-			CMark_Error::set( lr, EN_ERR_SQLITE );
+//			CMark_Error::set( lr, EN_ERR_SQLITE );
 			assert(0);
 			break;
 		}
@@ -167,10 +168,10 @@ HRESULT	CSQL_query::Step()
 		hr = S_OK;	
 	}
 	else if( SQLITE_ROW == lr ){
-		hr = S_ROW;
+//		hr = S_ROW;
 	}
 	else{
-		CMark_Error::set( lr, EN_ERR_SQLITE );
+//		CMark_Error::set( lr, EN_ERR_SQLITE );
 		sqlite3_reset( m_pstmt );
 		assert(0);
 	}
@@ -261,7 +262,7 @@ HRESULT		CSQL_query::Bind(long _lIndex, wchar_t* _pwcvalue , int isize)
 		long		lr = 0;
 		lr	= sqlite3_bind_text16( m_pstmt,  _lIndex,  _pwcvalue, isize, NULL  );
 		if(lr != SQLITE_OK){
-			CMark_Error::set( lr, EN_ERR_SQLITE );
+//			CMark_Error::set( lr, EN_ERR_SQLITE );
 			assert(0);
 			break;
 		}
@@ -292,7 +293,7 @@ HRESULT		CSQL_query::Bindblob(long _lIndex, void* _pwcvalue , int isize)
 
 		lr	= sqlite3_bind_blob( m_pstmt,  _lIndex,  _pwcvalue, isize, NULL  );
 		if(lr != SQLITE_OK){
-			CMark_Error::set( lr, EN_ERR_SQLITE );
+//			CMark_Error::set( lr, EN_ERR_SQLITE );
 			assert(0);
 			break;
 		}
@@ -322,7 +323,7 @@ HRESULT		CSQL_query::Bind(long _lIndex, double _dvalue )
 		lr	= sqlite3_bind_double( m_pstmt,  _lIndex,  _dvalue  );
 		if(lr != SQLITE_OK)
 		{
-			CMark_Error::set( lr, EN_ERR_SQLITE );
+//			CMark_Error::set( lr, EN_ERR_SQLITE );
 			assert(0);
 			break;
 		}
@@ -354,7 +355,7 @@ HRESULT		CSQL_query::Bind(long _lIndex )
 		lr	= sqlite3_bind_null( m_pstmt,  _lIndex );
 		if(lr != SQLITE_OK)
 		{
-			CMark_Error::set( lr, EN_ERR_SQLITE );
+//			CMark_Error::set( lr, EN_ERR_SQLITE );
 			assert(0);
 			break;
 		}
@@ -386,7 +387,7 @@ HRESULT		CSQL_query::Bind(long _lIndex, long _lvalue )
 		lr	= sqlite3_bind_int( m_pstmt,  _lIndex,  _lvalue  );
 		if(lr != SQLITE_OK)
 		{
-			CMark_Error::set( lr, EN_ERR_SQLITE );
+//			CMark_Error::set( lr, EN_ERR_SQLITE );
 			assert(0);
 			break;
 		}
@@ -455,7 +456,7 @@ HRESULT CSQL_session_base::Connect(const wchar_t* _pwcs_db_folder,  const wchar_
 		
 		hr	= sqlite3_open16(pw, &m_pdb);
 		if( SQLITE_OK != hr ){
-			CMark_Error::set( hr, EN_ERR_SQLITE );
+//			CMark_Error::set( hr, EN_ERR_SQLITE );
 			assert(0);
 			hr = E_FAIL;
 			break;
@@ -488,7 +489,7 @@ HRESULT CSQL_session_base::Disconnect()
 
 		lr	= sqlite3_close(m_pdb);
 		if (lr != SQLITE_OK){
-			CMark_Error::set( lr, EN_ERR_SQLITE );
+//			CMark_Error::set( lr, EN_ERR_SQLITE );
 			assert(0);
 			break;
 		}
@@ -550,7 +551,7 @@ wchar_t*	CSQL_session::GetName()
 
 HRESULT		CSQL_session::Connect(const wchar_t* _pname,  const wchar_t* _pfolder,  const wchar_t* _pfile,  int _buffSize)
 {
-	MarkCSLocker cslock( m_cs );
+//	MarkCSLocker cslock( m_cs );
 	HRESULT				hr			= E_FAIL;
 	
 	
@@ -586,7 +587,7 @@ HRESULT		CSQL_session::Connect(const wchar_t* _pname,  const wchar_t* _pfolder, 
 
 void		CSQL_session::DisConnect(bool* _pb)
 {
-	MarkCSLocker cslock( m_cs );
+//	MarkCSLocker cslock( m_cs );
 	if (--m_refCnt == 0) {	*_pb	= true;		delete this;	}
 	else					*_pb	= false;
 }
@@ -596,7 +597,7 @@ void		CSQL_session::DisConnect(bool* _pb)
 
 HRESULT		CSQL_session::Query_Create	(int* _pqh,  CSQL_query** _ppq)
 {
-	MarkCSLocker cslock( m_cs );
+//	MarkCSLocker cslock( m_cs );
 	HRESULT				hr		= E_FAIL;
 	
 	
@@ -628,7 +629,7 @@ HRESULT		CSQL_session::Query_Create	(int* _pqh,  CSQL_query** _ppq)
 
 HRESULT		CSQL_session::Query_Delete	(int _qh)
 {
-	MarkCSLocker cslock( m_cs );
+//	MarkCSLocker cslock( m_cs );
 	HRESULT				hr			= E_FAIL;
 	
 	
@@ -716,7 +717,7 @@ HRESULT		CSQL_sessionManager::Session_Connect		(const wchar_t* _pname,  const wc
 HRESULT		CSQL_sessionManager::Session_Connect_base	(const wchar_t* _pname,  const wchar_t* _pfolder,  const wchar_t* _pfile,  int _buffSize,  CSQL_session** _ppsession)
 {
 	HRESULT				hr			= E_FAIL;
-	MarkCSLocker cslock( m_cs );
+//	MarkCSLocker cslock( m_cs );
 	
 	do {
 		*_ppsession	= 0;
@@ -762,7 +763,7 @@ HRESULT		CSQL_sessionManager::Session_Connect_base	(const wchar_t* _pname,  cons
 
 HRESULT		CSQL_sessionManager::Session_DisConnect(const wchar_t* _pname, BOOL* pbIsDBClosed)
 {	
-	MarkCSLocker cslock( m_cs );
+//	MarkCSLocker cslock( m_cs );
 	*pbIsDBClosed		=	 FALSE;
 
 	for (vector<CSQL_session*>::iterator i = m_vec_session.begin(); i != m_vec_session.end(); i++) {

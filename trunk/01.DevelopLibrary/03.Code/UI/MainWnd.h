@@ -6,8 +6,12 @@
 class CMainWnd : public CMzWndEx
 {
 public:
-	CMainWnd();
-	~CMainWnd();
+	CMainWnd()
+	{
+	}
+	~CMainWnd()
+	{
+	}
 	MZ_DECLARE_DYNAMIC(CMainWnd);
 public:
   // 窗口中的按钮控件
@@ -54,6 +58,6 @@ protected:
 	
 private:
 		
-}
+};
 
 #endif __MainWnd_h__

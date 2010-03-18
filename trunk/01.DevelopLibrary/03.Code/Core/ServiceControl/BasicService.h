@@ -16,6 +16,6 @@ protected:
 	
 private:
 	
-}
+};
 
 #endif __BasicService_h__

@@ -1,21 +1,24 @@
-#ifndef __ContactorsService_h__
-#define __ContactorsService_h__
+#include"stdafx.h"
+#include"BasicService.h"
+#include"ContactorsService.h"
 
-class CContactorsService : public CBasicService
+CContactorsService::CContactorsService()
 {
-public:
-	CContactorsService();
-	~CContactorsService();
-	
-protected:
-	HRESULT MakeParam();
-	HRESULT ExcuteParam();
-	HRESULT MakeResult();	
-	
-	
-private:
-	
-		
 }
 
-#endif __ContactorsService_h__
+CContactorsService::~CContactorsService()
+{
+}
+
+HRESULT CContactorsService::MakeParam()
+{
+	return S_OK;
+}
+HRESULT CContactorsService::ExcuteParam()
+{
+	return S_OK;
+}
+HRESULT CContactorsService::MakeResult()
+{
+	return S_OK;
+}

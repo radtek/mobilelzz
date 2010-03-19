@@ -1,30 +1,34 @@
 #ifndef __UiEditControl_h__
 #define __UiEditControl_h__
 
-#include"ContactorsWnd.h"
 #include<Sqlite/CppSQLite3U.h>
-
+#define UiEditControl_Click		1001
 class UiEditControl: public UiSingleLineEdit
 {
-	CContactorsWnd m_ContactorsWnd;
+	long m_lFlag;
+	//HWND m_hParentWnd;
+
+	MyListItemData* m_pRecivers;
+	long			m_lReciversCount;
+
+	void* m_pParent;
 public:
 	UiEditControl()
 	{
+		m_lFlag = 0;
+		m_pParent = NULL;
+		m_pRecivers = NULL;
+		m_lReciversCount = 0;
 	}
 	virtual ~UiEditControl()
 	{
 	}
-	virtual void OnClick(size_t  nIndex )
-	{
-		int i = 0;
-		//MzMessageBoxEx(m_hWnd, L"联系人列表",NULL);
-	}
-	virtual void  OnFocused (UiWin *pWinPrev) 
-	{
-		int i = 0;
-		RECT rcWork = MzGetWorkArea();
-		m_ContactorsWnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0);
-		m_ContactorsWnd.Show();
-	}
+	void SetParent(void* pParent);
+
+	void UpdateData( MyListItemData* pRecivers,long lReciversCount );
+
+
+	virtual void  OnFocused (UiWin *pWinPrev);
+	
 };
 #endif //__UiEditControl_h__

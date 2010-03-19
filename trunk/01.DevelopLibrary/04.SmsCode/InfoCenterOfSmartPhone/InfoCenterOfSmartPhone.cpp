@@ -1,11 +1,12 @@
 //包含MZFC库的头文件
 #include"stdafx.h"
-#include <mzfc_inc.h>
+
 //此代码演示了：
 //  创建和初始化应用程序
 //  创建和初始化窗体
 //  按钮控件的使用及其命令消息的处理
 
+#include"ContactorsWnd.h"
 #include"MainWnd.h"
 
 MZ_IMPLEMENT_DYNAMIC(CContactorsWnd)
@@ -17,7 +18,7 @@ class CMainApp: public CMzApp
 {
 public:
   // 应用程序的主窗口
-  CMainWnd m_MainWnd;
+  CNewSmsWnd m_MainWnd;
 
   // 应用程序的初始化
   virtual BOOL Init()

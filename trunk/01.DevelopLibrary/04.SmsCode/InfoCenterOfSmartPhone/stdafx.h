@@ -7,6 +7,7 @@
 #include <mzfc_inc.h>
 #include <acc_api.h>
 #include <ShellNotifyMsg.h>
+extern BOOL g_bH;
 // 列表项的自定义数据
 class MyListItemData
 {

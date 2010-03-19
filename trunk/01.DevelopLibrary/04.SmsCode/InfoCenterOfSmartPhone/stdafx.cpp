@@ -3,6 +3,6 @@
 // stdafx.obj 将包含预编译类型信息
 
 #include "stdafx.h"
-
+BOOL g_bH = FALSE;
 // TODO: 在 STDAFX.H 中
 // 引用任何所需的附加头文件，而不是在此文件中引用

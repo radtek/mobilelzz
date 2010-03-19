@@ -105,27 +105,56 @@ public:
     // 是否被选中
     bool bSelected = pmlid->Selected;
 
-    // 绘制左边的小图像
-    ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA1, true);
-    RECT rcImg = *prcItem;
-    rcImg.right = rcImg.left + MZM_MARGIN_MAX*2;
-    if (pimg)
-    {
-      pimg->Draw(hdcDst, &rcImg, false, false);
-    }
+    
 
-    // 绘制主文本
-    RECT rcText = *prcItem;
-    rcText.left = rcImg.right;
-    rcText.bottom = rcText.top + RECT_HEIGHT(rcText)/2;
-    ::SetTextColor(hdcDst, RGB(0,200,0));
-    MzDrawText(hdcDst, pmlid->StringTitle.C_Str(), &rcText, DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS);
+	if(g_bH)
+	{
+		// 绘制左边的小图像
+		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA1, true);
+		RECT rcImg = *prcItem;
+		rcImg.right = rcImg.left + 30;
+		if (pimg)
+		{
+		  pimg->Draw(hdcDst, &rcImg, false, false);
+		}
+		 // 绘制主文本
+		RECT rcText = *prcItem;
+		rcText.left = rcImg.right+40;
+		rcText.right = 300;
+		::SetTextColor(hdcDst, RGB(0,200,0));
+		rcText.top -=10;
+		MzDrawText(hdcDst, pmlid->StringTitle.C_Str(), &rcText, DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS);
 
-    // 绘制描述文本
-    rcText.top = rcText.bottom;
-    rcText.bottom = prcItem->bottom;
-    ::SetTextColor(hdcDst, RGB(200,200,200));
-    MzDrawText(hdcDst, pmlid->StringDescription.C_Str(), &rcText, DT_LEFT|DT_TOP|DT_SINGLELINE|DT_END_ELLIPSIS);
+		// 绘制描述文本
+		rcText.left = rcText.left+rcText.right;
+		rcText.right = 680;
+		rcText.top +=15;
+		::SetTextColor(hdcDst, RGB(200,200,200));
+		MzDrawText(hdcDst, pmlid->StringDescription.C_Str(), &rcText, DT_LEFT|DT_TOP|DT_SINGLELINE|DT_END_ELLIPSIS);
+	}
+	else
+	{
+		// 绘制左边的小图像
+		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA1, true);
+		RECT rcImg = *prcItem;
+		rcImg.right = rcImg.left + MZM_MARGIN_MAX*2;
+		if (pimg)
+		{
+		  pimg->Draw(hdcDst, &rcImg, false, false);
+		}
+		// 绘制主文本
+		RECT rcText = *prcItem;
+		rcText.left = rcImg.right;
+		rcText.bottom = rcText.top + RECT_HEIGHT(rcText)/2;
+		::SetTextColor(hdcDst, RGB(0,200,0));
+		MzDrawText(hdcDst, pmlid->StringTitle.C_Str(), &rcText, DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS);
+
+		// 绘制描述文本
+		rcText.top = rcText.bottom;
+		rcText.bottom = prcItem->bottom;
+		::SetTextColor(hdcDst, RGB(200,200,200));
+		MzDrawText(hdcDst, pmlid->StringDescription.C_Str(), &rcText, DT_LEFT|DT_TOP|DT_SINGLELINE|DT_END_ELLIPSIS);
+	}
 
     // 绘制选中状态图标
     RECT rcSelectedIcon = *prcItem;

@@ -9,20 +9,39 @@ BOOL CContactorsWnd::OnInitDialog()
 	{
 	  return FALSE;
 	}
+	//打开重力感应设备
+	MzAccOpen();
 	m_accMsg = MzAccGetMessage();
 	// 初始化窗口中的控件
-	RECT rc = MzGetWorkArea();
-	SetWindowPos(m_hWnd, rc.left, rc.top,RECT_WIDTH(rc), RECT_HEIGHT(rc) );
-
-	m_List.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR);
+	if(g_bH)
+	{
+		long lWidth = GetWidth();
+		long lHeight = GetHeight();
+		RECT rc = MzGetWindowRect();
+		RECT rc2 = MzGetClientRect();
+		RECT rc3 = MzGetWorkArea();
+		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_HEIGHT(rc)+rc.top, RECT_WIDTH(rc)  );
+		lWidth = GetWidth();
+		lHeight = GetHeight();
+		m_List.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR_w720);
+		m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR_w720-rc.top,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR_w720);
+		m_List.SetItemHeight(50);
+	}
+	else
+	{
+		m_List.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR);
+		m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
+		m_List.SetItemHeight(90);
+	}
+	
 	m_List.SetID(MZ_IDC_LIST);
 	m_List.EnableScrollBarV(true);
 	m_List.EnableNotifyMessage(true);
-	m_List.SetItemHeight(90);
+	
 	m_List.SetTextColor(RGB(255,0,0));
 	AddUiWin(&m_List);
 
-	m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
+	
 	m_Toolbar.SetButton(0, true, true, L"取消");
 	m_Toolbar.SetButton(2, true, true, L"确认");
 	//m_Toolbar.SetButton(2, true, true, L"Setting");
@@ -126,25 +145,29 @@ LRESULT CContactorsWnd::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam)
 				// 转屏
 			  switch(wParam)
 			  {
-			  case SCREEN_PORTRAIT_P:
-				{
-					MzChangeDisplaySettingsEx(DMDO_90);
-				}
-				break;
-			  case SCREEN_PORTRAIT_N:
-				{
-					MzChangeDisplaySettingsEx(DMDO_270);
-				}
-				break;
-			  case SCREEN_LANDSCAPE_N:
-				{
-					MzChangeDisplaySettingsEx(DMDO_180);
-				}
-				break;
-			  case SCREEN_LANDSCAPE_P:
-				{
-					MzChangeDisplaySettingsEx(DMDO_0);
-				}
+					case SCREEN_PORTRAIT_P:
+					{
+						MzChangeDisplaySettingsEx(DMDO_90);
+						g_bH = TRUE;
+					}
+					break;
+				  case SCREEN_PORTRAIT_N:
+					{
+						MzChangeDisplaySettingsEx(DMDO_270);
+						g_bH = FALSE;
+					}
+					break;
+				  case SCREEN_LANDSCAPE_N:
+					{
+						MzChangeDisplaySettingsEx(DMDO_180);
+						g_bH = TRUE;
+					}
+					break;
+				  case SCREEN_LANDSCAPE_P:
+					{
+						MzChangeDisplaySettingsEx(DMDO_0);
+						g_bH = FALSE;
+					}
 				break;
 			  }
 			}	    
@@ -218,8 +241,9 @@ void CContactorsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
   //横屏
   if (devMode.dmDisplayOrientation == DMDO_90 || devMode.dmDisplayOrientation == DMDO_270)
   {
+		g_bH = TRUE;
 		RECT rc = MzGetWorkArea();
-		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_HEIGHT(rc), RECT_WIDTH(rc)  );
+		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_HEIGHT(rc)+rc.top, RECT_WIDTH(rc)  );
 		m_List.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR_w720);
 		m_List.SetItemHeight(50);
 
@@ -229,6 +253,7 @@ void CContactorsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
   //竖屏
 	if (devMode.dmDisplayOrientation == DMDO_180 || devMode.dmDisplayOrientation == DMDO_0)
 	{
+		g_bH = FALSE;
 		RECT rc = MzGetWorkArea();
 		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_WIDTH(rc), RECT_HEIGHT(rc) );
 		m_List.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR);

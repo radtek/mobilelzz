@@ -263,7 +263,7 @@ TiXmlElement*	CXmlNode::GetElement()
 //class CXmlStream 
 
 CXmlStream::CXmlStream()
-:m_pTiXmlDocument( NULL ), m_EnType( EnCreateXml )
+:m_pTiXmlDocument( NULL ), m_EnType( EnCreateXml ), bIsFirst( TRUE )
 {
 	
 }
@@ -408,21 +408,11 @@ HRESULT	CXmlStream::SubSelectNode( char *pcsNodePath, CXmlNode** pclXmlNode )
 	return	hr;
 }
 
-HRESULT	CXmlStream::MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode )
+HRESULT	CXmlStream::MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode )
 {
 	HRESULT	hr	=	S_OK;
 	
-	TiXmlDeclaration *pDeclaration = new TiXmlDeclaration( "1.0", "UTF-8", "" );
-	if ( NULL == pDeclaration || NULL == m_pTiXmlDocument )
-	{
-		return	E_FAIL;
-	}
-
-	m_pTiXmlDocument->LinkEndChild(pDeclaration);
-	if ( m_pTiXmlDocument->Error() )
-	{
-		return	E_FAIL;
-	}
+	vector< TiXmlElement * >	vecElement;
 
 	do 
 	{	
@@ -431,7 +421,6 @@ HRESULT	CXmlStream::MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 		TiXmlElement *pCurElement	=	NULL;
 		TiXmlElement *pPreElement	=	NULL;
 
-		vector< TiXmlElement * >	vecElement;
 		do 
 		{
 			char	*pTemp	=	clCFindChar.GetNextChar();
@@ -450,29 +439,114 @@ HRESULT	CXmlStream::MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 
 		} while ( TRUE );
 		
-//		m_pTiXmlDocument->LinkEndChild( pFirstElement );
+		hr	=	SubMakeXml( vecElement );
 
 
 	} while ( FALSE );
 
 	if ( SUCCEEDED(hr) )
 	{
-//		m_strBuf.clear();
 		m_pTiXmlDocument->SaveFile("./FileName.xml");
 
-		m_strBuf << *m_pTiXmlDocument;
-
-// 		*pclXmlNode	=	new	CXmlNode;
-// 		if ( NULL == *pclXmlNode )
-// 		{
-// 			return	E_FAIL;
-// 		}
-// 		(*pclXmlNode)->SetNodePtr( pPreNode, this );
+//		m_strBuf << *m_pTiXmlDocument;
 
 	}
 
 	return	hr;
 }
+
+
+HRESULT	CXmlStream::SubMakeXml( vector<TiXmlElement*> & vecElement)
+{
+	vector< TiXmlElement * >::reverse_iterator ri, riend, save;
+	riend	=	vecElement.rend();
+	ri = save = vecElement.rbegin();
+	++ri;
+	for ( ri; ri != riend; ++ri, ++save )
+	{
+		(*ri)->InsertEndChild( *(*save) );
+	}
+
+	m_pTiXmlDocument->LinkEndChild( *(vecElement.begin()) );
+	
+	vector< TiXmlElement * >::iterator	iter	=	vecElement.begin();
+	++iter;
+	for ( ; iter != vecElement.end(); ++iter )
+	{
+		delete (*iter);
+		(*iter)	=	NULL;
+	}
+
+	return	S_OK;
+}
+
+HRESULT	CXmlStream::MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode )
+{
+	HRESULT	hr	=	S_OK;
+
+	if ( bIsFirst )
+	{
+		bIsFirst	=	FALSE;
+
+		TiXmlDeclaration *pDeclaration = new TiXmlDeclaration( "1.0", "UTF-8", "" );
+		if ( NULL == pDeclaration || NULL == m_pTiXmlDocument )
+		{
+			return	E_FAIL;
+		}
+		m_pTiXmlDocument->LinkEndChild(pDeclaration);
+
+		hr	=	MakeXmlFirst( pcsNodePath, pclXmlNode );
+
+		return	hr;
+	}
+	
+	
+	do 
+	{
+		CFindChar	clCFindChar( pcsNodePath );
+		//first time
+		char	*pTemp		=	clCFindChar.GetNextChar();
+		if ( NULL == pTemp )
+		{
+			break;
+		}
+		TiXmlElement	*pNode = m_pTiXmlDocument->FirstChildElement( pTemp );
+		if ( NULL == pNode )
+		{
+			pNode	=	new TiXmlElement( pTemp );
+			m_pTiXmlDocument->LinkEndChild( pNode );
+//			m_strBuf << *m_pTiXmlDocument;
+			m_pTiXmlDocument->SaveFile("./FileName.xml");
+		}
+		
+		TiXmlElement	*pTempNode	=	NULL;
+		do 
+		{
+			pTemp		=	clCFindChar.GetNextChar();
+			if ( NULL == pTemp )
+			{
+				break;
+			}
+			pTempNode	=	pNode->FirstChildElement( pTemp );
+			if ( NULL == pTempNode )
+			{
+				pTempNode	=	new TiXmlElement( pTemp );
+				pNode->LinkEndChild( pTempNode );
+				pNode	=	pTempNode;
+				m_pTiXmlDocument->SaveFile("./FileName.xml");
+			}
+			else
+			{
+				pNode	=	pTempNode;
+			}
+
+		} while ( TRUE );
+
+	} while ( FALSE );
+
+	return	S_OK;
+}
+
 
 HRESULT	CXmlStream::ParseXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 {
@@ -546,6 +620,7 @@ HRESULT	CXmlStream::ParseXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 	
 	return	hr;
 }
+	
 
 TiXmlDocument*	CXmlStream::GetDocument()
 {

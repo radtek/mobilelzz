@@ -12,21 +12,12 @@
 
 #define MZ_IDC_LIST      101
 #define MZ_IDC_TOOLBAR1    102
-#define IDC_PPM_OK      103
-#define IDC_PPM_CANCEL    104
+
 #define MZ_IDC_SCROLLWIN  105
 
 #include "resource.h"
 
-// 列表项的自定义数据
-class MyListItemData
-{
-public:
-  CMzString StringTitle;  // 项的主文本
-  CMzString StringDescription;  // 项的描述文本
-  BOOL Selected; // 项是否被选中
-
-};
+#include"UiEditControl.h"
 
 // 从 UiList 派生的自定义列表类
 class MyList:
@@ -46,7 +37,7 @@ public:
   }
 
   // 选中、不选中某一项
-  void MultiSelectItem(int nIndex, bool bSelect)
+  BOOL MultiSelectItem(int nIndex, bool bSelect)
   {
     ListItem* pItem = GetItem(nIndex);
     if(pItem)
@@ -55,10 +46,11 @@ public:
       if(mlid)
           mlid->Selected = bSelect; 
     }
+	return FALSE;
   }
 
   // 判断某一项是否被选中
-  bool IsMultiSelect(int nIndex)
+  BOOL IsMultiSelect(int nIndex)
   {
     ListItem* pItem = GetItem(nIndex);
     if(pItem)
@@ -67,7 +59,7 @@ public:
       if(mlid)
           return mlid->Selected; 
     }
-    return false;
+    return FALSE;
   }
 
   // 在 OnLButtonUp 中改变项的选中状态
@@ -149,213 +141,30 @@ class CContactorsWnd: public CMzWndEx
 {
   MZ_DECLARE_DYNAMIC(CContactorsWnd);
 public:
-	CContactorsWnd()
-	{
-	}
+	//CContactorsWnd(UiEditControl* pUIEditControl)
+	//{
+	//	m_pUIEditControl = pUIEditControl;
+	//}
   UiToolbar_Text m_Toolbar;
-  
+  //UiEditControl* m_pUIEditControl;
   // 列表控件
   MyList m_List;
-
+	UiEditControl* m_pParent;
+	void SetParent(UiEditControl* pParent)
+	{
+		m_pParent = pParent;
+	}
+	DWORD m_accMsg;
 protected:
   // 窗口的初始化
-  virtual BOOL OnInitDialog()
-  {
-    // 必须先调用基类的初始化
-    if (!CMzWndEx::OnInitDialog())
-    {
-      return FALSE;
-    }
+  virtual BOOL OnInitDialog();
 
-	// 初始化窗口中的控件
-
-    m_List.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR);
-    m_List.SetID(MZ_IDC_LIST);
-    m_List.EnableScrollBarV(true);
-    m_List.EnableNotifyMessage(true);
-    m_List.SetItemHeight(90);
-    m_List.SetTextColor(RGB(255,0,0));
-    AddUiWin(&m_List);
-
-    m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
-    m_Toolbar.SetButton(0, true, true, L"Exit");
-    m_Toolbar.SetButton(1, true, true, L"Delete");
-    m_Toolbar.SetButton(2, true, true, L"Setting");
-    m_Toolbar.SetID(MZ_IDC_TOOLBAR1);
-    AddUiWin(&m_Toolbar);
-
-	CSQL_sessionManager*  pm =CSQL_sessionManager::GetInstance();
-	if( NULL == pm ) return RLH_FAIL;
-
-	CSQL_session*  pSession = NULL;
-
-	HRESULT hr = pm->Session_Connect(L"contact", L".\\", L"contacts.db", &pSession );
-	if(FAILED(hr) || pSession == NULL)	return RLH_FAIL;
-
-	CSQL_query * pq = NULL;
-	int          q_id = 0;
-
-	hr = pSession->Query_Create(&q_id, &pq );
-	if( FAILED(hr) || pq == NULL ) return RLH_FAIL;
-
-	
-	
- 	hr = pq->Prepare(SQL_GET_CONTACTS);
- 	if( FAILED(hr) ) return RLH_FAIL;
-
-
- 	hr = pq->Step();
-    ListItem li;
-	int i = 0;
-
-	while ( hr != E_FAIL && hr != S_OK )
-	{
-	  wchar_t* PName = NULL;
-	  pq->GetField(0, &PName);
-
-
-	  wchar_t* pNumber = NULL;
-      pq->GetField(3, &pNumber);    CMzString strTitle(256);
-	  CMzString strDescription(256);
-	  wsprintf(strTitle.C_Str(), PName, i);
-	  wsprintf(strDescription.C_Str(), pNumber, i);
-
-	  // 设置列表项的自定义数据
-	  MyListItemData *pmlid = new MyListItemData;
-	  pmlid->StringTitle = strTitle;
-	  pmlid->StringDescription = strDescription;
-	  pmlid->Selected = false;
-
-	  // 列表项的自定义数据指针设置到ListItem::Data
-	  li.Data = pmlid;
-	  m_List.AddItem(li);
-
-	  hr = pq->Step();
-	  i++;
-	}
-
-
-
-
-	
-
-
-    return TRUE;
-  }
 
   // 重载 MZFC 的消息处理函数
-  LRESULT MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam)
-  {
-    switch(message)
-    {
-    case MZ_WM_MOUSE_NOTIFY:
-      {
-        int nID = LOWORD(wParam);
-        int nNotify = HIWORD(wParam);
-        int x = LOWORD(lParam);
-        int y = HIWORD(lParam);
-
-        // 处理列表控件的鼠标按下通知
-        if (nID==MZ_IDC_LIST && nNotify==MZ_MN_LBUTTONDOWN)
-        {
-          if (!m_List.IsMouseDownAtScrolling() && !m_List.IsMouseMoved())
-          {
-            int nIndex = m_List.CalcIndexOfPos(x, y);
-            m_List.SetSelectedIndex(nIndex);
-            m_List.Invalidate();
-            m_List.Update();
-          }
-          return 0;
-        }
-
-        // 处理列表控件的鼠标移动通知
-        if (nID==MZ_IDC_LIST && nNotify==MZ_MN_MOUSEMOVE)
-        {
-		  if(m_List.GetSelectedIndex()!=-1)
-		  {
-            m_List.SetSelectedIndex(-1);
-            m_List.Invalidate();
-            m_List.Update();
-		  }
-          return 0;
-        }
-        //if (nID==MZ_IDC_LIST && nNotify==MZ_MN_LBUTTONDOWN)
-        //{
-        //  return 0;
-        //}
-      }
-      return 0;
-    }
-    return CMzWndEx::MzDefWndProc(message,wParam,lParam);
-  }
-
-  // 重载 MZFC 的命令消息处理函数
-  virtual void OnMzCommand(WPARAM wParam, LPARAM lParam)
-  {
-    UINT_PTR id = LOWORD(wParam);
-    switch(id)
-    {
-    case MZ_IDC_TOOLBAR1:
-      {
-        int nIndex = lParam;
-        if (nIndex==0)
-        {
-          //CMzString str(128);
-          //wsprintf(str.C_Str(), L"You pressed the %s button!", m_Toolbar.GetButtonText(0).C_Str());
-          //MzMessageBoxEx(m_hWnd, str.C_Str(), L"Test", MB_OK);
-          PostQuitMessage(0);
-          return;
-        }
-        if (nIndex==1)
-        {
-          // 弹出菜单
-          CPopupMenu ppm;
-          struct PopupMenuItemProp pmip;      
-
-          pmip.itemCr = MZC_BUTTON_PELLUCID;
-          pmip.itemRetID = IDC_PPM_CANCEL;
-          pmip.str = L"Cancel";
-          ppm.AddItem(pmip);
-
-          pmip.itemCr = MZC_BUTTON_ORANGE;
-          pmip.itemRetID = IDC_PPM_OK;
-          pmip.str = L"OK";
-          ppm.AddItem(pmip);  
-
-          RECT rc = MzGetWorkArea();      
-          rc.top = rc.bottom - ppm.GetHeight();
-          ppm.Create(rc.left,rc.top,RECT_WIDTH(rc),RECT_HEIGHT(rc),m_hWnd,0,WS_POPUP);      
-          int nID = ppm.DoModal();
-          if (nID==IDC_PPM_OK)
-          {
-            // 删除选中的列表项
-            for (int i=m_List.GetItemCount()-1; i>=0; i--)
-            {
-              if(m_List.IsMultiSelect(i))
-              {
-                m_List.RemoveItem(i);
-              }
-            }
-
-            // 刷新列表
-            m_List.Invalidate();
-            m_List.Update();
-          }
-          if (nID==IDC_PPM_CANCEL)
-          {
-            // do what you want...
-          }
-          return;
-        }
-        if (nIndex==2)
-        {
-          //...
-          return;
-        }
-      }
-      break;
-    }
-  }
+  LRESULT MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam);
+	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
+  // 转屏后如果需要调整窗口的位置，重载此函数响应 WM_SETTINGCHANGE 消息
+	virtual void OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName);
 };
 
 

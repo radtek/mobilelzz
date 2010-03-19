@@ -227,6 +227,10 @@
 				Name="UI"
 				>
 				<File
+					RelativePath=".\ContactorsWnd.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\ContactorsWnd.h"
 					>
 				</File>
@@ -235,7 +239,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\NewSmsWnd.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\NewSmsWnd.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UiEditControl.cpp"
 					>
 				</File>
 				<File

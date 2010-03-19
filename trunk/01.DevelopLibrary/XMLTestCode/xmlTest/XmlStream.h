@@ -5,8 +5,8 @@
 #define __XMLStream_h__
 
 #include "tinyxml.h"
-#include "string"
-#include "vector"
+#include <string>
+#include <vector>
 using namespace std;
 
 #define		DefaultBufSize		( 1024*4 )
@@ -100,6 +100,10 @@ class CXmlStream
 
 		TiXmlDocument*	GetDocument();
 
+		HRESULT	MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode );
+
+		HRESULT	SubMakeXml( vector<TiXmlElement*> & vecElement);	
+
 		enum	EnOperatorType
 		{
 			EnLoadXml	=	0,
@@ -117,6 +121,8 @@ class CXmlStream
 		TiXmlDocument		*	m_pTiXmlDocument;
 
 		EnOperatorType			m_EnType;
+
+		BOOL					bIsFirst;
 		
 };
 

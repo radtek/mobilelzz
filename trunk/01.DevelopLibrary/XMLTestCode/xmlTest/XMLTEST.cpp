@@ -136,7 +136,9 @@ int main(int argc, char* argv[])
 	delete	pCXmlStream;
 #else
 	CXmlNode	*	pCXmlNode	=	NULL;
-	pCXmlStream->SelectNode( L"Request/List/Rec/", &pCXmlNode );
+	pCXmlStream->SelectNode( L"request/data/operation/condition/", &pCXmlNode );
+	pCXmlStream->SelectNode( L"request/data/content/name/", &pCXmlNode );
+	pCXmlStream->SelectNode( L"request/data/content/ring/", &pCXmlNode );
 #endif
 	printf("Hello World!\n");
 	return 0;

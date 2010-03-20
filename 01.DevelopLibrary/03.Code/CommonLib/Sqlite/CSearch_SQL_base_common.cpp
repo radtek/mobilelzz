@@ -1,7 +1,5 @@
-
+#include"stdafx.h"
 #include	"CSearch_SQL_base_common.h"
-#include <windows.h>
-
 
 int		MB2WC(wchar_t* _pwc,  const char* _pch)
 {

@@ -94,6 +94,7 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 	{
 		case MZ_IDC_SEND_SMS_BTN:
 		{
+			g_ReciversList.Clear();
 			MzChangeDisplaySettingsEx(DMDO_90);
 		}
 

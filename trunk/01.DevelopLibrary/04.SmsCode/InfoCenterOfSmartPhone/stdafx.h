@@ -17,6 +17,7 @@ public:
 	{
 		Selected = FALSE;
 		lPID = 0;
+		memset(wcsfirstLetter, 0x0, sizeof(wcsfirstLetter));
 	}
 	BOOL Compare(MyListItemData* pTarget)
 	{
@@ -33,6 +34,7 @@ public:
 	CMzString StringDescription;  // 项的描述文本
 	BOOL Selected; // 项是否被选中
 	long lPID;
+	wchar_t	wcsfirstLetter[2];
 };
 
 #define DEFAULT_Recivers_List_MemoryBlock		20

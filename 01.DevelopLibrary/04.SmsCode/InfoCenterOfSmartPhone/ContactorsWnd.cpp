@@ -31,7 +31,7 @@ BOOL CContactorsWnd::OnInitDialog()
 		RECT rc = MzGetWindowRect();
 		RECT rc2 = MzGetClientRect();
 		RECT rc3 = MzGetWorkArea();
-		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_HEIGHT(rc)+rc.top, RECT_WIDTH(rc)  );
+		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_HEIGHT(rc)+rc.top,RECT_WIDTH(rc)  );
 		lWidth = GetWidth();
 		lHeight = GetHeight();
 		m_List.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR_w720);

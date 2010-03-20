@@ -5,16 +5,13 @@
 #define __XMLStream_h__
 
 #include "tinyxml.h"
-#include <string>
-#include <vector>
-using namespace std;
 
 #define		DefaultBufSize		( 1024*4 )
 #define		CHAR_MAX_LENGTH			( 50 )
 
 struct NodeAttribute_t
 {
-	wchar_t	wcsName[CHAR_MAX_LENGTH];
+	wchar_t	wcsName [CHAR_MAX_LENGTH];
 	wchar_t	wcsValue[CHAR_MAX_LENGTH];
 };
 
@@ -42,6 +39,7 @@ class CXmlNode
 		// pwcsNodePath从当前节点开始计算，最后一个标签后面也要添加'/'
 		HRESULT GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValue, NodeAttribute_t** ppAttributes, long* lAttributesCount );
 		
+		//从根目录开始指定Path
 		HRESULT SetNodeContent( wchar_t* pwcsNodePath, wchar_t* pwcsNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount );
 		
 		//Move到它的兄弟节点
@@ -56,6 +54,8 @@ class CXmlNode
 		TiXmlElement*	GetElement();
 
 		HRESULT	SubGetNodeContent( TiXmlElement* pNode, wchar_t** ppwcsNodeValue, NodeAttribute_t** ppAttributes, long* lAttributesCount );
+
+		HRESULT SubSetNodeContent( TiXmlElement* pNode, wchar_t* pwcsNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount );
 
 	private:
 		//node ptr of tiny lib 
@@ -90,6 +90,8 @@ class CXmlStream
 		//外部使用完pclXmlNode之后，需要释放
 		HRESULT SelectNode( wchar_t* pwcsNodePath, CXmlNode** pclXmlNode );
 
+		HRESULT	GetXmlStream( wchar_t* pwcStream, long lSize );
+
 	private:
 	
 		HRESULT	SubSelectNode( char *pcsNodePath, CXmlNode** pclXmlNode );
@@ -102,7 +104,9 @@ class CXmlStream
 
 		HRESULT	MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode );
 
-		HRESULT	SubMakeXml( vector<TiXmlElement*> & vecElement);	
+		HRESULT	FindNode( char *pcsNodePath, TiXmlElement** pclXmlElement );
+
+//		HRESULT	SubMakeXml( vector<TiXmlElement*> & vecElement);	
 
 		enum	EnOperatorType
 		{
@@ -112,10 +116,8 @@ class CXmlStream
 		
 	private:
 		//memory
-		
-//		char				*	m_pBuf;
+	
 		string					m_strBuf;
-//		long					m_bufSize;
 
 		//tiny xml object
 		TiXmlDocument		*	m_pTiXmlDocument;

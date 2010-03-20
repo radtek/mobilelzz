@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <request>
-    <data>
+    <data Type="Hum" Skill="T">
         <operation>
             <condition />
         </operation>
         <content>
-            <name />
-            <ring />
+            <name Type="Hum" Skill="T"></name>
+            <ring>100</ring>
         </content>
     </data>
 </request>

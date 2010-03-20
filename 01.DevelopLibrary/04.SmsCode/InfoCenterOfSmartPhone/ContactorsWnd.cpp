@@ -13,7 +13,18 @@ BOOL CContactorsWnd::OnInitDialog()
 	MzAccOpen();
 	m_accMsg = MzAccGetMessage();
 	// 初始化窗口中的控件
-	if(g_bH)
+	RECT rc = {0};
+	int height = 0;
+	int width = 0;
+	HWND hWnd = FindWindow(L"CTaskBar", 0);
+	if(hWnd != 0)
+	{
+		::GetWindowRect(hWnd, &rc);
+		height = rc.bottom - rc.top;
+		width = rc.right - rc.left;
+	}
+
+	if(width>480)
 	{
 		long lWidth = GetWidth();
 		long lHeight = GetHeight();

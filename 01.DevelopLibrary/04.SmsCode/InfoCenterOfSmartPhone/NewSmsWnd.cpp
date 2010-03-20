@@ -25,7 +25,18 @@ BOOL CNewSmsWnd::OnInitDialog()
 	m_accMsg = MzAccGetMessage();
 	//m_Recievers.SetParentWnd(m_hWnd);
 	// 初始化收件人控件，并添加到窗口中
-	if(g_bH)
+	RECT rc = {0};
+	int height = 0;
+	int width = 0;
+	HWND hWnd = FindWindow(L"CTaskBar", 0);
+	if(hWnd != 0)
+	{
+		::GetWindowRect(hWnd, &rc);
+		height = rc.bottom - rc.top;
+		width = rc.right - rc.left;
+	}
+
+	if(width>480)
 	{
 		m_Recievers.SetPos(0, 0, GetWidth()-BUTTON_WIDTH_H, 50);
 		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight(), GetWidth(), (GetHeight()-m_Recievers.GetHeight()));

@@ -17,7 +17,6 @@
 ** language. The code for the "sqlite3" command-line shell is also in a
 ** separate file. This file contains only code for the core SQLite library.
 */
-#include"stdafx.h"
 #define SQLITE_CORE 1
 #define SQLITE_AMALGAMATION 1
 #ifndef SQLITE_PRIVATE
@@ -11452,7 +11451,7 @@ static sqlite3_int64 localtimeOffset(DateTime *p){
 #elif defined(HAVE_LOCALTIME_S) && HAVE_LOCALTIME_S
   {
     struct tm sLocal;
-    localtime_s(&sLocal, &t);
+//    localtime_s(&sLocal, &t);
     y.Y = sLocal.tm_year + 1900;
     y.M = sLocal.tm_mon + 1;
     y.D = sLocal.tm_mday;

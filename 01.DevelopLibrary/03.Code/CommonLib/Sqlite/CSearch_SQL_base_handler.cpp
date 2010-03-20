@@ -1,6 +1,5 @@
 #include	"stdafx.h"
-#include<vector>
-using namespace std;
+//#include	"MarkCommon.h"
 #include	"CSearch_SQL_base_handler.h"
 /*
 #define SQLITE_OK           0    Successful result 
@@ -33,13 +32,13 @@ using namespace std;
 
 
 /*#include	"resource.h"*/
-#include	<assert.h>
-#include	"CSearch_SQL_base_common.h"
+#include <assert.h>
+#include "CSearch_SQL_base_common.h"
 
-
-//#define		 S_ROW			(HRESULT)0x00000002L
+#define		 S_ROW			((HRESULT)0x00000002L)
 
 CSQL_sessionManager*	CSQL_sessionManager::m_this	= 0;
+
 
 
 
@@ -77,7 +76,6 @@ HRESULT CSQL_query::Prepare(const wchar_t* _pwcsQuery)
 		long	lr = 0;
 		lr	= sqlite3_prepare16_v2(m_pdb, _pwcsQuery, -1, &m_pstmt, 0);
 		if (lr != SQLITE_OK){
-//			CMark_Error::set( lr, EN_ERR_SQLITE );
 			assert(0);
 			break;
 		}
@@ -112,7 +110,6 @@ HRESULT CSQL_query::Reset()
 		lr	= sqlite3_reset( m_pstmt );
 		if (lr != SQLITE_OK)
 		{
-//			CMark_Error::set( lr, EN_ERR_SQLITE );
 			assert(0);
 			break;
 		}	
@@ -137,7 +134,6 @@ HRESULT CSQL_query::Finalize()
 		lr	= sqlite3_finalize( m_pstmt );
 		if (lr != SQLITE_OK)
 		{
-//			CMark_Error::set( lr, EN_ERR_SQLITE );
 			assert(0);
 			break;
 		}
@@ -168,10 +164,9 @@ HRESULT	CSQL_query::Step()
 		hr = S_OK;	
 	}
 	else if( SQLITE_ROW == lr ){
-//		hr = S_ROW;
+		hr = S_ROW;
 	}
 	else{
-//		CMark_Error::set( lr, EN_ERR_SQLITE );
 		sqlite3_reset( m_pstmt );
 		assert(0);
 	}

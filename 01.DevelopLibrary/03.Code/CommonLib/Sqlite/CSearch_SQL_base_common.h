@@ -1,4 +1,4 @@
-#include "Stdafx.h"
+
 
 #define ROUND_UP( Size, Amount ) (((DWORD)(Size) +  ((Amount) - 1)) & ~((Amount) - 1))
 

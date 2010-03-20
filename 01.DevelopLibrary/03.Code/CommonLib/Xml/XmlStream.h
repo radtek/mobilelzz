@@ -4,8 +4,6 @@
 #ifndef __XMLStream_h__
 #define __XMLStream_h__
 
-#include "tinyxml.h"
-
 #define		DefaultBufSize		( 1024*4 )
 #define		CHAR_MAX_LENGTH			( 50 )
 
@@ -120,7 +118,7 @@ class CXmlStream
 	private:
 		//memory
 	
-		string					m_strBuf;
+		CMzString				m_strBuf;
 
 		//tiny xml object
 		TiXmlDocument		*	m_pTiXmlDocument;

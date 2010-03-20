@@ -21,7 +21,9 @@
 
 
 #define BUTTON_WIDTH_V	150
-#define BUTTON_WIDTH_H	300
+#define BUTTON_WIDTH_H	150
+
+#define BUTTON_HEIGHT_VH 65
 // 从 CMzWndEx 派生的主窗口类
 
 class CNewSmsWnd: public CMzWndEx

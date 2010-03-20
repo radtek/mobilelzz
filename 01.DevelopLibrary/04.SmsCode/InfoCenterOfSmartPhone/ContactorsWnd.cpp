@@ -85,28 +85,29 @@ BOOL CContactorsWnd::OnInitDialog()
 
 	while ( hr != E_FAIL && hr != S_OK )
 	{
-	  wchar_t* PName = NULL;
-	  pq->GetField(0, &PName);
+		wchar_t* PName = NULL;
+		pq->GetField(1, &PName);
+		long lPID = 0;
+		pq->GetField(0, &lPID);
+		wchar_t* pNumber = NULL;
+		pq->GetField(4, &pNumber);    CMzString strTitle(256);
+		CMzString strDescription(256);
+		wsprintf(strTitle.C_Str(), PName, i);
+		wsprintf(strDescription.C_Str(), pNumber, i);
 
+		// 设置列表项的自定义数据
+		MyListItemData *pmlid = new MyListItemData;
+		pmlid->StringTitle = strTitle;
+		pmlid->StringDescription = strDescription;
+		pmlid->Selected = false;
+		pmlid->lPID = lPID;
+		UpdateItem(pmlid);
+		// 列表项的自定义数据指针设置到ListItem::Data
+		li.Data = pmlid;
+		m_List.AddItem(li);
 
-	  wchar_t* pNumber = NULL;
-	  pq->GetField(3, &pNumber);    CMzString strTitle(256);
-	  CMzString strDescription(256);
-	  wsprintf(strTitle.C_Str(), PName, i);
-	  wsprintf(strDescription.C_Str(), pNumber, i);
-
-	  // 设置列表项的自定义数据
-	  MyListItemData *pmlid = new MyListItemData;
-	  pmlid->StringTitle = strTitle;
-	  pmlid->StringDescription = strDescription;
-	  pmlid->Selected = false;
-
-	  // 列表项的自定义数据指针设置到ListItem::Data
-	  li.Data = pmlid;
-	  m_List.AddItem(li);
-
-	  hr = pq->Step();
-	  i++;
+		hr = pq->Step();
+		i++;
 	}
 
 	return TRUE;
@@ -200,16 +201,14 @@ case MZ_IDC_TOOLBAR1:
     int nIndex = lParam;
     if (nIndex==0)
     {
-      
+		m_pParent->UpdateData(0);
 		EndModal(ID_CANCEL);  
       return;
     }
     if (nIndex==2)
     {
+		g_ReciversList.Clear();
 		long lCount = m_List.GetItemCount();
-		MyListItemData* pRecievers = new MyListItemData[lCount];
-		
-		long lValidCount = 0;
 		for(int i = 0; i < lCount; i++)
 		{
 			ListItem* pItem = m_List.GetItem(i);
@@ -220,17 +219,13 @@ case MZ_IDC_TOOLBAR1:
 			  {
 				if(mlid->Selected)
 				{
-					pRecievers[lValidCount] = *mlid;
-					lValidCount++;						
+					g_ReciversList.AppendItem(mlid);					
 				}
-
-			  }
-				   
-			}
-			
+			  }				   
+			}			
 		}
 		
-		m_pParent->UpdateData(pRecievers, lValidCount);
+		m_pParent->UpdateData(1);
 		EndModal(ID_CANCEL);  
       return;
     }
@@ -271,5 +266,18 @@ void CContactorsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
 		m_List.SetItemHeight(90);
 
 		m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
+	}
+}
+
+void CContactorsWnd::UpdateItem(MyListItemData* pmlid)
+{
+	long lCount = g_ReciversList.GetItemCount();
+	for(int i = 0; i < lCount; i++)
+	{
+		BOOL b = pmlid->Compare(g_ReciversList.GetItem(i));
+		if(b)
+		{
+			pmlid->Selected = g_ReciversList.GetItem(i)->Selected;
+		}
 	}
 }

@@ -22,7 +22,8 @@ void UiEditControl::OnFocused (UiWin *pWinPrev)
 		int b = 2;
 		m_lFlag = 1;
 	}
-	else{
+	else
+	{
 		m_lFlag = 0;
 	}
 }
@@ -32,18 +33,25 @@ void UiEditControl::SetParent(void* pParent)
 	m_pParent = pParent;
 }
 
-void UiEditControl::UpdateData( MyListItemData* pRecivers,long lReciversCount )
+void UiEditControl::UpdateData( long lFlag )
 {
-	m_pRecivers = pRecivers;
-	m_lReciversCount = lReciversCount;
-	wchar_t wcsReciversName[512] = L"";
-	wcscat(wcsReciversName, L"收件人:" );
-	for(int i  = 0; i < lReciversCount; i++)
+	if(lFlag == 0)
 	{
-		wcscat(wcsReciversName, m_pRecivers[i].StringTitle );
-		wcscat(wcsReciversName, L";" );
+		//m_lFlag = 0;
 	}
-	SetText(wcsReciversName);
-	Update();
-	((CNewSmsWnd*)m_pParent)->UpdateData(pRecivers, lReciversCount);
+	else
+	{
+		long lReciversCount = g_ReciversList.GetItemCount();
+		wchar_t wcsReciversName[512] = L"";
+		wcscat(wcsReciversName, L"收件人:" );
+		for(int i  = 0; i < lReciversCount; i++)
+		{
+			wcscat(wcsReciversName, g_ReciversList.GetItem(i)->StringTitle );
+			wcscat(wcsReciversName, L";" );
+		}
+		SetText(wcsReciversName);
+		//Update();
+	}
+	
+	//((CNewSmsWnd*)m_pParent)->UpdateData(pRecivers, lReciversCount);
 }

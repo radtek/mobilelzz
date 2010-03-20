@@ -8,24 +8,19 @@ class UiEditControl: public UiSingleLineEdit
 	long m_lFlag;
 	//HWND m_hParentWnd;
 
-	MyListItemData* m_pRecivers;
-	long			m_lReciversCount;
-
 	void* m_pParent;
 public:
 	UiEditControl()
 	{
 		m_lFlag = 0;
 		m_pParent = NULL;
-		m_pRecivers = NULL;
-		m_lReciversCount = 0;
 	}
 	virtual ~UiEditControl()
 	{
 	}
 	void SetParent(void* pParent);
 
-	void UpdateData( MyListItemData* pRecivers,long lReciversCount );
+	void UpdateData(  long lFlag  );
 
 
 	virtual void  OnFocused (UiWin *pWinPrev);

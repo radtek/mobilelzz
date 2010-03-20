@@ -8,7 +8,7 @@
 #define   RLH_FAIL   -1
 #define   RLH_OK	 0
 
-#define   SQL_GET_CONTACTS  L"select ABPerson.Name , ABPhones.*  from ABPerson, ABPhones where ABPerson.ROWID = ABPhones.record_id "
+#define   SQL_GET_CONTACTS  L"select ABPerson.ROWID, ABPerson.Name , ABPhones.*  from ABPerson, ABPhones where ABPerson.ROWID = ABPhones.record_id "
 
 #define MZ_IDC_LIST      101
 #define MZ_IDC_TOOLBAR1    102
@@ -192,6 +192,8 @@ protected:
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
   // 转屏后如果需要调整窗口的位置，重载此函数响应 WM_SETTINGCHANGE 消息
 	virtual void OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName);
+private:
+	void UpdateItem(MyListItemData* pmlid);
 };
 
 

@@ -14,6 +14,8 @@ CContactorsWnd clContactorsWnd;
 //zds 2010/03/21 19:39
 int UiEditControl::OnLButtonUp  ( UINT  fwKeys,  int  xPos,  int  yPos )
 {
+//	MzCloseSip();
+
 	int i = MZ_ANIMTYPE_SCROLL_BOTTOM_TO_TOP_2;
 	m_lFlag = 1;
 	
@@ -58,6 +60,7 @@ void UiEditControl::UpdateData( long lFlag )
 		//Update();
 	}
 	ReleaseCapture();
+	
 	
 	//((CNewSmsWnd*)m_pParent)->UpdateData(pRecivers, lReciversCount);
 }

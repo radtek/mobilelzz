@@ -80,9 +80,9 @@ BOOL CNewSmsWnd::OnInitDialog()
 	//m_Recievers.SetColorBg(RGB(0,0,0));
 	AddUiWin(&m_Recievers); // don't forget to add the control to the window
 	// 初始化短信文本控件，并添加到窗口中
-	MzOpenSip(IM_SIP_MODE_KEEP,0);
+	//MzOpenSip(IM_SIP_MODE_KEEP,0);
 	m_SmsMsgEdit.SetSipMode(IM_SIP_MODE_KEEP,0);
-	m_SmsMsgEdit.SetFocus(true);
+//	m_SmsMsgEdit.SetFocus(true);
 	
 	
 	m_SmsMsgEdit.SetTextColor(RGB(94,94,94)); // you could also set the color of text

@@ -260,7 +260,8 @@ void CContactorsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 				}
 				
 				m_pParent->UpdateData(1);
-				EndModal(ID_CANCEL);  
+				EndModal(ID_CANCEL); 
+				//MzOpenSip(IM_SIP_MODE_KEEP,0);
 			  return;
 			}
 

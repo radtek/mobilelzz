@@ -147,10 +147,10 @@ int main(int argc, char* argv[])
 // 
 // 	pCXmlNode->SetNodeContent( L"request/data/", L"100", chAttr, 2 );
 // 	
-// 	wchar_t	pwcBuf[ CHAR_MAX_LENGTH ]	=	L"";
-// 	pCXmlStream->GetXmlStream( pwcBuf, CHAR_MAX_LENGTH );
+// 	wchar_t	pwcBuf[ DefaultBufSize ]	=	L"";
+// 	pCXmlStream->GetXmlStream( pwcBuf, DefaultBufSize );
 /////
-	CXmlStream	*pCXmlStream1	=	new	CXmlStream;
+//	CXmlStream	*pCXmlStream1	=	new	CXmlStream;
 	CXmlNode	*	pCXmlNode	=	NULL;
 	pCXmlStream->SelectNode( L"result/data/", &pCXmlNode );
 	NodeAttribute_t  chAttr[2]	=	{ L"Type",L"list",  L"count", L"2" };
@@ -168,6 +168,8 @@ int main(int argc, char* argv[])
 		pCXmlNode->AppendNode( &rec );
 	}
 
+ 	wchar_t	pwcBuf[ DefaultBufSize ]	=	L"";
+ 	pCXmlStream->GetXmlStream( pwcBuf, DefaultBufSize );
 
 #endif
 	printf("Hello World!\n");

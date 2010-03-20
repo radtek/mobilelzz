@@ -3,10 +3,16 @@
 #include"UiEditControl.h"
 #include"NewSmsWnd.h"
 
+#include <sms.h>
+#pragma comment(lib,"sms.lib")
+
 CNewSmsWnd::~CNewSmsWnd()
 {
-	delete[] m_pRecivers;
-	m_pRecivers = NULL;
+	if(NULL != m_pRecivers)
+	{
+		delete[] m_pRecivers;
+		m_pRecivers = NULL;
+	}
 	m_lReciversCount = 0;
 }
 
@@ -25,6 +31,8 @@ BOOL CNewSmsWnd::OnInitDialog()
 	m_accMsg = MzAccGetMessage();
 	//m_Recievers.SetParentWnd(m_hWnd);
 	// 初始化收件人控件，并添加到窗口中
+	
+	RECT rect = MzGetVisibleDesktopRect();
 	RECT rc = {0};
 	int height = 0;
 	int width = 0;
@@ -48,7 +56,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 		lWidth = GetWidth();
 		lHeight = GetHeight();
 		m_Recievers.SetPos(0, 0, GetWidth()-BUTTON_WIDTH_H, BUTTON_HEIGHT_VH);
-		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight(), GetWidth(), (GetHeight()-m_Recievers.GetHeight()));
+		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight(), GetWidth(), (GetHeight()- m_Recievers.GetHeight() ));
 		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_H),0,BUTTON_WIDTH_H,BUTTON_HEIGHT_VH);
 	}
 	else
@@ -60,7 +68,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 		RECT rc3 = MzGetWorkArea();
 		SetWindowPos(m_hWnd, rc3.left, rc3.top,RECT_WIDTH(rc3), RECT_HEIGHT(rc3) );
 		m_Recievers.SetPos(0, 0, lWidth-BUTTON_WIDTH_V, BUTTON_HEIGHT_VH);
-		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight(), GetWidth(), (lHeight-m_Recievers.GetHeight()));
+		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight(), GetWidth(), (lHeight - m_Recievers.GetHeight()));
 		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_V),0,BUTTON_WIDTH_V,BUTTON_HEIGHT_VH);
 	}
 	
@@ -72,17 +80,26 @@ BOOL CNewSmsWnd::OnInitDialog()
 	//m_Recievers.SetColorBg(RGB(0,0,0));
 	AddUiWin(&m_Recievers); // don't forget to add the control to the window
 	// 初始化短信文本控件，并添加到窗口中
+	MzOpenSip(IM_SIP_MODE_KEEP,0);
 	m_SmsMsgEdit.SetSipMode(IM_SIP_MODE_KEEP,0);
+	m_SmsMsgEdit.SetFocus(true);
 	
-	m_SmsMsgEdit.SetTextColor(RGB(255,0,0)); // you could also set the color of text
+	
+	m_SmsMsgEdit.SetTextColor(RGB(94,94,94)); // you could also set the color of text
+
+	m_SmsMsgEdit.SetEditBgType(UI_EDIT_BGTYPE_FILL_WHITE_AND_TOPSHADOW);
+	m_SmsMsgEdit.SetColorBg(RGB(243,241,207)); 
+	m_SmsMsgEdit.EnableInsideScroll(true);
+	m_SmsMsgEdit.EnableZoomIn(true);   
 	AddUiWin(&m_SmsMsgEdit); // don't forget to add the control to the window
 
-	m_SendSmsBtn.SetButtonType(MZC_BUTTON_ORANGE);
+	m_SendSmsBtn.SetButtonType(MZC_BUTTON_DELETE_ORANGE);
 	
 	m_SendSmsBtn.SetID(MZ_IDC_SEND_SMS_BTN);
 	m_SendSmsBtn.SetText(L"发送");
 	//m_ContactorsBtn.SetTextColor(RGB(255,255,255));
 	AddUiWin(&m_SendSmsBtn);
+//	MzOpenSip();
 
 	return TRUE;
 }
@@ -94,8 +111,40 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 	{
 		case MZ_IDC_SEND_SMS_BTN:
 		{
-			g_ReciversList.Clear();
-			MzChangeDisplaySettingsEx(DMDO_90);
+			
+			int n = g_ReciversList.GetItemCount();
+			bool SendFlag = FALSE;
+			int  SendFail = 0;
+			for(int i = 0; i<n;i++ )
+			{
+				MyListItemData* pMyListItemData = NULL;
+				g_ReciversList.GetItem(i, &pMyListItemData );
+				CMzString  Number = pMyListItemData->StringDescription;
+				CMzString  NewNumber ;
+				if(Number.C_Str()[0] ==L'1')
+				{
+					NewNumber = L"+86";
+					NewNumber += Number;
+				}
+				else
+				{
+					NewNumber = Number;
+				}
+
+
+				SendFlag = SendSMS(NewNumber.C_Str(), m_SmsMsgEdit.GetText().C_Str());
+				if(!SendFlag)
+				{
+					SendFail++;
+				}
+
+			}
+
+			if(SendFail ==0 )
+			{
+				MzMessageBoxEx(NULL,L"短信已发送完毕",NULL);
+			}
+			break;
 		}
 
 	  break;
@@ -193,3 +242,71 @@ void CNewSmsWnd::UpdateData( MyListItemData* pRecivers,long lReciversCount )
 	m_pRecivers = pRecivers;
 	m_lReciversCount = lReciversCount;
 }
+
+/************************************
+* 调用范例:
+* SendSMS(_T("+8613xxxxxxxxx"),_T("测试~"));
+*
+* Author:LOJA
+* Version: 1.0.1.0
+* Date: 2009/07/30
+*
+* Smartphone Platforms: Smartphone 2002 and later
+* OS Versions: Windows CE 3.0 and later
+*
+*************************************/
+bool CNewSmsWnd::SendSMS(IN LPCTSTR lpNumber,IN LPCTSTR lpszMessage)
+{
+
+        HRESULT hRes; 
+        SMS_HANDLE   smsHandle=NULL; 
+        SMS_ADDRESS   smsaDestination; 
+        SMS_MESSAGE_ID   smsmidMessageID=0; 
+        TEXT_PROVIDER_SPECIFIC_DATA   tpsd; 
+
+        hRes=SmsOpen(SMS_MSGTYPE_TEXT,SMS_MODE_SEND,&smsHandle,NULL); 
+        if   (FAILED(hRes)) 
+        { 
+                return   false; 
+        } 
+
+        //地址方式注意国内号码前加"+86"
+        smsaDestination.smsatAddressType = SMSAT_INTERNATIONAL; 
+        _tcsncpy(smsaDestination.ptsAddress, lpNumber,SMS_MAX_ADDRESS_LENGTH); 
+
+        tpsd.dwMessageOptions  = PS_MESSAGE_OPTION_NONE; 
+        //tpsd.dwMessageOptions =  PS_MESSAGE_OPTION_STATUSREPORT;//表示需要状态报告
+        tpsd.psMessageClass  = PS_MESSAGE_CLASS1; 
+        //PS_MESSAGE_CLASS0表示短信在被接收后立即显示且不存储在收件箱(称为闪信) 
+        //PS_MESSAGE_CLASS1表示一般的情况，被接收后存储到收件箱并发送一个确认回短信中心，发送方收到一个已被接收的状态报告。
+
+        ZeroMemory(tpsd.pbHeaderData, sizeof(tpsd.pbHeaderData));         
+        tpsd.dwHeaderDataSize = 0; 
+        tpsd.fMessageContainsEMSHeaders = FALSE; 
+        tpsd.dwProtocolID = SMS_MSGPROTOCOL_UNKNOWN; 
+        tpsd.psReplaceOption = PSRO_NONE; 
+
+
+        hRes= SmsSendMessage(smsHandle,
+                NULL,   
+                &smsaDestination,   
+                NULL, 
+                (PBYTE)lpszMessage,   
+                _tcslen(lpszMessage) *  sizeof(TCHAR),   
+                (PBYTE)&tpsd, 
+                sizeof(TEXT_PROVIDER_SPECIFIC_DATA),   
+                SMSDE_OPTIMAL,   
+                SMS_OPTION_DELIVERY_NONE, 
+                &smsmidMessageID); 
+
+        SmsClose(smsHandle);
+
+        if   (SUCCEEDED(hRes)) 
+        { 
+                return true;
+        } 
+        else 
+        { 
+                return false;
+        } 
+} 

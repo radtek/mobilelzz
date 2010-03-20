@@ -63,7 +63,7 @@ protected:
   // 转屏后如果需要调整窗口的位置，重载此函数响应 WM_SETTINGCHANGE 消息
   virtual void OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName);
 
-  
+  bool SendSMS(IN LPCTSTR lpNumber,IN LPCTSTR lpszMessage);
 
 };
 #endif //__NewSmsWnd_h__

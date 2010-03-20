@@ -22,9 +22,9 @@ public:
 
 	void UpdateData(  long lFlag  );
 
-#if 0  //zds
+
 	virtual void  OnFocused (UiWin *pWinPrev);
-#endif //zds
+
 	
 	//zds 2010/03/21 19:39
 	virtual int OnLButtonUp  ( UINT  fwKeys,  int  xPos,  int  yPos );

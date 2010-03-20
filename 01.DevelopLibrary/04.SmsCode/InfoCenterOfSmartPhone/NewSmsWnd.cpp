@@ -47,9 +47,9 @@ BOOL CNewSmsWnd::OnInitDialog()
 		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_HEIGHT(rc)+rc.top,RECT_WIDTH(rc)  );
 		lWidth = GetWidth();
 		lHeight = GetHeight();
-		m_Recievers.SetPos(0, 0, GetWidth()-BUTTON_WIDTH_H, 50);
+		m_Recievers.SetPos(0, 0, GetWidth()-BUTTON_WIDTH_H, BUTTON_HEIGHT_VH);
 		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight(), GetWidth(), (GetHeight()-m_Recievers.GetHeight()));
-		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_H),0,BUTTON_WIDTH_H,50);
+		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_H),0,BUTTON_WIDTH_H,BUTTON_HEIGHT_VH);
 	}
 	else
 	{
@@ -58,10 +58,10 @@ BOOL CNewSmsWnd::OnInitDialog()
 		RECT rc = MzGetWindowRect();
 		RECT rc2 = MzGetClientRect();
 		RECT rc3 = MzGetWorkArea();
-		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_WIDTH(rc), RECT_HEIGHT(rc) );
-		m_Recievers.SetPos(0, 0, lWidth-BUTTON_WIDTH_V, 50);
+		SetWindowPos(m_hWnd, rc3.left, rc3.top,RECT_WIDTH(rc3), RECT_HEIGHT(rc3) );
+		m_Recievers.SetPos(0, 0, lWidth-BUTTON_WIDTH_V, BUTTON_HEIGHT_VH);
 		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight(), GetWidth(), (lHeight-m_Recievers.GetHeight()));
-		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_V),0,BUTTON_WIDTH_V,50);
+		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_V),0,BUTTON_WIDTH_V,BUTTON_HEIGHT_VH);
 	}
 	
 	m_Recievers.SetText(L" ’º˛»À:");  // set the tips text
@@ -157,30 +157,34 @@ void CNewSmsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
   devMode.dmFields = DM_DISPLAYORIENTATION;
   ChangeDisplaySettingsEx(NULL, &devMode, NULL, CDS_TEST, NULL);
 
-  //∫·∆¡
+ // ˙∆¡
   if (devMode.dmDisplayOrientation == DMDO_90 || devMode.dmDisplayOrientation == DMDO_270)
   {
 		g_bH = TRUE;
 		RECT rc = MzGetWorkArea();
-		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_HEIGHT(rc)+rc.top, RECT_WIDTH(rc)  );
-		m_Recievers.SetPos(0, 0, GetWidth()-BUTTON_WIDTH_H, 50);
+		//modify begin by zhaodsh  2010/03/21 12:27
+		//SetWindowPos(m_hWnd, rc.left, rc.top,RECT_HEIGHT(rc)+rc.top, RECT_WIDTH(rc)  );
+		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_WIDTH(rc), RECT_HEIGHT(rc) );
+		// modify end 2010/03/21 12:27
+		
+		m_Recievers.SetPos(0, 0, GetWidth()-BUTTON_WIDTH_V, BUTTON_HEIGHT_VH);
 
 		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight(), GetWidth(), (GetHeight()-m_Recievers.GetHeight()));
 
-		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_H),0,BUTTON_WIDTH_H,50);
+		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_V),0,BUTTON_WIDTH_V,BUTTON_HEIGHT_VH);
   }
 
-  // ˙∆¡
+  //∫·∆¡
 	if (devMode.dmDisplayOrientation == DMDO_180 || devMode.dmDisplayOrientation == DMDO_0)
 	{
 		g_bH = FALSE;
 		RECT rc = MzGetWorkArea();
 		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_WIDTH(rc), RECT_HEIGHT(rc) );
-		m_Recievers.SetPos(0, 0, GetWidth()-BUTTON_WIDTH_V, 50);
+		m_Recievers.SetPos(0, 0, GetWidth()-BUTTON_WIDTH_H, BUTTON_HEIGHT_VH);
 
 		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight(), GetWidth(), (GetHeight()-m_Recievers.GetHeight()));
 
-		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_V),0,BUTTON_WIDTH_V,50);
+		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_H),0,BUTTON_WIDTH_H,BUTTON_HEIGHT_VH);
 	}
 }
 

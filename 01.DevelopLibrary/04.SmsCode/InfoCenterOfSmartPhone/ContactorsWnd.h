@@ -105,9 +105,18 @@ public:
     // 是否被选中
     bool bSelected = pmlid->Selected;
 
-    
+	RECT rc = {0};
+	int height = 0;
+	int width = 0;
+	HWND hWnd = FindWindow(L"CTaskBar", 0);
+	if(hWnd != 0)
+	{
+		::GetWindowRect(hWnd, &rc);
+		height = rc.bottom - rc.top;
+		width = rc.right - rc.left;
+	}
 
-	if(g_bH)
+	if(width>480)
 	{
 		// 绘制左边的小图像
 		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA1, true);
@@ -168,10 +177,10 @@ class CContactorsWnd: public CMzWndEx
 {
   MZ_DECLARE_DYNAMIC(CContactorsWnd);
 public:
-	//CContactorsWnd(UiEditControl* pUIEditControl)
-	//{
-	//	m_pUIEditControl = pUIEditControl;
-	//}
+	CContactorsWnd()
+	{
+		m_bInit = FALSE;
+	}
   UiToolbar_Text m_Toolbar;
   //UiEditControl* m_pUIEditControl;
   // 列表控件
@@ -192,8 +201,9 @@ protected:
 	virtual void OnMzCommand(WPARAM wParam, LPARAM lParam);
   // 转屏后如果需要调整窗口的位置，重载此函数响应 WM_SETTINGCHANGE 消息
 	virtual void OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName);
-private:
+
 	void UpdateItem(MyListItemData* pmlid);
+  BOOL						m_bInit;
 };
 
 

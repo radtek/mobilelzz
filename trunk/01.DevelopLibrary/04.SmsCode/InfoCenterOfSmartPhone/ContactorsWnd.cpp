@@ -36,7 +36,7 @@ BOOL CContactorsWnd::OnInitDialog()
 		lHeight = GetHeight();
 		m_List.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR_w720);
 		m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR_w720-rc.top,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR_w720);
-		m_List.SetItemHeight(50);
+		m_List.SetItemHeight(70);
 	}
 	else
 	{
@@ -256,7 +256,7 @@ void CContactorsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
 		RECT rc = MzGetWorkArea();
 		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_HEIGHT(rc)+rc.top, RECT_WIDTH(rc)  );
 		m_List.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR_w720);
-		m_List.SetItemHeight(50);
+		m_List.SetItemHeight(70);
 
 		m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR_w720,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR_w720);
   }

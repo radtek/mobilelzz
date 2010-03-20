@@ -112,25 +112,23 @@ public:
 		// 绘制左边的小图像
 		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA1, true);
 		RECT rcImg = *prcItem;
-		rcImg.right = rcImg.left + 30;
+		rcImg.right = rcImg.left + 80;
 		if (pimg)
 		{
 		  pimg->Draw(hdcDst, &rcImg, false, false);
 		}
 		 // 绘制主文本
 		RECT rcText = *prcItem;
-		rcText.left = rcImg.right+40;
+		rcText.left = rcImg.right;
 		rcText.right = 300;
 		::SetTextColor(hdcDst, RGB(0,200,0));
-		rcText.top -=10;
-		MzDrawText(hdcDst, pmlid->StringTitle.C_Str(), &rcText, DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS);
+		MzDrawText(hdcDst, pmlid->StringTitle.C_Str(), &rcText, DT_LEFT|DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);
 
 		// 绘制描述文本
 		rcText.left = rcText.left+rcText.right;
 		rcText.right = 680;
-		rcText.top +=15;
 		::SetTextColor(hdcDst, RGB(200,200,200));
-		MzDrawText(hdcDst, pmlid->StringDescription.C_Str(), &rcText, DT_LEFT|DT_TOP|DT_SINGLELINE|DT_END_ELLIPSIS);
+		MzDrawText(hdcDst, pmlid->StringDescription.C_Str(), &rcText, DT_LEFT|DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);
 	}
 	else
 	{

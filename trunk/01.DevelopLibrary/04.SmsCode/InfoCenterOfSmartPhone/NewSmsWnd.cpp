@@ -38,6 +38,14 @@ BOOL CNewSmsWnd::OnInitDialog()
 
 	if(width>480)
 	{
+		long lWidth = GetWidth();
+		long lHeight = GetHeight();
+		RECT rc = MzGetWindowRect();
+		RECT rc2 = MzGetClientRect();
+		RECT rc3 = MzGetWorkArea();
+		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_HEIGHT(rc)+rc.top,RECT_WIDTH(rc)  );
+		lWidth = GetWidth();
+		lHeight = GetHeight();
 		m_Recievers.SetPos(0, 0, GetWidth()-BUTTON_WIDTH_H, 50);
 		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight(), GetWidth(), (GetHeight()-m_Recievers.GetHeight()));
 		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_H),0,BUTTON_WIDTH_H,50);

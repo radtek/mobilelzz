@@ -138,7 +138,17 @@ int main(int argc, char* argv[])
 	CXmlNode	*	pCXmlNode	=	NULL;
 	pCXmlStream->SelectNode( L"request/data/operation/condition/", &pCXmlNode );
 	pCXmlStream->SelectNode( L"request/data/content/name/", &pCXmlNode );
+//	wchar_t	name[20]	=	L"MK";
+	wchar_t	name[20]	=	L"";
+	NodeAttribute_t  chAttr[2]	=	{ L"Type",L"Hum",  L"Skill", L"T" };
+	
+	pCXmlNode->SetNodeContent( NULL, name, chAttr, 2 );
 	pCXmlStream->SelectNode( L"request/data/content/ring/", &pCXmlNode );
+
+	pCXmlNode->SetNodeContent( L"request/data/", L"100", chAttr, 2 );
+	
+	wchar_t	pwcBuf[ CHAR_MAX_LENGTH ]	=	L"";
+	pCXmlStream->GetXmlStream( pwcBuf, CHAR_MAX_LENGTH );
 #endif
 	printf("Hello World!\n");
 	return 0;

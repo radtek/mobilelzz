@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<request>
-    <data Type="Hum" Skill="T">
-        <operation>
-            <condition />
-        </operation>
-        <content>
-            <name Type="Hum" Skill="T"></name>
-            <ring>100</ring>
-        </content>
+<result>
+    <data Type="list" count="2">
+        <rec>
+            <id>8888</id>
+            <name>zhu.t</name>
+        </rec>
+        <rec>
+            <id>8888</id>
+            <name>zhu.t</name>
+        </rec>
+        <rec>
+            <id>8888</id>
+            <name>zhu.t</name>
+        </rec>
+        <rec>
+            <id>8888</id>
+            <name>zhu.t</name>
+        </rec>
+        <rec>
+            <id>8888</id>
+            <name>zhu.t</name>
+        </rec>
     </data>
-</request>
+</result>

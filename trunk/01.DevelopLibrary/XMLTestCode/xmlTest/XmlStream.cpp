@@ -68,9 +68,25 @@ CXmlNode::CXmlNode()
 
 }
 
+CXmlNode::CXmlNode( wchar_t *pwcNodeName )
+: m_CurElement( NULL ), m_pCXmlStream( NULL )
+{
+	char	wcTemp[ CHAR_MAX_LENGTH ]	=	"";
+	WC2MB( wcTemp, pwcNodeName );
+	m_CurElement	=	new TiXmlElement( wcTemp );
+	if ( NULL == m_CurElement )
+	{
+		_ASSERT(0);
+	}
+}
+
 CXmlNode::~CXmlNode()
 {
-	
+	if ( NULL == m_pCXmlStream && NULL != m_CurElement )
+	{
+		delete	m_CurElement;
+		m_CurElement	=	NULL;
+	}
 }
 
 //public:
@@ -103,6 +119,7 @@ HRESULT CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValu
 		hr	=	SubGetNodeContent( m_CurElement, ppwcsNodeValue, ppAttributes, lAttributesCount );
 		if (FAILED(hr))
 		{
+			_ASSERT(0);
 			hr	=	E_FAIL;
 		}
 
@@ -111,6 +128,7 @@ HRESULT CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValu
 	//从pwcsNodePath指定的位置取得信息
 	if ( NULL == m_CurElement )
 	{
+		_ASSERT(0);
 		return	E_FAIL;
 	}
 
@@ -120,6 +138,7 @@ HRESULT CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValu
 		char	*pTemp	=	new	char [ lSize ];
 		if ( NULL == *pTemp )
 		{
+			_ASSERT(0);
 			hr	=	E_FAIL;		
 			break;
 		}
@@ -136,6 +155,7 @@ HRESULT CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValu
 		char	*pBuf		=	clCFindChar.GetNextChar();
 		if ( NULL == pBuf )
 		{
+			_ASSERT(0);
 			hr	=	E_FAIL;
 			break;
 		}
@@ -143,6 +163,7 @@ HRESULT CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValu
 		pPreNode = m_CurElement->FirstChildElement( pBuf );
 		if ( NULL == pPreNode )
 		{
+			_ASSERT(0);
 			hr	=	E_FAIL;
 			break;
 		}
@@ -170,6 +191,7 @@ HRESULT CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValu
 
 		if (  !bIsFind )
 		{
+			_ASSERT(0);
 			hr	=	E_FAIL;
 			break;
 		}
@@ -178,6 +200,7 @@ HRESULT CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValu
 			hr	=	SubGetNodeContent( pPreNode, ppwcsNodeValue, ppAttributes, lAttributesCount );
 			if (FAILED(hr))
 			{
+				_ASSERT(0);
 				hr	=	E_FAIL;
 				break;
 			}
@@ -192,6 +215,7 @@ HRESULT CXmlNode::SetNodeContent( wchar_t* pwcsNodePath, wchar_t* pwcsNodeValue,
 {
 	if ( NULL == m_CurElement )
 	{
+		_ASSERT(0);
 		return	E_FAIL;
 	}
 	HRESULT	hr	=	S_OK;
@@ -206,20 +230,25 @@ HRESULT CXmlNode::SetNodeContent( wchar_t* pwcsNodePath, wchar_t* pwcsNodeValue,
 
 		if ( NULL == m_pCXmlStream )
 		{
+			_ASSERT(0);
 			return	E_FAIL;
 		}
 		TiXmlElement*	pTiXmlElement;
 		hr	=	m_pCXmlStream->FindNode( chPath, &pTiXmlElement );
 		if ( FAILED(hr) )
 		{
+			_ASSERT(0);
 			return	E_FAIL;
 		}
 
 		hr	=	SubSetNodeContent( pTiXmlElement, pwcsNodeValue, ppAttributes, lAttributesCount );
 	}
 
-#ifdef _DEBUG	
-	m_pCXmlStream->GetDocument()->SaveFile( "./FileName.xml" );
+#ifdef _DEBUG
+	if ( NULL != m_pCXmlStream )
+	{
+		m_pCXmlStream->GetDocument()->SaveFile( "./FileName.xml" );
+	}	
 #endif
 
 	return	hr;
@@ -227,8 +256,8 @@ HRESULT CXmlNode::SetNodeContent( wchar_t* pwcsNodePath, wchar_t* pwcsNodeValue,
 
 HRESULT CXmlNode::SubSetNodeContent( TiXmlElement* pNode, wchar_t* pwcsNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount )
 {
-	if ( NULL != pwcsNodeValue )
-	{
+//	if ( NULL != pwcsNodeValue )
+//	{
 		char	chValue[ CHAR_MAX_LENGTH ]	=	"";
 		WC2MB( chValue, pwcsNodeValue );
 		
@@ -244,15 +273,33 @@ HRESULT CXmlNode::SubSetNodeContent( TiXmlElement* pNode, wchar_t* pwcsNodeValue
 			pNode->SetAttribute( name, value );
 		}
 		
-		m_CurElement->InsertEndChild( text );
-	}
+		pNode->InsertEndChild( text );
+//	}
+// 	else
+// 	{
+// 		_ASSERT(0);
+// 		return	E_FAIL;
+// 	}
 
 	return	S_OK;
 }
 
 HRESULT	CXmlNode::AppendNode( CXmlNode* pCXmlNode )
 {
+	if ( NULL == m_CurElement )
+	{
+		_ASSERT(0);
+		return	E_FAIL;
+	}
+	
 	m_CurElement->InsertEndChild( *( pCXmlNode->GetElement() ) );
+
+#ifdef _DEBUG
+	if ( NULL != m_pCXmlStream )
+	{
+		m_pCXmlStream->GetDocument()->SaveFile( "./FileName.xml" );
+	}	
+#endif
 
 	return	S_OK;
 }
@@ -298,6 +345,7 @@ HRESULT CXmlNode::SetNodePtr( TiXmlElement* pNode, CXmlStream* pCXmlStream )
 {
 	if ( NULL == pNode || NULL == pCXmlStream )
 	{
+		_ASSERT(0);
 		return	E_FAIL;
 	}
 	
@@ -367,6 +415,7 @@ HRESULT	CXmlStream::Initialize( long lSize )
 		m_pTiXmlDocument	=	new	TiXmlDocument();
 		if ( NULL == m_pTiXmlDocument )
 		{
+			_ASSERT(0);
 			hr	=	E_FAIL;
 			break;
 		}
@@ -382,6 +431,7 @@ HRESULT CXmlStream::Load( wchar_t* pwcsXmlBuf, long lSize )
 {
 	if ( NULL == pwcsXmlBuf )	// need ReAlloc
 	{
+		_ASSERT(0);
 		return	E_FAIL;
 	}
 	HRESULT	hr	=	S_OK;
@@ -390,12 +440,14 @@ HRESULT CXmlStream::Load( wchar_t* pwcsXmlBuf, long lSize )
 	{
 		if ( NULL == m_pTiXmlDocument  )
 		{
+			_ASSERT(0);
 			hr	=	E_FAIL;
 			break;
 		}
 		char	*pTemp	=	new	char[ lSize ];
 		if ( NULL == pTemp )
 		{
+			_ASSERT(0);
 			hr	=	E_FAIL;
 			break;
 		}
@@ -406,6 +458,7 @@ HRESULT CXmlStream::Load( wchar_t* pwcsXmlBuf, long lSize )
 		m_pTiXmlDocument->Parse( m_strBuf.c_str() );
 		if ( m_pTiXmlDocument->Error() )
 		{
+			_ASSERT(0);
 			hr	=	E_FAIL;
 			break;
 		}
@@ -421,6 +474,7 @@ HRESULT CXmlStream::SelectNode( wchar_t* pwcsNodePath, CXmlNode** pclXmlNode )
 {
 	if ( NULL == pwcsNodePath )
 	{
+		_ASSERT(0);
 		return	E_FAIL;
 	}
 	
@@ -432,6 +486,7 @@ HRESULT CXmlStream::SelectNode( wchar_t* pwcsNodePath, CXmlNode** pclXmlNode )
 		char *pTemp	=	new	char [ lSize ];
 		if ( NULL == *pTemp )
 		{
+			_ASSERT(0);
 			hr	=	E_FAIL, *pclXmlNode	=	NULL;		
 			break;
 		}
@@ -503,7 +558,10 @@ HRESULT	CXmlStream::MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode )
 			pNode->LinkEndChild( pTempNode );
 			pNode	=	pTempNode;
 #ifdef _DEBUG
-			m_pTiXmlDocument->SaveFile("./FileName.xml");
+			if ( NULL != m_pTiXmlDocument )
+			{
+				m_pTiXmlDocument->SaveFile( "./FileName.xml" );
+			}
 #endif
 
 		} while ( TRUE );
@@ -513,6 +571,7 @@ HRESULT	CXmlStream::MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode )
 			* pclXmlNode	=	new	CXmlNode;
 			if ( NULL == *pclXmlNode )
 			{
+				_ASSERT(0);
 				return	E_FAIL;
 			}
 			(*pclXmlNode)->SetNodePtr( pNode, this );
@@ -548,6 +607,7 @@ HRESULT	CXmlStream::MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode )
 			TiXmlElement * pElement	=	new TiXmlElement( pTemp );
 			if ( NULL == pElement )
 			{
+				_ASSERT(0);
 				hr	=	E_FAIL;
 				break;
 			}
@@ -563,9 +623,10 @@ HRESULT	CXmlStream::MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode )
 	if ( SUCCEEDED(hr) )
 	{
 #ifdef _DEBUG		
-		m_pTiXmlDocument->SaveFile("./FileName.xml");
-
-//		m_strBuf << *m_pTiXmlDocument;
+	if ( NULL != m_pCXmlStream )
+	{
+		m_pCXmlStream->GetDocument()->SaveFile( "./FileName.xml" );
+	}
 #endif
 	}
 
@@ -609,6 +670,7 @@ HRESULT	CXmlStream::MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 		TiXmlDeclaration *pDeclaration = new TiXmlDeclaration( "1.0", "UTF-8", "" );
 		if ( NULL == pDeclaration || NULL == m_pTiXmlDocument )
 		{
+			_ASSERT(0);
 			return	E_FAIL;
 		}
 		m_pTiXmlDocument->LinkEndChild(pDeclaration);
@@ -634,8 +696,10 @@ HRESULT	CXmlStream::MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 			pNode	=	new TiXmlElement( pTemp );
 			m_pTiXmlDocument->LinkEndChild( pNode );
 #ifdef _DEBUG
-//			m_strBuf << *m_pTiXmlDocument;
-			m_pTiXmlDocument->SaveFile("./FileName.xml");
+			if ( NULL != m_pTiXmlDocument )
+			{
+				m_pTiXmlDocument->SaveFile( "./FileName.xml" );
+			}
 #endif
 		}
 		
@@ -654,7 +718,10 @@ HRESULT	CXmlStream::MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 				pNode->LinkEndChild( pTempNode );
 				pNode	=	pTempNode;
 #ifdef _DEBUG
-				m_pTiXmlDocument->SaveFile("./FileName.xml");
+				if ( NULL != m_pTiXmlDocument )
+				{
+					m_pTiXmlDocument->SaveFile( "./FileName.xml" );
+				}
 #endif
 			}
 			else
@@ -669,6 +736,7 @@ HRESULT	CXmlStream::MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 			* pclXmlNode	=	new	CXmlNode;
 			if ( NULL == *pclXmlNode )
 			{
+				_ASSERT(0);
 				return	E_FAIL;
 			}
 			(*pclXmlNode)->SetNodePtr( pNode, this );
@@ -704,6 +772,7 @@ HRESULT	CXmlStream::ParseXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 
 		if ( NULL == pPreNode )
 		{
+			_ASSERT(0);
 			hr	=	E_FAIL;
 			break;
 		}
@@ -741,6 +810,7 @@ HRESULT	CXmlStream::ParseXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 			*pclXmlNode	=	new	CXmlNode;
 			if ( NULL == *pclXmlNode )
 			{
+				_ASSERT(0);
 				hr	=	E_FAIL;
 				break;
 			}
@@ -770,6 +840,7 @@ HRESULT	CXmlStream::FindNode( char *pcsNodePath, TiXmlElement** pclXmlElement )
 		TiXmlElement	*pNode = m_pTiXmlDocument->FirstChildElement( pTemp );
 		if ( NULL == pNode )
 		{
+			_ASSERT(0);
 			hr	=	E_FAIL;
 			break;
 		}
@@ -785,6 +856,7 @@ HRESULT	CXmlStream::FindNode( char *pcsNodePath, TiXmlElement** pclXmlElement )
 			pTempNode	=	pNode->FirstChildElement( pTemp );
 			if ( NULL == pTempNode )
 			{
+				_ASSERT(0);
 				hr	=	E_FAIL;
 				break;
 			}

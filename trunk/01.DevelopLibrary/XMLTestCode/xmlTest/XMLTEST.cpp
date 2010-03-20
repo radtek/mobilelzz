@@ -135,20 +135,40 @@ int main(int argc, char* argv[])
 	hr	=	pCXmlNode->GetNodeContent( NULL, &pValue, &Attribute, &Count );
 	delete	pCXmlStream;
 #else
+// 	CXmlNode	*	pCXmlNode	=	NULL;
+// 	pCXmlStream->SelectNode( L"request/data/operation/condition/", &pCXmlNode );
+// 	pCXmlStream->SelectNode( L"request/data/content/name/", &pCXmlNode );
+// //	wchar_t	name[20]	=	L"MK";
+// 	wchar_t	name[20]	=	L"";
+// 	NodeAttribute_t  chAttr[2]	=	{ L"Type",L"Hum",  L"Skill", L"T" };
+// 	
+// 	pCXmlNode->SetNodeContent( NULL, name, chAttr, 2 );
+// 	pCXmlStream->SelectNode( L"request/data/content/ring/", &pCXmlNode );
+// 
+// 	pCXmlNode->SetNodeContent( L"request/data/", L"100", chAttr, 2 );
+// 	
+// 	wchar_t	pwcBuf[ CHAR_MAX_LENGTH ]	=	L"";
+// 	pCXmlStream->GetXmlStream( pwcBuf, CHAR_MAX_LENGTH );
+/////
+	CXmlStream	*pCXmlStream1	=	new	CXmlStream;
 	CXmlNode	*	pCXmlNode	=	NULL;
-	pCXmlStream->SelectNode( L"request/data/operation/condition/", &pCXmlNode );
-	pCXmlStream->SelectNode( L"request/data/content/name/", &pCXmlNode );
-//	wchar_t	name[20]	=	L"MK";
-	wchar_t	name[20]	=	L"";
-	NodeAttribute_t  chAttr[2]	=	{ L"Type",L"Hum",  L"Skill", L"T" };
-	
-	pCXmlNode->SetNodeContent( NULL, name, chAttr, 2 );
-	pCXmlStream->SelectNode( L"request/data/content/ring/", &pCXmlNode );
+	pCXmlStream->SelectNode( L"result/data/", &pCXmlNode );
+	NodeAttribute_t  chAttr[2]	=	{ L"Type",L"list",  L"count", L"2" };
+	pCXmlNode->SetNodeContent( NULL, NULL, chAttr, 2 );
 
-	pCXmlNode->SetNodeContent( L"request/data/", L"100", chAttr, 2 );
-	
-	wchar_t	pwcBuf[ CHAR_MAX_LENGTH ]	=	L"";
-	pCXmlStream->GetXmlStream( pwcBuf, CHAR_MAX_LENGTH );
+	for ( int i=0; i<5; ++i )
+	{
+		CXmlNode	rec( L"rec" );
+		CXmlNode	id( L"id" );
+		id.SetNodeContent( NULL, L"8888", NULL, 0 );
+		CXmlNode	name1( L"name" );
+		name1.SetNodeContent( NULL, L"zhu.t", NULL, 0 );
+		rec.AppendNode( &id );
+		rec.AppendNode( &name1 );
+		pCXmlNode->AppendNode( &rec );
+	}
+
+
 #endif
 	printf("Hello World!\n");
 	return 0;

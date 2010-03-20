@@ -27,7 +27,7 @@ class CXmlNode
 {
 	public:
 
-		CXmlNode();
+		CXmlNode( wchar_t *pwcNodeName );
 
 		virtual ~CXmlNode();
 		
@@ -49,6 +49,9 @@ class CXmlNode
 		HRESULT	AppendNode( CXmlNode* pCXmlNode );
 
 	private:
+
+		CXmlNode();
+
 		HRESULT SetNodePtr( TiXmlElement* pNode,  CXmlStream* pCXmlStream );
 
 		TiXmlElement*	GetElement();

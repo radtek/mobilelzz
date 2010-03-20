@@ -1,30 +1,34 @@
 #ifndef __CSEARCH_SQL_BASE_HANDLER_H__
 #define __CSEARCH_SQL_BASE_HANDLER_H__
 
-#include "sqlite/sqlite3.h"
+#include "sqlite3.h"
+#include <windows.h>
+#include <vector>
+using namespace std;
+
 
 
 //====================================================================================
 //____________________________________________________________________________________
 //	CSQL_query.
 
-class  sqllock{
-
-	public:
-		sqllock			(){::InitializeCriticalSection( &m_sec ); }
-		~sqllock			(){::DeleteCriticalSection( &m_sec );	  }
-		void lock		(){::EnterCriticalSection( &m_sec );	  }
-		void unlock		(){::LeaveCriticalSection( &m_sec );      }
-
-	private:
-		CRITICAL_SECTION		m_sec;
-};
-
-
+// class  sqllock{
+// 
+// 	public:
+// 		sqllock			(){::InitializeCriticalSection( &m_sec ); }
+// 		~sqllock			(){::DeleteCriticalSection( &m_sec );	  }
+// 		void lock		(){::EnterCriticalSection( &m_sec );	  }
+// 		void unlock		(){::LeaveCriticalSection( &m_sec );      }
+// 
+// 	private:
+// 		CRITICAL_SECTION		m_sec;
+// };
 
 
 
-class CSQL_query
+
+
+class CSQL_query 
 {
 	public:	
 		virtual	~CSQL_query();
@@ -91,7 +95,7 @@ class CSQL_query
 //____________________________________________________________________________________
 //	CSQL_session_base.
 
-class CSQL_session_base
+class CSQL_session_base 
 {
 	public:
 		virtual	~CSQL_session_base();
@@ -200,7 +204,7 @@ class	CSQL_session : public CSQL_session_base
 //____________________________________________________________________________________
 //	CSQL_sessionManager.
 
-class	CSQL_sessionManager
+class	CSQL_sessionManager 
 {
 	private:
 		CSQL_sessionManager() : m_ref_count(0)

@@ -15,6 +15,8 @@
 
 #define MZ_IDC_SCROLLWIN  105
 
+#define MZ_IDC_ALPBAR	106
+
 #include "resource.h"
 
 #include"UiEditControl.h"
@@ -119,7 +121,7 @@ public:
 	if(width>480)
 	{
 		// 绘制左边的小图像
-		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA1, true);
+		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA3, true);
 		RECT rcImg = *prcItem;
 		rcImg.right = rcImg.left + 80;
 		if (pimg)
@@ -129,20 +131,20 @@ public:
 		 // 绘制主文本
 		RECT rcText = *prcItem;
 		rcText.left = rcImg.right;
-		rcText.right = 300;
+		rcText.right = 280;
 		::SetTextColor(hdcDst, RGB(0,200,0));
 		MzDrawText(hdcDst, pmlid->StringTitle.C_Str(), &rcText, DT_LEFT|DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);
 
 		// 绘制描述文本
 		rcText.left = rcText.left+rcText.right;
-		rcText.right = 680;
+		rcText.right = 580;
 		::SetTextColor(hdcDst, RGB(200,200,200));
 		MzDrawText(hdcDst, pmlid->StringDescription.C_Str(), &rcText, DT_LEFT|DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);
 	}
 	else
 	{
 		// 绘制左边的小图像
-		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA1, true);
+		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA3, true);
 		RECT rcImg = *prcItem;
 		rcImg.right = rcImg.left + MZM_MARGIN_MAX*2;
 		if (pimg)
@@ -185,6 +187,8 @@ public:
   //UiEditControl* m_pUIEditControl;
   // 列表控件
   MyList m_List;
+  UiAlphabetBar m_AlpBar;
+
 	UiEditControl* m_pParent;
 	void SetParent(UiEditControl* pParent)
 	{

@@ -42,6 +42,8 @@ BOOL CContactorsWnd::OnInitDialog()
 		m_List.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR_w720);
 		m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR_w720,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR_w720);
 		m_List.SetItemHeight(70);
+
+		//m_AlpBar.SetPos(650,0,70,GetHeight());
 	}
 	else
 	{
@@ -55,6 +57,8 @@ BOOL CContactorsWnd::OnInitDialog()
 		m_List.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR);
 		m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
 		m_List.SetItemHeight(90);
+
+		//m_AlpBar.SetPos(430,0,50,GetHeight());
 	}
 	
 	m_List.SetID(MZ_IDC_LIST);
@@ -63,6 +67,12 @@ BOOL CContactorsWnd::OnInitDialog()
 	
 	m_List.SetTextColor(RGB(255,0,0));
 	AddUiWin(&m_List);
+
+	
+    //m_AlpBar.SetID(MZ_IDC_ALPBAR);
+    //m_AlpBar.EnableZoomAlphabet(true);
+    //m_AlpBar.EnableNotifyMessage(true);
+    //AddUiWin(&m_AlpBar);
 
 	
 	m_Toolbar.SetButton(0, true, true, L"取消");
@@ -206,46 +216,71 @@ LRESULT CContactorsWnd::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam)
   // 重载 MZFC 的命令消息处理函数
 void CContactorsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 {
-UINT_PTR id = LOWORD(wParam);
-switch(id)
-{
-case MZ_IDC_TOOLBAR1:
-  {
-    int nIndex = lParam;
-    if (nIndex==0)
-    {
-		m_pParent->UpdateData(0);
-		EndModal(ID_CANCEL);  
-      return;
-    }
-    if (nIndex==2)
-    {
-		g_ReciversList.Clear();
-		long lCount = m_List.GetItemCount();
-		for(int i = 0; i < lCount; i++)
+	UINT_PTR id = LOWORD(wParam);
+	switch(id)
+	{
+		case MZ_IDC_TOOLBAR1:
 		{
-			ListItem* pItem = m_List.GetItem(i);
-			if(pItem)
+			int nIndex = lParam;
+			if (nIndex==0)
 			{
-			  MyListItemData* mlid = (MyListItemData*)pItem->Data;
-			  if(mlid)
-			  {
-				if(mlid->Selected)
+				m_pParent->UpdateData(0);
+				EndModal(ID_CANCEL);  
+			  return;
+			}
+			if (nIndex==2)
+			{
+				g_ReciversList.Clear();
+				long lCount = m_List.GetItemCount();
+				for(int i = 0; i < lCount; i++)
 				{
-					g_ReciversList.AppendItem(mlid);					
+					ListItem* pItem = m_List.GetItem(i);
+					if(pItem)
+					{
+					  MyListItemData* mlid = (MyListItemData*)pItem->Data;
+					  if(mlid)
+					  {
+						if(mlid->Selected)
+						{
+							g_ReciversList.AppendItem(mlid);					
+						}
+					  }				   
+					}			
 				}
-			  }				   
-			}			
+				
+				m_pParent->UpdateData(1);
+				EndModal(ID_CANCEL);  
+			  return;
+			}
+
 		}
-		
-		m_pParent->UpdateData(1);
-		EndModal(ID_CANCEL);  
-      return;
-    }
-    
-  }
-  break;
-}
+		break;
+		case MZ_IDC_ALPBAR:
+		{
+			//if(m_AlpBar.GetCurLetter())
+			//{
+			//	for (int i=0;i<m_List.GetItemCount();i++)
+			//	{
+			//		MyListItemData* itemData = (MyListItemData*)m_List.GetItem(i)->Data;
+			//		wchar_t* fLetter = itemData->wcsfirstLetter;
+			//		//将找到的列表项显示在屏幕顶端。
+			//		if (wcscmp(m_AlpBar.GetCurLetter(),fLetter) == 0)
+			//		{
+			//		  int topPos = m_List.CalcItemTopPos(i);
+			//		  m_List.SetTopPos(m_List.GetTopPos()-topPos);
+			//		  m_List.Invalidate();
+			//		  m_List.Update();
+			//		  break;
+			//		}
+			//	}
+			//}
+		}
+	    break;
+
+		default:
+			break;
+	}	  
+
 }
 // 转屏后如果需要调整窗口的位置，重载此函数响应 WM_SETTINGCHANGE 消息
 void CContactorsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)

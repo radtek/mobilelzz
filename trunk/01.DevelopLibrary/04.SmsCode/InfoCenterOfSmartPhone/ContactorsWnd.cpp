@@ -132,6 +132,17 @@ BOOL CContactorsWnd::OnInitDialog()
 		i++;
 	}
 
+	bool DisConect  = false;
+
+#if 0 
+	pq->Finalize();
+	pSession->DisConnect(&DisConect);
+
+	pSession->Query_Delete(q_id);
+	
+	pm->ReleaseInstance();
+	
+#endif 
 	m_bInit = TRUE;
 	return TRUE;
 }

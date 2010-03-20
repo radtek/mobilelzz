@@ -38,6 +38,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 
 	if(width>480)
 	{
+		g_bH = TRUE;
 		long lWidth = GetWidth();
 		long lHeight = GetHeight();
 		RECT rc = MzGetWindowRect();

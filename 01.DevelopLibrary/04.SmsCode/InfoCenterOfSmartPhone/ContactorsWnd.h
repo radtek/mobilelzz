@@ -131,13 +131,13 @@ public:
 		}
 		 // 绘制主文本
 		RECT rcText = *prcItem;
-		rcText.left = rcImg.right+30;
-		rcText.right = 280;
+		rcText.left = rcImg.right+15;
+		rcText.right = 300;
 		::SetTextColor(hdcDst, RGB(0,200,0));
 		MzDrawText(hdcDst, pmlid->StringTitle.C_Str(), &rcText, DT_LEFT|DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);
 
 		// 绘制描述文本
-		rcText.left = rcText.left+rcText.right;
+		rcText.left = rcText.right + 20;
 		rcText.right = 580;
 		::SetTextColor(hdcDst, RGB(200,200,200));
 		MzDrawText(hdcDst, pmlid->StringDescription.C_Str(), &rcText, DT_LEFT|DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);

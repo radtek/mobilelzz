@@ -134,7 +134,7 @@ BOOL CContactorsWnd::OnInitDialog()
 
 	bool DisConect  = false;
 
-#if 0 
+#if 1 
 	pq->Finalize();
 	pSession->DisConnect(&DisConect);
 

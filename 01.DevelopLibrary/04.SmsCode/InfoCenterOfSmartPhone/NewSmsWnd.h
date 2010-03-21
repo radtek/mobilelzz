@@ -28,6 +28,8 @@
 #define BUTTON_HEIGHT_VH 65
 // 从 CMzWndEx 派生的主窗口类
 
+
+
 class CNewSmsWnd: public CMzWndEx
 {
   MZ_DECLARE_DYNAMIC(CNewSmsWnd);
@@ -36,7 +38,11 @@ public:
    {
 		m_lCurProgress = 0;
    }
-   virtual ~CNewSmsWnd(){}
+   virtual ~CNewSmsWnd(){
+	
+		MzAccClose();  
+   
+   }
  
    void UpdateData( MyListItemData* pRecivers,long lReciversCount );
   // 按钮

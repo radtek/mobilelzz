@@ -7,7 +7,6 @@
 #pragma comment(lib,"sms.lib")
 
 
-
 BOOL CNewSmsWnd::OnInitDialog()
 {
 	// 必须先调用基类的初始化

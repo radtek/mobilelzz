@@ -19,6 +19,8 @@
 
 #define MZ_IDC_CONTACTORS_BTN  106
 
+#define PROGRESS_TIMER_ID		107
+
 
 #define BUTTON_WIDTH_V	150
 #define BUTTON_WIDTH_H	150
@@ -32,8 +34,7 @@ class CNewSmsWnd: public CMzWndEx
 public:
    CNewSmsWnd()
    {
-		m_pRecivers = NULL;
-		m_lReciversCount = 0;
+		m_lCurProgress = 0;
    }
    virtual ~CNewSmsWnd(){}
  
@@ -41,9 +42,8 @@ public:
   // °´Å¥
   UiButton m_SendSmsBtn;
   UiButton m_ContactorsBtn;
-
-	MyListItemData* m_pRecivers;
-	long			m_lReciversCount;
+  MzPopupProgress m_progress;
+  long m_lCurProgress;
 
   // ÎÄ±¾
   UiEditControl				m_Recievers;
@@ -65,6 +65,8 @@ protected:
 
   bool SendSMS(IN LPCTSTR lpNumber,IN LPCTSTR lpszMessage);
   bool SendSMS_Wrapper(IN CMzString&  Number);
+
+  void OnTimer(UINT_PTR nIDEvent);
 
 };
 #endif //__NewSmsWnd_h__

@@ -104,7 +104,17 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 	switch(id)
 	{
 		case MZ_IDC_SEND_SMS_BTN:
-		{			
+		{		
+			 m_lCurProgress = 0;
+            // 初始化 MzPopupProgress 控件
+            m_progress.SetRange(0, 100);
+            m_progress.SetCurrentValue(m_lCurProgress);
+            //m_progress.SetTitleText(L"剩余时间 10 秒");
+            m_progress.SetNoteText(L"短信发送中");
+            m_progress.StartProgress(m_hWnd, TRUE, FALSE);
+            // 开启定时器，每100ms刷新一次进度条
+            SetTimer(m_hWnd, PROGRESS_TIMER_ID, 100, NULL);
+
 			int n = g_ReciversList.GetItemCount();
 			bool SendFlag = FALSE;
 	//		MzAutoMsgBoxEx(NULL, L"短信发送中.....", 3000);
@@ -116,10 +126,13 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 				CMzString  Number = pMyListItemData->StringDescription;
 				
 				//SendFlag = SendSMS_Wrapper(Number);
-			
+				Sleep(1000);
 			}
+			KillTimer(m_hWnd, PROGRESS_TIMER_ID);
+			m_progress.KillProgress();
+
 			MzMessageBoxEx(NULL,L"短信已发送完毕",MB_OK);
-			
+			m_SmsMsgEdit.SetText(L"");
 			break;
 		}
 
@@ -215,8 +228,6 @@ void CNewSmsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
 
 void CNewSmsWnd::UpdateData( MyListItemData* pRecivers,long lReciversCount )
 {
-	m_pRecivers = pRecivers;
-	m_lReciversCount = lReciversCount;
 }
 
 /************************************
@@ -331,4 +342,28 @@ bool CNewSmsWnd::SendSMS_Wrapper(IN CMzString&  Number)
 
 	return SendFlag;
 
+}
+
+// 定时器触发的消息函数
+void CNewSmsWnd::OnTimer(UINT_PTR nIDEvent)
+{
+	if (PROGRESS_TIMER_ID == nIDEvent)
+	{
+		// 刷新进度条
+		m_progress.SetCurrentValue(++m_lCurProgress);
+		//if (m_lCurProgress % 10 == 0)
+		//{
+		//	WCHAR wstr[10];
+		//	wsprintf(wstr, L"剩余时间 %d 秒", (100 - m_lCurProgress) / 10);
+		//	m_progress.SetTitleText(wstr);
+		//}
+		m_progress.UpdateProgress(FALSE);
+
+		if (100 == m_lCurProgress)
+		{
+			KillTimer(m_hWnd, PROGRESS_TIMER_ID);
+			m_progress.KillProgress();
+			MzMessageBoxEx(NULL,L"发送超时",MB_OK);
+		}
+	}
 }

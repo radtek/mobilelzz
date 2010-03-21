@@ -64,6 +64,7 @@ IDR_RCDATA1             RCDATA                  "sms.png"
 IDR_RCDATA3             RCDATA                  "01.gif"
 IDR_RCDATA4             RCDATA                  "015_V.png"
 IDR_RCDATA5             RCDATA                  "015_H.png"
+IDR_RCDATA6             RCDATA                  "12.png"
 #endif    // 中文(中华人民共和国) resources
 /////////////////////////////////////////////////////////////////////////////
 

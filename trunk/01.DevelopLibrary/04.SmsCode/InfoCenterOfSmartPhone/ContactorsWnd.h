@@ -168,7 +168,7 @@ public:
     // 绘制选中状态图标
     RECT rcSelectedIcon = *prcItem;
     rcSelectedIcon.left = rcSelectedIcon.right - 50;
-    MzDrawControl(hdcDst, &rcSelectedIcon,  bSelected?MZC_SELECTED:MZC_UNSELECTED, 0);
+    MzDrawControl(hdcDst, &rcSelectedIcon,  bSelected? MZC_TICK :MZCV2_CHECKBOX_SELECT, 0);
   }
 protected:
 private:

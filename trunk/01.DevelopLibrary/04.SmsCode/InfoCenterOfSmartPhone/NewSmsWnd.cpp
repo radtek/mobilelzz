@@ -86,6 +86,8 @@ BOOL CNewSmsWnd::OnInitDialog()
 	AddUiWin(&m_SmsMsgEdit); // don't forget to add the control to the window
 
 	m_SendSmsBtn.SetButtonType(MZC_BUTTON_DELETE_ORANGE);
+	m_SendSmsBtn.EnableTextSinkOnPressed(TRUE);
+	m_SendSmsBtn.SetTextColor_Pressed(RGB(94,94,94));
 	
 	m_SendSmsBtn.SetID(MZ_IDC_SEND_SMS_BTN);
 	m_SendSmsBtn.SetText(L"·¢ËÍ");

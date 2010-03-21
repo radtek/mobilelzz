@@ -43,7 +43,7 @@ BOOL CContactorsWnd::OnInitDialog()
 		m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR_w720,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR_w720);
 		m_List.SetItemHeight(70);
 
-		//m_AlpBar.SetPos(650,0,70,GetHeight());
+		m_AlpBar.SetPos(500,0,70,GetHeight());
 	}
 	else
 	{
@@ -58,7 +58,7 @@ BOOL CContactorsWnd::OnInitDialog()
 		m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
 		m_List.SetItemHeight(90);
 
-		//m_AlpBar.SetPos(430,0,50,GetHeight());
+		m_AlpBar.SetPos(350,0,50,GetHeight());
 	}
 	
 	m_List.SetID(MZ_IDC_LIST);
@@ -69,10 +69,10 @@ BOOL CContactorsWnd::OnInitDialog()
 	AddUiWin(&m_List);
 
 	
-    //m_AlpBar.SetID(MZ_IDC_ALPBAR);
-    //m_AlpBar.EnableZoomAlphabet(true);
-    //m_AlpBar.EnableNotifyMessage(true);
-    //AddUiWin(&m_AlpBar);
+    m_AlpBar.SetID(MZ_IDC_ALPBAR);
+    m_AlpBar.EnableZoomAlphabet(true);
+    m_AlpBar.EnableNotifyMessage(true);
+    AddUiWin(&m_AlpBar);
 
 	
 	m_Toolbar.SetButton(0, true, true, L"取消");
@@ -94,7 +94,13 @@ BOOL CContactorsWnd::OnInitDialog()
 
 	hr = pSession->Query_Create(&q_id, &pq );
 	if( FAILED(hr) || pq == NULL ) return RLH_FAIL;
-
+	
+	CSQL_query * pQFirstLetter = NULL;
+	int lQFirstLetterID = 0;
+	hr = pSession->Query_Create(&lQFirstLetterID, &pQFirstLetter );
+	if( FAILED(hr) || pQFirstLetter== NULL ) return RLH_FAIL;
+	hr = pQFirstLetter->Prepare(SQL_GET_FIRSTLETER);
+	if( FAILED(hr) ) return RLH_FAIL;
 
 
 	hr = pq->Prepare(SQL_GET_CONTACTS);
@@ -117,12 +123,16 @@ BOOL CContactorsWnd::OnInitDialog()
 		wsprintf(strTitle.C_Str(), PName, i);
 		wsprintf(strDescription.C_Str(), pNumber, i);
 
+		wchar_t awcsFirstLetter[2] = L"";
+		MakeFirstLetter(awcsFirstLetter, pQFirstLetter, lPID);
+
 		// 设置列表项的自定义数据
 		MyListItemData *pmlid = new MyListItemData;
 		pmlid->StringTitle = strTitle;
 		pmlid->StringDescription = strDescription;
 		pmlid->Selected = false;
 		pmlid->lPID = lPID;
+		pmlid->wcsfirstLetter[0] = awcsFirstLetter[0];
 		UpdateItem(pmlid);
 		// 列表项的自定义数据指针设置到ListItem::Data
 		li.Data = pmlid;
@@ -269,23 +279,23 @@ void CContactorsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 		break;
 		case MZ_IDC_ALPBAR:
 		{
-			//if(m_AlpBar.GetCurLetter())
-			//{
-			//	for (int i=0;i<m_List.GetItemCount();i++)
-			//	{
-			//		MyListItemData* itemData = (MyListItemData*)m_List.GetItem(i)->Data;
-			//		wchar_t* fLetter = itemData->wcsfirstLetter;
-			//		//将找到的列表项显示在屏幕顶端。
-			//		if (wcscmp(m_AlpBar.GetCurLetter(),fLetter) == 0)
-			//		{
-			//		  int topPos = m_List.CalcItemTopPos(i);
-			//		  m_List.SetTopPos(m_List.GetTopPos()-topPos);
-			//		  m_List.Invalidate();
-			//		  m_List.Update();
-			//		  break;
-			//		}
-			//	}
-			//}
+			if(m_AlpBar.GetCurLetter())
+			{
+				for (int i=0;i<m_List.GetItemCount();i++)
+				{
+					MyListItemData* itemData = (MyListItemData*)m_List.GetItem(i)->Data;
+					wchar_t* fLetter = itemData->wcsfirstLetter;
+					//将找到的列表项显示在屏幕顶端。
+					if (wcscmp(m_AlpBar.GetCurLetter(),fLetter) == 0)
+					{
+					  int topPos = m_List.CalcItemTopPos(i);
+					  m_List.SetTopPos(m_List.GetTopPos()-topPos);
+					  m_List.Invalidate();
+					  m_List.Update();
+					  break;
+					}
+				}
+			}
 		}
 	    break;
 
@@ -343,4 +353,17 @@ void CContactorsWnd::UpdateItem(MyListItemData* pmlid)
 			pmlid->Selected = g_ReciversList.GetItem(i)->Selected;
 		}
 	}
+}
+
+void CContactorsWnd::MakeFirstLetter(wchar_t* pwcsFirstLetter, CSQL_query* pQFirstLetter, long lPID )
+{
+	pQFirstLetter->Reset();
+	pQFirstLetter->Bind(1, lPID);
+	pQFirstLetter->Step();
+	pQFirstLetter->Step();
+
+	wchar_t* pTemp = NULL;
+	pQFirstLetter->GetField(0,&pTemp);
+	pwcsFirstLetter[0] = pTemp[0];
+	
 }

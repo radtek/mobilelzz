@@ -74,7 +74,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 	// 初始化短信文本控件，并添加到窗口中
 	//MzOpenSip(IM_SIP_MODE_KEEP,0);
 	m_SmsMsgEdit.SetSipMode(IM_SIP_MODE_KEEP,0);
-//	m_SmsMsgEdit.SetFocus(true);
+	//m_SmsMsgEdit.SetFocus(true);
 	
 	
 	m_SmsMsgEdit.SetTextColor(RGB(94,94,94)); // you could also set the color of text
@@ -83,6 +83,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 	m_SmsMsgEdit.SetColorBg(RGB(243,241,207)); 
 	m_SmsMsgEdit.EnableInsideScroll(true);
 	m_SmsMsgEdit.EnableZoomIn(true);   
+	//m_SmsMsgEdit.EnableAutoOpenSip(true);
 	AddUiWin(&m_SmsMsgEdit); // don't forget to add the control to the window
 
 	m_SendSmsBtn.SetButtonType(MZC_BUTTON_DELETE_ORANGE);
@@ -105,9 +106,29 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 	{
 		case MZ_IDC_SEND_SMS_BTN:
 		{		
+			RECT rect = MzGetVisibleDesktopRect();
+			RECT rc = {0};
+			int height = 0;
+			int width = 0;
+			HWND hWnd = FindWindow(L"CTaskBar", 0);
+			if(hWnd != 0)
+			{
+				::GetWindowRect(hWnd, &rc);
+				height = rc.bottom - rc.top;
+				width = rc.right - rc.left;
+			}
+
+			if(width>480)
+			{
+				m_progress.SetPos(200, 100, 300, 150);
+			}
+			else
+			{
+				m_progress.SetPos(100, 200, 150, 300);
+			}
 			 m_lCurProgress = 0;
             // 初始化 MzPopupProgress 控件
-            m_progress.SetRange(0, 100);
+            m_progress.SetRange(0, 10);
             m_progress.SetCurrentValue(m_lCurProgress);
             //m_progress.SetTitleText(L"剩余时间 10 秒");
             m_progress.SetNoteText(L"短信发送中");
@@ -119,19 +140,19 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 			bool SendFlag = FALSE;
 	//		MzAutoMsgBoxEx(NULL, L"短信发送中.....", 3000);
 
-			for(int i = 0; i<n;i++ )
-			{
-				MyListItemData* pMyListItemData = NULL;
-				g_ReciversList.GetItem(i, &pMyListItemData );
-				CMzString  Number = pMyListItemData->StringDescription;
-				
-				//SendFlag = SendSMS_Wrapper(Number);
-				Sleep(1000);
-			}
-			KillTimer(m_hWnd, PROGRESS_TIMER_ID);
-			m_progress.KillProgress();
+			//for(int i = 0; i<n;i++ )
+			//{
+			//	MyListItemData* pMyListItemData = NULL;
+			//	g_ReciversList.GetItem(i, &pMyListItemData );
+			//	CMzString  Number = pMyListItemData->StringDescription;
+			//	
+			//	//SendFlag = SendSMS_Wrapper(Number);
+			//	Sleep(1000);
+			//}
+			//KillTimer(m_hWnd, PROGRESS_TIMER_ID);
+			//m_progress.KillProgress();
 
-			MzMessageBoxEx(NULL,L"短信已发送完毕",MB_OK);
+			//MzMessageBoxEx(NULL,L"短信已发送完毕",MB_OK);
 			m_SmsMsgEdit.SetText(L"");
 			break;
 		}
@@ -177,6 +198,11 @@ LRESULT CNewSmsWnd::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			break;
 		  }
+		}
+		else if( message == 641 )
+		{
+			WinManager* pMng = GetWinManager();
+			pMng->SetFocusedWinBeforeDeactivate(&m_SmsMsgEdit);
 		}
 	    
 	  }
@@ -359,7 +385,7 @@ void CNewSmsWnd::OnTimer(UINT_PTR nIDEvent)
 		//}
 		m_progress.UpdateProgress(FALSE);
 
-		if (100 == m_lCurProgress)
+		if (10 == m_lCurProgress)
 		{
 			KillTimer(m_hWnd, PROGRESS_TIMER_ID);
 			m_progress.KillProgress();

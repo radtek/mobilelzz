@@ -121,7 +121,7 @@ public:
 	if(width>480)
 	{
 		// 绘制左边的小图像
-		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA3, true);
+		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA5, true);
 		RECT rcImg = *prcItem;
 		rcImg.right = rcImg.left + 80;
 		if (pimg)
@@ -130,7 +130,7 @@ public:
 		}
 		 // 绘制主文本
 		RECT rcText = *prcItem;
-		rcText.left = rcImg.right;
+		rcText.left = rcImg.right+30;
 		rcText.right = 280;
 		::SetTextColor(hdcDst, RGB(0,200,0));
 		MzDrawText(hdcDst, pmlid->StringTitle.C_Str(), &rcText, DT_LEFT|DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);
@@ -144,7 +144,7 @@ public:
 	else
 	{
 		// 绘制左边的小图像
-		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA3, true);
+		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA4, true);
 		RECT rcImg = *prcItem;
 		rcImg.right = rcImg.left + MZM_MARGIN_MAX*2;
 		if (pimg)
@@ -153,7 +153,7 @@ public:
 		}
 		// 绘制主文本
 		RECT rcText = *prcItem;
-		rcText.left = rcImg.right;
+		rcText.left = rcImg.right+20;
 		rcText.bottom = rcText.top + RECT_HEIGHT(rcText)/2;
 		::SetTextColor(hdcDst, RGB(0,200,0));
 		MzDrawText(hdcDst, pmlid->StringTitle.C_Str(), &rcText, DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS);

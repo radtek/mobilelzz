@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "tinyxml.h"
+#include "./TinySrc/tinyxml.h"
 #include "XmlStream.h"
 
 //class
@@ -45,7 +45,7 @@ private:
 
 //Function
 
-int		MB2WC( wchar_t* _pwc,  const char* _pch )
+int		CXmlNode::MB2WC( wchar_t* _pwc,  const char* _pch )
 {
 	int			buf_ln	=	MultiByteToWideChar(CP_ACP, 0, _pch, -1, _pwc, 0);
 	MultiByteToWideChar(CP_ACP, 0, _pch, -1, _pwc, buf_ln);
@@ -53,7 +53,7 @@ int		MB2WC( wchar_t* _pwc,  const char* _pch )
 	return	buf_ln;
 }
 
-int		WC2MB( char* _pch,  wchar_t* _pwc )
+int		CXmlNode::WC2MB( char* _pch,  wchar_t* _pwc )
 {
 	int			buf_ln	=	WideCharToMultiByte(CP_ACP, 0, _pwc, -1, _pch, 0,		0, 0);
 	WideCharToMultiByte(CP_ACP, 0, _pwc, -1, _pch, buf_ln,	0, 0);
@@ -878,4 +878,20 @@ HRESULT	CXmlStream::FindNode( char *pcsNodePath, TiXmlElement** pclXmlElement )
 TiXmlDocument*	CXmlStream::GetDocument()
 {
 	return	m_pTiXmlDocument;
+}
+
+int		CXmlStream::MB2WC( wchar_t* _pwc,  const char* _pch )
+{
+	int			buf_ln	=	MultiByteToWideChar(CP_ACP, 0, _pch, -1, _pwc, 0);
+	MultiByteToWideChar(CP_ACP, 0, _pch, -1, _pwc, buf_ln);
+
+	return	buf_ln;
+}
+
+int		CXmlStream::WC2MB( char* _pch,  wchar_t* _pwc )
+{
+	int			buf_ln	=	WideCharToMultiByte(CP_ACP, 0, _pwc, -1, _pch, 0,		0, 0);
+	WideCharToMultiByte(CP_ACP, 0, _pwc, -1, _pch, buf_ln,	0, 0);
+
+	return	buf_ln;
 }

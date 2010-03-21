@@ -63,7 +63,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_V),0,BUTTON_WIDTH_V-2,BUTTON_HEIGHT_VH);
 	}
 	
-	m_Recievers.SetText(L"收件人:");  // set the tips text
+	m_Recievers.SetText(L"收件人:点击选择联系人");  // set the tips text
 	m_Recievers.SetID(MZ_IDC_RECIEVERS_EDIT);
 	m_Recievers.SetParent((void*)this);
 	//m_Recievers.SetTextColor(RGB(0,0,0)); // you could also set the color of text

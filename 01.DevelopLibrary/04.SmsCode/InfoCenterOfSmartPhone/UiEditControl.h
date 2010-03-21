@@ -23,7 +23,7 @@ public:
 	void UpdateData(  long lFlag  );
 
 
-//	virtual void  OnFocused (UiWin *pWinPrev);
+	virtual void  OnFocused (UiWin *pWinPrev);
 
 	
 	//zds 2010/03/21 19:39

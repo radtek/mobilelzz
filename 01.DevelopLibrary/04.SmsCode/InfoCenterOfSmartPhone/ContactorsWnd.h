@@ -9,6 +9,7 @@
 #define   RLH_OK	 0
 
 #define   SQL_GET_CONTACTS  L"select ABPerson.ROWID, ABPerson.Name , ABPhones.*  from ABPerson, ABPhones where ABPerson.ROWID = ABPhones.record_id "
+#define   SQL_GET_FIRSTLETER  L"select token  from ABLookupFirstLetter where source = ?"
 
 #define MZ_IDC_LIST      101
 #define MZ_IDC_TOOLBAR1    102
@@ -208,6 +209,10 @@ protected:
 
 	void UpdateItem(MyListItemData* pmlid);
   BOOL						m_bInit;
+  
+private:
+	
+	void MakeFirstLetter(wchar_t* pwcsFirstLetter, CSQL_query* pQFirstLetter, long lPID );
 };
 
 

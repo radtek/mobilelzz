@@ -72,7 +72,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 	AddUiWin(&m_Recievers); // don't forget to add the control to the window
 	// 初始化短信文本控件，并添加到窗口中
 	//MzOpenSip(IM_SIP_MODE_KEEP,0);
-	m_SmsMsgEdit->SetSipMode(IM_SIP_MODE_KEEP,0);
+	m_SmsMsgEdit->SetSipMode(IM_SIP_MODE_GEL_PY,0);
 	//m_SmsMsgEdit->SetFocus(true);
 	
 	
@@ -128,7 +128,7 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 			}
 			 m_lCurProgress = 0;
             // 初始化 MzPopupProgress 控件
-            m_progress.SetRange(0, 10);
+            m_progress.SetRange(0, 200);
             m_progress.SetCurrentValue(m_lCurProgress);
             //m_progress.SetTitleText(L"剩余时间 10 秒");
             m_progress.SetNoteText(L"短信发送中");
@@ -136,26 +136,14 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
             // 开启定时器，每100ms刷新一次进度条
             SetTimer(m_hWnd, PROGRESS_TIMER_ID, 100, NULL);
 
-			int n = g_ReciversList.GetItemCount();
-			bool SendFlag = FALSE;
 	//		MzAutoMsgBoxEx(NULL, L"短信发送中.....", 3000);
 
-			//for(int i = 0; i<n;i++ )
-			//{
-			//	MyListItemData* pMyListItemData = NULL;
-			//	g_ReciversList.GetItem(i, &pMyListItemData );
-			//	CMzString  Number = pMyListItemData->StringDescription;
-			//	
-			//	//SendFlag = SendSMS_Wrapper(Number);
-			//	Sleep(1000);
-			//}
-			//KillTimer(m_hWnd, PROGRESS_TIMER_ID);
-			//m_progress.KillProgress();
 
-			//MzMessageBoxEx(NULL,L"短信已发送完毕",MB_OK);
-			m_SmsMsgEdit->SetText(L"");
-			g_ReciversList.Clear();
-			m_Recievers.UpdateData(1);
+
+			DWORD lThreadId = 0;
+			CreateThread( NULL, 0, ProxyRun, (void*)this, 0, &lThreadId);
+			//m_SmsMsgEdit->SetText(L"");
+			
 
 
 			break;
@@ -165,6 +153,9 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 	}
 
 }
+
+
+
 
 LRESULT CNewSmsWnd::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -352,15 +343,15 @@ bool CNewSmsWnd::SendSMS_Wrapper(IN CMzString&  Number)
 
 	
 	int length = SMS_Content.Length();
-	if( length <= 70 )
+	if( length <= 69 )
 	{
 	 	SendFlag = SendSMS(NewNumber.C_Str(), m_SmsMsgEdit->GetText().C_Str());
 	}
 	else
 	{
-		for(int i = 0; i < length; i+=70)
+		for(int i = 0; i < length; i+=69)
 		{
-			int count = ((length - i) < 70 ? (length-i): 70); 
+			int count = ((length - i) < 69 ? (length-i): 69); 
 			CMzString Single_Content =SMS_Content.SubStr(i,count);
 
 			SendFlag = SendSMS(NewNumber.C_Str(), Single_Content.C_Str() );
@@ -389,11 +380,41 @@ void CNewSmsWnd::OnTimer(UINT_PTR nIDEvent)
 		//}
 		m_progress.UpdateProgress(FALSE);
 
-		if (10 == m_lCurProgress)
+		if (200 == m_lCurProgress)
 		{
 			KillTimer(m_hWnd, PROGRESS_TIMER_ID);
 			m_progress.KillProgress();
-			MzMessageBoxEx(NULL,L"发送超时",MB_OK);
+//			MzMessageBoxEx(NULL,L"发送超时",MB_OK);
 		}
 	}
+}
+
+DWORD CNewSmsWnd::ProxyRun(LPVOID lp)
+{
+	CNewSmsWnd*  Wnd = (CNewSmsWnd*)lp;
+	Wnd->Run();
+
+	return 0;
+}
+
+void
+CNewSmsWnd::Run()
+{
+	int n = g_ReciversList.GetItemCount();
+	bool SendFlag = FALSE;
+	for(int i = 0; i<n;i++ )
+	{
+		MyListItemData* pMyListItemData = NULL;
+		g_ReciversList.GetItem(i, &pMyListItemData );
+		CMzString  Number = pMyListItemData->StringDescription;
+		
+		SendFlag = SendSMS_Wrapper(Number);
+	}
+
+	KillTimer(m_hWnd, PROGRESS_TIMER_ID);
+	m_progress.KillProgress();
+	MzMessageBoxEx(NULL,L"短信已发送完毕",MB_OK);
+
+	g_ReciversList.Clear();
+	m_Recievers.UpdateData(1);
 }

@@ -55,6 +55,11 @@ public:
 		MzAccClose();  
    
    }
+
+   static DWORD WINAPI   ProxyRun(LPVOID lp);
+
+
+   void Run();
  
    void UpdateData( MyListItemData* pRecivers,long lReciversCount );
   // °´Å¥

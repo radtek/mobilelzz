@@ -110,7 +110,7 @@ void TiXmlBase::EncodeString( const TIXML_STRING& str, TIXML_STRING* outString )
 			// Below 32 is symbolic.
 			char buf[ 32 ];
 			
-			#if defined(TIXML_SNPRINTF)		
+			#if 0/*defined(TIXML_SNPRINTF)*/		
 				TIXML_SNPRINTF( buf, sizeof(buf), "&#x%02X;", (unsigned) ( c & 0xff ) );
 			#else
 				sprintf( buf, "&#x%02X;", (unsigned) ( c & 0xff ) );
@@ -683,7 +683,7 @@ int TiXmlElement::QueryDoubleAttribute( const std::string& name, double* dval ) 
 void TiXmlElement::SetAttribute( const char * name, int val )
 {	
 	char buf[64];
-	#if defined(TIXML_SNPRINTF)		
+	#if 0/*defined(TIXML_SNPRINTF)*/		
 		TIXML_SNPRINTF( buf, sizeof(buf), "%d", val );
 	#else
 		sprintf( buf, "%d", val );
@@ -705,7 +705,7 @@ void TiXmlElement::SetAttribute( const std::string& name, int val )
 void TiXmlElement::SetDoubleAttribute( const char * name, double val )
 {	
 	char buf[256];
-	#if defined(TIXML_SNPRINTF)		
+	#if 0/*defined(TIXML_SNPRINTF)*/		
 		TIXML_SNPRINTF( buf, sizeof(buf), "%f", val );
 	#else
 		sprintf( buf, "%f", val );
@@ -1254,7 +1254,7 @@ int TiXmlAttribute::QueryDoubleValue( double* dval ) const
 void TiXmlAttribute::SetIntValue( int _value )
 {
 	char buf [64];
-	#if defined(TIXML_SNPRINTF)		
+	#if 0/*defined(TIXML_SNPRINTF)*/		
 		TIXML_SNPRINTF(buf, sizeof(buf), "%d", _value);
 	#else
 		sprintf (buf, "%d", _value);
@@ -1265,7 +1265,7 @@ void TiXmlAttribute::SetIntValue( int _value )
 void TiXmlAttribute::SetDoubleValue( double _value )
 {
 	char buf [256];
-	#if defined(TIXML_SNPRINTF)		
+	#if 0/*defined(TIXML_SNPRINTF)*/		
 		TIXML_SNPRINTF( buf, sizeof(buf), "%lf", _value);
 	#else
 		sprintf (buf, "%lf", _value);

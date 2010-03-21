@@ -7,6 +7,7 @@
 #define		DefaultBufSize		( 1024*4 )
 #define		CHAR_MAX_LENGTH			( 50 )
 
+
 struct NodeAttribute_t
 {
 	wchar_t	wcsName [CHAR_MAX_LENGTH];
@@ -58,7 +59,10 @@ class CXmlNode
 
 		HRESULT SubSetNodeContent( TiXmlElement* pNode, wchar_t* pwcsNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount );
 
-	private:
+		int		MB2WC( wchar_t* _pwc,  const char* _pch );
+		int		WC2MB( char* _pch,  wchar_t* _pwc );	
+
+private:
 		//node ptr of tiny lib 
 		TiXmlElement*			m_CurElement;
 
@@ -107,6 +111,9 @@ class CXmlStream
 
 		HRESULT	FindNode( char *pcsNodePath, TiXmlElement** pclXmlElement );
 
+		int		MB2WC( wchar_t* _pwc,  const char* _pch );
+		int		WC2MB( char* _pch,  wchar_t* _pwc );	
+
 //		HRESULT	SubMakeXml( vector<TiXmlElement*> & vecElement);	
 
 		enum	EnOperatorType
@@ -118,7 +125,7 @@ class CXmlStream
 	private:
 		//memory
 	
-		CMzString				m_strBuf;
+		string				m_strBuf;
 
 		//tiny xml object
 		TiXmlDocument		*	m_pTiXmlDocument;

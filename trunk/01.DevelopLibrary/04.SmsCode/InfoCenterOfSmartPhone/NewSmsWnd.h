@@ -29,6 +29,15 @@
 // 从 CMzWndEx 派生的主窗口类
 
 
+class CMyEdit: public UiEdit
+{
+public:
+	virtual ~CMyEdit()
+	{
+		ReleaseCapture();
+	}
+
+};
 
 class CNewSmsWnd: public CMzWndEx
 {
@@ -37,6 +46,9 @@ public:
    CNewSmsWnd()
    {
 		m_lCurProgress = 0;
+		m_SmsMsgEdit = new CMyEdit;
+
+
    }
    virtual ~CNewSmsWnd(){
 	
@@ -53,7 +65,7 @@ public:
 
   // 文本
   UiEditControl				m_Recievers;
-  UiEdit					m_SmsMsgEdit;
+  CMyEdit*					m_SmsMsgEdit;
 
   DWORD m_accMsg;
 protected:

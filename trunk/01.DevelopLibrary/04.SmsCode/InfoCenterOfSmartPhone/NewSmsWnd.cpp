@@ -47,7 +47,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 		lWidth = GetWidth();
 		lHeight = GetHeight();
 		m_Recievers.SetPos(2, 0, GetWidth()-BUTTON_WIDTH_H-2, BUTTON_HEIGHT_VH);
-		m_SmsMsgEdit.SetPos(2, m_Recievers.GetHeight()+3, GetWidth()-4, (GetHeight()- m_Recievers.GetHeight() ));
+		m_SmsMsgEdit->SetPos(2, m_Recievers.GetHeight()+3, GetWidth()-4, (GetHeight()- m_Recievers.GetHeight() ));
 		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_H),0,BUTTON_WIDTH_H-2,BUTTON_HEIGHT_VH);
 	}
 	else
@@ -59,7 +59,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 		RECT rc3 = MzGetWorkArea();
 		SetWindowPos(m_hWnd, rc3.left, rc3.top,RECT_WIDTH(rc3), RECT_HEIGHT(rc3) );
 		m_Recievers.SetPos(2, 0, lWidth-BUTTON_WIDTH_V-2, BUTTON_HEIGHT_VH);
-		m_SmsMsgEdit.SetPos(2, m_Recievers.GetHeight()+3, GetWidth()-4, (lHeight - m_Recievers.GetHeight()));
+		m_SmsMsgEdit->SetPos(2, m_Recievers.GetHeight()+3, GetWidth()-4, (lHeight - m_Recievers.GetHeight()));
 		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_V),0,BUTTON_WIDTH_V-2,BUTTON_HEIGHT_VH);
 	}
 	
@@ -72,19 +72,19 @@ BOOL CNewSmsWnd::OnInitDialog()
 	AddUiWin(&m_Recievers); // don't forget to add the control to the window
 	// 初始化短信文本控件，并添加到窗口中
 	//MzOpenSip(IM_SIP_MODE_KEEP,0);
-	m_SmsMsgEdit.SetSipMode(IM_SIP_MODE_KEEP,0);
-	//m_SmsMsgEdit.SetFocus(true);
+	m_SmsMsgEdit->SetSipMode(IM_SIP_MODE_KEEP,0);
+	//m_SmsMsgEdit->SetFocus(true);
 	
 	
-	m_SmsMsgEdit.SetTextColor(RGB(94,94,94)); // you could also set the color of text
+	m_SmsMsgEdit->SetTextColor(RGB(94,94,94)); // you could also set the color of text
 
-	m_SmsMsgEdit.SetEditBgType(UI_EDIT_BGTYPE_ROUND_RECT);
-	m_SmsMsgEdit.SetColorBg(RGB(243,241,207)); 
-	m_SmsMsgEdit.EnableInsideScroll(true);
-	m_SmsMsgEdit.EnableZoomIn(true);   
-	m_SmsMsgEdit.SetTip(L"在这里输入短信内容");
-	//m_SmsMsgEdit.EnableAutoOpenSip(true);
-	AddUiWin(&m_SmsMsgEdit); // don't forget to add the control to the window
+	m_SmsMsgEdit->SetEditBgType(UI_EDIT_BGTYPE_ROUND_RECT);
+	m_SmsMsgEdit->SetColorBg(RGB(243,241,207)); 
+	m_SmsMsgEdit->EnableInsideScroll(true);
+	m_SmsMsgEdit->EnableZoomIn(true);   
+	m_SmsMsgEdit->SetTip(L"在这里输入短信内容");
+	//m_SmsMsgEdit->EnableAutoOpenSip(true);
+	AddUiWin(m_SmsMsgEdit); // don't forget to add the control to the window
 
 	m_SendSmsBtn.SetButtonType(MZC_BUTTON_DELETE_ORANGE);
 	m_SendSmsBtn.EnableTextSinkOnPressed(TRUE);
@@ -153,7 +153,7 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 			//m_progress.KillProgress();
 
 			//MzMessageBoxEx(NULL,L"短信已发送完毕",MB_OK);
-			m_SmsMsgEdit.SetText(L"");
+			m_SmsMsgEdit->SetText(L"");
 			g_ReciversList.Clear();
 			m_Recievers.UpdateData(1);
 
@@ -206,7 +206,7 @@ LRESULT CNewSmsWnd::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam)
 		else if( message == 641 )
 		{
 			WinManager* pMng = GetWinManager();
-			pMng->SetFocusedWinBeforeDeactivate(&m_SmsMsgEdit);
+			pMng->SetFocusedWinBeforeDeactivate(m_SmsMsgEdit);
 		}
 	    
 	  }
@@ -237,7 +237,7 @@ void CNewSmsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
 		
 		m_Recievers.SetPos(2, 0, GetWidth()-BUTTON_WIDTH_V-2, BUTTON_HEIGHT_VH);
 
-		m_SmsMsgEdit.SetPos(2, m_Recievers.GetHeight()+3, GetWidth()-4, (GetHeight()-m_Recievers.GetHeight()));
+		m_SmsMsgEdit->SetPos(2, m_Recievers.GetHeight()+3, GetWidth()-4, (GetHeight()-m_Recievers.GetHeight()));
 
 		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_V),0,BUTTON_WIDTH_V-2,BUTTON_HEIGHT_VH);
   }
@@ -250,7 +250,7 @@ void CNewSmsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
 		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_WIDTH(rc), RECT_HEIGHT(rc) );
 		m_Recievers.SetPos(2, 0, GetWidth()-BUTTON_WIDTH_H-2, BUTTON_HEIGHT_VH);
 
-		m_SmsMsgEdit.SetPos(2, m_Recievers.GetHeight()+3, GetWidth()-4, (GetHeight()-m_Recievers.GetHeight()));
+		m_SmsMsgEdit->SetPos(2, m_Recievers.GetHeight()+3, GetWidth()-4, (GetHeight()-m_Recievers.GetHeight()));
 
 		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_H),0,BUTTON_WIDTH_H-2,BUTTON_HEIGHT_VH);
 	}
@@ -348,13 +348,13 @@ bool CNewSmsWnd::SendSMS_Wrapper(IN CMzString&  Number)
 	}
 
 
-	CMzString  SMS_Content = m_SmsMsgEdit.GetText().C_Str();
+	CMzString  SMS_Content = m_SmsMsgEdit->GetText().C_Str();
 
 	
 	int length = SMS_Content.Length();
 	if( length <= 70 )
 	{
-	 	SendFlag = SendSMS(NewNumber.C_Str(), m_SmsMsgEdit.GetText().C_Str());
+	 	SendFlag = SendSMS(NewNumber.C_Str(), m_SmsMsgEdit->GetText().C_Str());
 	}
 	else
 	{

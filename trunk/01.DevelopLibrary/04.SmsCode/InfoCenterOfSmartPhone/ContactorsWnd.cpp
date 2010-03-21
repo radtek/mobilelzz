@@ -136,7 +136,7 @@ BOOL CContactorsWnd::OnInitDialog()
 
 #if 1 
 	pq->Finalize();
-	pSession->DisConnect(&DisConect);
+	//pSession->DisConnect(&DisConect);
 
 	pSession->Query_Delete(q_id);
 	

@@ -5,10 +5,10 @@
 #include"ContactorsWnd.h"
 
 
-//void UiEditControl::OnFocused (UiWin *pWinPrev) 
-//{
-//
-//}
+void UiEditControl::OnFocused (UiWin *pWinPrev) 
+{
+
+}
  
 CContactorsWnd clContactorsWnd;
 //zds 2010/03/21 19:39

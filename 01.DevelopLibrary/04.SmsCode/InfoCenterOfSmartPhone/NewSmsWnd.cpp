@@ -48,7 +48,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 		lWidth = GetWidth();
 		lHeight = GetHeight();
 		m_Recievers.SetPos(0, 0, GetWidth()-BUTTON_WIDTH_H, BUTTON_HEIGHT_VH);
-		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight(), GetWidth(), (GetHeight()- m_Recievers.GetHeight() ));
+		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight()+5, GetWidth(), (GetHeight()- m_Recievers.GetHeight() ));
 		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_H),0,BUTTON_WIDTH_H,BUTTON_HEIGHT_VH);
 	}
 	else
@@ -60,7 +60,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 		RECT rc3 = MzGetWorkArea();
 		SetWindowPos(m_hWnd, rc3.left, rc3.top,RECT_WIDTH(rc3), RECT_HEIGHT(rc3) );
 		m_Recievers.SetPos(0, 0, lWidth-BUTTON_WIDTH_V, BUTTON_HEIGHT_VH);
-		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight(), GetWidth(), (lHeight - m_Recievers.GetHeight()));
+		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight()+5, GetWidth(), (lHeight - m_Recievers.GetHeight()));
 		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_V),0,BUTTON_WIDTH_V,BUTTON_HEIGHT_VH);
 	}
 	
@@ -79,10 +79,11 @@ BOOL CNewSmsWnd::OnInitDialog()
 	
 	m_SmsMsgEdit.SetTextColor(RGB(94,94,94)); // you could also set the color of text
 
-	m_SmsMsgEdit.SetEditBgType(UI_EDIT_BGTYPE_FILL_WHITE_AND_TOPSHADOW);
+	m_SmsMsgEdit.SetEditBgType(UI_EDIT_BGTYPE_ROUND_RECT);
 	m_SmsMsgEdit.SetColorBg(RGB(243,241,207)); 
 	m_SmsMsgEdit.EnableInsideScroll(true);
 	m_SmsMsgEdit.EnableZoomIn(true);   
+	m_SmsMsgEdit.SetTip(L"在这里输入短信内容");
 	//m_SmsMsgEdit.EnableAutoOpenSip(true);
 	AddUiWin(&m_SmsMsgEdit); // don't forget to add the control to the window
 
@@ -233,7 +234,7 @@ void CNewSmsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
 		
 		m_Recievers.SetPos(0, 0, GetWidth()-BUTTON_WIDTH_V, BUTTON_HEIGHT_VH);
 
-		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight(), GetWidth(), (GetHeight()-m_Recievers.GetHeight()));
+		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight()+5, GetWidth(), (GetHeight()-m_Recievers.GetHeight()));
 
 		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_V),0,BUTTON_WIDTH_V,BUTTON_HEIGHT_VH);
   }
@@ -246,7 +247,7 @@ void CNewSmsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
 		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_WIDTH(rc), RECT_HEIGHT(rc) );
 		m_Recievers.SetPos(0, 0, GetWidth()-BUTTON_WIDTH_H, BUTTON_HEIGHT_VH);
 
-		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight(), GetWidth(), (GetHeight()-m_Recievers.GetHeight()));
+		m_SmsMsgEdit.SetPos(0, m_Recievers.GetHeight()+5, GetWidth(), (GetHeight()-m_Recievers.GetHeight()));
 
 		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_H),0,BUTTON_WIDTH_H,BUTTON_HEIGHT_VH);
 	}

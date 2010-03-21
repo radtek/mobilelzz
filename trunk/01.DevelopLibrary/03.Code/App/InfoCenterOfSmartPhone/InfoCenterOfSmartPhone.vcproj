@@ -46,7 +46,7 @@
 				PreprocessorDefinitions="_DEBUG;_WIN32_WCE=$(CEVER);UNDER_CE;WINCE;DEBUG;_WINDOWS;$(ARCHFAM);$(_ARCHFAM_);_UNICODE;UNICODE;STANDARDSHELL_UI_MODEL;MZFC_STATIC;_LIB;TIXML_USE_STL"
 				MinimalRebuild="true"
 				RuntimeLibrary="1"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="1"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -291,6 +291,14 @@
 				<Filter
 					Name="FunctionLib"
 					>
+					<File
+						RelativePath="..\..\CommonLib\FunctionLib\CommonTypes.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\CommonLib\FunctionLib\CommonTypes.h"
+						>
+					</File>
 					<File
 						RelativePath="..\..\CommonLib\FunctionLib\DynamicArray.h"
 						>

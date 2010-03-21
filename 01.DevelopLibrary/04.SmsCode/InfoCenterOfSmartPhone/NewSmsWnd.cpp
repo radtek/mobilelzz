@@ -6,15 +6,7 @@
 #include <sms.h>
 #pragma comment(lib,"sms.lib")
 
-CNewSmsWnd::~CNewSmsWnd()
-{
-	if(NULL != m_pRecivers)
-	{
-		delete[] m_pRecivers;
-		m_pRecivers = NULL;
-	}
-	m_lReciversCount = 0;
-}
+
 
 BOOL CNewSmsWnd::OnInitDialog()
 {
@@ -110,40 +102,22 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 	switch(id)
 	{
 		case MZ_IDC_SEND_SMS_BTN:
-		{
-			
+		{			
 			int n = g_ReciversList.GetItemCount();
 			bool SendFlag = FALSE;
-			int  SendFail = 0;
+	//		MzAutoMsgBoxEx(NULL, L"短信发送中.....", 3000);
+
 			for(int i = 0; i<n;i++ )
 			{
 				MyListItemData* pMyListItemData = NULL;
 				g_ReciversList.GetItem(i, &pMyListItemData );
 				CMzString  Number = pMyListItemData->StringDescription;
-				CMzString  NewNumber ;
-				if(Number.C_Str()[0] ==L'1')
-				{
-					NewNumber = L"+86";
-					NewNumber += Number;
-				}
-				else
-				{
-					NewNumber = Number;
-				}
-
-
-				SendFlag = SendSMS(NewNumber.C_Str(), m_SmsMsgEdit.GetText().C_Str());
-				if(!SendFlag)
-				{
-					SendFail++;
-				}
-
+				
+				//SendFlag = SendSMS_Wrapper(Number);
+			
 			}
-
-			if(SendFail ==0 )
-			{
-				MzMessageBoxEx(NULL,L"短信已发送完毕",NULL);
-			}
+			MzMessageBoxEx(NULL,L"短信已发送完毕",MB_OK);
+			
 			break;
 		}
 
@@ -310,3 +284,49 @@ bool CNewSmsWnd::SendSMS(IN LPCTSTR lpNumber,IN LPCTSTR lpszMessage)
                 return false;
         } 
 } 
+
+
+
+/*
+ *拆分短信发送
+*/
+bool CNewSmsWnd::SendSMS_Wrapper(IN CMzString&  Number)
+{
+	bool SendFlag = false;
+	CMzString  NewNumber ;
+	if(Number.C_Str()[0] ==L'1')
+	{
+		NewNumber = L"+86";
+		NewNumber += Number;
+	}
+	else
+	{
+		NewNumber = Number;
+	}
+
+
+	CMzString  SMS_Content = m_SmsMsgEdit.GetText().C_Str();
+
+	
+	int length = SMS_Content.Length();
+	if( length <= 70 )
+	{
+	 	SendFlag = SendSMS(NewNumber.C_Str(), m_SmsMsgEdit.GetText().C_Str());
+	}
+	else
+	{
+		for(int i = 0; i < length; i+=70)
+		{
+			int count = ((length - i) < 70 ? (length-i): 70); 
+			CMzString Single_Content =SMS_Content.SubStr(i,count);
+
+			SendFlag = SendSMS(NewNumber.C_Str(), Single_Content.C_Str() );
+
+		}
+		
+	}
+
+
+	return SendFlag;
+
+}

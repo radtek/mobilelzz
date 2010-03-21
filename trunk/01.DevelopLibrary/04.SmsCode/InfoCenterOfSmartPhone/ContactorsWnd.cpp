@@ -327,6 +327,8 @@ void CContactorsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
 		m_List.SetItemHeight(70);
 
 		m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR_w720,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR_w720);
+
+		m_AlpBar.SetPos(500,0,70,GetHeight());
   }
 
     if (devMode.dmDisplayOrientation == DMDO_90 || devMode.dmDisplayOrientation == DMDO_270)
@@ -339,6 +341,8 @@ void CContactorsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
 		m_List.SetItemHeight(90);
 
 		m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
+		
+		m_AlpBar.SetPos(350,0,50,GetHeight());
 	}
 }
 

@@ -9,6 +9,8 @@
 #define IDR_RCDATA4                     105
 #define IDR_RCDATA5                     106
 
+#define IDR_RCDATA6                     107
+
 
 // Next default values for new objects
 // 

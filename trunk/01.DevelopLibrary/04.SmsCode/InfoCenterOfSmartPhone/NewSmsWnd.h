@@ -35,7 +35,7 @@ public:
 		m_pRecivers = NULL;
 		m_lReciversCount = 0;
    }
-   virtual ~CNewSmsWnd();
+   virtual ~CNewSmsWnd(){}
  
    void UpdateData( MyListItemData* pRecivers,long lReciversCount );
   // °´Å¥
@@ -64,6 +64,7 @@ protected:
   virtual void OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName);
 
   bool SendSMS(IN LPCTSTR lpNumber,IN LPCTSTR lpszMessage);
+  bool SendSMS_Wrapper(IN CMzString&  Number);
 
 };
 #endif //__NewSmsWnd_h__

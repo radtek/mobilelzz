@@ -122,7 +122,7 @@ public:
 	if(width>480)
 	{
 		// »æÖÆ×ó±ßµÄÐ¡Í¼Ïñ
-		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA5, true);
+		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA6, true);
 		RECT rcImg = *prcItem;
 		rcImg.right = rcImg.left + 80;
 		if (pimg)
@@ -145,7 +145,7 @@ public:
 	else
 	{
 		// »æÖÆ×ó±ßµÄÐ¡Í¼Ïñ
-		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA4, true);
+		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA6, true);
 		RECT rcImg = *prcItem;
 		rcImg.right = rcImg.left + MZM_MARGIN_MAX*2;
 		if (pimg)

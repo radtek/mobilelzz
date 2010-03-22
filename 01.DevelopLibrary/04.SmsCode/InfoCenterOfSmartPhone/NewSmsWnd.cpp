@@ -2,28 +2,25 @@
 
 #include"UiEditControl.h"
 #include"NewSmsWnd.h"
+#include "UsbNotifyApi.h"
 
 #include <sms.h>
-
 #pragma comment(lib,"sms.lib")
+
+INT g_iUsbNotifyMsg = 0;
 
 
 BOOL CNewSmsWnd::OnInitDialog()
 {
-//zhu.t add for License	at 2010-3-22
-#ifdef	LICENSE
-	if ( !LicenseProtect())
-	{
-		PostQuitMessage(0);
-		return	FALSE;
-	}
-#endif
-//end	
 	// 必须先调用基类的初始化
 	if (!CMzWndEx::OnInitDialog())
 	{
 	  return FALSE;
 	}
+
+	SetWindowText(L"易短信");
+	g_iUsbNotifyMsg = RegisterUsbNotifyMsg();
+
 
 	//打开重力感应设备
 	MzAccOpen();
@@ -89,14 +86,15 @@ BOOL CNewSmsWnd::OnInitDialog()
 	m_SmsMsgEdit->SetTextColor(RGB(94,94,94)); // you could also set the color of text
 
 	m_SmsMsgEdit->SetEditBgType(UI_EDIT_BGTYPE_ROUND_RECT);
-	m_SmsMsgEdit->SetColorBg(RGB(243,241,207)); 
+	//m_SmsMsgEdit->SetColorBg(RGB(243,241,207)); 
+	m_SmsMsgEdit->SetColorBg(RGB(250,250,250));
 	m_SmsMsgEdit->EnableInsideScroll(true);
 	m_SmsMsgEdit->EnableZoomIn(true);   
 	m_SmsMsgEdit->SetTip(L"在这里输入短信内容");
 	//m_SmsMsgEdit->EnableAutoOpenSip(true);
 	AddUiWin(m_SmsMsgEdit); // don't forget to add the control to the window
 
-	m_SendSmsBtn.SetButtonType(MZC_BUTTON_DELETE_ORANGE);
+	m_SendSmsBtn.SetButtonType(MZC_BUTTON_DEFAULT);
 	m_SendSmsBtn.EnableTextSinkOnPressed(TRUE);
 	m_SendSmsBtn.SetTextColor_Pressed(RGB(94,94,94));
 	
@@ -208,6 +206,16 @@ LRESULT CNewSmsWnd::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			WinManager* pMng = GetWinManager();
 			pMng->SetFocusedWinBeforeDeactivate(m_SmsMsgEdit);
+		}
+		else if( message == g_iUsbNotifyMsg)
+		{
+			INT iEvenType = (INT)wParam;
+			if(wParam == USB_MASSSTORAGE_ATTACH)
+			{
+				exit(0);
+			}
+
+			
 		}
 	    
 	  }
@@ -426,5 +434,6 @@ CNewSmsWnd::Run()
 	MzMessageBoxEx(NULL,L"短信已发送完毕",MB_OK);
 
 	g_ReciversList.Clear();
-	m_Recievers.UpdateData(1);
+	m_Recievers.SetText(L"");
+	m_SmsMsgEdit->SetText(L"");
 }

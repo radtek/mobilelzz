@@ -86,7 +86,7 @@ BOOL CContactorsWnd::OnInitDialog()
 
 	CSQL_session*  pSession = NULL;
 
-	HRESULT hr = pm->Session_Connect(L"contact", L".\\", L"contacts.db", &pSession );
+	HRESULT hr = pm->Session_Connect(L"contact", L".\\Documents and Settings\\", L"contacts.db", &pSession );
 	if(FAILED(hr) || pSession == NULL)	return RLH_FAIL;
 
 	CSQL_query * pq = NULL;

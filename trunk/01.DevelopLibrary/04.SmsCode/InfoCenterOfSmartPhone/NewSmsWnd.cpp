@@ -4,11 +4,21 @@
 #include"NewSmsWnd.h"
 
 #include <sms.h>
+
 #pragma comment(lib,"sms.lib")
 
 
 BOOL CNewSmsWnd::OnInitDialog()
 {
+//zhu.t add for License	at 2010-3-22
+#ifdef	LICENSE
+	if ( !LicenseProtect())
+	{
+		PostQuitMessage(0);
+		return	FALSE;
+	}
+#endif
+//end	
 	// 必须先调用基类的初始化
 	if (!CMzWndEx::OnInitDialog())
 	{

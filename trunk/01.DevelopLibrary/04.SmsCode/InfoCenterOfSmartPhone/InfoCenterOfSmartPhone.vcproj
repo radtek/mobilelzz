@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="InfoCenterOfSmartPhone"
 	ProjectGUID="{63AAFBF4-1830-4934-8D32-8AAD7BCE0C8E}"
+	RootNamespace="InfoCenterOfSmartPhone"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -64,7 +65,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=" /subsystem:windowsce,6.00"
-				AdditionalDependencies="mzfcsd.lib PlatformApi.lib"
+				AdditionalDependencies="mzfcsd.lib PlatformApi.lib MyStoreLib.lib"
 				OutputFile="$(OutDir)/InfoCenterOfSmartPhone.exe"
 				LinkIncremental="2"
 				DelayLoadDLLs="$(NOINHERIT)"
@@ -151,7 +152,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=" /subsystem:windowsce,6.00"
-				AdditionalDependencies="mzfcsd.lib PlatformApi.lib"
+				AdditionalDependencies="mzfcsd.lib PlatformApi.lib MyStoreLib.lib"
 				OutputFile="$(OutDir)/L2ZMessager.exe"
 				LinkIncremental="1"
 				DelayLoadDLLs="$(NOINHERIT)"
@@ -295,6 +296,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\MyStoreLib.h"
+				>
+			</File>
 			<File
 				RelativePath=".\resource.h"
 				>

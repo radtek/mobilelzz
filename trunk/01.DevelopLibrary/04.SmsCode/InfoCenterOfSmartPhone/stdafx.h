@@ -7,6 +7,15 @@
 #include <mzfc_inc.h>
 #include <acc_api.h>
 #include <ShellNotifyMsg.h>
+
+//zhu.t add for License	at 2010-3-22
+#include "MyStoreLib.h"
+#pragma comment(lib, "MyStoreLib.lib")
+#pragma comment(lib, "PlatformAPI.lib")
+#pragma comment(lib, "PhoneAdapter.lib")
+//end
+#define	LICENSE
+
 extern BOOL g_bH;
 
 // 列表项的自定义数据
@@ -135,4 +144,5 @@ private:
 };
 extern CReciversList g_ReciversList;
 
+bool	LicenseProtect();
 // TODO: 在此处引用程序需要的其他头文件

@@ -7,6 +7,9 @@ BOOL g_bH = FALSE;
 CReciversList g_ReciversList;
 // TODO: 在 STDAFX.H 中
 // 引用任何所需的附加头文件，而不是在此文件中引用
+
+ 
+
 bool	LicenseProtect()
 {
 	wchar_t pszFileName[MAX_PATH] = {0};

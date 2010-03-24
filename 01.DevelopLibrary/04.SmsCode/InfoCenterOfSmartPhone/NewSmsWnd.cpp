@@ -103,7 +103,10 @@ BOOL CNewSmsWnd::OnInitDialog()
 	//m_ContactorsBtn.SetTextColor(RGB(255,255,255));
 	AddUiWin(&m_SendSmsBtn);
 //	MzOpenSip();
-	PostMessage(65535,0,0);
+//	PostMessage(65535,0,0);
+
+//	WinManager* pMng = GetWinManager();
+//	pMng->SetFocusedWinBeforeDeactivate(m_SmsMsgEdit);
 
 	return TRUE;
 }
@@ -202,16 +205,6 @@ LRESULT CNewSmsWnd::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			break;
 		  }
-		}
-		else if( message == 641 )
-		{
-			HWND h = GetForegroundWindow();
-			if(h==m_hWnd)
-			{
-				WinManager* pMng = GetWinManager();
-				pMng->SetFocusedWinBeforeDeactivate(m_SmsMsgEdit);
-
-			}
 		}
 		else if( message == g_iUsbNotifyMsg)
 		{

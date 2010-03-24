@@ -10,15 +10,53 @@ void UiEditControl::OnFocused (UiWin *pWinPrev)
 
 }
  
-CContactorsWnd clContactorsWnd;
+
 //zds 2010/03/21 19:39
 int UiEditControl::OnLButtonUp  ( UINT  fwKeys,  int  xPos,  int  yPos )
 {
 //	MzCloseSip();
 
+	RECT rc = {0};
+	int height = 0;
+	int width = 0;
+	HWND hWnd = FindWindow(L"CTaskBar", 0);
+	if(hWnd != 0)
+	{
+		::GetWindowRect(hWnd, &rc);
+		height = rc.bottom - rc.top;
+		width = rc.right - rc.left;
+	}
+
+	//ºáÆÁ
+	if(width>480)
+	{
+		if( (xPos <= (GetWidth() -150) && xPos >= 2) &&( yPos <= 65 && yPos >=0) )	
+		{
+			int x =0;
+
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	else
+	{
+		if((xPos <= (GetWidth() -150) && xPos >= 2) &&( yPos <= 65 && yPos >=0))
+		{
+			int x =0;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+
 	int i = MZ_ANIMTYPE_SCROLL_BOTTOM_TO_TOP_2;
 	m_lFlag = 1;
-	
+	CContactorsWnd clContactorsWnd;
 	clContactorsWnd.SetParent(this);
 	RECT rcWork = MzGetWorkArea();
 	clContactorsWnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, WS_POPUP);
@@ -59,7 +97,7 @@ void UiEditControl::UpdateData( long lFlag )
 		SetText(wcsReciversName);
 		//Update();
 	}
-	ReleaseCapture();
+//	ReleaseCapture();
 	
 	
 	//((CNewSmsWnd*)m_pParent)->UpdateData(pRecivers, lReciversCount);

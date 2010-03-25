@@ -73,6 +73,7 @@ public:
   CMyEdit*					m_SmsMsgEdit;
 
   DWORD m_accMsg;
+  DWORD m_smsMsg;
 protected:
   // 窗口的初始化
   virtual BOOL OnInitDialog();
@@ -90,6 +91,7 @@ protected:
   bool SendSMS_Wrapper(IN CMzString&  Number);
 
   void OnTimer(UINT_PTR nIDEvent);
-
+private:
+	void ReadMessage();
 };
 #endif //__NewSmsWnd_h__

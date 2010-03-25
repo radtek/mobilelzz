@@ -3,6 +3,9 @@
 #include"UiEditControl.h"
 #include"NewSmsWnd.h"
 #include "UsbNotifyApi.h"
+#include "CallNotifyApi.h"
+
+//#include <Mzpam\\MessageDbIf.h>
 
 #include <sms.h>
 #pragma comment(lib,"sms.lib")
@@ -102,8 +105,22 @@ BOOL CNewSmsWnd::OnInitDialog()
 	m_SendSmsBtn.SetText(L"发送");
 	//m_ContactorsBtn.SetTextColor(RGB(255,255,255));
 	AddUiWin(&m_SendSmsBtn);
+
+	//MessageDbIf* pMessage = MessageDbIf::GetMessageDbIf();
+	//mzu::array<mzu::stringw> vAddressInfo;
+	//pMessage->GetAddrRelatedThread(vAddressInfo);
+	//CMessageInfo info;
+	//info.strNumber = L"13889374835";
+	//info.strBody = L"我爱你";
+	//long lThreadID = pMessage->PreInsertMessage(vAddressInfo, info);
+	//info.threadId = lThreadID;
+	//info.messageid = 1;
+	//pMessage->InsertMessage(info);
+
 //	MzOpenSip();
 //	PostMessage(65535,0,0);
+
+	m_smsMsg = GetSmsRegisterMessage();
 
 //	WinManager* pMng = GetWinManager();
 //	pMng->SetFocusedWinBeforeDeactivate(m_SmsMsgEdit);
@@ -216,11 +233,53 @@ LRESULT CNewSmsWnd::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 			
 		}
-	    
+		else if( message == m_smsMsg)
+		{
+			ReadMessage();
+		}
 	  }
 	  break;
 	}
 	  return CMzWndEx::MzDefWndProc(message,wParam,lParam);
+}
+
+void CNewSmsWnd::ReadMessage()
+{
+	HRESULT hRes; 
+	SMS_HANDLE   smsHandle=NULL; 
+	SMS_ADDRESS   smsaDestination; 
+	SMS_MESSAGE_ID   smsmidMessageID=0; 
+	hRes=SmsOpen(SMS_MSGTYPE_TEXT,SMS_MODE_RECEIVE,&smsHandle,NULL); 
+	if   (FAILED(hRes)) 
+	{ 
+	//	return   false; 
+	} 
+	long lDataSize = 0;
+	SmsGetMessageSize( smsHandle,  (DWORD *const)&lDataSize);
+	wchar_t strMessage[512] = L"";
+	SYSTEMTIME stTime;
+	memset(&stTime, 0x0, sizeof(SYSTEMTIME));
+	GetSystemTime(&stTime);
+	stTime.wHour = 0;
+	stTime.wMilliseconds = 0;
+	stTime.wMinute = 0;
+	stTime.wSecond = 0;
+
+	TEXT_PROVIDER_SPECIFIC_DATA   tpsd;
+	memset(&tpsd, 0x0, sizeof(tpsd));
+	tpsd.dwMessageOptions  = PS_MESSAGE_OPTION_NONE; 
+	tpsd.dwHeaderDataSize = 0; 
+	tpsd.fMessageContainsEMSHeaders = FALSE; 
+	tpsd.dwProtocolID = SMS_MSGPROTOCOL_UNKNOWN; 
+	tpsd.psReplaceOption = PSRO_NONE; 
+
+	long lReadSize = 0;	
+	SmsReadMessage(smsHandle, 0, 0, &stTime, (PBYTE)strMessage, 1024,
+		(PBYTE)&tpsd, 
+		sizeof(TEXT_PROVIDER_SPECIFIC_DATA), (DWORD *)&lReadSize); 
+	m_SmsMsgEdit->SetText(strMessage);
+	SmsClose(smsHandle);
+	
 }
 
 // 转屏后如果需要调整窗口的位置，重载此函数响应 WM_SETTINGCHANGE 消息

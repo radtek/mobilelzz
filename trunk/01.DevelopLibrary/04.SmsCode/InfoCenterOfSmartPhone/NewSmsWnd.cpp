@@ -274,9 +274,13 @@ void CNewSmsWnd::ReadMessage()
 	tpsd.psReplaceOption = PSRO_NONE; 
 
 	long lReadSize = 0;	
-	SmsReadMessage(smsHandle, 0, 0, &stTime, (PBYTE)strMessage, 1024,
+	hRes = SmsReadMessage(smsHandle, 0, 0, &stTime, (PBYTE)strMessage, 1024,
 		(PBYTE)&tpsd, 
 		sizeof(TEXT_PROVIDER_SPECIFIC_DATA), (DWORD *)&lReadSize); 
+	if   (FAILED(hRes)) 
+	{ 
+		//	return   false; 
+	} 
 	m_SmsMsgEdit->SetText(strMessage);
 	SmsClose(smsHandle);
 	

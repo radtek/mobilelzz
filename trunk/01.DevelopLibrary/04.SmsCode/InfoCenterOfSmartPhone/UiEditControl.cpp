@@ -1,9 +1,26 @@
 #include"stdafx.h"
 #include <mzfc_inc.h>
+
 #include"UiEditControl.h"
 #include"NewSmsWnd.h"
 #include"ContactorsWnd.h"
 
+UiEditControl::UiEditControl()
+{
+	m_lFlag = 0;
+	m_pParent = NULL;
+	m_pclContactorsWnd  = NULL;	
+}
+
+UiEditControl::~UiEditControl()
+{
+	if(NULL != m_pclContactorsWnd )
+	{
+		delete m_pclContactorsWnd ;
+		m_pclContactorsWnd  = NULL;	
+	}
+
+}
 
 void UiEditControl::OnFocused (UiWin *pWinPrev) 
 {
@@ -12,60 +29,31 @@ void UiEditControl::OnFocused (UiWin *pWinPrev)
  
 
 //zds 2010/03/21 19:39
-int UiEditControl::OnLButtonUp  ( UINT  fwKeys,  int  xPos,  int  yPos )
+int UiEditControl::OnLButtonUp123  ( UINT  fwKeys,  int  xPos,  int  yPos )
 {
-//	MzCloseSip();
-
-	RECT rc = {0};
-	int height = 0;
-	int width = 0;
-	HWND hWnd = FindWindow(L"CTaskBar", 0);
-	if(hWnd != 0)
+	RECT EditRc = GetClientRect();
+	if( (yPos <= EditRc.bottom && yPos >= EditRc.top) &&( xPos <= EditRc.right && xPos >=EditRc.left) )	
 	{
-		::GetWindowRect(hWnd, &rc);
-		height = rc.bottom - rc.top;
-		width = rc.right - rc.left;
+		int i = MZ_ANIMTYPE_SCROLL_BOTTOM_TO_TOP_2;
+		m_lFlag = 1;
+		
+		if(NULL != m_pclContactorsWnd )
+		{
+			delete m_pclContactorsWnd ;
+			m_pclContactorsWnd  = NULL;
+		}
+
+		m_pclContactorsWnd = new CContactorsWnd;
+		m_pclContactorsWnd->SetParent(this);
+		RECT rcWork = MzGetWorkArea();
+		m_pclContactorsWnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0, 0);
+		// 设置窗口切换动画（弹出时的动画）
+		//clContactorsWnd.SetAnimateType_Show(i);
+		// 设置窗口切换动画（结束时的动画）
+		//clContactorsWnd.SetAnimateType_Hide(i+1);
+		m_pclContactorsWnd->Show();		
+
 	}
-
-	//横屏
-	if(width>480)
-	{
-		if( (xPos <= (GetWidth() -150) && xPos >= 2) &&( yPos <= 65 && yPos >=0) )	
-		{
-			int x =0;
-
-		}
-		else
-		{
-			return 0;
-		}
-	}
-
-	else
-	{
-		if((xPos <= (GetWidth() -150) && xPos >= 2) &&( yPos <= 65 && yPos >=0))
-		{
-			int x =0;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-	
-
-	int i = MZ_ANIMTYPE_SCROLL_BOTTOM_TO_TOP_2;
-	m_lFlag = 1;
-	CContactorsWnd clContactorsWnd;
-	clContactorsWnd.SetParent(this);
-	RECT rcWork = MzGetWorkArea();
-	clContactorsWnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, WS_POPUP);
-	// 设置窗口切换动画（弹出时的动画）
-	//clContactorsWnd.SetAnimateType_Show(i);
-	// 设置窗口切换动画（结束时的动画）
-	//clContactorsWnd.SetAnimateType_Hide(i+1);
-	int nRet = clContactorsWnd.DoModal();
-	int b = 2;
 
 	return 0;
 
@@ -97,7 +85,7 @@ void UiEditControl::UpdateData( long lFlag )
 		SetText(wcsReciversName);
 		//Update();
 	}
-//	ReleaseCapture();
+	ReleaseCapture();
 	
 	
 	//((CNewSmsWnd*)m_pParent)->UpdateData(pRecivers, lReciversCount);

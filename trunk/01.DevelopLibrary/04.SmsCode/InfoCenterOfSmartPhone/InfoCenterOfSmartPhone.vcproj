@@ -335,6 +335,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\N_H.png"
+				>
+			</File>
+			<File
+				RelativePath=".\N_V.png"
+				>
+			</File>
+			<File
 				RelativePath=".\sms.png"
 				>
 			</File>

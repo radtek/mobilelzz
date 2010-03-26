@@ -217,13 +217,93 @@
 				Name="UI"
 				>
 				<File
+					RelativePath="..\..\UI\ContactorsWnd.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\ContactorsWnd.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\UI\MainWnd.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\NewSmsWnd.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\NewSmsWnd.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\UiEditControl.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\UiEditControl.h"
 					>
 				</File>
 			</Filter>
 			<Filter
 				Name="Core"
 				>
+				<Filter
+					Name="ContactorsService"
+					>
+					<File
+						RelativePath="..\..\Core\ContactorsService\ContactorsService.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Core\ContactorsService\ContactorsService.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="FavoriteService"
+					>
+					<File
+						RelativePath="..\..\Core\FavoriteService\FavoriteService.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="GroupService"
+					>
+					<File
+						RelativePath="..\..\Core\GroupService\GroupService.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="OwnerService"
+					>
+					<File
+						RelativePath="..\..\Core\OwnerService\OwnerService.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="ServiceControl"
+					>
+					<File
+						RelativePath="..\..\Core\ServiceControl\BasicService.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Core\ServiceControl\ServiceControl.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="SmsService"
+					>
+					<File
+						RelativePath="..\..\Core\SmsService\SmsService.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="CommonLib"
@@ -309,6 +389,10 @@
 					</File>
 					<File
 						RelativePath="..\..\CommonLib\FunctionLib\FuncLib.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\CommonLib\FunctionLib\MyStoreLib.h"
 						>
 					</File>
 				</Filter>

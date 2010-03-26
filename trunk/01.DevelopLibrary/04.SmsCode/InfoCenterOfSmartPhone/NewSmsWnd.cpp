@@ -14,10 +14,10 @@ INT g_iUsbNotifyMsg = 0;
 
 BOOL CNewSmsWnd::OnInitDialog()
 {
-//	if(!LicenseProtect())
-//	{
-//		exit(0);
-//	}
+	if(!LicenseProtect())
+	{
+		exit(0);
+	}
 	// 必须先调用基类的初始化
 	if (!CMzWndEx::OnInitDialog())
 	{

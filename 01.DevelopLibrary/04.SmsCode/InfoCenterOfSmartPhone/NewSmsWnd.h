@@ -22,8 +22,8 @@
 #define PROGRESS_TIMER_ID		111
 
 
-#define BUTTON_WIDTH_V	150
-#define BUTTON_WIDTH_H	150
+#define BUTTON_WIDTH_V	100
+#define BUTTON_WIDTH_H	100
 
 #define BUTTON_HEIGHT_VH 65
 // 从 CMzWndEx 派生的主窗口类
@@ -59,8 +59,6 @@ public:
    {
 		m_lCurProgress = 0;
 		m_SmsMsgEdit = new CMyEdit;
-
-
    }
    virtual ~CNewSmsWnd(){
 	
@@ -75,7 +73,7 @@ public:
  
    void UpdateData( MyListItemData* pRecivers,long lReciversCount );
   // 按钮
-  UiButton m_SendSmsBtn;
+//  UiButton m_SendSmsBtn;
   UiButton m_ContactorsBtn;
   MzPopupProgress m_progress;
   long m_lCurProgress;
@@ -86,6 +84,7 @@ public:
 
   DWORD m_accMsg;
   DWORD m_smsMsg;
+  HANDLE					m_hReadMessageThread;
 protected:
   // 窗口的初始化
   virtual BOOL OnInitDialog();
@@ -105,7 +104,13 @@ protected:
   void OnTimer(UINT_PTR nIDEvent);
 
   virtual void OnLButtonUp  ( UINT  fwKeys,  int  xPos,  int  yPos );
+	static DWORD WINAPI ReadMessage(LPVOID lpParameter);
 private:
 	void ReadMessage();
+
+	UiButton_Image m_SendSmsBtn;
+
+	ImageContainer m_imgContainer;
+
 };
 #endif //__NewSmsWnd_h__

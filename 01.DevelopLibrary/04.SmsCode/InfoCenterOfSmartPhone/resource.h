@@ -20,6 +20,10 @@
 
 #define IDR_RCDATA_N_H					112
 #define IDR_RCDATA_N_V					113
+#define IDR_PNG_SMSICON					114
+#define IDR_PNG_EMAILICON				115
+
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

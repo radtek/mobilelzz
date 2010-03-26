@@ -7,7 +7,7 @@
 #include <mzfc_inc.h>
 #include <acc_api.h>
 #include <ShellNotifyMsg.h>
-
+#include <sms.h>
 //zhu.t add for License	at 2010-3-22
 #include "MyStoreLib.h"
 #pragma comment(lib, "MyStoreLib.lib")

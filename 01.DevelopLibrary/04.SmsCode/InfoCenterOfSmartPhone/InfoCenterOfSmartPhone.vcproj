@@ -327,7 +327,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\120.png"
+				>
+			</File>
+			<File
 				RelativePath=".\21.png"
+				>
+			</File>
+			<File
+				RelativePath=".\Email.png"
 				>
 			</File>
 			<File
@@ -340,6 +348,14 @@
 			</File>
 			<File
 				RelativePath=".\N_V.png"
+				>
+			</File>
+			<File
+				RelativePath=".\SendBTN.png"
+				>
+			</File>
+			<File
+				RelativePath=".\SendBTN11.png"
 				>
 			</File>
 			<File

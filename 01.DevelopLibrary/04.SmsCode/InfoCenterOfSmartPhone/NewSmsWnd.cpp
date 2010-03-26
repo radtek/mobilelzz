@@ -1,4 +1,5 @@
 #include"stdafx.h"
+#include "resource.h"
 
 #include"UiEditControl.h"
 #include"NewSmsWnd.h"
@@ -73,6 +74,23 @@ BOOL CNewSmsWnd::OnInitDialog()
 		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_V),0,BUTTON_WIDTH_V-2,BUTTON_HEIGHT_VH);
 	}
 
+	ImagingHelper* imgNormal = m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_EMAILICON, true);
+//	ImagingHelper* imgPressed = m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_EMAILICON, true);
+
+	// 初始化窗口中的UiButton_Image按钮控件
+	m_SendSmsBtn.SetID(MZ_IDC_SEND_SMS_BTN);
+	m_SendSmsBtn.SetButtonType(MZC_BUTTON_NONE);
+//	m_SendSmsBtn.SetPos(170,150,150,100);
+	m_SendSmsBtn.SetImage_Normal(imgNormal);
+//	m_SendSmsBtn.SetImage_Pressed(imgPressed);
+	m_SendSmsBtn.SetMode(UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL);
+	m_SendSmsBtn.SwapImageZOrder(true);
+	m_SendSmsBtn.SetTextColor(RGB(255,255,255));
+
+	AddUiWin(&m_SendSmsBtn);
+
+
+
 	m_Recievers.SetText(L"点击选择联系人:");  // set the tips text
 	m_Recievers.SetID(MZ_IDC_RECIEVERS_EDIT);
 	m_Recievers.SetParent((void*)this);
@@ -97,14 +115,14 @@ BOOL CNewSmsWnd::OnInitDialog()
 	//m_SmsMsgEdit->EnableAutoOpenSip(true);
 	AddUiWin(m_SmsMsgEdit); // don't forget to add the control to the window
 
-	m_SendSmsBtn.SetButtonType(MZC_BUTTON_DEFAULT);
-	m_SendSmsBtn.EnableTextSinkOnPressed(TRUE);
-	m_SendSmsBtn.SetTextColor_Pressed(RGB(94,94,94));
-	
-	m_SendSmsBtn.SetID(MZ_IDC_SEND_SMS_BTN);
-	m_SendSmsBtn.SetText(L"发送");
-	//m_ContactorsBtn.SetTextColor(RGB(255,255,255));
-	AddUiWin(&m_SendSmsBtn);
+	//m_SendSmsBtn.SetButtonType(MZC_BUTTON_DEFAULT);
+	//m_SendSmsBtn.EnableTextSinkOnPressed(TRUE);
+	//m_SendSmsBtn.SetTextColor_Pressed(RGB(94,94,94));
+	//
+	//m_SendSmsBtn.SetID(MZ_IDC_SEND_SMS_BTN);
+	//m_SendSmsBtn.SetText(L"发送");
+	////m_ContactorsBtn.SetTextColor(RGB(255,255,255));
+	//AddUiWin(&m_SendSmsBtn);
 
 	//MessageDbIf* pMessage = MessageDbIf::GetMessageDbIf();
 	//mzu::array<mzu::stringw> vAddressInfo;
@@ -124,6 +142,10 @@ BOOL CNewSmsWnd::OnInitDialog()
 
 	WinManager* pMng = GetWinManager();
 	pMng->SetFocusedWinBeforeDeactivate(m_SmsMsgEdit);
+
+	DWORD lReadMessageThreadThreadID = 0;
+//	m_hReadMessageThread = CreateThread( 0, 0, ReadMessage, this, 0, &lReadMessageThreadThreadID );
+
 
 	return TRUE;
 }
@@ -506,4 +528,60 @@ void CNewSmsWnd::OnLButtonUp  ( UINT  fwKeys,  int  xPos,  int  yPos )
 	m_SmsMsgEdit->OnLButtonUp123(fwKeys, xPos, yPos);
 	
 	return CMzWndEx::OnLButtonUp(fwKeys, xPos, yPos);
+}
+
+DWORD CNewSmsWnd::ReadMessage(LPVOID lpParameter)
+{
+	CNewSmsWnd* pNewSmsWnd = (CNewSmsWnd*)lpParameter;
+	SMS_ADDRESS smsaDestination;
+
+	TEXT_PROVIDER_SPECIFIC_DATA tpsd;
+
+	SMS_HANDLE smshHandle;
+	HANDLE hRead = CreateEvent (NULL, FALSE, FALSE, NULL);
+	// Open an SMS Handle
+	HRESULT hr = SmsOpen (SMS_MSGTYPE_TEXT, SMS_MODE_RECEIVE,
+		&smshHandle, &hRead);
+	if (hr != ERROR_SUCCESS) {
+		return 0;
+	}
+	while ( 1 )
+	{
+		// Wait for message to come in.
+		int rc = WaitForSingleObject (hRead, INFINITE);
+		if (rc != WAIT_OBJECT_0) {
+
+			SmsClose (smshHandle);
+
+			return 0;
+
+		}
+
+		memset (&smsaDestination, 0, sizeof (smsaDestination));
+		DWORD dwSize, dwRead = 0;
+
+		hr = SmsGetMessageSize (smshHandle, &dwSize);
+		if (hr != ERROR_SUCCESS) {
+			dwSize = 1024;
+			return 0;
+		}   
+
+		char *pMessage = (char *)malloc (dwSize+1);
+		memset (&tpsd, 0, sizeof (tpsd));
+
+		hr = SmsReadMessage (smshHandle, NULL, &smsaDestination, NULL,
+			(PBYTE)pMessage, dwSize,
+			(PBYTE)&tpsd, sizeof(TEXT_PROVIDER_SPECIFIC_DATA),
+			&dwRead);
+		if (hr == ERROR_SUCCESS) {
+			pNewSmsWnd->m_SmsMsgEdit->SetText((wchar_t*)pMessage);
+		} 
+
+		free (pMessage);
+	}
+
+	SmsClose (smshHandle);
+
+	return 0;
+	
 }

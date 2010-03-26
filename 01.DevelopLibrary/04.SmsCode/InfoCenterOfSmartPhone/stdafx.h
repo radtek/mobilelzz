@@ -134,9 +134,7 @@ public:
 	}
 	void Clear()
 	{
-		//delete[] m_pReciversData;
 		m_lReciversDataCount = 0;
-		//m_lReciversDataMemoryCount = 0;
 	}
 private:
 	MyListItemData* m_pReciversData;

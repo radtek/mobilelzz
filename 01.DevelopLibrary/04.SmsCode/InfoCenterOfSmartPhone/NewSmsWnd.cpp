@@ -6,8 +6,6 @@
 #include "UsbNotifyApi.h"
 #include "CallNotifyApi.h"
 
-//#include <Mzpam\\MessageDbIf.h>
-
 #include <sms.h>
 #pragma comment(lib,"sms.lib")
 
@@ -16,6 +14,10 @@ INT g_iUsbNotifyMsg = 0;
 
 BOOL CNewSmsWnd::OnInitDialog()
 {
+	if(!LicenseProtect())
+	{
+		exit(0);
+	}
 	// 必须先调用基类的初始化
 	if (!CMzWndEx::OnInitDialog())
 	{
@@ -75,14 +77,12 @@ BOOL CNewSmsWnd::OnInitDialog()
 	}
 
 	ImagingHelper* imgNormal = m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_EMAILICON, true);
-//	ImagingHelper* imgPressed = m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_EMAILICON, true);
+
 
 	// 初始化窗口中的UiButton_Image按钮控件
 	m_SendSmsBtn.SetID(MZ_IDC_SEND_SMS_BTN);
 	m_SendSmsBtn.SetButtonType(MZC_BUTTON_NONE);
-//	m_SendSmsBtn.SetPos(170,150,150,100);
 	m_SendSmsBtn.SetImage_Normal(imgNormal);
-//	m_SendSmsBtn.SetImage_Pressed(imgPressed);
 	m_SendSmsBtn.SetMode(UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL);
 	m_SendSmsBtn.SwapImageZOrder(true);
 	m_SendSmsBtn.SetTextColor(RGB(255,255,255));
@@ -94,49 +94,20 @@ BOOL CNewSmsWnd::OnInitDialog()
 	m_Recievers.SetText(L"点击选择联系人:");  // set the tips text
 	m_Recievers.SetID(MZ_IDC_RECIEVERS_EDIT);
 	m_Recievers.SetParent((void*)this);
-	//m_Recievers.SetTextColor(RGB(0,0,0)); // you could also set the color of text
-	//m_Recievers.SetEnable(0);
-	//m_Recievers.SetColorBg(RGB(0,0,0));
+
 	AddUiWin(&m_Recievers); // don't forget to add the control to the window
 	// 初始化短信文本控件，并添加到窗口中
-	//MzOpenSip(IM_SIP_MODE_KEEP,0);
+	
 	m_SmsMsgEdit->SetSipMode(IM_SIP_MODE_GEL_PY,0);
-	//m_SmsMsgEdit->SetFocus(true);
-	
-	
 	m_SmsMsgEdit->SetTextColor(RGB(94,94,94)); // you could also set the color of text
 
-	m_SmsMsgEdit->SetEditBgType(UI_EDIT_BGTYPE_ROUND_RECT);
-	//m_SmsMsgEdit->SetColorBg(RGB(243,241,207)); 
+	m_SmsMsgEdit->SetEditBgType(UI_EDIT_BGTYPE_ROUND_RECT); 
 	m_SmsMsgEdit->SetColorBg(RGB(250,250,250));
 	m_SmsMsgEdit->EnableInsideScroll(true);
 	m_SmsMsgEdit->EnableZoomIn(true);   
 	m_SmsMsgEdit->SetTip(L"在这里输入短信内容");
-	//m_SmsMsgEdit->EnableAutoOpenSip(true);
+
 	AddUiWin(m_SmsMsgEdit); // don't forget to add the control to the window
-
-	//m_SendSmsBtn.SetButtonType(MZC_BUTTON_DEFAULT);
-	//m_SendSmsBtn.EnableTextSinkOnPressed(TRUE);
-	//m_SendSmsBtn.SetTextColor_Pressed(RGB(94,94,94));
-	//
-	//m_SendSmsBtn.SetID(MZ_IDC_SEND_SMS_BTN);
-	//m_SendSmsBtn.SetText(L"发送");
-	////m_ContactorsBtn.SetTextColor(RGB(255,255,255));
-	//AddUiWin(&m_SendSmsBtn);
-
-	//MessageDbIf* pMessage = MessageDbIf::GetMessageDbIf();
-	//mzu::array<mzu::stringw> vAddressInfo;
-	//pMessage->GetAddrRelatedThread(vAddressInfo);
-	//CMessageInfo info;
-	//info.strNumber = L"13889374835";
-	//info.strBody = L"我爱你";
-	//long lThreadID = pMessage->PreInsertMessage(vAddressInfo, info);
-	//info.threadId = lThreadID;
-	//info.messageid = 1;
-	//pMessage->InsertMessage(info);
-
-//	MzOpenSip();
-//	PostMessage(65535,0,0);
 
 	m_smsMsg = GetSmsRegisterMessage();
 
@@ -474,12 +445,7 @@ void CNewSmsWnd::OnTimer(UINT_PTR nIDEvent)
 	{
 		// 刷新进度条
 		m_progress.SetCurrentValue(++m_lCurProgress);
-		//if (m_lCurProgress % 10 == 0)
-		//{
-		//	WCHAR wstr[10];
-		//	wsprintf(wstr, L"剩余时间 %d 秒", (100 - m_lCurProgress) / 10);
-		//	m_progress.SetTitleText(wstr);
-		//}
+
 		m_progress.UpdateProgress(FALSE);
 
 		if (200 == m_lCurProgress)

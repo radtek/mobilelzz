@@ -44,8 +44,6 @@ protected:
     {
     case MZ_IDC_NewSmsBtn:
       {
-        //if(1 == MzMessageBoxEx(m_hWnd, L"You have pressed Exit button, Really want exit?", L"Exit", MB_YESNO, false))
-        //  PostQuitMessage(0);
 		RECT rcWork = MzGetWorkArea();
 		m_NewSmsWnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0);
 		m_NewSmsWnd.Show();

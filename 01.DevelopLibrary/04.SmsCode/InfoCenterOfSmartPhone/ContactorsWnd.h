@@ -133,7 +133,7 @@ public:
 		RECT rcText = *prcItem;
 		rcText.left = rcImg.right+15;
 		rcText.right = 300;
-		//::SetTextColor(hdcDst, RGB(0,200,0));
+
 		::SetTextColor(hdcDst, RGB(0,0,0));
 		
 		MzDrawText(hdcDst, pmlid->StringTitle.C_Str(), &rcText, DT_LEFT|DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);

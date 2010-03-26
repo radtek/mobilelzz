@@ -8,7 +8,6 @@ class CContactorsWnd;
 class UiEditControl: public UiSingleLineEdit
 {
 	long m_lFlag;
-	//HWND m_hParentWnd;
 
 	void* m_pParent;
 	CContactorsWnd* m_pclContactorsWnd;

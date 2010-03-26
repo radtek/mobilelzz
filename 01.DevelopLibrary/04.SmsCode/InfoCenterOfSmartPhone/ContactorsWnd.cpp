@@ -78,7 +78,7 @@ BOOL CContactorsWnd::OnInitDialog()
 	
 	m_Toolbar.SetButton(0, true, true, L"取消");
 	m_Toolbar.SetButton(2, true, true, L"确认");
-	//m_Toolbar.SetButton(2, true, true, L"Setting");
+	
 	m_Toolbar.SetID(MZ_IDC_TOOLBAR1);
 	AddUiWin(&m_Toolbar);
 
@@ -145,15 +145,14 @@ BOOL CContactorsWnd::OnInitDialog()
 
 	bool DisConect  = false;
 
-#if 1 
 	pq->Finalize();
-	//pSession->DisConnect(&DisConect);
+
 	pQFirstLetter->Finalize();
 	pSession->Query_Delete(q_id);
 	pSession->Query_Delete(lQFirstLetterID);
 	pm->ReleaseInstance();
 	
-#endif 
+
 	m_bInit = TRUE;
 	return TRUE;
 }
@@ -248,7 +247,6 @@ void CContactorsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 			{
 				m_pParent->UpdateData(0);
 				DestroyWindow();
-				//EndModal(ID_CANCEL);  
 				g_bContactShow = FALSE;
 			  return;
 			}
@@ -275,9 +273,6 @@ void CContactorsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 				m_pParent->UpdateData(1);
 				DestroyWindow();
 				g_bContactShow = FALSE;
-
-				//EndModal(ID_CANCEL); 
-				//MzOpenSip(IM_SIP_MODE_KEEP,0);
 			  return;
 			}
 

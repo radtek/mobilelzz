@@ -47,10 +47,7 @@ int UiEditControl::OnLButtonUp123  ( UINT  fwKeys,  int  xPos,  int  yPos )
 		m_pclContactorsWnd->SetParent(this);
 		RECT rcWork = MzGetWorkArea();
 		m_pclContactorsWnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0, 0);
-		// 设置窗口切换动画（弹出时的动画）
-		//clContactorsWnd.SetAnimateType_Show(i);
-		// 设置窗口切换动画（结束时的动画）
-		//clContactorsWnd.SetAnimateType_Hide(i+1);
+
 		m_pclContactorsWnd->Show();		
 		g_bContactShow = TRUE;
 
@@ -71,7 +68,6 @@ void UiEditControl::UpdateData( long lFlag )
 {
 	if(lFlag == 0)
 	{
-		//m_lFlag = 0;
 	}
 	else
 	{
@@ -84,10 +80,8 @@ void UiEditControl::UpdateData( long lFlag )
 			wcscat(wcsReciversName, L";" );
 		}
 		SetText(wcsReciversName);
-		//Update();
 	}
 	ReleaseCapture();
 	
 	
-	//((CNewSmsWnd*)m_pParent)->UpdateData(pRecivers, lReciversCount);
 }

@@ -502,17 +502,8 @@ CNewSmsWnd::Run()
 
 void CNewSmsWnd::OnLButtonUp  ( UINT  fwKeys,  int  xPos,  int  yPos )
 {
-
-
 	m_Recievers.OnLButtonUp123(fwKeys, xPos, yPos);
 	m_SmsMsgEdit->OnLButtonUp123(fwKeys, xPos, yPos);
-	
-
-	
-
-
-
-	
 	
 	return CMzWndEx::OnLButtonUp(fwKeys, xPos, yPos);
 }

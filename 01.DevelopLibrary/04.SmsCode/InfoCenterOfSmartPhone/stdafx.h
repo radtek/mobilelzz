@@ -18,6 +18,8 @@
 
 extern BOOL g_bH;
 
+extern  BOOL  g_bContactShow;
+
 // 列表项的自定义数据
 class MyListItemData
 {

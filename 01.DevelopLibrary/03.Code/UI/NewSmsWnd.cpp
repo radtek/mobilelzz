@@ -1,23 +1,24 @@
 #include"stdafx.h"
-#include "resource.h"
 
 #include"UiEditControl.h"
 #include"NewSmsWnd.h"
-#include "UsbNotifyApi.h"
-#include "CallNotifyApi.h"
 
 #include <sms.h>
 #pragma comment(lib,"sms.lib")
 
 INT g_iUsbNotifyMsg = 0;
 
+CNewSmsWnd::~CNewSmsWnd()
+{
+	MzAccClose();  
+}
 
 BOOL CNewSmsWnd::OnInitDialog()
 {
-	if(!LicenseProtect())
-	{
-		exit(0);
-	}
+	//if(!F_LicenseProtect())
+	//{
+	//	exit(0);
+	//}
 	// 必须先调用基类的初始化
 	if (!CMzWndEx::OnInitDialog())
 	{

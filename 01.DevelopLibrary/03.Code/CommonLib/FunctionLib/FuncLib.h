@@ -17,4 +17,6 @@ unsigned short* F_wcscpyn( unsigned short *pwstrDest, const unsigned short *pwst
 
 long S_MultiByte2WideChar( const char *pMultiByteStr, long lMultiByteCharSize, unsigned short *pusWideCharStr, long lWideCharSize );
 
+BOOL	F_LicenseProtect();
+
 #endif // FuncLib__H

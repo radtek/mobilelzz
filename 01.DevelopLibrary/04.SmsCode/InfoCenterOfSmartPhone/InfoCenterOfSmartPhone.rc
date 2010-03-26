@@ -59,19 +59,9 @@ END
 // RCDATA
 //
 
-IDR_RCDATA1             RCDATA                  "sms.png"
-//IDR_RCDATA2             RCDATA                  "tiger.jpg"
-IDR_RCDATA3             RCDATA                  "01.gif"
-IDR_RCDATA4             RCDATA                  "015_V.png"
-IDR_RCDATA5             RCDATA                  "015_H.png"
-IDR_RCDATA6             RCDATA                  "12.png"
-IDR_RCDATA8             RCDATA                  "21.png"
-IDR_RCDATA_H             RCDATA                  "008_H.png"
-IDR_RCDATA_V             RCDATA                  "008_V.png"
-IDR_RCDATA_N_H             RCDATA                  "N_H.png"
-IDR_RCDATA_N_V             RCDATA                  "N_V.png"
-IDR_PNG_EMAILICON	RCDATA                  "btn11.png"
-IDR_PNG_SMSICON		RCDATA                  "sms.png"
+IDR_RCDATA_N_H             RCDATA               "Person_H.png"
+IDR_RCDATA_N_V             RCDATA               "Person_V.png"
+IDR_PNG_EMAILICON	RCDATA                  "Send.png"
 
 
 #endif    // 中文(中华人民共和国) resources

@@ -26,6 +26,7 @@ public:
 	// 初始化 COM 组件
     CoInitializeEx(0, COINIT_MULTITHREADED);
 
+
 	// 创建主窗口
     RECT rcWork = MzGetWorkArea();
     m_MainWnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0);

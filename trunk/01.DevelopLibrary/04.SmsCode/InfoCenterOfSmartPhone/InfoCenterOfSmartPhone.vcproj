@@ -66,7 +66,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=" /subsystem:windowsce,6.00"
 				AdditionalDependencies="mzfcsd.lib PlatformApi.lib MyStoreLib.lib"
-				OutputFile="$(OutDir)/InfoCenterOfSmartPhone.exe"
+				OutputFile="$(OutDir)/易短信.exe"
 				LinkIncremental="2"
 				DelayLoadDLLs="$(NOINHERIT)"
 				GenerateDebugInformation="true"
@@ -106,7 +106,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|M8SDK (ARMV4I)"
-			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(PlatformName)\易短信"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"

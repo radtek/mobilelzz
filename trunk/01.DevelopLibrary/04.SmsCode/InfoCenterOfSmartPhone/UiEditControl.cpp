@@ -52,6 +52,7 @@ int UiEditControl::OnLButtonUp123  ( UINT  fwKeys,  int  xPos,  int  yPos )
 		// 设置窗口切换动画（结束时的动画）
 		//clContactorsWnd.SetAnimateType_Hide(i+1);
 		m_pclContactorsWnd->Show();		
+		g_bContactShow = TRUE;
 
 	}
 

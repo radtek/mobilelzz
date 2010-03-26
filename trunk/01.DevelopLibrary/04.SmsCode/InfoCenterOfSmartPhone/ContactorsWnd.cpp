@@ -2,6 +2,7 @@
 #include"UiEditControl.h"
 #include"ContactorsWnd.h"
 
+
 BOOL CContactorsWnd::OnInitDialog()
 {
 	if(m_bInit)
@@ -248,6 +249,7 @@ void CContactorsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 				m_pParent->UpdateData(0);
 				DestroyWindow();
 				//EndModal(ID_CANCEL);  
+				g_bContactShow = FALSE;
 			  return;
 			}
 			if (nIndex==2)
@@ -272,6 +274,8 @@ void CContactorsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 				
 				m_pParent->UpdateData(1);
 				DestroyWindow();
+				g_bContactShow = FALSE;
+
 				//EndModal(ID_CANCEL); 
 				//MzOpenSip(IM_SIP_MODE_KEEP,0);
 			  return;
@@ -345,9 +349,15 @@ void CContactorsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
 		m_Toolbar.SetPos(0,GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR,GetWidth(),MZM_HEIGHT_TEXT_TOOLBAR);
 		
 		m_AlpBar.SetPos(350,0,50,GetHeight());
+
+	}
+
+	if(g_bContactShow)
+	{
+		SetWindowPos(HWND_TOPMOST,   0,   0,   0,   0,   SWP_NOMOVE| SWP_NOSIZE);
 	}
 }
-
+	
 void CContactorsWnd::UpdateItem(MyListItemData* pmlid)
 {
 	long lCount = g_ReciversList.GetItemCount();

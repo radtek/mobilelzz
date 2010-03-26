@@ -14,10 +14,10 @@ INT g_iUsbNotifyMsg = 0;
 
 BOOL CNewSmsWnd::OnInitDialog()
 {
-	if(!LicenseProtect())
-	{
-		exit(0);
-	}
+//	if(!LicenseProtect())
+//	{
+//		exit(0);
+//	}
 	// 必须先调用基类的初始化
 	if (!CMzWndEx::OnInitDialog())
 	{
@@ -91,7 +91,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 
 
 
-	m_Recievers.SetText(L"点击选择联系人:");  // set the tips text
+	m_Recievers.SetTip(L"点击选择联系人:");  // set the tips text
 	m_Recievers.SetID(MZ_IDC_RECIEVERS_EDIT);
 	m_Recievers.SetParent((void*)this);
 

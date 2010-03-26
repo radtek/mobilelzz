@@ -315,51 +315,19 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\008_H.png"
-				>
-			</File>
-			<File
-				RelativePath=".\008_V.png"
-				>
-			</File>
-			<File
-				RelativePath=".\12.png"
-				>
-			</File>
-			<File
-				RelativePath=".\120.png"
-				>
-			</File>
-			<File
-				RelativePath=".\21.png"
-				>
-			</File>
-			<File
-				RelativePath=".\Email.png"
-				>
-			</File>
-			<File
 				RelativePath=".\InfoCenterOfSmartPhone.rc"
 				>
 			</File>
 			<File
-				RelativePath=".\N_H.png"
+				RelativePath=".\Person_H.png"
 				>
 			</File>
 			<File
-				RelativePath=".\N_V.png"
+				RelativePath=".\Person_V.png"
 				>
 			</File>
 			<File
-				RelativePath=".\SendBTN.png"
-				>
-			</File>
-			<File
-				RelativePath=".\SendBTN11.png"
-				>
-			</File>
-			<File
-				RelativePath=".\sms.png"
+				RelativePath=".\Send.png"
 				>
 			</File>
 		</Filter>

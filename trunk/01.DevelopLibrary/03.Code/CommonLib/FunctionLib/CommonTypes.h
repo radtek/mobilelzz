@@ -10,6 +10,7 @@ public:
 	{
 		Selected = FALSE;
 		lPID = 0;
+		memset(wcsfirstLetter, 0x0, sizeof(wcsfirstLetter));
 	}
 	BOOL Compare(MyListItemData* pTarget)
 	{
@@ -26,10 +27,14 @@ public:
 	CMzString StringDescription;  // 项的描述文本
 	BOOL Selected; // 项是否被选中
 	long lPID;
+	wchar_t	wcsfirstLetter[2];
 };
-
 extern BOOL g_bH;
 
 extern CDynamicArray<MyListItemData> g_ReciversList;
+extern  BOOL  g_bContactShow;
+
+#define	LICENSE
+
 
 #endif // __CommonTypes_h__

@@ -60,11 +60,7 @@ public:
 		m_lCurProgress = 0;
 		m_SmsMsgEdit = new CMyEdit;
    }
-   virtual ~CNewSmsWnd(){
-	
-		MzAccClose();  
-   
-   }
+   virtual ~CNewSmsWnd();
 
    static DWORD WINAPI   ProxyRun(LPVOID lp);
 

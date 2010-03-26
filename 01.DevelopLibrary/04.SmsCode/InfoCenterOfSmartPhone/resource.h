@@ -17,6 +17,9 @@
 
 #define IDR_RCDATA_H                    110
 #define IDR_RCDATA_V                    111
+
+#define IDR_RCDATA_N_H					112
+#define IDR_RCDATA_N_V					113
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

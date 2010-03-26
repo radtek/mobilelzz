@@ -68,6 +68,9 @@ IDR_RCDATA6             RCDATA                  "12.png"
 IDR_RCDATA8             RCDATA                  "21.png"
 IDR_RCDATA_H             RCDATA                  "008_H.png"
 IDR_RCDATA_V             RCDATA                  "008_V.png"
+IDR_RCDATA_N_H             RCDATA                  "N_H.png"
+IDR_RCDATA_N_V             RCDATA                  "N_V.png"
+
 #endif    // 中文(中华人民共和国) resources
 /////////////////////////////////////////////////////////////////////////////
 

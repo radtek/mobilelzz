@@ -122,8 +122,8 @@ BOOL CNewSmsWnd::OnInitDialog()
 
 	m_smsMsg = GetSmsRegisterMessage();
 
-//	WinManager* pMng = GetWinManager();
-//	pMng->SetFocusedWinBeforeDeactivate(m_SmsMsgEdit);
+	WinManager* pMng = GetWinManager();
+	pMng->SetFocusedWinBeforeDeactivate(m_SmsMsgEdit);
 
 	return TRUE;
 }
@@ -498,4 +498,21 @@ CNewSmsWnd::Run()
 	g_ReciversList.Clear();
 	m_Recievers.SetText(L"");
 	m_SmsMsgEdit->SetText(L"");
+}
+
+void CNewSmsWnd::OnLButtonUp  ( UINT  fwKeys,  int  xPos,  int  yPos )
+{
+
+
+	m_Recievers.OnLButtonUp123(fwKeys, xPos, yPos);
+	m_SmsMsgEdit->OnLButtonUp123(fwKeys, xPos, yPos);
+	
+
+	
+
+
+
+	
+	
+	return CMzWndEx::OnLButtonUp(fwKeys, xPos, yPos);
 }

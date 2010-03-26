@@ -3,21 +3,20 @@
 
 #include<Sqlite/CppSQLite3U.h>
 #define UiEditControl_Click		1001
+class CContactorsWnd;
+
 class UiEditControl: public UiSingleLineEdit
 {
 	long m_lFlag;
 	//HWND m_hParentWnd;
 
 	void* m_pParent;
+	CContactorsWnd* m_pclContactorsWnd;
 public:
-	UiEditControl()
-	{
-		m_lFlag = 0;
-		m_pParent = NULL;
-	}
-	virtual ~UiEditControl()
-	{
-	}
+	UiEditControl();
+
+	virtual ~UiEditControl();
+
 	void SetParent(void* pParent);
 
 	void UpdateData(  long lFlag  );
@@ -27,7 +26,7 @@ public:
 
 	
 	//zds 2010/03/21 19:39
-	virtual int OnLButtonUp  ( UINT  fwKeys,  int  xPos,  int  yPos );
+	int OnLButtonUp123  ( UINT  fwKeys,  int  xPos,  int  yPos );
 	//zds 2010/03/21 19:39
 	
 };

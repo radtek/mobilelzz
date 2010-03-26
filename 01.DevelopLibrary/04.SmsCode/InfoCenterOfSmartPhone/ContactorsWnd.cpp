@@ -246,7 +246,8 @@ void CContactorsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 			if (nIndex==0)
 			{
 				m_pParent->UpdateData(0);
-				EndModal(ID_CANCEL);  
+				DestroyWindow();
+				//EndModal(ID_CANCEL);  
 			  return;
 			}
 			if (nIndex==2)
@@ -270,7 +271,8 @@ void CContactorsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 				}
 				
 				m_pParent->UpdateData(1);
-				EndModal(ID_CANCEL); 
+				DestroyWindow();
+				//EndModal(ID_CANCEL); 
 				//MzOpenSip(IM_SIP_MODE_KEEP,0);
 			  return;
 			}

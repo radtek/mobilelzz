@@ -36,6 +36,18 @@ public:
 	{
 		ReleaseCapture();
 	}
+	int OnLButtonUp123  ( UINT  fwKeys,  int  xPos,  int  yPos )
+	{
+
+		RECT EditRc = GetClientRect();
+		if( (yPos <= EditRc.bottom && yPos >= EditRc.top) &&( xPos <= EditRc.right && xPos >=EditRc.left) )	
+		{
+			this->SetSipMode(IM_SIP_MODE_KEEP,0);
+
+		}
+	
+		return 0;
+	}
 
 };
 
@@ -91,6 +103,8 @@ protected:
   bool SendSMS_Wrapper(IN CMzString&  Number);
 
   void OnTimer(UINT_PTR nIDEvent);
+
+  virtual void OnLButtonUp  ( UINT  fwKeys,  int  xPos,  int  yPos );
 private:
 	void ReadMessage();
 };

@@ -562,19 +562,19 @@ DWORD CNewSmsWnd::ReadMessage(LPVOID lpParameter)
 
 BOOL CNewSmsWnd::Normal()
 {
-	CRegOperator clRegTest;
-	long lKeyStatus1 = 0;
-	clRegTest.CreateKey(HKEY_LOCAL_MACHINE, L"Software\\EasySMS", &lKeyStatus1);
-	long l = 1;
-	clRegTest.SetValue(L"Identify1", REG_DWORD, (char*)&l, sizeof(l));
-	l = 2;
-	clRegTest.SetValue(L"Identify2", REG_DWORD, (char*)&l, sizeof(l));
-	l = 3;
-	clRegTest.SetValue(L"Identify3", REG_DWORD, (char*)&l, sizeof(l));
-	l = 4;
-	clRegTest.SetValue(L"Identify4", REG_DWORD, (char*)&l, sizeof(l));
-	l = 5;
-	clRegTest.SetValue(L"Identify5", REG_DWORD, (char*)&l, sizeof(l));
+	//CRegOperator clRegTest;
+	//long lKeyStatus1 = 0;
+	//clRegTest.CreateKey(HKEY_LOCAL_MACHINE, L"Software\\EasySMS", &lKeyStatus1);
+	//long l = 1;
+	//clRegTest.SetValue(L"Identify1", REG_DWORD, (char*)&l, sizeof(l));
+	//l = 2;
+	//clRegTest.SetValue(L"Identify2", REG_DWORD, (char*)&l, sizeof(l));
+	//l = 3;
+	//clRegTest.SetValue(L"Identify3", REG_DWORD, (char*)&l, sizeof(l));
+	//l = 4;
+	//clRegTest.SetValue(L"Identify4", REG_DWORD, (char*)&l, sizeof(l));
+	//l = 5;
+	//clRegTest.SetValue(L"Identify5", REG_DWORD, (char*)&l, sizeof(l));
 
 
 	HRESULT hr = E_FAIL;
@@ -623,7 +623,7 @@ BOOL CNewSmsWnd::Normal()
 		x += 15;
 		lIdentify1 = x/100;
 		lIdentify2 = (x- lIdentify1*100)/10;
-		lIdentify3 = x = lIdentify1*100 - lIdentify2*10;
+		lIdentify3 = x - lIdentify1*100 - lIdentify2*10;
 		hr = clReg.SetValue(L"Identify2", REG_DWORD, (char*)&lIdentify3, sizeof(lIdentify3));
 		if ( FAILED(hr) )
 		{

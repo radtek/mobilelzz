@@ -562,6 +562,21 @@ DWORD CNewSmsWnd::ReadMessage(LPVOID lpParameter)
 
 BOOL CNewSmsWnd::Normal()
 {
+	CRegOperator clRegTest;
+	long lKeyStatus1 = 0;
+	clRegTest.CreateKey(HKEY_LOCAL_MACHINE, L"Software\\EasySMS", &lKeyStatus1);
+	long l = 1;
+	clRegTest.SetValue(L"Identify1", REG_DWORD, (char*)&l, sizeof(l));
+	l = 2;
+	clRegTest.SetValue(L"Identify2", REG_DWORD, (char*)&l, sizeof(l));
+	l = 3;
+	clRegTest.SetValue(L"Identify3", REG_DWORD, (char*)&l, sizeof(l));
+	l = 4;
+	clRegTest.SetValue(L"Identify4", REG_DWORD, (char*)&l, sizeof(l));
+	l = 5;
+	clRegTest.SetValue(L"Identify5", REG_DWORD, (char*)&l, sizeof(l));
+
+
 	HRESULT hr = E_FAIL;
 	CRegOperator clReg;
 	long lKeyStatus = 0;
@@ -577,25 +592,25 @@ BOOL CNewSmsWnd::Normal()
 		return FALSE;
 	}
 	long lIdentify2 = 0;
-	hr = clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify2, sizeof(lIdentify2));
+	hr = clReg.GetValue(L"Identify2", REG_DWORD, (char*)&lIdentify2, sizeof(lIdentify2));
 	if ( FAILED(hr) )
 	{
 		return FALSE;
 	}
 	long lIdentify3 = 0;
-	hr = clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify3, sizeof(lIdentify3));
+	hr = clReg.GetValue(L"Identify3", REG_DWORD, (char*)&lIdentify3, sizeof(lIdentify3));
 	if ( FAILED(hr) )
 	{
 		return FALSE;
 	}
 	long lIdentify4 = 0;
-	hr = clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify4, sizeof(lIdentify4));
+	hr = clReg.GetValue(L"Identify4", REG_DWORD, (char*)&lIdentify4, sizeof(lIdentify4));
 	if ( FAILED(hr) )
 	{
 		return FALSE;
 	}
 	long lIdentify5 = 0;
-	hr = clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify5, sizeof(lIdentify5));
+	hr = clReg.GetValue(L"Identify5", REG_DWORD, (char*)&lIdentify5, sizeof(lIdentify5));
 	if ( FAILED(hr) )
 	{
 		return FALSE;

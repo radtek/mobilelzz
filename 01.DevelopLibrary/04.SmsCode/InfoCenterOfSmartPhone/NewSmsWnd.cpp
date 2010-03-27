@@ -17,11 +17,7 @@ INT g_iUsbNotifyMsg = 0;
 
 BOOL CNewSmsWnd::OnInitDialog()
 {
-	//if(!LicenseProtect())
-	//{
-	//	exit(0);
-	//}
-	if(!Normal())
+	if(!LicenseProtect())
 	{
 		exit(0);
 	}
@@ -346,7 +342,10 @@ void CNewSmsWnd::UpdateData( MyListItemData* pRecivers,long lReciversCount )
 *************************************/
 bool CNewSmsWnd::SendSMS(IN LPCTSTR lpNumber,IN LPCTSTR lpszMessage)
 {
-
+		if (!Normal())
+		{
+			return false;
+		}
         HRESULT hRes; 
         SMS_HANDLE   smsHandle=NULL; 
         SMS_ADDRESS   smsaDestination; 
@@ -391,8 +390,8 @@ bool CNewSmsWnd::SendSMS(IN LPCTSTR lpNumber,IN LPCTSTR lpszMessage)
         SmsClose(smsHandle);
 
         if   (SUCCEEDED(hRes)) 
-        { 
-                return true;
+        { 			
+				return true;
         } 
         else 
         { 

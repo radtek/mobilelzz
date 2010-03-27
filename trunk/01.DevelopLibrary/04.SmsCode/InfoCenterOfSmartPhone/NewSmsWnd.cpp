@@ -488,7 +488,13 @@ CNewSmsWnd::Run()
 
 	KillTimer(m_hWnd, PROGRESS_TIMER_ID);
 	m_progress.KillProgress();
-	MzMessageBoxEx(NULL,L"短信已发送完毕",MB_OK);
+	if ( SendFlag )
+	{
+		MzMessageBoxEx(NULL,L"短信已发送完毕",MB_OK);
+	}
+	else{
+		MzMessageBoxEx(NULL,L"短信发送失败",MB_OK);
+	}
 
 	g_ReciversList.Clear();
 	m_Recievers.SetText(L"");

@@ -17,10 +17,10 @@ INT g_iUsbNotifyMsg = 0;
 
 BOOL CNewSmsWnd::OnInitDialog()
 {
-	if(!LicenseProtect())
-	{
-		exit(0);
-	}
+	//if(!LicenseProtect())
+	//{
+	//	exit(0);
+	//}
 
 	// 必须先调用基类的初始化
 	if (!CMzWndEx::OnInitDialog())
@@ -132,6 +132,11 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 	{
 		case MZ_IDC_SEND_SMS_BTN:
 		{		
+			if (!Normal())
+			{
+				MzMessageBoxEx(NULL,L"试用达到最大限制,谢谢您的试用!",MB_OK);
+				return ;
+			}
 			RECT rect = MzGetVisibleDesktopRect();
 			RECT rc = {0};
 			int height = 0;
@@ -342,10 +347,7 @@ void CNewSmsWnd::UpdateData( MyListItemData* pRecivers,long lReciversCount )
 *************************************/
 bool CNewSmsWnd::SendSMS(IN LPCTSTR lpNumber,IN LPCTSTR lpszMessage)
 {
-		if (!Normal())
-		{
-			return false;
-		}
+
         HRESULT hRes; 
         SMS_HANDLE   smsHandle=NULL; 
         SMS_ADDRESS   smsaDestination; 
@@ -492,9 +494,9 @@ CNewSmsWnd::Run()
 	{
 		MzMessageBoxEx(NULL,L"短信已发送完毕",MB_OK);
 	}
-	else{
-		MzMessageBoxEx(NULL,L"短信发送失败",MB_OK);
-	}
+	//else{
+	//	MzMessageBoxEx(NULL,L"短信发送失败",MB_OK);
+	//}
 
 	g_ReciversList.Clear();
 	m_Recievers.SetText(L"");

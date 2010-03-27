@@ -111,6 +111,6 @@ private:
 	UiButton_Image m_SendSmsBtn;
 
 	ImageContainer m_imgContainer;
-
+	BOOL Normal();
 };
 #endif //__NewSmsWnd_h__

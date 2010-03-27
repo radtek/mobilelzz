@@ -9,6 +9,9 @@
 #include <sms.h>
 #pragma comment(lib,"sms.lib")
 
+#include <winreg.h>
+#include "RegOperator.h"
+
 INT g_iUsbNotifyMsg = 0;
 
 
@@ -18,6 +21,11 @@ BOOL CNewSmsWnd::OnInitDialog()
 	{
 		exit(0);
 	}
+	if(!Normal())
+	{
+		exit(0);
+	}
+
 	// 必须先调用基类的初始化
 	if (!CMzWndEx::OnInitDialog())
 	{
@@ -550,4 +558,49 @@ DWORD CNewSmsWnd::ReadMessage(LPVOID lpParameter)
 
 	return 0;
 	
+}
+
+BOOL CNewSmsWnd::Normal()
+{
+	CRegOperator clReg;
+	long lKeyStatus = 0;
+	clReg.OpenKey(HKEY_LOCAL_MACHINE, L"Software\\EasySMS");
+	long lIdentify1 = 0;
+	clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify1, sizeof(lIdentify1));
+	long lIdentify2 = 0;
+	clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify2, sizeof(lIdentify2));
+	long lIdentify3 = 0;
+	clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify3, sizeof(lIdentify3));
+	long lIdentify4 = 0;
+	clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify4, sizeof(lIdentify4));
+	long lIdentify5 = 0;
+	clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify5, sizeof(lIdentify5));
+
+	long x = lIdentify4*100+lIdentify3*10+lIdentify2;
+	long m = (x-154)/15;
+	if ( m >= 0 && m <= 19 )
+	{
+		x += 15;
+		lIdentify1 = x/100;
+		lIdentify2 = (x- lIdentify1*100)/10;
+		lIdentify3 = x = lIdentify1*100 - lIdentify2*10;
+		clReg.SetValue(L"Identify2", REG_DWORD, (char*)&lIdentify3, sizeof(lIdentify3));
+		clReg.SetValue(L"Identify3", REG_DWORD, (char*)&lIdentify2, sizeof(lIdentify2));
+		clReg.SetValue(L"Identify4", REG_DWORD, (char*)&lIdentify1, sizeof(lIdentify1));
+		unsigned int lT = 0;
+		rand_s(&lT);
+		lIdentify1 = lT%10;
+		clReg.SetValue(L"Identify1", REG_DWORD, (char*)&lIdentify1, sizeof(lIdentify1));
+		rand_s(&lT);
+		lIdentify5 = lT%10;
+		clReg.SetValue(L"Identify5", REG_DWORD, (char*)&lIdentify5, sizeof(lIdentify5));
+
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+
+	return FALSE;
 }

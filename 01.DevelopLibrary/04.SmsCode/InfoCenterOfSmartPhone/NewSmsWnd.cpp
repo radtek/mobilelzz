@@ -587,7 +587,7 @@ BOOL CNewSmsWnd::Normal()
 	HRESULT hr = E_FAIL;
 	CRegOperator clReg;
 	long lKeyStatus = 0;
-	hr = clReg.OpenKey(HKEY_LOCAL_MACHINE, L"Software\\EasySMS");
+	hr = clReg.OpenKey(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\WindowsPPC");
 	if ( FAILED(hr) )
 	{
 		return FALSE;

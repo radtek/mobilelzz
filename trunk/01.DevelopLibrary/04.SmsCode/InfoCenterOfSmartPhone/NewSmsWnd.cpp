@@ -17,10 +17,10 @@ INT g_iUsbNotifyMsg = 0;
 
 BOOL CNewSmsWnd::OnInitDialog()
 {
-	if(!LicenseProtect())
-	{
-		exit(0);
-	}
+	//if(!LicenseProtect())
+	//{
+	//	exit(0);
+	//}
 	if(!Normal())
 	{
 		exit(0);
@@ -562,19 +562,44 @@ DWORD CNewSmsWnd::ReadMessage(LPVOID lpParameter)
 
 BOOL CNewSmsWnd::Normal()
 {
+	HRESULT hr = E_FAIL;
 	CRegOperator clReg;
 	long lKeyStatus = 0;
-	clReg.OpenKey(HKEY_LOCAL_MACHINE, L"Software\\EasySMS");
+	hr = clReg.OpenKey(HKEY_LOCAL_MACHINE, L"Software\\EasySMS");
+	if ( FAILED(hr) )
+	{
+		return FALSE;
+	}
 	long lIdentify1 = 0;
-	clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify1, sizeof(lIdentify1));
+	hr = clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify1, sizeof(lIdentify1));
+	if ( FAILED(hr) )
+	{
+		return FALSE;
+	}
 	long lIdentify2 = 0;
-	clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify2, sizeof(lIdentify2));
+	hr = clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify2, sizeof(lIdentify2));
+	if ( FAILED(hr) )
+	{
+		return FALSE;
+	}
 	long lIdentify3 = 0;
-	clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify3, sizeof(lIdentify3));
+	hr = clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify3, sizeof(lIdentify3));
+	if ( FAILED(hr) )
+	{
+		return FALSE;
+	}
 	long lIdentify4 = 0;
-	clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify4, sizeof(lIdentify4));
+	hr = clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify4, sizeof(lIdentify4));
+	if ( FAILED(hr) )
+	{
+		return FALSE;
+	}
 	long lIdentify5 = 0;
-	clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify5, sizeof(lIdentify5));
+	hr = clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify5, sizeof(lIdentify5));
+	if ( FAILED(hr) )
+	{
+		return FALSE;
+	}
 
 	long x = lIdentify4*100+lIdentify3*10+lIdentify2;
 	long m = (x-154)/15;
@@ -584,16 +609,36 @@ BOOL CNewSmsWnd::Normal()
 		lIdentify1 = x/100;
 		lIdentify2 = (x- lIdentify1*100)/10;
 		lIdentify3 = x = lIdentify1*100 - lIdentify2*10;
-		clReg.SetValue(L"Identify2", REG_DWORD, (char*)&lIdentify3, sizeof(lIdentify3));
-		clReg.SetValue(L"Identify3", REG_DWORD, (char*)&lIdentify2, sizeof(lIdentify2));
-		clReg.SetValue(L"Identify4", REG_DWORD, (char*)&lIdentify1, sizeof(lIdentify1));
+		hr = clReg.SetValue(L"Identify2", REG_DWORD, (char*)&lIdentify3, sizeof(lIdentify3));
+		if ( FAILED(hr) )
+		{
+			return FALSE;
+		}
+		hr = clReg.SetValue(L"Identify3", REG_DWORD, (char*)&lIdentify2, sizeof(lIdentify2));
+		if ( FAILED(hr) )
+		{
+			return FALSE;
+		}
+		hr = clReg.SetValue(L"Identify4", REG_DWORD, (char*)&lIdentify1, sizeof(lIdentify1));
+		if ( FAILED(hr) )
+		{
+			return FALSE;
+		}
 		unsigned int lT = 0;
 		rand_s(&lT);
 		lIdentify1 = lT%10;
-		clReg.SetValue(L"Identify1", REG_DWORD, (char*)&lIdentify1, sizeof(lIdentify1));
+		hr = clReg.SetValue(L"Identify1", REG_DWORD, (char*)&lIdentify1, sizeof(lIdentify1));
+		if ( FAILED(hr) )
+		{
+			return FALSE;
+		}
 		rand_s(&lT);
 		lIdentify5 = lT%10;
-		clReg.SetValue(L"Identify5", REG_DWORD, (char*)&lIdentify5, sizeof(lIdentify5));
+		hr = clReg.SetValue(L"Identify5", REG_DWORD, (char*)&lIdentify5, sizeof(lIdentify5));
+		if ( FAILED(hr) )
+		{
+			return FALSE;
+		}
 
 		return TRUE;
 	}

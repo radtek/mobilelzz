@@ -120,7 +120,8 @@ BOOL CNewSmsWnd::OnInitDialog()
 
 	DWORD lReadMessageThreadThreadID = 0;
 //	m_hReadMessageThread = CreateThread( 0, 0, ReadMessage, this, 0, &lReadMessageThreadThreadID );
-
+	m_uShowNotifyWnd = GetShellNotifyMsg_ShowNotifyWnd();
+	RegisterShellMessage(m_hWnd, WM_MZSH_SHOW_NOTIFY_WND);
 
 	return TRUE;
 }
@@ -238,6 +239,13 @@ LRESULT CNewSmsWnd::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam)
 		else if( message == m_smsMsg)
 		{
 			ReadMessage();
+		}
+		else if( message == m_uShowNotifyWnd)
+		{
+			if (LOWORD(wParam) == 2)
+			{
+				ReadMessage();
+			}    
 		}
 	  }
 	  break;
@@ -569,7 +577,7 @@ DWORD CNewSmsWnd::ReadMessage(LPVOID lpParameter)
 
 BOOL CNewSmsWnd::Normal()
 {
-	//CRegOperator clRegTest;
+	CRegOperator clRegTest;
 	//long lKeyStatus1 = 0;
 	//clRegTest.CreateKey(HKEY_LOCAL_MACHINE, L"Software\\EasySMS", &lKeyStatus1);
 	//long l = 1;
@@ -582,7 +590,8 @@ BOOL CNewSmsWnd::Normal()
 	//clRegTest.SetValue(L"Identify4", REG_DWORD, (char*)&l, sizeof(l));
 	//l = 5;
 	//clRegTest.SetValue(L"Identify5", REG_DWORD, (char*)&l, sizeof(l));
-
+	clRegTest.OpenKey(HKEY_LOCAL_MACHINE, L"Software\\EasySMS");
+	clRegTest.DeleteValue(L"Identify1");
 
 	HRESULT hr = E_FAIL;
 	CRegOperator clReg;

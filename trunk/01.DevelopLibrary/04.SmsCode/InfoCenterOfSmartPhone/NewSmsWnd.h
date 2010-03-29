@@ -77,7 +77,7 @@ public:
   UiButton m_ContactorsBtn;
   MzPopupProgress m_progress;
   long m_lCurProgress;
-
+	UINT	m_uShowNotifyWnd;
   // нд╠╬
   UiEditControl				m_Recievers;
   CMyEdit*					m_SmsMsgEdit;

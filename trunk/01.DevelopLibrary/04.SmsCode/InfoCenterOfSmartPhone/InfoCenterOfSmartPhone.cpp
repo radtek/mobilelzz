@@ -24,6 +24,23 @@ public:
   virtual BOOL Init()
   {
 	// 初始化 COM 组件
+
+	  HANDLE  hSem = CreateSemaphore(NULL, 1,1, L"LZZEasySMS");
+	  if( GetLastError() == ERROR_ALREADY_EXISTS )
+	  {
+		  // 关闭信号量句柄 
+		  CloseHandle(hSem); 
+		  HWND hw = FindWindow(NULL, L"易短信");
+		  if( hw != NULL )
+		  {
+			  ::ShowWindow(hw,SW_SHOWMAXIMIZED); 
+			  // 将主窗激活 
+			  ::SetForegroundWindow(hw); 
+		  }
+		  exit(1); 
+	  }
+
+
     CoInitializeEx(0, COINIT_MULTITHREADED);
 
 

@@ -1,7 +1,7 @@
 #ifndef __BasicService_h__
 #define __BasicService_h__
 
-class CBasicService
+class CORE_API CBasicService
 {
 public:
 	CBasicService();

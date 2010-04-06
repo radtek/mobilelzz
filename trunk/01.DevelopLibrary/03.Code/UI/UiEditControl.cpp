@@ -1,7 +1,8 @@
 #include"stdafx.h"
+#include <mzfc_inc.h>
+
 #include"UiEditControl.h"
 #include"NewSmsWnd.h"
-#include "CSearch_SQL_base_handler.h"
 #include"ContactorsWnd.h"
 
 UiEditControl::UiEditControl()

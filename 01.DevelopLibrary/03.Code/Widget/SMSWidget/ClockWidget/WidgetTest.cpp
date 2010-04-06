@@ -1,5 +1,8 @@
 #include "WidgetTest.h"
 #include "resource.h"
+
+#define MZ_IDC_TESTBTN_EDIT  101
+
 void UiWidget_Clock::PaintWin( HDC hdcDst, RECT* prcWin, RECT* prcUpdate )
 {
     COLORREF clr = RGB(255,0,0);
@@ -103,6 +106,23 @@ UiWidget_Clock::UiWidget_Clock()
 {
 	m_CurIndex = 0;
 	m_TotalCount = 0;
+
+	ImagingHelper* imgNormal = m_imgContainer.LoadImage( GetModuleHandle(L"ClockWidget.dll"), IDR_JPG_EDIT, true);
+
+	ImagingHelper* imgPressed  = m_imgContainer.LoadImage( GetModuleHandle(L"ClockWidget.dll"), IDR_JPG_SEND, true);
+	// 初始化窗口中的UiButton_Image按钮控件
+	m_Edit_btn.SetID(MZ_IDC_TESTBTN_EDIT);
+	m_Edit_btn.SetButtonType(MZC_BUTTON_NONE);
+	m_Edit_btn.SetPos(140,165,100,100);
+	m_Edit_btn.SetImage_Normal(imgPressed);
+	m_Edit_btn.SetImage_Pressed(imgNormal);
+
+	m_Edit_btn.SetMode(/*UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL*/UI_BUTTON_IMAGE_MODE_NORMAL);
+	m_Edit_btn.SwapImageZOrder(true);
+	m_Edit_btn.SetTextColor(RGB(255,255,255));
+
+	UiWin::AddChild(&m_Edit_btn);
+
 }
 
 UiWidget_Clock::~UiWidget_Clock()

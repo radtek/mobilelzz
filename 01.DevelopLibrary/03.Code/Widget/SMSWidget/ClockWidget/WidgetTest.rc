@@ -52,6 +52,9 @@ END
 // RCDATA
 //
 IDR_JPG_PIC1              RCDATA                  "12.PNG"
+IDR_JPG_EDIT              RCDATA                  "edit.PNG"
+IDR_JPG_SEND              RCDATA                  "send.PNG"
+IDR_JPG_SETUP             RCDATA                  "setup.PNG"
 
 #endif    // 中文(中华人民共和国) resources
 /////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,15 @@
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Meizu\MiniOneShell\Main\ClockWidget]
+"DisplayName"="ClockWidget"
+"ExecFileName"="\\windows\\ClockWidget.dll"
+"Order"=dword:00000004
+"Page"=dword:00000000
+"AnimateIcon"=dword:00000000
+"ProgramID"="{8A3916DD-6BE9-42fd-9218-DE40C425CB1A}"
+"IsWidget"=dword:00000001
+"WidgetLeft"=dword:00000000
+"WidgetTop"=dword:00000000
+"WidgetRight"=dword:00000000
+"WidgetBottom"=dword:00000000
+"IsHide"=dword:00000000

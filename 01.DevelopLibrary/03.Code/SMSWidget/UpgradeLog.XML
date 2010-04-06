@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="ClockWidgetTest">
+</Property><Property Name="Solution File" Value="C:\Program Files\Windows CE Tools\wce600\M8SDK\Samples\Widget\ClockWidget\ClockWidgetTest.sln">
+</Property><Property Name="Date" Value="2010年4月1日">
+</Property><Property Name="Time" Value="10:14">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="ClockWidgetTest.sln" Description="File successfully backed up as C:\Program Files\Windows CE Tools\wce600\M8SDK\Samples\Widget\ClockWidget\ClockWidgetTest.sln.old">
+</Event><Event ErrorLevel="1" Project="ClockWidgetTest" Source="ClockWidget_test\ClockWidgetTest.vcproj" Description="This application has been updated to include settings related to the User Account Control (UAC) feature of Windows Vista. By default, when run on Windows Vista with UAC enabled, this application is marked to run with the same privileges as the process that launched it. This marking also disables the application from running with virtualization. You can change UAC related settings from the Property Pages of the project.">
+</Event><Event ErrorLevel="0" Project="ClockWidgetTest" Source="ClockWidget_test\ClockWidgetTest.vcproj" Description="Project file successfully backed up as 'C:\Program Files\Windows CE Tools\wce600\M8SDK\Samples\Widget\ClockWidget\ClockWidget_test\ClockWidgetTest.vcproj.8.00.old'.">
+</Event><Event ErrorLevel="0" Project="ClockWidgetTest" Source="ClockWidget_test\ClockWidgetTest.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="ClockWidgetTest" Source="ClockWidget_test\ClockWidgetTest.vcproj" Description="Converted">
+</Event><Event ErrorLevel="1" Project="ClockWidget" Source="ClockWidget\ClockWidget.vcproj" Description="This application has been updated to include settings related to the User Account Control (UAC) feature of Windows Vista. By default, when run on Windows Vista with UAC enabled, this application is marked to run with the same privileges as the process that launched it. This marking also disables the application from running with virtualization. You can change UAC related settings from the Property Pages of the project.">
+</Event><Event ErrorLevel="0" Project="ClockWidget" Source="ClockWidget\ClockWidget.vcproj" Description="Project file successfully backed up as 'C:\Program Files\Windows CE Tools\wce600\M8SDK\Samples\Widget\ClockWidget\ClockWidget\ClockWidget.vcproj.8.00.old'.">
+</Event><Event ErrorLevel="0" Project="ClockWidget" Source="ClockWidget\ClockWidget.vcproj" Description="Project upgraded successfully.">
+</Event><Event ErrorLevel="3" Project="ClockWidget" Source="ClockWidget\ClockWidget.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="ClockWidgetTest.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="ClockWidgetTest.sln" Description="Converted">
+</Event></UpgradeLog>

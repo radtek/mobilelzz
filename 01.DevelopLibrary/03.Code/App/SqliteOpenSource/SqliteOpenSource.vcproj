@@ -64,7 +64,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalOptions=" /subsystem:windowsce,6.00"
-				OutputFile="..\..\CommonLib\Libs\Debug\SqliteOpenSource.lib"
+				OutputFile="..\Debug\SqliteOpenSource.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -141,7 +141,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalOptions=" /subsystem:windowsce,6.00"
-				OutputFile="..\..\CommonLib\Libs\Release\SqliteOpenSource.lib"
+				OutputFile="..\Release\SqliteOpenSource.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"

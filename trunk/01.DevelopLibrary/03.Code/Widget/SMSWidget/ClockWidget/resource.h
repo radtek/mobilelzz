@@ -3,6 +3,9 @@
 // Used by 11_UiPicture.rc
 //
 #define IDR_JPG_PIC1                    105
+#define IDR_JPG_EDIT					106
+#define IDR_JPG_SEND					107
+#define IDR_JPG_SETUP					108
 
 // Next default values for new objects
 // 

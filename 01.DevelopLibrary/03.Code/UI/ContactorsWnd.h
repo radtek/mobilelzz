@@ -2,6 +2,9 @@
 #ifndef __ContactorsWnd_h__
 #define __ContactorsWnd_h__
 
+
+#include ".\\Sqlite\\CSearch_SQL_base_handler.h"
+
 #define   RLH_FAIL   -1
 #define   RLH_OK	 0
 
@@ -14,6 +17,10 @@
 #define MZ_IDC_SCROLLWIN  105
 
 #define MZ_IDC_ALPBAR	106
+
+#include "resource.h"
+
+#include"UiEditControl.h"
 
 // 从 UiList 派生的自定义列表类
 class MyList:
@@ -73,7 +80,7 @@ public:
       int nIndex = CalcIndexOfPos(xPos, yPos);
       if(nIndex>=0)
       {
-        BOOL bSelect = IsMultiSelect(nIndex);
+        bool bSelect = IsMultiSelect(nIndex);
 
         // 改变项的选中状态
         MultiSelectItem(nIndex, !bSelect);
@@ -99,7 +106,7 @@ public:
     MyListItemData *pmlid = (MyListItemData*)pItem->Data;
 
     // 是否被选中
-    BOOL bSelected = pmlid->Selected;
+    bool bSelected = pmlid->Selected;
 
 	RECT rc = {0};
 	int height = 0;

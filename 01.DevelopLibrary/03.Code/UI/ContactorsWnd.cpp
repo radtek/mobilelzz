@@ -1,6 +1,4 @@
 #include"stdafx.h"
-#include "CSearch_SQL_base_handler.h"
-
 #include"UiEditControl.h"
 #include"ContactorsWnd.h"
 

@@ -60,7 +60,11 @@ public:
 		m_lCurProgress = 0;
 		m_SmsMsgEdit = new CMyEdit;
    }
-   virtual ~CNewSmsWnd();
+   virtual ~CNewSmsWnd(){
+	
+		MzAccClose();  
+   
+   }
 
    static DWORD WINAPI   ProxyRun(LPVOID lp);
 
@@ -73,7 +77,7 @@ public:
   UiButton m_ContactorsBtn;
   MzPopupProgress m_progress;
   long m_lCurProgress;
-
+	UINT	m_uShowNotifyWnd;
   // ÎÄ±¾
   UiEditControl				m_Recievers;
   CMyEdit*					m_SmsMsgEdit;
@@ -107,6 +111,6 @@ private:
 	UiButton_Image m_SendSmsBtn;
 
 	ImageContainer m_imgContainer;
-
+	BOOL Normal();
 };
 #endif //__NewSmsWnd_h__

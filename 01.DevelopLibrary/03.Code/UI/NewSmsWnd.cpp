@@ -1,24 +1,27 @@
 #include"stdafx.h"
+#include "resource.h"
 
 #include"UiEditControl.h"
 #include"NewSmsWnd.h"
+#include "UsbNotifyApi.h"
+#include "CallNotifyApi.h"
 
 #include <sms.h>
 #pragma comment(lib,"sms.lib")
 
+#include <winreg.h>
+#include "RegOperator.h"
+
 INT g_iUsbNotifyMsg = 0;
 
-CNewSmsWnd::~CNewSmsWnd()
-{
-	MzAccClose();  
-}
 
 BOOL CNewSmsWnd::OnInitDialog()
 {
-	//if(!F_LicenseProtect())
+	//if(!LicenseProtect())
 	//{
 	//	exit(0);
 	//}
+
 	// 必须先调用基类的初始化
 	if (!CMzWndEx::OnInitDialog())
 	{
@@ -117,7 +120,8 @@ BOOL CNewSmsWnd::OnInitDialog()
 
 	DWORD lReadMessageThreadThreadID = 0;
 //	m_hReadMessageThread = CreateThread( 0, 0, ReadMessage, this, 0, &lReadMessageThreadThreadID );
-
+	m_uShowNotifyWnd = GetShellNotifyMsg_ShowNotifyWnd();
+	RegisterShellMessage(m_hWnd, WM_MZSH_SHOW_NOTIFY_WND);
 
 	return TRUE;
 }
@@ -129,6 +133,11 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 	{
 		case MZ_IDC_SEND_SMS_BTN:
 		{		
+			if (!Normal())
+			{
+				MzMessageBoxEx(NULL,L"试用达到最大限制,谢谢您的试用!",MB_OK);
+				return ;
+			}
 			RECT rect = MzGetVisibleDesktopRect();
 			RECT rc = {0};
 			int height = 0;
@@ -230,6 +239,13 @@ LRESULT CNewSmsWnd::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam)
 		else if( message == m_smsMsg)
 		{
 			ReadMessage();
+		}
+		else if( message == m_uShowNotifyWnd)
+		{
+			if (LOWORD(wParam) == 2)
+			{
+				ReadMessage();
+			}    
 		}
 	  }
 	  break;
@@ -384,8 +400,8 @@ bool CNewSmsWnd::SendSMS(IN LPCTSTR lpNumber,IN LPCTSTR lpszMessage)
         SmsClose(smsHandle);
 
         if   (SUCCEEDED(hRes)) 
-        { 
-                return true;
+        { 			
+				return true;
         } 
         else 
         { 
@@ -482,7 +498,13 @@ CNewSmsWnd::Run()
 
 	KillTimer(m_hWnd, PROGRESS_TIMER_ID);
 	m_progress.KillProgress();
-	MzMessageBoxEx(NULL,L"短信已发送完毕",MB_OK);
+	if ( SendFlag )
+	{
+		MzMessageBoxEx(NULL,L"短信已发送完毕",MB_OK);
+	}
+	//else{
+	//	MzMessageBoxEx(NULL,L"短信发送失败",MB_OK);
+	//}
 
 	g_ReciversList.Clear();
 	m_Recievers.SetText(L"");
@@ -551,4 +573,110 @@ DWORD CNewSmsWnd::ReadMessage(LPVOID lpParameter)
 
 	return 0;
 	
+}
+
+BOOL CNewSmsWnd::Normal()
+{
+	CRegOperator clRegTest;
+	//long lKeyStatus1 = 0;
+	//clRegTest.CreateKey(HKEY_LOCAL_MACHINE, L"Software\\EasySMS", &lKeyStatus1);
+	//long l = 1;
+	//clRegTest.SetValue(L"Identify1", REG_DWORD, (char*)&l, sizeof(l));
+	//l = 2;
+	//clRegTest.SetValue(L"Identify2", REG_DWORD, (char*)&l, sizeof(l));
+	//l = 3;
+	//clRegTest.SetValue(L"Identify3", REG_DWORD, (char*)&l, sizeof(l));
+	//l = 4;
+	//clRegTest.SetValue(L"Identify4", REG_DWORD, (char*)&l, sizeof(l));
+	//l = 5;
+	//clRegTest.SetValue(L"Identify5", REG_DWORD, (char*)&l, sizeof(l));
+	clRegTest.OpenKey(HKEY_LOCAL_MACHINE, L"Software\\EasySMS");
+	clRegTest.DeleteValue(L"Identify1");
+
+	HRESULT hr = E_FAIL;
+	CRegOperator clReg;
+	long lKeyStatus = 0;
+	hr = clReg.OpenKey(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\WindowsPPC");
+	if ( FAILED(hr) )
+	{
+		return FALSE;
+	}
+	long lIdentify1 = 0;
+	hr = clReg.GetValue(L"Identify1", REG_DWORD, (char*)&lIdentify1, sizeof(lIdentify1));
+	if ( FAILED(hr) )
+	{
+		return FALSE;
+	}
+	long lIdentify2 = 0;
+	hr = clReg.GetValue(L"Identify2", REG_DWORD, (char*)&lIdentify2, sizeof(lIdentify2));
+	if ( FAILED(hr) )
+	{
+		return FALSE;
+	}
+	long lIdentify3 = 0;
+	hr = clReg.GetValue(L"Identify3", REG_DWORD, (char*)&lIdentify3, sizeof(lIdentify3));
+	if ( FAILED(hr) )
+	{
+		return FALSE;
+	}
+	long lIdentify4 = 0;
+	hr = clReg.GetValue(L"Identify4", REG_DWORD, (char*)&lIdentify4, sizeof(lIdentify4));
+	if ( FAILED(hr) )
+	{
+		return FALSE;
+	}
+	long lIdentify5 = 0;
+	hr = clReg.GetValue(L"Identify5", REG_DWORD, (char*)&lIdentify5, sizeof(lIdentify5));
+	if ( FAILED(hr) )
+	{
+		return FALSE;
+	}
+
+	long x = lIdentify4*100+lIdentify3*10+lIdentify2;
+	long m = (x-154)/15;
+	if ( m >= 0 && m <= 19 )
+	{
+		x += 15;
+		lIdentify1 = x/100;
+		lIdentify2 = (x- lIdentify1*100)/10;
+		lIdentify3 = x - lIdentify1*100 - lIdentify2*10;
+		hr = clReg.SetValue(L"Identify2", REG_DWORD, (char*)&lIdentify3, sizeof(lIdentify3));
+		if ( FAILED(hr) )
+		{
+			return FALSE;
+		}
+		hr = clReg.SetValue(L"Identify3", REG_DWORD, (char*)&lIdentify2, sizeof(lIdentify2));
+		if ( FAILED(hr) )
+		{
+			return FALSE;
+		}
+		hr = clReg.SetValue(L"Identify4", REG_DWORD, (char*)&lIdentify1, sizeof(lIdentify1));
+		if ( FAILED(hr) )
+		{
+			return FALSE;
+		}
+		unsigned int lT = 0;
+		rand_s(&lT);
+		lIdentify1 = lT%10;
+		hr = clReg.SetValue(L"Identify1", REG_DWORD, (char*)&lIdentify1, sizeof(lIdentify1));
+		if ( FAILED(hr) )
+		{
+			return FALSE;
+		}
+		rand_s(&lT);
+		lIdentify5 = lT%10;
+		hr = clReg.SetValue(L"Identify5", REG_DWORD, (char*)&lIdentify5, sizeof(lIdentify5));
+		if ( FAILED(hr) )
+		{
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
+
+	return FALSE;
 }

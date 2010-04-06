@@ -1,7 +1,8 @@
 #ifndef __UiEditControl_h__
 #define __UiEditControl_h__
 
-//#define UiEditControl_Click		1001
+#include<Sqlite/CppSQLite3U.h>
+#define UiEditControl_Click		1001
 class CContactorsWnd;
 
 class UiEditControl: public UiSingleLineEdit

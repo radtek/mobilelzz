@@ -3,7 +3,7 @@
 #define __ContactorsWnd_h__
 
 
-#include ".\\Sqlite\\CSearch_SQL_base_handler.h"
+#include "CSearch_SQL_base_handler.h"
 
 #define   RLH_FAIL   -1
 #define   RLH_OK	 0

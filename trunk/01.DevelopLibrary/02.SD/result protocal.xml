@@ -1,5 +1,40 @@
 <result>
 	<unique id></unique id>//client make it,server return the result file by name the file of this id
+	<data type = "sms">
+		<data type = "list" count = "" decode = "true">
+			<rec decode = "true">
+				<id></id>
+				<from></from>
+				<to></to>
+				<date></date>
+				<detail></detail>
+			</rec>
+			<rec decode = "false">
+				<id></id>
+				<from></from>
+				<to></to>
+				<date></date>
+				<detail></detail>
+			</rec>
+			<rec decode = "true">
+				<id></id>
+				<from></from>
+				<to></to>
+				<date></date>
+				<detail></detail>
+			</rec>
+		</data>
+		<data type = "detail">
+			<rec decode = "false">
+				<id></id>
+				<from></from>
+				<to></to>
+				<date></date>
+				<detail></detail>
+			</rec>
+		</data>
+	</data>
+	
 	<data type = "group">
 		<data type = "list" count = "">
 			<rec>
@@ -36,7 +71,7 @@
 			</rec>
 
 		</data>
-		<data type = "detail" count = "">
+		<data type = "detail">
 			<rec>
 				<basicinfo>
 					<name></name>
@@ -73,7 +108,7 @@
 					</data>
 				</rec>
 			</data>
-			<data type = "detail" count = "">
+			<data type = "detail">
 				<rec>
 					<id></id>
 					<type></type>

@@ -21,6 +21,12 @@
 			</content>
 		</operation>
 		
+		<operation type = "search">
+			<content>
+				<condition name = "keyword" value = "word"></condition>
+			</content>
+		</operation>
+		
 		<operation type = "add">
 			<content>
 				<from>phone no</from>

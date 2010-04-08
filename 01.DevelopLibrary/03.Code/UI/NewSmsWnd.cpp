@@ -93,8 +93,6 @@ BOOL CNewSmsWnd::OnInitDialog()
 
 	AddUiWin(&m_SendSmsBtn);
 
-
-
 	m_Recievers.SetTip(L"点击选择联系人:");  // set the tips text
 	m_Recievers.SetID(MZ_IDC_RECIEVERS_EDIT);
 	m_Recievers.SetParent((void*)this);
@@ -122,6 +120,19 @@ BOOL CNewSmsWnd::OnInitDialog()
 //	m_hReadMessageThread = CreateThread( 0, 0, ReadMessage, this, 0, &lReadMessageThreadThreadID );
 	m_uShowNotifyWnd = GetShellNotifyMsg_ShowNotifyWnd();
 	RegisterShellMessage(m_hWnd, WM_MZSH_SHOW_NOTIFY_WND);
+
+	//back
+	ImagingHelper* imgNormalBack = m_imgContainer.LoadImage(MzGetInstanceHandle(), /*IDR_PNG_EditWndBack*/IDR_PNG_MainWndSmsSendBtnDown, true);
+	// 初始化窗口中的UiButton_Image按钮控件
+	m_SendSmsBack.SetID(MZ_IDC_NEWSMS_BACK);
+	m_SendSmsBack.SetButtonType(MZC_BUTTON_NONE);
+	m_SendSmsBack.SetImage_Normal(imgNormalBack);
+	m_SendSmsBack.SetMode(UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL);
+	m_SendSmsBack.SwapImageZOrder(true);
+	m_SendSmsBack.SetTextColor(RGB(255,255,255));
+	m_SendSmsBack.SetPos( 100, 100, 100, 100 );
+	AddUiWin(&m_SendSmsBack);
+	//
 
 	return TRUE;
 }
@@ -179,6 +190,11 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 
 
 			break;
+		}
+		case	MZ_IDC_NEWSMS_BACK:
+		{
+				this->EndModal( ID_CANCEL );
+				break;
 		}
 
 	  break;

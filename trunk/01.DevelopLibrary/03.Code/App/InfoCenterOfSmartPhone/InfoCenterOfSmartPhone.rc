@@ -61,8 +61,15 @@ END
 
 IDR_RCDATA_N_H             RCDATA               "Person_H.png"
 IDR_RCDATA_N_V             RCDATA               "Person_V.png"
-IDR_PNG_EMAILICON	RCDATA                  "Send.png"
+IDR_PNG_EMAILICON					 RCDATA                  "Send.png"
 
+IDR_PNG_MainWndSmsLookBtnDown					 RCDATA                  "MainWndSmsLookBtnDown.PNG"
+IDR_PNG_MainWndSmsLookBtnUp					   RCDATA                  "MainWndSmsLookBtnUp.PNG"
+
+IDR_PNG_MainWndSmsSendBtnDown					 RCDATA                  "MainWndSmsSendBtnDown.PNG"
+IDR_PNG_MainWndSmsSendBtnUp					   RCDATA                  "MainWndSmsSendBtnUp.PNG"
+
+IDR_PNG_EditWndBack					   				RCDATA                  "EditWndBack.PNG"
 
 #endif    // 中文(中华人民共和国) resources
 /////////////////////////////////////////////////////////////////////////////

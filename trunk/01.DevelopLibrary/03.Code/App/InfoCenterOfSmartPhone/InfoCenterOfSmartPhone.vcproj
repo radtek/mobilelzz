@@ -228,6 +228,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\UI\EasySmsMainWnd.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\EasySmsMainWnd.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\UI\MainWnd.h"
 					>
 				</File>
@@ -237,6 +245,30 @@
 				</File>
 				<File
 					RelativePath="..\..\UI\NewSmsWnd.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\SmsLookCtorWnd.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\SmsLookCtorWnd.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\SmsLookMsgWnd.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\SmsLookMsgWnd.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\SmsReadWnd.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\SmsReadWnd.h"
 					>
 				</File>
 				<File

@@ -63,6 +63,7 @@ public:
    virtual ~CNewSmsWnd(){
 	
 		MzAccClose();  
+		m_imgContainer.RemoveAll();
    
    }
 
@@ -109,6 +110,7 @@ private:
 	void ReadMessage();
 
 	UiButton_Image m_SendSmsBtn;
+	UiButton_Image m_SendSmsBack;
 
 	ImageContainer m_imgContainer;
 	BOOL Normal();

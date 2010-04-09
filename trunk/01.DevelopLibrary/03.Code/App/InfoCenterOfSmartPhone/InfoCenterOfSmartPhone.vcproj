@@ -359,6 +359,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\CommonLib\FunctionLib\Errors.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\CommonLib\FunctionLib\FuncLib.cpp"
 						>
 					</File>

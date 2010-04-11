@@ -36,28 +36,28 @@ class CXmlNode
 		
 		// client needs to release the memory
 		// pwcsNodePath从当前节点开始计算，最后一个标签后面也要添加'/'
-		HRESULT GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValue, NodeAttribute_t** ppAttributes, long* lAttributesCount );
+		APP_Result GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValue, NodeAttribute_t** ppAttributes, long* lAttributesCount );
 		
 		//从根目录开始指定Path
-		HRESULT SetNodeContent( wchar_t* pwcsNodePath, wchar_t* pwcsNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount );
+		APP_Result SetNodeContent( wchar_t* pwcsNodePath, wchar_t* pwcsNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount );
 		
 		//Move到它的兄弟节点
 		EN_MOVE	MoveNext();
 		
 		//将一个节点追加到已存在的节点上,追加后，pCXmlNode可以被释放
-		HRESULT	AppendNode( CXmlNode* pCXmlNode );
+		APP_Result	AppendNode( CXmlNode* pCXmlNode );
 
 	private:
 
 		CXmlNode();
 
-		HRESULT SetNodePtr( TiXmlElement* pNode,  CXmlStream* pCXmlStream );
+		APP_Result SetNodePtr( TiXmlElement* pNode,  CXmlStream* pCXmlStream );
 
 		TiXmlElement*	GetElement();
 
-		HRESULT	SubGetNodeContent( TiXmlElement* pNode, wchar_t** ppwcsNodeValue, NodeAttribute_t** ppAttributes, long* lAttributesCount );
+		APP_Result	SubGetNodeContent( TiXmlElement* pNode, wchar_t** ppwcsNodeValue, NodeAttribute_t** ppAttributes, long* lAttributesCount );
 
-		HRESULT SubSetNodeContent( TiXmlElement* pNode, wchar_t* pwcsNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount );
+		APP_Result SubSetNodeContent( TiXmlElement* pNode, wchar_t* pwcsNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount );
 
 		int		MB2WC( wchar_t* _pwc,  const char* _pch );
 		int		WC2MB( char* _pch,  wchar_t* _pwc );	
@@ -82,10 +82,10 @@ class CXmlStream
 	public:
 		//accept buf external, but internal also needs alloc and copy the memory
 		//解析XML文件，需要调用Load，生成XML文件不需要调用Load
-		HRESULT Load( wchar_t* pwcsXmlBuf, long lSize );
+		APP_Result Load( wchar_t* pwcsXmlBuf, long lSize );
 		
 		//alloc xml buf,and set the header content
-		HRESULT Initialize( long lSize = DefaultBufSize );
+		APP_Result Initialize( long lSize = DefaultBufSize );
 		
 		//if the nodepath dosen't exist,then create it first
 		//Path 使用'/'进行分割,最后一个标签后面也要添加'/',比如: A/B/C/
@@ -93,28 +93,28 @@ class CXmlStream
 		//得到第一个满足条件的Node
 		//在创建XML文件时，该方法根据传入的Path，创建指定的Node
 		//外部使用完pclXmlNode之后，需要释放
-		HRESULT SelectNode( wchar_t* pwcsNodePath, CXmlNode** pclXmlNode );
+		APP_Result SelectNode( wchar_t* pwcsNodePath, CXmlNode** pclXmlNode );
 
-		HRESULT	GetXmlStream( wchar_t* pwcStream, long lSize );
+		APP_Result	GetXmlStream( wchar_t* pwcStream, long lSize );
 
 	private:
 	
-		HRESULT	SubSelectNode( char *pcsNodePath, CXmlNode** pclXmlNode );
+		APP_Result	SubSelectNode( char *pcsNodePath, CXmlNode** pclXmlNode );
 
-		HRESULT	MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode );
+		APP_Result	MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode );
 
-		HRESULT	ParseXml( char *pcsNodePath, CXmlNode** pclXmlNode );
+		APP_Result	ParseXml( char *pcsNodePath, CXmlNode** pclXmlNode );
 
 		TiXmlDocument*	GetDocument();
 
-		HRESULT	MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode );
+		APP_Result	MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode );
 
-		HRESULT	FindNode( char *pcsNodePath, TiXmlElement** pclXmlElement );
+		APP_Result	FindNode( char *pcsNodePath, TiXmlElement** pclXmlElement );
 
 		int		MB2WC( wchar_t* _pwc,  const char* _pch );
 		int		WC2MB( char* _pch,  wchar_t* _pwc );	
 
-//		HRESULT	SubMakeXml( vector<TiXmlElement*> & vecElement);	
+//		APP_Result	SubMakeXml( vector<TiXmlElement*> & vecElement);	
 
 		enum	EnOperatorType
 		{

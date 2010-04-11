@@ -108,9 +108,9 @@ EN_MOVE	CXmlNode::MoveNext()
 	return	MOVE_OK;
 }
 
-HRESULT CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValue, NodeAttribute_t** ppAttributes, long* lAttributesCount )
+APP_Result CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValue, NodeAttribute_t** ppAttributes, long* lAttributesCount )
 {
-	HRESULT	hr			=	S_OK;
+	APP_Result	hr			=	APP_Result_S_OK;
 
 	BOOL	bIsFind		=	TRUE;
 	*lAttributesCount	=	0;
@@ -121,7 +121,7 @@ HRESULT CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValu
 		if (FAILED(hr))
 		{
 			_ASSERT(0);
-			hr	=	E_FAIL;
+			hr	=	APP_Result_E_Fail;
 		}
 
 		return	hr;
@@ -130,7 +130,7 @@ HRESULT CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValu
 	if ( NULL == m_CurElement )
 	{
 		_ASSERT(0);
-		return	E_FAIL;
+		return	APP_Result_E_Fail;
 	}
 
 	do 
@@ -140,7 +140,7 @@ HRESULT CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValu
 		if ( NULL == *pTemp )
 		{
 			_ASSERT(0);
-			hr	=	E_FAIL;		
+			hr	=	APP_Result_E_Fail;		
 			break;
 		}
 		memset( pTemp, 0x0, lSize * sizeof( char ) );
@@ -157,7 +157,7 @@ HRESULT CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValu
 		if ( NULL == pBuf )
 		{
 			_ASSERT(0);
-			hr	=	E_FAIL;
+			hr	=	APP_Result_E_Fail;
 			break;
 		}
 		
@@ -165,7 +165,7 @@ HRESULT CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValu
 		if ( NULL == pPreNode )
 		{
 			_ASSERT(0);
-			hr	=	E_FAIL;
+			hr	=	APP_Result_E_Fail;
 			break;
 		}
 
@@ -193,7 +193,7 @@ HRESULT CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValu
 		if (  !bIsFind )
 		{
 			_ASSERT(0);
-			hr	=	E_FAIL;
+			hr	=	APP_Result_E_Fail;
 			break;
 		}
 		else
@@ -202,7 +202,7 @@ HRESULT CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValu
 			if (FAILED(hr))
 			{
 				_ASSERT(0);
-				hr	=	E_FAIL;
+				hr	=	APP_Result_E_Fail;
 				break;
 			}
 		}
@@ -212,14 +212,14 @@ HRESULT CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeValu
 	return	hr;
 }
 
-HRESULT CXmlNode::SetNodeContent( wchar_t* pwcsNodePath, wchar_t* pwcsNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount )
+APP_Result CXmlNode::SetNodeContent( wchar_t* pwcsNodePath, wchar_t* pwcsNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount )
 {
 	if ( NULL == m_CurElement )
 	{
 		_ASSERT(0);
-		return	E_FAIL;
+		return	APP_Result_E_Fail;
 	}
-	HRESULT	hr	=	S_OK;
+	APP_Result	hr	=	APP_Result_S_OK;
 	if ( NULL == pwcsNodePath )
 	{
 		hr	=	SubSetNodeContent( m_CurElement, pwcsNodeValue, ppAttributes, lAttributesCount );
@@ -232,14 +232,14 @@ HRESULT CXmlNode::SetNodeContent( wchar_t* pwcsNodePath, wchar_t* pwcsNodeValue,
 		if ( NULL == m_pCXmlStream )
 		{
 			_ASSERT(0);
-			return	E_FAIL;
+			return	APP_Result_E_Fail;
 		}
 		TiXmlElement*	pTiXmlElement;
 		hr	=	m_pCXmlStream->FindNode( chPath, &pTiXmlElement );
 		if ( FAILED(hr) )
 		{
 			_ASSERT(0);
-			return	E_FAIL;
+			return	APP_Result_E_Fail;
 		}
 
 		hr	=	SubSetNodeContent( pTiXmlElement, pwcsNodeValue, ppAttributes, lAttributesCount );
@@ -255,7 +255,7 @@ HRESULT CXmlNode::SetNodeContent( wchar_t* pwcsNodePath, wchar_t* pwcsNodeValue,
 	return	hr;
 }
 
-HRESULT CXmlNode::SubSetNodeContent( TiXmlElement* pNode, wchar_t* pwcsNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount )
+APP_Result CXmlNode::SubSetNodeContent( TiXmlElement* pNode, wchar_t* pwcsNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount )
 {
 //	if ( NULL != pwcsNodeValue )
 //	{
@@ -279,18 +279,18 @@ HRESULT CXmlNode::SubSetNodeContent( TiXmlElement* pNode, wchar_t* pwcsNodeValue
 // 	else
 // 	{
 // 		_ASSERT(0);
-// 		return	E_FAIL;
+// 		return	APP_Result_E_Fail;
 // 	}
 
-	return	S_OK;
+	return	APP_Result_S_OK;
 }
 
-HRESULT	CXmlNode::AppendNode( CXmlNode* pCXmlNode )
+APP_Result	CXmlNode::AppendNode( CXmlNode* pCXmlNode )
 {
 	if ( NULL == m_CurElement )
 	{
 		_ASSERT(0);
-		return	E_FAIL;
+		return	APP_Result_E_Fail;
 	}
 	
 	m_CurElement->InsertEndChild( *( pCXmlNode->GetElement() ) );
@@ -302,12 +302,12 @@ HRESULT	CXmlNode::AppendNode( CXmlNode* pCXmlNode )
 	}	
 #endif
 
-	return	S_OK;
+	return	APP_Result_S_OK;
 }
 
 //private:
 
-HRESULT	CXmlNode::SubGetNodeContent( TiXmlElement* pNode, wchar_t** ppwcsNodeValue, NodeAttribute_t** ppAttributes, long* lAttributesCount )
+APP_Result	CXmlNode::SubGetNodeContent( TiXmlElement* pNode, wchar_t** ppwcsNodeValue, NodeAttribute_t** ppAttributes, long* lAttributesCount )
 {
 	const char *pText	=	pNode->GetText();
 	if ( NULL == pText )
@@ -339,21 +339,21 @@ HRESULT	CXmlNode::SubGetNodeContent( TiXmlElement* pNode, wchar_t** ppwcsNodeVal
 		}
 	}
 
-	return	S_OK;
+	return	APP_Result_S_OK;
 }
 
-HRESULT CXmlNode::SetNodePtr( TiXmlElement* pNode, CXmlStream* pCXmlStream )
+APP_Result CXmlNode::SetNodePtr( TiXmlElement* pNode, CXmlStream* pCXmlStream )
 {
 	if ( NULL == pNode || NULL == pCXmlStream )
 	{
 		_ASSERT(0);
-		return	E_FAIL;
+		return	APP_Result_E_Fail;
 	}
 	
 	m_pCXmlStream	=	pCXmlStream;
 	m_CurElement	=	pNode;
 	
-	return	S_OK;
+	return	APP_Result_S_OK;
 }
 
 TiXmlElement*	CXmlNode::GetElement()
@@ -385,25 +385,25 @@ CXmlStream::~CXmlStream()
 
 //public:
 
-HRESULT	CXmlStream::GetXmlStream( wchar_t* pwcStream, long lSize )
+APP_Result	CXmlStream::GetXmlStream( wchar_t* pwcStream, long lSize )
 {
 	m_strBuf << *m_pTiXmlDocument;
 
 	MB2WC( pwcStream, m_strBuf.c_str() );
 
-	return	S_OK;
+	return	APP_Result_S_OK;
 }
 
-HRESULT	CXmlStream::Initialize( long lSize )
+APP_Result	CXmlStream::Initialize( long lSize )
 {
-	HRESULT	hr	=	S_OK;
+	APP_Result	hr	=	APP_Result_S_OK;
 
 	do 
 	{
 		if ( lSize <= 0 )
 		{
 			_ASSERT( 0 );
-			hr	=	E_FAIL;
+			hr	=	APP_Result_E_Fail;
 			break;
 		}
 		
@@ -417,7 +417,7 @@ HRESULT	CXmlStream::Initialize( long lSize )
 		if ( NULL == m_pTiXmlDocument )
 		{
 			_ASSERT(0);
-			hr	=	E_FAIL;
+			hr	=	APP_Result_E_Fail;
 			break;
 		}
 
@@ -428,28 +428,28 @@ HRESULT	CXmlStream::Initialize( long lSize )
 	return	hr;
 }
 
-HRESULT CXmlStream::Load( wchar_t* pwcsXmlBuf, long lSize )
+APP_Result CXmlStream::Load( wchar_t* pwcsXmlBuf, long lSize )
 {
 	if ( NULL == pwcsXmlBuf )	// need ReAlloc
 	{
 		_ASSERT(0);
-		return	E_FAIL;
+		return	APP_Result_E_Fail;
 	}
-	HRESULT	hr	=	S_OK;
+	APP_Result	hr	=	APP_Result_S_OK;
 	
 	do 
 	{
 		if ( NULL == m_pTiXmlDocument  )
 		{
 			_ASSERT(0);
-			hr	=	E_FAIL;
+			hr	=	APP_Result_E_Fail;
 			break;
 		}
 		char	*pTemp	=	new	char[ lSize ];
 		if ( NULL == pTemp )
 		{
 			_ASSERT(0);
-			hr	=	E_FAIL;
+			hr	=	APP_Result_E_Fail;
 			break;
 		}
 		WC2MB( pTemp, pwcsXmlBuf);
@@ -460,7 +460,7 @@ HRESULT CXmlStream::Load( wchar_t* pwcsXmlBuf, long lSize )
 		if ( m_pTiXmlDocument->Error() )
 		{
 			_ASSERT(0);
-			hr	=	E_FAIL;
+			hr	=	APP_Result_E_Fail;
 			break;
 		}
 
@@ -471,15 +471,15 @@ HRESULT CXmlStream::Load( wchar_t* pwcsXmlBuf, long lSize )
 	return	hr;
 }
 
-HRESULT CXmlStream::SelectNode( wchar_t* pwcsNodePath, CXmlNode** pclXmlNode )
+APP_Result CXmlStream::SelectNode( wchar_t* pwcsNodePath, CXmlNode** pclXmlNode )
 {
 	if ( NULL == pwcsNodePath )
 	{
 		_ASSERT(0);
-		return	E_FAIL;
+		return	APP_Result_E_Fail;
 	}
 	
-	HRESULT	hr	=	S_OK;
+	APP_Result	hr	=	APP_Result_S_OK;
 
 	do 
 	{
@@ -488,7 +488,7 @@ HRESULT CXmlStream::SelectNode( wchar_t* pwcsNodePath, CXmlNode** pclXmlNode )
 		if ( NULL == *pTemp )
 		{
 			_ASSERT(0);
-			hr	=	E_FAIL, *pclXmlNode	=	NULL;		
+			hr	=	APP_Result_E_Fail, *pclXmlNode	=	NULL;		
 			break;
 		}
 		memset( pTemp, 0x0, lSize * sizeof( char ) );
@@ -510,9 +510,9 @@ HRESULT CXmlStream::SelectNode( wchar_t* pwcsNodePath, CXmlNode** pclXmlNode )
 
 //private:
 
-HRESULT	CXmlStream::SubSelectNode( char *pcsNodePath, CXmlNode** pclXmlNode )
+APP_Result	CXmlStream::SubSelectNode( char *pcsNodePath, CXmlNode** pclXmlNode )
 {
-	HRESULT	hr	=	S_OK;
+	APP_Result	hr	=	APP_Result_S_OK;
 
 	do 
 	{
@@ -530,9 +530,9 @@ HRESULT	CXmlStream::SubSelectNode( char *pcsNodePath, CXmlNode** pclXmlNode )
 	return	hr;
 }
 
-HRESULT	CXmlStream::MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode )
+APP_Result	CXmlStream::MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode )
 {
-	HRESULT	hr	=	S_OK;
+	APP_Result	hr	=	APP_Result_S_OK;
 
 	do 
 	{
@@ -573,7 +573,7 @@ HRESULT	CXmlStream::MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode )
 			if ( NULL == *pclXmlNode )
 			{
 				_ASSERT(0);
-				return	E_FAIL;
+				return	APP_Result_E_Fail;
 			}
 			(*pclXmlNode)->SetNodePtr( pNode, this );
 		}
@@ -584,9 +584,9 @@ HRESULT	CXmlStream::MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode )
 }
 
 #if 0
-HRESULT	CXmlStream::MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode )
+APP_Result	CXmlStream::MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode )
 {
-	HRESULT	hr	=	S_OK;
+	APP_Result	hr	=	APP_Result_S_OK;
 	
 	vector< TiXmlElement * >	vecElement;
 
@@ -609,7 +609,7 @@ HRESULT	CXmlStream::MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode )
 			if ( NULL == pElement )
 			{
 				_ASSERT(0);
-				hr	=	E_FAIL;
+				hr	=	APP_Result_E_Fail;
 				break;
 			}
 			vecElement.push_back( pElement );
@@ -634,7 +634,7 @@ HRESULT	CXmlStream::MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode )
 	return	hr;
 }
 
-HRESULT	CXmlStream::SubMakeXml( vector<TiXmlElement*> & vecElement)
+APP_Result	CXmlStream::SubMakeXml( vector<TiXmlElement*> & vecElement)
 {
 	vector< TiXmlElement * >::reverse_iterator ri, riend, save;
 	riend	=	vecElement.rend();
@@ -655,14 +655,14 @@ HRESULT	CXmlStream::SubMakeXml( vector<TiXmlElement*> & vecElement)
 		(*iter)	=	NULL;
 	}
 
-	return	S_OK;
+	return	APP_Result_S_OK;
 }
 
 #endif
 
-HRESULT	CXmlStream::MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode )
+APP_Result	CXmlStream::MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 {
-	HRESULT	hr	=	S_OK;
+	APP_Result	hr	=	APP_Result_S_OK;
 
 	if ( bIsFirst )
 	{
@@ -672,7 +672,7 @@ HRESULT	CXmlStream::MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 		if ( NULL == pDeclaration || NULL == m_pTiXmlDocument )
 		{
 			_ASSERT(0);
-			return	E_FAIL;
+			return	APP_Result_E_Fail;
 		}
 		m_pTiXmlDocument->LinkEndChild(pDeclaration);
 
@@ -738,7 +738,7 @@ HRESULT	CXmlStream::MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 			if ( NULL == *pclXmlNode )
 			{
 				_ASSERT(0);
-				return	E_FAIL;
+				return	APP_Result_E_Fail;
 			}
 			(*pclXmlNode)->SetNodePtr( pNode, this );
 		}
@@ -749,9 +749,9 @@ HRESULT	CXmlStream::MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 }
 
 
-HRESULT	CXmlStream::ParseXml( char *pcsNodePath, CXmlNode** pclXmlNode )
+APP_Result	CXmlStream::ParseXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 {
-	HRESULT	hr	=	S_OK;
+	APP_Result	hr	=	APP_Result_S_OK;
 
 	string strTemp	=	pcsNodePath;
 
@@ -774,7 +774,7 @@ HRESULT	CXmlStream::ParseXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 		if ( NULL == pPreNode )
 		{
 			_ASSERT(0);
-			hr	=	E_FAIL;
+			hr	=	APP_Result_E_Fail;
 			break;
 		}
 				
@@ -812,7 +812,7 @@ HRESULT	CXmlStream::ParseXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 			if ( NULL == *pclXmlNode )
 			{
 				_ASSERT(0);
-				hr	=	E_FAIL;
+				hr	=	APP_Result_E_Fail;
 				break;
 			}
 			(*pclXmlNode)->SetNodePtr( pPreNode, this );
@@ -824,9 +824,9 @@ HRESULT	CXmlStream::ParseXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 	return	hr;
 }
 
-HRESULT	CXmlStream::FindNode( char *pcsNodePath, TiXmlElement** pclXmlElement )
+APP_Result	CXmlStream::FindNode( char *pcsNodePath, TiXmlElement** pclXmlElement )
 {
-	HRESULT	hr		=	S_OK;
+	APP_Result	hr		=	APP_Result_S_OK;
 	*pclXmlElement		=	NULL;
 
 	do 
@@ -842,7 +842,7 @@ HRESULT	CXmlStream::FindNode( char *pcsNodePath, TiXmlElement** pclXmlElement )
 		if ( NULL == pNode )
 		{
 			_ASSERT(0);
-			hr	=	E_FAIL;
+			hr	=	APP_Result_E_Fail;
 			break;
 		}
 		
@@ -858,7 +858,7 @@ HRESULT	CXmlStream::FindNode( char *pcsNodePath, TiXmlElement** pclXmlElement )
 			if ( NULL == pTempNode )
 			{
 				_ASSERT(0);
-				hr	=	E_FAIL;
+				hr	=	APP_Result_E_Fail;
 				break;
 			}
 			pNode	=	pTempNode;

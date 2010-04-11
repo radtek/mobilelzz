@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SqliteOpenSource", "..\Sqli
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Core", "..\Core\Core.vcproj", "{047CFF93-3CFE-476B-ACDB-3ED1E4F9E853}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CommonLib", "..\CommonLib\CommonLib.vcproj", "{CDEFD98C-A911-4087-BE5C-6C3D321D40EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|M8SDK (ARMV4I) = Debug|M8SDK (ARMV4I)
@@ -59,6 +61,20 @@ Global
 		{047CFF93-3CFE-476B-ACDB-3ED1E4F9E853}.Release|Mixed Platforms.Build.0 = Release|M8SDK (ARMV4I)
 		{047CFF93-3CFE-476B-ACDB-3ED1E4F9E853}.Release|Mixed Platforms.Deploy.0 = Release|M8SDK (ARMV4I)
 		{047CFF93-3CFE-476B-ACDB-3ED1E4F9E853}.Release|Win32.ActiveCfg = Release|M8SDK (ARMV4I)
+		{CDEFD98C-A911-4087-BE5C-6C3D321D40EF}.Debug|M8SDK (ARMV4I).ActiveCfg = Debug|M8SDK (ARMV4I)
+		{CDEFD98C-A911-4087-BE5C-6C3D321D40EF}.Debug|M8SDK (ARMV4I).Build.0 = Debug|M8SDK (ARMV4I)
+		{CDEFD98C-A911-4087-BE5C-6C3D321D40EF}.Debug|M8SDK (ARMV4I).Deploy.0 = Debug|M8SDK (ARMV4I)
+		{CDEFD98C-A911-4087-BE5C-6C3D321D40EF}.Debug|Mixed Platforms.ActiveCfg = Debug|M8SDK (ARMV4I)
+		{CDEFD98C-A911-4087-BE5C-6C3D321D40EF}.Debug|Mixed Platforms.Build.0 = Debug|M8SDK (ARMV4I)
+		{CDEFD98C-A911-4087-BE5C-6C3D321D40EF}.Debug|Mixed Platforms.Deploy.0 = Debug|M8SDK (ARMV4I)
+		{CDEFD98C-A911-4087-BE5C-6C3D321D40EF}.Debug|Win32.ActiveCfg = Debug|M8SDK (ARMV4I)
+		{CDEFD98C-A911-4087-BE5C-6C3D321D40EF}.Release|M8SDK (ARMV4I).ActiveCfg = Release|M8SDK (ARMV4I)
+		{CDEFD98C-A911-4087-BE5C-6C3D321D40EF}.Release|M8SDK (ARMV4I).Build.0 = Release|M8SDK (ARMV4I)
+		{CDEFD98C-A911-4087-BE5C-6C3D321D40EF}.Release|M8SDK (ARMV4I).Deploy.0 = Release|M8SDK (ARMV4I)
+		{CDEFD98C-A911-4087-BE5C-6C3D321D40EF}.Release|Mixed Platforms.ActiveCfg = Release|M8SDK (ARMV4I)
+		{CDEFD98C-A911-4087-BE5C-6C3D321D40EF}.Release|Mixed Platforms.Build.0 = Release|M8SDK (ARMV4I)
+		{CDEFD98C-A911-4087-BE5C-6C3D321D40EF}.Release|Mixed Platforms.Deploy.0 = Release|M8SDK (ARMV4I)
+		{CDEFD98C-A911-4087-BE5C-6C3D321D40EF}.Release|Win32.ActiveCfg = Release|M8SDK (ARMV4I)
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,79 +12,6 @@ class ListItemData
 
 };
 
-
-/////////////////////CSmsLookCtorList/////////////////////////////////////////////////////
-
-CSmsLookMsgList::CSmsLookMsgList()
-{
-
-}
-
-CSmsLookMsgList::~CSmsLookMsgList()
-{
-	RemoveAll();
-}
-
-void CSmsLookMsgList::OnRemoveItem(int nIndex)
-{
-	ListItem*	pItem	=	GetItem(nIndex);
-	if( NULL != pItem )
-	{
-		MyListItemData*	mlid	=	(MyListItemData*)pItem->Data;
-		if( NULL != mlid )
-		{
-			delete mlid; 
-		}
-	}
-}
-
-int CSmsLookMsgList::OnLButtonUp( UINT fwKeys, int xPos, int yPos )
-{
-	int iRlt = UiList::OnLButtonUp(fwKeys, xPos, yPos);
-
-	return	iRlt;
-}
-
-void CSmsLookMsgList::DrawItem(HDC hdcDst, int nIndex, RECT* prcItem, RECT *prcWin, RECT *prcUpdate)
-{
-	ListItem*	pItem	=	GetItem( nIndex );
-	if ( 0 == pItem )
-	{
-		return;
-	}
-	if ( 0 == pItem->Data )
-	{
-		return;
-	}
-		
-	ListItemData*	pmlid	=	(ListItemData*)pItem->Data;
-
-	// 绘制左边的小图像
-	ImagingHelper*	pimg	=	m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA_N_V, true);
-	RECT			rcImg	=	*prcItem;
-	rcImg.right	=	rcImg.left + MZM_MARGIN_MAX * 2;
-	if (NULL != pimg )
-	{
-		pimg->Draw(hdcDst, &rcImg, false, false);
-	}
-	// 绘制主文本
-	RECT	rcText	=	*prcItem;
-	rcText.left		=	rcImg.right + 20;
-	rcText.bottom	=	rcText.top + RECT_HEIGHT( rcText ) / 2;
-	//::SetTextColor(hdcDst, RGB(0,200,0));
-	::SetTextColor( hdcDst, RGB( 0, 0, 0 ) );
-
-	MzDrawText( hdcDst, pmlid->StringTitle.C_Str(), &rcText, 
-				DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS );
-
-	// 绘制描述文本
-	rcText.top		=	rcText.bottom;
-	rcText.bottom	=	prcItem->bottom;
-	::SetTextColor( hdcDst, RGB( 200, 200, 200 ) );
-	MzDrawText( hdcDst, pmlid->StringDescription.C_Str(), &rcText, 
-				DT_LEFT|DT_TOP|DT_SINGLELINE|DT_END_ELLIPSIS );
-}
-
 ///////////////////CSmsLookCtorWnd///////////////////////////////////////////////////////
 CSmsLookMsgWnd::CSmsLookMsgWnd(void)
 {
@@ -98,55 +25,14 @@ CSmsLookMsgWnd::~CSmsLookMsgWnd(void)
 
 BOOL CSmsLookMsgWnd::OnInitDialog()
 {
-	if ( !CMzWndEx::OnInitDialog() )
+	if ( !CEasySmsWndBase::OnInitDialog() )
 	{
 		return FALSE;
 	}
 
-	//ini list
-	m_List.SetID( MZ_IDC_SMSLOOKCTOR_LIST );
-	m_List.EnableScrollBarV( true );
-	m_List.EnableNotifyMessage( true );
-	m_List.SetTextColor( RGB( 255, 0, 0 ) );
-	m_List.SetPos(0, 0, GetWidth(), GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR );
-	m_List.SetItemHeight( 90 );
-	AddUiWin( &m_List );
+	SetWindowText( L"昵称/号码" );
 
-
-
-	//ini alp
-	m_AlpBar.SetID( MZ_IDC_SMSLOOKCTOR_ALPBAR );
-	m_AlpBar.EnableZoomAlphabet( true );
-	m_AlpBar.EnableNotifyMessage( true );
-	m_AlpBar.SetPos( 350, 0, 50, GetHeight( ) );
-	AddUiWin( &m_AlpBar );
-
-	//ini toolbar
-	m_Toolbar.SetButton( 2, true, true, L"取消" );
-	m_Toolbar.SetID( MZ_IDC_SMSLOOKCTOR_TOOLBAR );
-	m_Toolbar.SetPos( 0, GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR, GetWidth(), MZM_HEIGHT_TEXT_TOOLBAR );
-	AddUiWin( &m_Toolbar );
-
-
-//test
-	ListItem	clListItem;
-	ListItemData	*	pmlid	=	new ListItemData;
-	if ( NULL == pmlid )
-	{
-		return	FALSE;
-	}
-	pmlid->StringTitle			=	L"SmsMsgWnd";
-	pmlid->StringDescription	=	L"SmsMsgWnd";
-	pmlid->Selected				=	false;
-
-	clListItem.Data				=	pmlid;
-	m_List.AddItem( clListItem );
-
-	m_List.Invalidate();
-	m_List.Update();
-
-//
-	return	TRUE;
+	return	SubInitialize();
 }
 
 void CSmsLookMsgWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
@@ -155,7 +41,7 @@ void CSmsLookMsgWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 
 	switch(id)
 	{
-		case MZ_IDC_SMSLOOKCTOR_TOOLBAR:
+		case MZ_IDC_SMSLOOKMSG_TOOLBAR:
 		{
 			int nIndex	=	lParam;
 			if ( 2 == nIndex )
@@ -168,4 +54,53 @@ void CSmsLookMsgWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 		default:
 			break;
 	}
+}
+
+
+BOOL	CSmsLookMsgWnd::SubInitialize()
+{
+	//ini list
+	m_list_base.EnableDragModeH(true);
+	m_list_base.SetID( MZ_IDC_SMSLOOKMSG_LIST );
+	AddUiWin( &m_list_base );
+
+	//ini toolbar
+	m_toolBar_base.SetID( MZ_IDC_SMSLOOKMSG_TOOLBAR );
+	AddUiWin( &m_toolBar_base );
+
+	//test
+	CMzString content = L"短信内容 SmsContent%d:";
+	CMzString stime = L"12:20";
+
+	CMzString content1(30);
+	for (int i = 0; i < 100; i++)
+	{
+		swprintf(content1.C_Str(),content.C_Str(),i);
+
+		ListItemEx* item = new ListItemEx;
+		item->m_pData = (void*)i;
+
+		item->m_textPostscript1 = stime.C_Str();
+
+		if (i == 2)
+		{
+			item->m_textDescription = L"content: I&apos;m dying to see u! what? I couldn&apos;t get it";
+		}
+		else if(i == 6)
+		{
+			item->m_textDescription = L"我这里天快要黑了，那里呢？我这里天气凉凉的那里呢？ 我这里一切都变了，而那你呢？";
+		}
+		else
+		{
+			item->m_textDescription = content1.C_Str();
+		}
+
+		item->m_pImgFirst = m_imgContainer_base.LoadImage(MzGetInstanceHandle(), IDR_PNG_CTR_LIST_READ, true);
+
+		item->m_itemBgType	=	UILIST_ITEM_BGTYPE_YELLOW;
+		m_list_base.AddItem(item);
+	}
+
+	//
+	return	TRUE;
 }

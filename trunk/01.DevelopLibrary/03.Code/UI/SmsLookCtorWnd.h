@@ -1,35 +1,12 @@
 #ifndef __SMSLOOKCTORWND_h__
 #define __SMSLOOKCTORWND_h__
 
-#include"ContactorsWnd.h"
-#include"NewSmsWnd.h"
-
-class CSmsLookCtorList	:	public	UiList
-{
-	public:
-
-		CSmsLookCtorList();
-
-		virtual ~CSmsLookCtorList();
-
-	public:
-		// 当某一项即将被删除之前，delete 其自定义项数据
-		virtual void OnRemoveItem( int nIndex );
-
-		virtual int OnLButtonUp( UINT fwKeys, int xPos, int yPos );
-
-		virtual void DrawItem(HDC hdcDst, int nIndex, RECT* prcItem, RECT *prcWin, RECT *prcUpdate);
+#include "ContactorsWnd.h"
+#include "NewSmsWnd.h"
+#include "EasySmsWndBase.h"
 
 
-	protected:
-
-	private:
-	
-		ImageContainer m_ImageContainer;
-};
-
-
-class CSmsLookCtorWnd	:	public	CMzWndEx
+class CSmsLookCtorWnd	:	public	CEasySmsWndBase
 {
 	
 	MZ_DECLARE_DYNAMIC( CSmsLookCtorWnd );
@@ -46,17 +23,18 @@ class CSmsLookCtorWnd	:	public	CMzWndEx
 
 		virtual void OnMzCommand( WPARAM wParam, LPARAM lParam );
 
+
+		BOOL	SubInitialize();
+
 	private:
 		
 	protected:
 
+		virtual void	DoSthForItemBtnUpSelect( ListItemEx* pItem );
+
 	private:
 
-		CSmsLookCtorList			m_List;
-
 		UiAlphabetBar				m_AlpBar;
-
-		UiToolbar_Text				m_Toolbar;
 
 };
 

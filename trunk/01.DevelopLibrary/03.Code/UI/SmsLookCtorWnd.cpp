@@ -4,6 +4,7 @@
 #include "SmsLookCtorWnd.h"
 #include "SmsLookMsgWnd.h"
 
+
 class ListItemData
 {
 	public:
@@ -12,97 +13,6 @@ class ListItemData
 		BOOL		Selected;				// 项是否被选中
 
 };
-
-
-/////////////////////CSmsLookCtorList/////////////////////////////////////////////////////
-
-CSmsLookCtorList::CSmsLookCtorList()
-{
-
-}
-
-CSmsLookCtorList::~CSmsLookCtorList()
-{
-	RemoveAll();
-}
-
-void CSmsLookCtorList::OnRemoveItem(int nIndex)
-{
-	ListItem*	pItem	=	GetItem(nIndex);
-	if( NULL != pItem )
-	{
-		MyListItemData*	mlid	=	(MyListItemData*)pItem->Data;
-		if( NULL != mlid )
-		{
-			delete mlid; 
-		}	
-	}
-}
-
-int CSmsLookCtorList::OnLButtonUp( UINT fwKeys, int xPos, int yPos )
-{
-	int		iRlt	=	UiList::OnLButtonUp( fwKeys, xPos, yPos );
-
-	bool	b1		=	IsMouseDownAtScrolling();
-	bool	b2		=	IsMouseMoved();
-
-	if( ( !b1 ) && ( !b2 ) )
-	{
-		// 计算鼠标所在位置的项的索引
-		int	nIndex	=	CalcIndexOfPos( xPos, yPos );
-		if( 1 == nIndex )
-		{
-			CSmsLookMsgWnd	clCSmsLookMsgWnd;
-			RECT rcWork	=	MzGetWorkArea();
-			clCSmsLookMsgWnd.Create(	rcWork.left, rcWork.top, RECT_WIDTH(rcWork), 
-										RECT_HEIGHT(rcWork), 0, 0, 0 );
-			clCSmsLookMsgWnd.DoModal();
-		}
-	}
-
-	return	iRlt;
-}
-
-void CSmsLookCtorList::DrawItem(HDC hdcDst, int nIndex, RECT* prcItem, RECT *prcWin, RECT *prcUpdate)
-{
-	ListItem*	pItem	=	GetItem( nIndex );
-	if ( 0 == pItem )
-	{
-		return;
-	}
-		
-	if ( 0 == pItem->Data )
-	{
-		return;
-	}
-	
-	ListItemData	*	pmlid	=	(ListItemData*)pItem->Data;
-
-	// 绘制左边的小图像
-	ImagingHelper* pimg	=	m_ImageContainer.LoadImage( MzGetInstanceHandle(), IDR_RCDATA_N_V, true );
-	RECT rcImg			=	*prcItem;
-	rcImg.right			=	rcImg.left + MZM_MARGIN_MAX * 2;
-	if ( NULL != pimg )
-	{
-		pimg->Draw( hdcDst, &rcImg, false, false );
-	}
-	// 绘制主文本
-	RECT rcText		=	*prcItem;
-	rcText.left		=	rcImg.right + 20;
-	rcText.bottom	=	rcText.top + RECT_HEIGHT( rcText ) / 2;
-	//::SetTextColor(hdcDst, RGB(0,200,0));
-	::SetTextColor( hdcDst, RGB( 0, 0, 0 ) );
-
-	MzDrawText( hdcDst, pmlid->StringTitle.C_Str(), &rcText, 
-				DT_LEFT|DT_BOTTOM|DT_SINGLELINE|DT_END_ELLIPSIS );
-
-	// 绘制描述文本
-	rcText.top		=	rcText.bottom;
-	rcText.bottom	=	prcItem->bottom;
-	::SetTextColor( hdcDst, RGB( 200, 200, 200 ) );
-	MzDrawText( hdcDst, pmlid->StringDescription.C_Str(), &rcText, 
-				DT_LEFT|DT_TOP|DT_SINGLELINE|DT_END_ELLIPSIS );
-}
 
 ///////////////////CSmsLookCtorWnd///////////////////////////////////////////////////////
 CSmsLookCtorWnd::CSmsLookCtorWnd(void)
@@ -117,62 +27,15 @@ CSmsLookCtorWnd::~CSmsLookCtorWnd(void)
 
 BOOL CSmsLookCtorWnd::OnInitDialog()
 {
-	if ( !CMzWndEx::OnInitDialog() )
+	if ( !CEasySmsWndBase::OnInitDialog() )
 	{
 		return FALSE;
 	}
-	//ini list
-	m_List.SetID( MZ_IDC_SMSLOOKCTOR_LIST );
-	m_List.EnableScrollBarV( true );
-	m_List.EnableNotifyMessage( true );
-	m_List.SetTextColor( RGB( 255,0,0 ) );
-	m_List.SetPos(0, 0, GetWidth(), GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR );
-	m_List.SetItemHeight( 90 );
-	AddUiWin( &m_List );
 
+	SetWindowText( L"短信查看" );
 
-
-	//ini alp
-	m_AlpBar.SetID( MZ_IDC_SMSLOOKCTOR_ALPBAR );
-	m_AlpBar.EnableZoomAlphabet( true );
-	m_AlpBar.EnableNotifyMessage( true );
-	m_AlpBar.SetPos( 350, 0, 50, GetHeight() );
-	AddUiWin( &m_AlpBar );
-
-	//ini toolbar
-	m_Toolbar.SetButton( 2, true, true, L"取消" );
-	m_Toolbar.SetID( MZ_IDC_SMSLOOKCTOR_TOOLBAR );
-	m_Toolbar.SetPos( 0, GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR, GetWidth(), MZM_HEIGHT_TEXT_TOOLBAR );
-	AddUiWin( &m_Toolbar );
-
-
-//test
-	{
-		ListItem li;
-		ListItemData *pmlid = new ListItemData;
-		pmlid->StringTitle			= L"Title1";
-		pmlid->StringDescription	= L"Description1";
-		pmlid->Selected = false;
-
-		li.Data = pmlid;
-		m_List.AddItem(li);
-	}
+	return	SubInitialize();
 	
-	{
-		ListItem li;
-		ListItemData *pmlid = new ListItemData;
-		pmlid->StringTitle			= L"Title2";
-		pmlid->StringDescription	= L"Description2";
-		pmlid->Selected = false;
-
-		li.Data = pmlid;
-		m_List.AddItem(li);
-	}
-
-
-//
-
-	return	TRUE;
 }
 
 void CSmsLookCtorWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
@@ -193,5 +56,78 @@ void CSmsLookCtorWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 
 		default:
 			break;
+	}
+}
+
+
+BOOL	CSmsLookCtorWnd::SubInitialize()
+{
+	//ini list
+	
+	m_list_base.SetID( MZ_IDC_SMSLOOKCTOR_LIST );
+	AddUiWin( &m_list_base );
+/////////////////////////////////////////////////////////////////	
+//	ItemAttribute	clItemAttribute;
+//	clItemAttribute.SetPsText1Param( 100, RGB(100, 100, 100), FW_MEDIUM, false, false, 
+//							DT_TOP|DT_LEFT|DT_END_ELLIPSIS|DT_SINGLELINE|DT_NOPREFIX ); 
+
+//	m_list_base.SetItemAttributeH( clItemAttribute );
+///////////////////////////////////////////////////////////////////
+	//ini alp
+	m_AlpBar.SetID( MZ_IDC_SMSLOOKCTOR_ALPBAR );
+	m_AlpBar.EnableZoomAlphabet( true );
+	m_AlpBar.EnableNotifyMessage( true );
+	m_AlpBar.SetPos( 350, 0, 50, GetHeight() );
+	AddUiWin( &m_AlpBar );
+
+	//ini toolbar
+	m_toolBar_base.SetID( MZ_IDC_SMSLOOKCTOR_TOOLBAR );
+	AddUiWin( &m_toolBar_base );
+
+
+	/////////////test/////////////////////////////////////////////////////////////
+	
+	CMzString name = L"姓名%d";
+//	CMzString content = L"短信内容 SmsContent%d:";
+	CMzString stime = L"Count: 100";
+
+	CMzString name1(10);
+	CMzString content1(30);
+	for (int i = 0; i < 100; i++)
+	{
+		swprintf(name1.C_Str(),name.C_Str(),i);
+//		swprintf(content1.C_Str(),content.C_Str(),i);
+		ListItemEx* item = new ListItemEx;
+		
+//		ItemAttribute	clItemAttribute;
+//		clItemAttribute.SetPsText1Param( 100, RGB(100, 100, 100), FW_MEDIUM, false, false, 
+//									DT_TOP|DT_END_ELLIPSIS|DT_SINGLELINE|DT_NOPREFIX ); 
+//		item->m_pSpecialItemAttr	=	&clItemAttribute;
+
+		
+		item->m_pData = (void*)i;
+		item->m_textTitle = name1.C_Str();
+
+		item->m_textPostscript1 = stime.C_Str();
+
+
+ 		item->m_pImgFirst = m_imgContainer_base.LoadImage(MzGetInstanceHandle(), IDR_PNG_CTR_LIST_READ, true);
+
+		m_list_base.AddItem(item);
+	}
+
+
+/////////////test/////////////////////////////////////////////////////////////
+
+	return	TRUE;
+}
+
+void	CSmsLookCtorWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
+{
+	CSmsLookMsgWnd	clCSmsLookMsgWnd;
+	int iRlt	=	DoModalBase( &clCSmsLookMsgWnd );
+	if ( ID_CASCADE_EXIT == iRlt )
+	{
+		ReturnToMainWnd();
 	}
 }

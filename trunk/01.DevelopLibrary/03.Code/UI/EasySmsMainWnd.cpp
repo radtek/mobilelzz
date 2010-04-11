@@ -12,7 +12,7 @@ CEasySmsMainWnd::CEasySmsMainWnd(void)
 
 CEasySmsMainWnd::~CEasySmsMainWnd(void)
 {
-	m_imgContainer.RemoveAll();
+
 }
 
 BOOL CEasySmsMainWnd::OnInitDialog()
@@ -22,36 +22,46 @@ BOOL CEasySmsMainWnd::OnInitDialog()
 		return FALSE;
 	}
 	
-	return	Initialize_Btn_Img();
+	SetWindowText( L"Ò×¶ÌÐÅ2.000" );
+
+	return	SubInitialize();
 }
 
 void CEasySmsMainWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 {
 	UINT_PTR id	=	LOWORD( wParam );
 
+	int iRlt	=	-1;
+
 	switch( id )
 	{
 		case MZ_IDC_LOOK_SMS:
 		{
 			CSmsLookCtorWnd		clCSmsLookCtorWnd;
-			RECT rcWork	=	MzGetWorkArea();
-			clCSmsLookCtorWnd.Create(	rcWork.left, rcWork.top, RECT_WIDTH( rcWork ),
-										RECT_HEIGHT( rcWork ), 0, 0, 0 );
-			clCSmsLookCtorWnd.DoModal();
+			iRlt	=	DoModalBase( &clCSmsLookCtorWnd );
+
 			break;
 		}
 			
 
 		case MZ_IDC_SEND_SMS:
 		{
-			//CNewSmsWnd *pclSendSms	=	new	CNewSmsWnd;
+
 			CNewSmsWnd		clSendSms;
-			RECT rcWork	=	MzGetWorkArea();
-			clSendSms.Create( rcWork.left, rcWork.top, RECT_WIDTH(rcWork), RECT_HEIGHT(rcWork), 0, 0, 0 );
-			//pclSendSms->Show();
-			clSendSms.DoModal();
+			iRlt	=	DoModalBase( &clSendSms );
+
 			break;
 		}
+
+		case IDR_TOOLBAR_MAIN_WND:
+		{
+			int index = lParam;
+			if ( 2 == index )
+			{
+				exit( 0 );
+			}
+		}
+
 
 		default:
 			break;
@@ -62,13 +72,13 @@ void CEasySmsMainWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 
 
 /////private/////////////////////////////////////////////////////////////////////
-BOOL	CEasySmsMainWnd::Initialize_Btn_Img()
+BOOL	CEasySmsMainWnd::SubInitialize()
 {
 	// sms look 
-	ImagingHelper* imgNormal_look = m_imgContainer.LoadImage(	MzGetInstanceHandle(), 
+	ImagingHelper* imgNormal_look = m_imgContainer_base.LoadImage(	MzGetInstanceHandle(), 
 																IDR_PNG_MainWndSmsLookBtnDown, 
 																true );
-	ImagingHelper* imgPress_look = m_imgContainer.LoadImage(	MzGetInstanceHandle(), 
+	ImagingHelper* imgPress_look = m_imgContainer_base.LoadImage(	MzGetInstanceHandle(), 
 																IDR_PNG_MainWndSmsLookBtnUp, 
 																true );
 
@@ -90,10 +100,10 @@ BOOL	CEasySmsMainWnd::Initialize_Btn_Img()
 	AddUiWin( &m_LookSmsBtnImg );
 
 	//sms send
-	ImagingHelper* imgNormal_send = m_imgContainer.LoadImage(	MzGetInstanceHandle(), 
+	ImagingHelper* imgNormal_send = m_imgContainer_base.LoadImage(	MzGetInstanceHandle(), 
 																IDR_PNG_MainWndSmsSendBtnDown, 
 																true );
-	ImagingHelper* imgPress_send = m_imgContainer.LoadImage(	MzGetInstanceHandle(), 
+	ImagingHelper* imgPress_send = m_imgContainer_base.LoadImage(	MzGetInstanceHandle(), 
 																IDR_PNG_MainWndSmsSendBtnUp, 
 																true );
 	m_SendSmsBtnImg.SetID( MZ_IDC_SEND_SMS );
@@ -107,6 +117,13 @@ BOOL	CEasySmsMainWnd::Initialize_Btn_Img()
 	m_SendSmsBtnImg.SetPos( 110, 10, 100, 100 );
 
 	AddUiWin( &m_SendSmsBtnImg );
+
+	//ini toolbar
+	m_toolBar_base.SetID(IDR_TOOLBAR_MAIN_WND);	
+	m_toolBar_base.SetPos( 0, GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR , GetWidth() , MZM_HEIGHT_TEXT_TOOLBAR );
+	m_toolBar_base.SetButton( 2, true, true, L"ÍË³ö" );
+	AddUiWin( &m_toolBar_base );
+
 
 	return	TRUE;
 }

@@ -374,6 +374,22 @@
 						RelativePath="..\..\CommonLib\FunctionLib\MyStoreLib.h"
 						>
 					</File>
+					<File
+						RelativePath="..\..\CommonLib\FunctionLib\RequestXmlOperator.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\CommonLib\FunctionLib\RequestXmlOperator.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\CommonLib\FunctionLib\ResultXmlOperator.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\CommonLib\FunctionLib\ResultXmlOperator.h"
+						>
+					</File>
 				</Filter>
 			</Filter>
 		</Filter>

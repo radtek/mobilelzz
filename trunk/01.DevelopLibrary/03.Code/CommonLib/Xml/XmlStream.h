@@ -4,17 +4,19 @@
 #ifndef __XMLStream_h__
 #define __XMLStream_h__
 
+#include "./TinySrc/tinyxml.h"
+
 #define		DefaultBufSize		( 1024*4 )
 #define		CHAR_MAX_LENGTH			( 50 )
 
 
-struct NodeAttribute_t
+struct COMMONLIB_API NodeAttribute_t
 {
 	wchar_t	wcsName [CHAR_MAX_LENGTH];
 	wchar_t	wcsValue[CHAR_MAX_LENGTH];
 };
 
-enum	EN_MOVE
+enum COMMONLIB_API EN_MOVE
 {
 	MOVE_END	=	0,
 	MOVE_OK
@@ -22,7 +24,7 @@ enum	EN_MOVE
 
 class	CXmlStream;
 
-class CXmlNode
+class COMMONLIB_API CXmlNode
 {
 	public:
 
@@ -69,7 +71,7 @@ private:
 		CXmlStream	*			m_pCXmlStream;
 }; 
 
-class CXmlStream  
+class COMMONLIB_API CXmlStream  
 {
 	public:
 

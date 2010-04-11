@@ -28,7 +28,7 @@ using namespace std;
 
 
 
-class CSQL_query 
+class COMMONLIB_API CSQL_query 
 {
 	public:	
 		virtual	~CSQL_query();
@@ -95,7 +95,7 @@ class CSQL_query
 //____________________________________________________________________________________
 //	CSQL_session_base.
 
-class CSQL_session_base 
+class COMMONLIB_API CSQL_session_base 
 {
 	public:
 		virtual	~CSQL_session_base();
@@ -140,7 +140,7 @@ class	CSQL_sessionManager;
 //	CSQL_session.
 
 
-class	CSQL_session : public CSQL_session_base
+class COMMONLIB_API	CSQL_session : public CSQL_session_base
 {
 	friend		CSQL_sessionManager;
 	
@@ -204,7 +204,7 @@ class	CSQL_session : public CSQL_session_base
 //____________________________________________________________________________________
 //	CSQL_sessionManager.
 
-class	CSQL_sessionManager 
+class COMMONLIB_API	CSQL_sessionManager 
 {
 	private:
 		CSQL_sessionManager() : m_ref_count(0)

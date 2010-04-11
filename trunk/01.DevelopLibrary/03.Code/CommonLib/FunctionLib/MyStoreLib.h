@@ -1,7 +1,7 @@
 #include <Windows.h>
 
 // 验证结果数据结构体
-typedef struct stMYSTORE_VERIFY_CONTEXT 
+typedef struct COMMONLIB_API stMYSTORE_VERIFY_CONTEXT 
 {
     DWORD Ver;              //< 版本号
     DWORD LicenseValid;     //< 证书是否合法（0：非法，1：合法）
@@ -84,5 +84,5 @@ typedef struct stMYSTORE_VERIFY_CONTEXT
  \endcode
 
  */
-DWORD MyStoreVerify(const wchar_t* pszFileName, __out MYSTORE_VERIFY_CONTEXT* pmyStoreVerifyContext);
+DWORD COMMONLIB_API MyStoreVerify(const wchar_t* pszFileName, __out MYSTORE_VERIFY_CONTEXT* pmyStoreVerifyContext);
 

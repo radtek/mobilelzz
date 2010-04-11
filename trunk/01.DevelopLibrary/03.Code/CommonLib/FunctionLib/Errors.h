@@ -1,10 +1,11 @@
 #ifndef __Errors_h__
 #define __Errors_h__
 
-enum APP_Result{
+enum COMMONLIB_API APP_Result{
 	APP_Result_S_OK					= 0x0,
 	APP_Result_E_Fail				= 0x80000000,//最高位为1，表示失败
 	APP_Result_InvalidInstance		= 0x80000001,//相当于无效Handle
+	APP_Result_NullPointer			= 0x80000002,
 	
 	APP_Result_Param_Invalid		= 0x80000010,
 	APP_Result_Param_NullPointer	= 0x80000010,

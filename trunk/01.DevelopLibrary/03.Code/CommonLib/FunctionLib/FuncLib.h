@@ -9,14 +9,14 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-long F_wcscatn(wchar_t* pwcsDest, wchar_t* pwcsSrc, long sCount);
-long F_wcscatn_pos(wchar_t* pwcsDest, wchar_t* pwcsSrc, long sCount, long lBeginCount);
+long COMMONLIB_API F_wcscatn(wchar_t* pwcsDest, wchar_t* pwcsSrc, long sCount);
+long COMMONLIB_API F_wcscatn_pos(wchar_t* pwcsDest, wchar_t* pwcsSrc, long sCount, long lBeginCount);
 
-unsigned short* F_wcscpyn( unsigned short *pwstrDest, const unsigned short *pwstrSrc, unsigned long sizeMax );
+COMMONLIB_API wchar_t*  F_wcscpyn( wchar_t *pwstrDest, const wchar_t *pwstrSrc, unsigned long sizeMax );
 
 
-long S_MultiByte2WideChar( const char *pMultiByteStr, long lMultiByteCharSize, unsigned short *pusWideCharStr, long lWideCharSize );
+long COMMONLIB_API S_MultiByte2WideChar( const char *pMultiByteStr, long lMultiByteCharSize, unsigned short *pusWideCharStr, long lWideCharSize );
 
-BOOL	F_LicenseProtect();
+BOOL	COMMONLIB_API F_LicenseProtect();
 
 #endif // FuncLib__H

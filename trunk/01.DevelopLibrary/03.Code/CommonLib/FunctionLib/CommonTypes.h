@@ -3,7 +3,7 @@
 
 
 // 列表项的自定义数据
-class MyListItemData
+class COMMONLIB_API MyListItemData
 {
 public:
 	MyListItemData()
@@ -29,10 +29,10 @@ public:
 	long lPID;
 	wchar_t	wcsfirstLetter[2];
 };
-extern BOOL g_bH;
+extern COMMONLIB_API BOOL g_bH;
 
-extern CDynamicArray<MyListItemData> g_ReciversList;
-extern  BOOL  g_bContactShow;
+extern COMMONLIB_API CDynamicArray<MyListItemData> g_ReciversList;
+extern  COMMONLIB_API BOOL  g_bContactShow;
 
 #define	LICENSE
 

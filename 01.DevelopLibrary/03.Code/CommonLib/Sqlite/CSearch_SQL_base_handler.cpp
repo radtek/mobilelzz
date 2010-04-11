@@ -35,7 +35,7 @@
 #include <assert.h>
 #include "CSearch_SQL_base_common.h"
 
-#define		 S_ROW			((HRESULT)0x00000002L)
+#define		 S_ROW			((APP_Result)0x00000002L)
 
 CSQL_sessionManager*	CSQL_sessionManager::m_this	= 0;
 
@@ -61,11 +61,11 @@ CSQL_query::~CSQL_query()
 
 
 
-HRESULT CSQL_query::Prepare(const wchar_t* _pwcsQuery)
+APP_Result CSQL_query::Prepare(const wchar_t* _pwcsQuery)
 {
 //	m_lock.lock();
 	
-	int					hr	= E_FAIL;
+	APP_Result					hr	= APP_Result_E_Fail;
 
 	do {
 		if( ( NULL == _pwcsQuery ) || ( NULL != m_pstmt ) || ( NULL == m_pdb ) ){
@@ -80,7 +80,7 @@ HRESULT CSQL_query::Prepare(const wchar_t* _pwcsQuery)
 			break;
 		}
 		
-		hr	= S_OK;
+		hr	= APP_Result_S_OK;
 		
 	}	while (false);
 	
@@ -92,11 +92,11 @@ HRESULT CSQL_query::Prepare(const wchar_t* _pwcsQuery)
 
 
 
-HRESULT CSQL_query::Reset()
+APP_Result CSQL_query::Reset()
 {	
 //	m_lock.lock();
 
-	int					hr	= E_FAIL;
+	APP_Result					hr	= APP_Result_E_Fail;
 	
 	do {
 		if( NULL == m_pstmt )
@@ -113,7 +113,7 @@ HRESULT CSQL_query::Reset()
 			assert(0);
 			break;
 		}	
-		hr	= S_OK;
+		hr	= APP_Result_S_OK;
 
 	}	while (false);
 	
@@ -123,11 +123,11 @@ HRESULT CSQL_query::Reset()
 }
 
 
-HRESULT CSQL_query::Finalize()
+APP_Result CSQL_query::Finalize()
 {
 //	m_lock.lock();
 
-	int					hr	= E_FAIL;
+	APP_Result					hr	= APP_Result_E_Fail;
 	
 	do {
 		long	lr = 0;
@@ -138,7 +138,7 @@ HRESULT CSQL_query::Finalize()
 			break;
 		}
 		m_pstmt = NULL;
-		hr	= S_OK;
+		hr	= APP_Result_S_OK;
 		
 	}	while (false);
 	
@@ -149,19 +149,19 @@ HRESULT CSQL_query::Finalize()
 }
 
 
-HRESULT	CSQL_query::Step()
+APP_Result	CSQL_query::Step()
 {
 //	m_lock.lock();
 
-	int			hr	= E_FAIL;
+	APP_Result			hr	= APP_Result_E_Fail;
 		
 	if( m_pstmt == NULL )
-		return E_FAIL;
+		return APP_Result_E_Fail;
 	
 	long		lr  = 0;
 	lr	= sqlite3_step( m_pstmt );
 	if( SQLITE_DONE == lr ){
-		hr = S_OK;	
+		hr = APP_Result_S_OK;	
 	}
 	else if( SQLITE_ROW == lr ){
 		hr = S_ROW;
@@ -177,76 +177,76 @@ HRESULT	CSQL_query::Step()
 }
 
 
-HRESULT		CSQL_query::GetField(long _lIndex, long* _plvalue )
+APP_Result		CSQL_query::GetField(long _lIndex, long* _plvalue )
 {
 //	m_lock.lock();
 
 	if( NULL == m_pstmt || NULL == _plvalue ){
 		assert( 0 );
-		return E_FAIL;
+		return APP_Result_E_Fail;
 	}
 	
 	*_plvalue	=	sqlite3_column_int(	m_pstmt, _lIndex );
 	
 //	m_lock.unlock();
 
-	return	S_OK;
+	return	APP_Result_S_OK;
 }
 
 
-HRESULT		CSQL_query::GetField(long _lIndex, double* _pdvalue )
+APP_Result		CSQL_query::GetField(long _lIndex, double* _pdvalue )
 {
 //	m_lock.lock();
 	if( NULL == m_pstmt || NULL == _pdvalue ){
 		assert( 0 );
-		return E_FAIL;
+		return APP_Result_E_Fail;
 	}
 
 	*_pdvalue	=	sqlite3_column_double(	m_pstmt, _lIndex );
 	
 //	m_lock.unlock();
 
-	return	S_OK;
+	return	APP_Result_S_OK;
 }
 
 
-HRESULT		CSQL_query::GetField(long _lIndex, wchar_t** _pwcvalue )
+APP_Result		CSQL_query::GetField(long _lIndex, wchar_t** _pwcvalue )
 {
 //	m_lock.lock();
 
 	if( NULL == m_pstmt || NULL == _pwcvalue ){
 		assert( 0 );
-		return E_FAIL;
+		return APP_Result_E_Fail;
 	}
 
 	*_pwcvalue	= (wchar_t*)sqlite3_column_text16( m_pstmt, _lIndex );
 	
 //	m_lock.unlock();
 
-	return	S_OK;
+	return	APP_Result_S_OK;
 }
 
-HRESULT		CSQL_query::Getblob(long _lIndex, const void** _pwcvalue )
+APP_Result		CSQL_query::Getblob(long _lIndex, const void** _pwcvalue )
 {
 //	m_lock.lock();
 
 	if( NULL == m_pstmt || NULL == _pwcvalue ){
 		assert( 0 );
-		return E_FAIL;
+		return APP_Result_E_Fail;
 	}
 	
 	*_pwcvalue	= sqlite3_column_blob( m_pstmt, _lIndex );
 
 //	m_lock.unlock();
-	return	S_OK;
+	return	APP_Result_S_OK;
 }
 
 
-HRESULT		CSQL_query::Bind(long _lIndex, wchar_t* _pwcvalue , int isize)
+APP_Result		CSQL_query::Bind(long _lIndex, wchar_t* _pwcvalue , int isize)
 {
 //	m_lock.lock();
 	
-	int					hr = E_FAIL;
+	APP_Result					hr = APP_Result_E_Fail;
 
 	do {
 		if( NULL == m_pstmt /*|| NULL == _pwcvalue*/  ){
@@ -262,7 +262,7 @@ HRESULT		CSQL_query::Bind(long _lIndex, wchar_t* _pwcvalue , int isize)
 			break;
 		}
 
-		hr = S_OK;
+		hr = APP_Result_S_OK;
 
 	} while( false );
 
@@ -271,11 +271,11 @@ HRESULT		CSQL_query::Bind(long _lIndex, wchar_t* _pwcvalue , int isize)
 	return	hr;
 }
 
-HRESULT		CSQL_query::Bindblob(long _lIndex, void* _pwcvalue , int isize)
+APP_Result		CSQL_query::Bindblob(long _lIndex, void* _pwcvalue , int isize)
 {
 //	m_lock.lock();
 
-	int					hr = E_FAIL;
+	APP_Result					hr = APP_Result_E_Fail;
 
 
 	do {
@@ -293,7 +293,7 @@ HRESULT		CSQL_query::Bindblob(long _lIndex, void* _pwcvalue , int isize)
 			break;
 		}
 
-		hr = S_OK;
+		hr = APP_Result_S_OK;
 
 	} while( false );
 
@@ -302,10 +302,10 @@ HRESULT		CSQL_query::Bindblob(long _lIndex, void* _pwcvalue , int isize)
 	return	hr;
 }
 
-HRESULT		CSQL_query::Bind(long _lIndex, double _dvalue )
+APP_Result		CSQL_query::Bind(long _lIndex, double _dvalue )
 {
 //	m_lock.lock();
-	int					hr = E_FAIL;
+	APP_Result					hr = APP_Result_E_Fail;
 
 	
 	do {
@@ -324,7 +324,7 @@ HRESULT		CSQL_query::Bind(long _lIndex, double _dvalue )
 		}
 		
 
-		hr = S_OK;
+		hr = APP_Result_S_OK;
 
 	} while( false );
 
@@ -334,10 +334,10 @@ HRESULT		CSQL_query::Bind(long _lIndex, double _dvalue )
 
 }
 
-HRESULT		CSQL_query::Bind(long _lIndex )
+APP_Result		CSQL_query::Bind(long _lIndex )
 {
 //	m_lock.lock();
-	int					hr = E_FAIL;
+	APP_Result					hr = APP_Result_E_Fail;
 
 	
 	do {
@@ -356,7 +356,7 @@ HRESULT		CSQL_query::Bind(long _lIndex )
 		}
 		
 
-		hr = S_OK;
+		hr = APP_Result_S_OK;
 
 	} while( false );
 
@@ -366,11 +366,11 @@ HRESULT		CSQL_query::Bind(long _lIndex )
 
 }
 
-HRESULT		CSQL_query::Bind(long _lIndex, long _lvalue )
+APP_Result		CSQL_query::Bind(long _lIndex, long _lvalue )
 {
 //	m_lock.lock();
 
-	int					hr = E_FAIL;
+	APP_Result					hr = APP_Result_E_Fail;
 
 
 	do {
@@ -388,7 +388,7 @@ HRESULT		CSQL_query::Bind(long _lIndex, long _lvalue )
 		}
 		
 
-		hr = S_OK;
+		hr = APP_Result_S_OK;
 
 	} while( false );
 
@@ -401,9 +401,9 @@ HRESULT		CSQL_query::Bind(long _lIndex, long _lvalue )
 
 
 
-HRESULT		CSQL_query::GetData()
+APP_Result		CSQL_query::GetData()
 {
-	return	S_OK;
+	return	APP_Result_S_OK;
 }
 
 
@@ -431,9 +431,9 @@ CSQL_session_base::~CSQL_session_base()
 
 
 
-HRESULT CSQL_session_base::Connect(const wchar_t* _pwcs_db_folder,  const wchar_t* _pwcs_db_file,  int _buffSize)
+APP_Result CSQL_session_base::Connect(const wchar_t* _pwcs_db_folder,  const wchar_t* _pwcs_db_file,  int _buffSize)
 {
-	HRESULT				hr			= E_FAIL;
+	APP_Result				hr			= APP_Result_E_Fail;
 	
 	const size_t		pw_len		= 128;
 	wchar_t*			pw			= new wchar_t[pw_len];
@@ -449,15 +449,15 @@ HRESULT CSQL_session_base::Connect(const wchar_t* _pwcs_db_folder,  const wchar_
 		wcscat_as(pw, pw_len, L"\\");
 		wcscat_as(pw, pw_len, _pwcs_db_file);
 		
-		hr	= sqlite3_open16(pw, &m_pdb);
+		hr	= (APP_Result)sqlite3_open16(pw, &m_pdb);
 		if( SQLITE_OK != hr ){
 //			CMark_Error::set( hr, EN_ERR_SQLITE );
 			assert(0);
-			hr = E_FAIL;
+			hr = APP_Result_E_Fail;
 			break;
 		}
 				
-		hr = S_OK;
+		hr = APP_Result_S_OK;
 	}	while (false);
 	
 	delete[]	pw;
@@ -470,9 +470,9 @@ HRESULT CSQL_session_base::Connect(const wchar_t* _pwcs_db_folder,  const wchar_
 
 
 
-HRESULT CSQL_session_base::Disconnect()
+APP_Result CSQL_session_base::Disconnect()
 {
-	int					hr	= E_FAIL;;
+	APP_Result					hr	= APP_Result_E_Fail;;
 	long				lr  = 0;	
 	
 	do {
@@ -489,7 +489,7 @@ HRESULT CSQL_session_base::Disconnect()
 			break;
 		}
 		
-		hr	= S_OK;		
+		hr	= APP_Result_S_OK;		
 	}	while (false);
 	
 	
@@ -544,10 +544,10 @@ wchar_t*	CSQL_session::GetName()
 
 
 
-HRESULT		CSQL_session::Connect(const wchar_t* _pname,  const wchar_t* _pfolder,  const wchar_t* _pfile,  int _buffSize)
+APP_Result		CSQL_session::Connect(const wchar_t* _pname,  const wchar_t* _pfolder,  const wchar_t* _pfile,  int _buffSize)
 {
 //	MarkCSLocker cslock( m_cs );
-	HRESULT				hr			= E_FAIL;
+	APP_Result				hr			= APP_Result_E_Fail;
 	
 	
 	do {
@@ -569,7 +569,7 @@ HRESULT		CSQL_session::Connect(const wchar_t* _pname,  const wchar_t* _pfolder, 
 		
 		AddRef();
 
-		hr = S_OK;
+		hr = APP_Result_S_OK;
 
 	}	while (false);
 	
@@ -590,10 +590,10 @@ void		CSQL_session::DisConnect(bool* _pb)
 
 
 
-HRESULT		CSQL_session::Query_Create	(int* _pqh,  CSQL_query** _ppq)
+APP_Result		CSQL_session::Query_Create	(int* _pqh,  CSQL_query** _ppq)
 {
 //	MarkCSLocker cslock( m_cs );
-	HRESULT				hr		= E_FAIL;
+	APP_Result				hr		= APP_Result_E_Fail;
 	
 	
 	do {
@@ -610,7 +610,7 @@ HRESULT		CSQL_session::Query_Create	(int* _pqh,  CSQL_query** _ppq)
 		
 		if (_pqh)		*_pqh	= m_maxcount;
 		
-		hr	= S_OK;
+		hr	= APP_Result_S_OK;
 		
 		
 	}	while (false);
@@ -622,10 +622,10 @@ HRESULT		CSQL_session::Query_Create	(int* _pqh,  CSQL_query** _ppq)
 
 
 
-HRESULT		CSQL_session::Query_Delete	(int _qh)
+APP_Result		CSQL_session::Query_Delete	(int _qh)
 {
 //	MarkCSLocker cslock( m_cs );
-	HRESULT				hr			= E_FAIL;
+	APP_Result				hr			= APP_Result_E_Fail;
 	
 	
 	for (vector<CSQL_query*>::iterator i = m_vec_qry.begin(); i != m_vec_qry.end(); i++) {
@@ -633,7 +633,7 @@ HRESULT		CSQL_session::Query_Delete	(int _qh)
 			delete	(*i);
 			m_vec_qry.erase(i);
 //			(*i)->Finalize();
-			hr	= S_OK;
+			hr	= APP_Result_S_OK;
 			
 			break;
 		}
@@ -646,9 +646,9 @@ HRESULT		CSQL_session::Query_Delete	(int _qh)
 
 
 
-HRESULT		CSQL_session::Query_Get		(int _qh,  CSQL_query** _ppq)
+APP_Result		CSQL_session::Query_Get		(int _qh,  CSQL_query** _ppq)
 {
-	HRESULT				hr			= E_FAIL;
+	APP_Result				hr			= APP_Result_E_Fail;
 	
 	
 	*_ppq	= 0;
@@ -659,7 +659,7 @@ HRESULT		CSQL_session::Query_Get		(int _qh,  CSQL_query** _ppq)
 			*_ppq	= (*i);
 			
 			
-			hr	= S_OK;
+			hr	= APP_Result_S_OK;
 			
 			
 			break;
@@ -699,19 +699,19 @@ CSQL_sessionManager::~CSQL_sessionManager()
 
 
 
-HRESULT		CSQL_sessionManager::Session_Connect		(const wchar_t* _pname,  const wchar_t* _pfolder,  const wchar_t* _pfile,  CSQL_session** _ppsession)
+APP_Result		CSQL_sessionManager::Session_Connect		(const wchar_t* _pname,  const wchar_t* _pfolder,  const wchar_t* _pfile,  CSQL_session** _ppsession)
 {
 	return	Session_Connect_base (_pname, _pfolder, _pfile, 256,  _ppsession);
 }
 
-HRESULT		CSQL_sessionManager::Session_Connect		(const wchar_t* _pname,  const wchar_t* _pfolder,  const wchar_t* _pfile,  int _buffSize,  CSQL_session** _ppsession)
+APP_Result		CSQL_sessionManager::Session_Connect		(const wchar_t* _pname,  const wchar_t* _pfolder,  const wchar_t* _pfile,  int _buffSize,  CSQL_session** _ppsession)
 {
 	return	Session_Connect_base (_pname, _pfolder, _pfile, _buffSize,  _ppsession);
 }
 
-HRESULT		CSQL_sessionManager::Session_Connect_base	(const wchar_t* _pname,  const wchar_t* _pfolder,  const wchar_t* _pfile,  int _buffSize,  CSQL_session** _ppsession)
+APP_Result		CSQL_sessionManager::Session_Connect_base	(const wchar_t* _pname,  const wchar_t* _pfolder,  const wchar_t* _pfile,  int _buffSize,  CSQL_session** _ppsession)
 {
-	HRESULT				hr			= E_FAIL;
+	APP_Result				hr			= APP_Result_E_Fail;
 //	MarkCSLocker cslock( m_cs );
 	
 	do {
@@ -737,7 +737,7 @@ HRESULT		CSQL_sessionManager::Session_Connect_base	(const wchar_t* _pname,  cons
 		}
 		
 		
-		hr	= S_OK;
+		hr	= APP_Result_S_OK;
 		
 		
 	}	while (false);
@@ -756,7 +756,7 @@ HRESULT		CSQL_sessionManager::Session_Connect_base	(const wchar_t* _pname,  cons
 
 
 
-HRESULT		CSQL_sessionManager::Session_DisConnect(const wchar_t* _pname, BOOL* pbIsDBClosed)
+APP_Result		CSQL_sessionManager::Session_DisConnect(const wchar_t* _pname, BOOL* pbIsDBClosed)
 {	
 //	MarkCSLocker cslock( m_cs );
 	*pbIsDBClosed		=	 FALSE;
@@ -776,7 +776,7 @@ HRESULT		CSQL_sessionManager::Session_DisConnect(const wchar_t* _pname, BOOL* pb
 	}
 	
 	
-	return	S_OK;
+	return	APP_Result_S_OK;
 }
 
 

@@ -63,23 +63,23 @@ class CSQL_query
 		int						GetQh()	{	return	m_qh;	};
 		
 		
-		HRESULT					Prepare(const wchar_t* _pwcsQuery);	
-		HRESULT					Finalize();
-		HRESULT					Reset();	
-		HRESULT					Step();
-		HRESULT					GetData();
+		APP_Result					Prepare(const wchar_t* _pwcsQuery);	
+		APP_Result					Finalize();
+		APP_Result					Reset();	
+		APP_Result					Step();
+		APP_Result					GetData();
 
 
-		HRESULT					GetField( long _lIndex,  long*		_plValue  );
-		HRESULT					GetField( long _lIndex,  double*	_pdValue );
-		HRESULT					GetField( long _lIndex,  wchar_t**	_pwcvalue );
-		HRESULT					Getblob(long _lIndex,   const void** _pwcvalue );
+		APP_Result					GetField( long _lIndex,  long*		_plValue  );
+		APP_Result					GetField( long _lIndex,  double*	_pdValue );
+		APP_Result					GetField( long _lIndex,  wchar_t**	_pwcvalue );
+		APP_Result					Getblob(long _lIndex,   const void** _pwcvalue );
 		
-		HRESULT					Bind( long	_lIndex );
-		HRESULT				    Bind( long	_lindex,	long 		_lvalue );
-		HRESULT					Bind( long	_lindex,	double		_dvalue );
-		HRESULT					Bind( long	_lindex,	wchar_t * 	_wcvalue, int iSize );
-		HRESULT					Bindblob( long _lIndex,   void* _pwcvalue , int isize);
+		APP_Result					Bind( long	_lIndex );
+		APP_Result				    Bind( long	_lindex,	long 		_lvalue );
+		APP_Result					Bind( long	_lindex,	double		_dvalue );
+		APP_Result					Bind( long	_lindex,	wchar_t * 	_wcvalue, int iSize );
+		APP_Result					Bindblob( long _lIndex,   void* _pwcvalue , int isize);
 		
 		
 };
@@ -115,8 +115,8 @@ class CSQL_session_base
 		
 		
 	public:
-		HRESULT					Connect(const wchar_t* _pwcs_db_Folder,  const wchar_t* _pwcs_db_File,  int _buffSize);
-		HRESULT					Disconnect();
+		APP_Result					Connect(const wchar_t* _pwcs_db_Folder,  const wchar_t* _pwcs_db_File,  int _buffSize);
+		APP_Result					Disconnect();
 		
 		sqlite3*				GetSession()	{	return	m_pdb;		};
 		
@@ -180,13 +180,13 @@ class	CSQL_session : public CSQL_session_base
 		
 	public:
 		wchar_t*				GetName();
-		HRESULT					Connect		(const wchar_t* _pn,  const wchar_t* _pfolder,  const wchar_t* _pfile,  int _buffSize);
+		APP_Result					Connect		(const wchar_t* _pn,  const wchar_t* _pfolder,  const wchar_t* _pfile,  int _buffSize);
 		void					DisConnect	(bool* _pb);
 		
 		
-		HRESULT					Query_Create	(int* _pqh,		CSQL_query** _ppq);
-		HRESULT					Query_Delete	(int _qh);
-		HRESULT					Query_Get		(int _qh,		CSQL_query** _ppq);
+		APP_Result					Query_Create	(int* _pqh,		CSQL_query** _ppq);
+		APP_Result					Query_Delete	(int _qh);
+		APP_Result					Query_Get		(int _qh,		CSQL_query** _ppq);
 		
 		
 		
@@ -242,15 +242,15 @@ class	CSQL_sessionManager
 		
 		
 	private:
-		HRESULT					Session_Connect_base(const wchar_t* _name,  const wchar_t* _folder,  const wchar_t* _file,  int _buffSize,  CSQL_session** _ppsession);
+		APP_Result					Session_Connect_base(const wchar_t* _name,  const wchar_t* _folder,  const wchar_t* _file,  int _buffSize,  CSQL_session** _ppsession);
 		
 		
 		
 		
 	public:
-		HRESULT					Session_Connect		(const wchar_t* _name,  const wchar_t* _folder,  const wchar_t* _file,  CSQL_session** _ppsession);
-		HRESULT					Session_Connect		(const wchar_t* _name,  const wchar_t* _folder,  const wchar_t* _file,  int _buffSize,  CSQL_session** _ppsession);
-		HRESULT					Session_DisConnect	(const wchar_t* _name, BOOL* pbIsDBClosed);
+		APP_Result					Session_Connect		(const wchar_t* _name,  const wchar_t* _folder,  const wchar_t* _file,  CSQL_session** _ppsession);
+		APP_Result					Session_Connect		(const wchar_t* _name,  const wchar_t* _folder,  const wchar_t* _file,  int _buffSize,  CSQL_session** _ppsession);
+		APP_Result					Session_DisConnect	(const wchar_t* _name, BOOL* pbIsDBClosed);
 		
 		
 		

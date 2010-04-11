@@ -1,21 +1,26 @@
 #ifndef __BasicService_h__
 #define __BasicService_h__
 
-class CORE_API CBasicService
+#include "CSearch_SQL_base_handler.h"
+
+class CBasicService
 {
 public:
 	CBasicService();
 	~CBasicService();
 	
-	HRESULT Excute(wchar_t* pwcsRequestXML, wchar_t* pwcsResultXML);
-
+	APP_Result Excute(wchar_t* pwcsRequestXML, wchar_t** ppwcsResultXML);
+	APP_Result Initialize();
 protected:
-	virtual HRESULT MakeParam();
-	virtual HRESULT ExcuteParam();
-	virtual HRESULT MakeResult();	
+	virtual APP_Result MakeParam(wchar_t* pwcsRequestXML);
+	virtual APP_Result ExcuteParam(wchar_t* pwcsRequestXML, wchar_t** ppwcsResultXML);
+	virtual APP_Result MakeResult(wchar_t** ppwcsResultXML);	
 	
 private:
 	
+
+private:
+	CSQL_session*		m_pclSqlDBSession;
 };
 
 #endif __BasicService_h__

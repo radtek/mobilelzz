@@ -10,15 +10,18 @@ CContactorsService::~CContactorsService()
 {
 }
 
-HRESULT CContactorsService::MakeParam()
+APP_Result CContactorsService::MakeParam(wchar_t* pwcsRequestXML)
 {
-	return S_OK;
+
+	return APP_Result_S_OK;
 }
-HRESULT CContactorsService::ExcuteParam()
+APP_Result CContactorsService::ExcuteParam(wchar_t* pwcsRequestXML, wchar_t** ppwcsResultXML)
 {
-	return S_OK;
+
+	return APP_Result_S_OK;
 }
-HRESULT CContactorsService::MakeResult()
+APP_Result CContactorsService::MakeResult(wchar_t** ppwcsResultXML)
 {
-	return S_OK;
+
+	return APP_Result_S_OK;
 }

@@ -388,7 +388,7 @@ CXmlStream::~CXmlStream()
 
 APP_Result	CXmlStream::GetXmlStream( wchar_t* pwcStream, long lSize )
 {
-//	m_strBuf << *m_pTiXmlDocument;
+	m_strBuf << *m_pTiXmlDocument;
 
 	MB2WC( pwcStream, m_strBuf.c_str() );
 

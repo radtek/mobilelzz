@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				ExecutionBucket="7"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../CommonLib/Xml;../../CommonLib/Sqlite;../../CommonLib/FunctionLib;./"
+				AdditionalIncludeDirectories="../CommonLib;./;../../Core/ServiceControl;../SqliteOpenSource;../../Core/SmsService;../../Core/ContactorsService;../../CommonLib/Xml;../../CommonLib/Sqlite;../../CommonLib/FunctionLib"
 				PreprocessorDefinitions="_DEBUG;_WIN32_WCE=$(CEVER);UNDER_CE;WINCE;DEBUG;_WINDOWS;_USRDLL;CORE_EXPORTS;$(ARCHFAM);$(_ARCHFAM_);_UNICODE;UNICODE"
 				MinimalRebuild="true"
 				RuntimeLibrary="1"
@@ -64,7 +64,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=" /subsystem:windowsce,6.00"
-				AdditionalDependencies="SqliteOpenSource.lib"
+				AdditionalDependencies="SqliteOpenSource.lib CommonLib.lib"
 				OutputFile="..\Debug\Core.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="../Debug"
@@ -132,7 +132,7 @@
 				ExecutionBucket="7"
 				Optimization="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories="../../CommonLib/Xml;../../CommonLib/Sqlite;../../CommonLib/FunctionLib;./"
+				AdditionalIncludeDirectories="../CommonLib;./;../../Core/ServiceControl;../SqliteOpenSource;../../Core/SmsService;../../Core/ContactorsService;../../CommonLib/Xml;../../CommonLib/Sqlite;../../CommonLib/FunctionLib"
 				PreprocessorDefinitions="NDEBUG;_WIN32_WCE=$(CEVER);UNDER_CE;WINCE;_WINDOWS;_USRDLL;CORE_EXPORTS;$(ARCHFAM);$(_ARCHFAM_);_UNICODE;UNICODE"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="1"
@@ -154,10 +154,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=" /subsystem:windowsce,6.00"
-				AdditionalDependencies="SqliteOpenSource.lib"
+				AdditionalDependencies="SqliteOpenSource.lib CommonLib.lib"
 				OutputFile="../Release/Core.dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="../../CommonLib/Libs/Release"
+				AdditionalLibraryDirectories="../Release"
 				DelayLoadDLLs="$(NOINHERIT)"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="../Release/Core.pdb"
@@ -233,6 +233,14 @@
 			<Filter
 				Name="ContactorsService"
 				>
+				<File
+					RelativePath="..\..\Core\ContactorsService\ContactorsService.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Core\ContactorsService\ContactorsService.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="FavoriteService"
@@ -250,17 +258,29 @@
 				Name="ServiceControl"
 				>
 				<File
+					RelativePath="..\..\Core\ServiceControl\BasicService.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Core\ServiceControl\BasicService.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\Core\ServiceControl\ServiceControl.h"
+					RelativePath="..\..\Core\ServiceControl\CoreService.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Core\ServiceControl\CoreService.h"
 					>
 				</File>
 			</Filter>
 			<Filter
 				Name="SmsService"
 				>
+				<File
+					RelativePath="..\..\Core\SmsService\SmsService.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\..\Core\SmsService\SmsService.h"
 					>

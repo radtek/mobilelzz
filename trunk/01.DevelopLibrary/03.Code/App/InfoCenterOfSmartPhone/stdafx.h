@@ -14,6 +14,7 @@
 #include <vector>
 using namespace std;
 
+#include "CommonLib.h"
 #include "Errors.h"
 #include"FuncLib.h"
 #include"DynamicArray.h"

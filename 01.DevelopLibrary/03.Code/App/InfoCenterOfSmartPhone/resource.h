@@ -12,6 +12,7 @@
 #define MZ_IDC_SEND_SMS					111
 #define IDR_PNG_MainWndSmsLookBtnDown	120
 #define IDR_PNG_MainWndSmsLookBtnUp		121
+#define	IDR_TOOLBAR_MAIN_WND			122
 
 #define IDR_PNG_MainWndSmsSendBtnDown	122
 #define IDR_PNG_MainWndSmsSendBtnUp		123
@@ -20,10 +21,17 @@
 #define IDR_PNG_EditWndBack				124
 #define MZ_IDC_NEWSMS_BACK				112
 
+//SmsLookCtorWnd.h
 #define MZ_IDC_SMSLOOKCTOR_LIST			113
 #define	MZ_IDC_SMSLOOKCTOR_TOOLBAR		115
 #define	MZ_IDC_SMSLOOKCTOR_ALPBAR		116
 
+#define IDR_PNG_CTR_LIST_READ			125
+#define	MZ_IDC_SMSLOOKMSG_LIST			117
+#define	MZ_IDC_SMSLOOKMSG_TOOLBAR		118
+
+
+//SmsLookMsgWnd.h
 
 // Next default values for new objects
 // 

@@ -12,7 +12,9 @@
 #include "SmsLookCtorWnd.h"
 #include "SmsLookMsgWnd.h"
 #include "SmsReadWnd.h"
+#include "EasySmsWndBase.h"
 
+MZ_IMPLEMENT_DYNAMIC(CEasySmsWndBase)
 MZ_IMPLEMENT_DYNAMIC(CContactorsWnd)
 MZ_IMPLEMENT_DYNAMIC(CNewSmsWnd)
 MZ_IMPLEMENT_DYNAMIC(CMainWnd)

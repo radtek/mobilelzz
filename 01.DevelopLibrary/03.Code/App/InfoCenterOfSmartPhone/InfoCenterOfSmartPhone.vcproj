@@ -236,6 +236,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\UI\EasySmsWndBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\EasySmsWndBase.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\UI\MainWnd.h"
 					>
 				</File>

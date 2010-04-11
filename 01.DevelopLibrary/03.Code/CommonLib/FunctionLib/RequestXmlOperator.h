@@ -4,17 +4,16 @@
 #define Path_RequestDataType	L"request/data/"
 
 
-class CRequestXmlOperator : public CBasicService
+class COMMONLIB_API CRequestXmlOperator
 {
 public:
 	CRequestXmlOperator();
 	~CRequestXmlOperator();
 	
-	APP_Result GetNode(wchar_t* pwcsNodePath, );
+	//APP_Result GetNode(wchar_t* pwcsNodePath );
 protected:
 	virtual APP_Result MakeParam(wchar_t* pwcsRequestXML);
 	virtual APP_Result ExcuteParam(wchar_t* pwcsRequestXML, wchar_t** ppwcsResultXML);
-	virtual APP_Result MakeResult(wchar_t** ppwcsResultXML);	
 
 private:
 

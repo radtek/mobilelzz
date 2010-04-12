@@ -68,7 +68,7 @@
 				AdditionalDependencies="SqliteOpenSource.lib mzfcsd.lib PhoneAdapter.lib PlatformApi.lib MyStoreLib.lib"
 				OutputFile="../Debug/CommonLib.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="../Release"
+				AdditionalLibraryDirectories="../Debug"
 				DelayLoadDLLs="$(NOINHERIT)"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="../Debug/CommonLib.pdb"

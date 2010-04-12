@@ -1,7 +1,7 @@
 #ifndef __SMSLOOKCTORWND_h__
 #define __SMSLOOKCTORWND_h__
 
-#include "ContactorsWnd.h"
+#include "UiEditControl.h"
 #include "NewSmsWnd.h"
 #include "EasySmsWndBase.h"
 

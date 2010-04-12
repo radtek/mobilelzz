@@ -1,9 +1,6 @@
 #ifndef __EASYSMSWNDBASE_h__
 #define __EASYSMSWNDBASE_h__
 
-#include"ContactorsWnd.h"
-#include"NewSmsWnd.h"
-
 class CEasySmsWndBase;
 
 /////////////////CEasySmsListBase/////////////////////////////////////////////////////////

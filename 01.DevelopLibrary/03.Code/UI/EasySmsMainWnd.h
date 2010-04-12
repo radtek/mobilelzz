@@ -1,10 +1,7 @@
 #ifndef __EASYSMSMAINWND_h__
 #define __EASYSMSMAINWND_h__
 
-#include"ContactorsWnd.h"
 #include "EasySmsWndBase.h"
-#include"NewSmsWnd.h"
-
 
 class CEasySmsMainWnd : public CEasySmsWndBase
 {
@@ -29,9 +26,19 @@ class CEasySmsMainWnd : public CEasySmsWndBase
 
 	protected:
 
-		UiButton_Image		m_LookSmsBtnImg;	//进入查看短信窗口
+		UiButton_Image		m_LookSmsBtnImg;			//进入查看短信窗口
 
 		UiButton_Image		m_SendSmsBtnImg;
+
+		UiButton_Image		m_UnReadSmsBtnImg;
+
+		UiButton_Image		m_UnFindSmsBtnImg;
+
+		UiButton_Image		m_UnEncryptSmsBtnImg;
+
+		UiButton_Image		m_UnSyncSmsBtnImg;
+
+		UiButton_Image		m_UnSetUpSmsBtnImg;
 
 	private:
 

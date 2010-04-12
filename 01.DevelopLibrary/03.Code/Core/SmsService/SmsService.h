@@ -6,7 +6,7 @@ class CSmsService : public CBasicService
 public:
 	CSmsService();
 	~CSmsService();
-
+	virtual APP_Result Initialize();
 protected:
 	virtual APP_Result MakeParam(wchar_t* pwcsRequestXML);
 	virtual APP_Result ExcuteParam(wchar_t* pwcsRequestXML, wchar_t** ppwcsResultXML);

@@ -4,8 +4,8 @@
 class CORE_API CCoreService
 {
 public:
-	CCoreService* GetInstance();
-	void DeleteInstance();
+	static CCoreService* GetInstance();
+	static void DeleteInstance();
 
 	APP_Result Request(wchar_t* pwcsRequestXML, wchar_t** ppwcsResultXML);
 

@@ -310,35 +310,43 @@ APP_Result	CXmlNode::AppendNode( CXmlNode* pCXmlNode )
 
 APP_Result	CXmlNode::SubGetNodeContent( TiXmlElement* pNode, wchar_t** ppwcsNodeValue, NodeAttribute_t** ppAttributes, long* lAttributesCount )
 {
-	const char *pText	=	pNode->GetText();
-	if ( NULL == pText )
+	if ( NULL != ppwcsNodeValue )
 	{
-		*ppwcsNodeValue	=	NULL;
-	}
-	else
-	{
-		MB2WC( *ppwcsNodeValue, pText );
-	}
-	TiXmlAttribute*	pAttr	=	pNode->FirstAttribute();
-	
-	while ( NULL != pAttr )
-	{
-		pAttr	=	pAttr->Next();
-		++(*lAttributesCount);
-	}
-	
-	if ( 0 < (*lAttributesCount) )
-	{
-		*ppAttributes	=	new	NodeAttribute_t[ *lAttributesCount ];
-		pAttr			=	pNode->FirstAttribute();
-		
-		for (int i = 0; i < *lAttributesCount; ++i )
+		const char *pText	=	pNode->GetText();
+		if ( NULL == pText )
 		{
-			MB2WC( (*ppAttributes)[i].wcsName , pAttr->Name()  );
-			MB2WC( (*ppAttributes)[i].wcsValue, pAttr->Value() );
-			pAttr	=	pAttr->Next();
+			*ppwcsNodeValue	=	NULL;
+		}
+		else
+		{
+			MB2WC( *ppwcsNodeValue, pText );
 		}
 	}
+	
+	if ( NULL != ppAttributes )
+	{
+		TiXmlAttribute*	pAttr	=	pNode->FirstAttribute();
+
+		while ( NULL != pAttr )
+		{
+			pAttr	=	pAttr->Next();
+			++(*lAttributesCount);
+		}
+
+		if ( 0 < (*lAttributesCount) )
+		{
+			*ppAttributes	=	new	NodeAttribute_t[ *lAttributesCount ];
+			pAttr			=	pNode->FirstAttribute();
+
+			for (int i = 0; i < *lAttributesCount; ++i )
+			{
+				MB2WC( (*ppAttributes)[i].wcsName , pAttr->Name()  );
+				MB2WC( (*ppAttributes)[i].wcsValue, pAttr->Value() );
+				pAttr	=	pAttr->Next();
+			}
+		}
+	}
+	
 
 	return	APP_Result_S_OK;
 }

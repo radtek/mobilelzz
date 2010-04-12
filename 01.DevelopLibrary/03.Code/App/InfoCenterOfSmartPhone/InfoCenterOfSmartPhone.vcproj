@@ -280,14 +280,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\UI\SmsReadWnd.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\UI\SmsReadWnd.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\UI\SmsUnReadWnd.cpp"
 					>
 				</File>

@@ -1,34 +1,34 @@
-#ifndef __SMSLOOKMSGWND_h__
-#define __SMSLOOKMSGWND_h__
+#ifndef __SMSUNREADWND_h__
+#define __SMSUNREADWND_h__
 
 #include "ContactorsWnd.h"
 #include "NewSmsWnd.h"
 #include "EasySmsWndBase.h"
 
-class CSmsLookMsgWnd	:	public	CEasySmsWndBase
+class CSmsUnReadWnd	:	public	CEasySmsWndBase
 {
 	
-	MZ_DECLARE_DYNAMIC( CSmsLookMsgWnd );
+	MZ_DECLARE_DYNAMIC( CSmsUnReadWnd );
 
 	public:
 
-		CSmsLookMsgWnd(void);
+		CSmsUnReadWnd(void);
 
-		virtual ~CSmsLookMsgWnd(void);
+		virtual ~CSmsUnReadWnd(void);
 
 	public:
 
 		virtual	BOOL OnInitDialog();
 
 		virtual void OnMzCommand( WPARAM wParam, LPARAM lParam );
-
-	private:
-
-		BOOL	SubInitialize();
 		
 	protected:
 
 		virtual void	DoSthForItemBtnUpSelect( ListItemEx* pItem );
+
+	private:
+
+		BOOL	SubInitialize();
 
 	private:
 

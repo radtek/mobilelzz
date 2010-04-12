@@ -1,48 +1,48 @@
-#include"stdafx.h"
+#include "stdafx.h"
 #include "resource.h"
 
-#include "SmsLookMsgWnd.h"
+#include "SmsUnReadWnd.h"
 #include "SmsLookMsgDetailWnd.h"
 
 class ListItemData
 {
-	public:
-		CMzString	StringTitle;			// 项的主文本
-		CMzString	StringDescription;		// 项的描述文本
-		BOOL		Selected;				// 项是否被选中
+public:
+	CMzString	StringTitle;			// 项的主文本
+	CMzString	StringDescription;		// 项的描述文本
+	BOOL		Selected;				// 项是否被选中
 
 };
 
 ///////////////////CSmsLookCtorWnd///////////////////////////////////////////////////////
-CSmsLookMsgWnd::CSmsLookMsgWnd(void)
+CSmsUnReadWnd::CSmsUnReadWnd(void)
 {
 
 }
 
-CSmsLookMsgWnd::~CSmsLookMsgWnd(void)
+CSmsUnReadWnd::~CSmsUnReadWnd(void)
 {
 
 }
 
-BOOL CSmsLookMsgWnd::OnInitDialog()
+BOOL CSmsUnReadWnd::OnInitDialog()
 {
 	if ( !CEasySmsWndBase::OnInitDialog() )
 	{
 		return FALSE;
 	}
 
-	SetWindowText( L"昵称/号码" );
-
+	SetWindowText( L"未读短信" );
+	
 	return	SubInitialize();
 }
 
-void CSmsLookMsgWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
+void CSmsUnReadWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 {
 	UINT_PTR id = LOWORD( wParam );
 
 	switch(id)
 	{
-		case MZ_IDC_SMSLOOKMSG_TOOLBAR:
+	case MZ_IDC_SMS_UNREAD_TOOLBAR:
 		{
 			int nIndex	=	lParam;
 			if ( 2 == nIndex )
@@ -52,24 +52,26 @@ void CSmsLookMsgWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 			break;
 		}
 
-		default:
-			break;
+	default:
+		break;
 	}
 }
 
-
-BOOL	CSmsLookMsgWnd::SubInitialize()
+BOOL	CSmsUnReadWnd::SubInitialize()
 {
 	//ini list
-	m_list_base.EnableDragModeH(true);
-	m_list_base.SetID( MZ_IDC_SMSLOOKMSG_LIST );
+
+	m_list_base.SetID( MZ_IDC_SMS_UNREAD_LIST );
 	AddUiWin( &m_list_base );
 
+
 	//ini toolbar
-	m_toolBar_base.SetID( MZ_IDC_SMSLOOKMSG_TOOLBAR );
+	m_toolBar_base.SetID( MZ_IDC_SMS_UNREAD_TOOLBAR );
 	AddUiWin( &m_toolBar_base );
 
-	//test
+
+	/////////////test/////////////////////////////////////////////////////////////
+
 	CMzString content = L"短信内容 SmsContent%d:";
 	CMzString stime = L"12:20";
 
@@ -102,15 +104,17 @@ BOOL	CSmsLookMsgWnd::SubInitialize()
 		m_list_base.AddItem(item);
 	}
 
-	//
+
+	/////////////test/////////////////////////////////////////////////////////////
+
 	return	TRUE;
 }
 
-void	CSmsLookMsgWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
+void	CSmsUnReadWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 {
 	CSmsLookMsgDetailWnd	clCSmsLookMsgDetailWnd;
 	//Test
-	wchar_t chTemp[ 256 ]	=	L"我对你的崇拜犹如滔滔江水连绵不绝！！！！";
+	wchar_t chTemp[ 256 ]	=	L"为什么屏幕就是竖着的呢？？？？";
 	//
 	clCSmsLookMsgDetailWnd.SetText( chTemp );
 	int iRlt	=	DoModalBase( &clCSmsLookMsgDetailWnd );

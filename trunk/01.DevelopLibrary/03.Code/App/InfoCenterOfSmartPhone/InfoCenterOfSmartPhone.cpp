@@ -7,21 +7,21 @@
 //  按钮控件的使用及其命令消息的处理
 
 #include"ContactorsWnd.h"
-#include"MainWnd.h"
 #include"EasySmsMainWnd.h"
 #include "SmsLookCtorWnd.h"
 #include "SmsLookMsgWnd.h"
-#include "SmsReadWnd.h"
+#include "SmsUnReadWnd.h"
 #include "EasySmsWndBase.h"
+#include "SmsLookMsgDetailWnd.h"
 
 MZ_IMPLEMENT_DYNAMIC(CEasySmsWndBase)
 MZ_IMPLEMENT_DYNAMIC(CContactorsWnd)
 MZ_IMPLEMENT_DYNAMIC(CNewSmsWnd)
-MZ_IMPLEMENT_DYNAMIC(CMainWnd)
 MZ_IMPLEMENT_DYNAMIC(CEasySmsMainWnd)
 MZ_IMPLEMENT_DYNAMIC(CSmsLookCtorWnd)
 MZ_IMPLEMENT_DYNAMIC(CSmsLookMsgWnd)
-MZ_IMPLEMENT_DYNAMIC(CSmsReadWnd)
+MZ_IMPLEMENT_DYNAMIC(CSmsUnReadWnd)
+MZ_IMPLEMENT_DYNAMIC(CSmsLookMsgDetailWnd)
 
 class CMainApp: public CMzApp
 {

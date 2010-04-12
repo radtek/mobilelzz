@@ -27,12 +27,12 @@ struct Contactors_OperationListData
 
 union Contactors_OperationData{
 	Contactors_OperationListData		stOperationListData;
-
+	
 };
 
 struct Contactors_RequestData{
 	Contactors_OperationType		enOperationType;
-
+	Contactors_OperationData		stOperationData;
 };
 
 class CContactorsService : public CBasicService
@@ -52,6 +52,8 @@ private:
 	long				m_lID_QFirstLetter;
 	CSQL_query*			m_pQContactorsList;
 	long				m_lID_QContactorsList;
+
+	Contactors_RequestData		m_stRequestData;
 };
 
 #endif __ContactorsService_h__

@@ -4,6 +4,7 @@
 #include "EasySmsMainWnd.h"
 #include "SmsLookCtorWnd.h"
 #include "SmsUnReadWnd.h"
+#include "SmsFindWnd.h"
 
 
 CEasySmsMainWnd::CEasySmsMainWnd(void)
@@ -63,6 +64,9 @@ void CEasySmsMainWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 
 		case MZ_IDC_FIND_SMS:
 		{
+			CSmsFindWnd		clCSmsFindWnd;
+			iRlt	=	DoModalBase( &clCSmsFindWnd );
+
 			break;
 		}
 

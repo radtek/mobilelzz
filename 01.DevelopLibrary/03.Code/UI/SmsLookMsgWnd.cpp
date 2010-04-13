@@ -62,7 +62,7 @@ BOOL	CSmsLookMsgWnd::SubInitialize()
 {
 	//ini list
 	m_list_base.EnableDragModeH(true);
-	m_list_base.SetID( MZ_IDC_SMSLOOKMSG_LIST );
+	m_list_base.SetID( MZ_IDC_FIND_RESULT_LIST );
 	AddUiWin( &m_list_base );
 
 	//ini toolbar

@@ -256,6 +256,22 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\UI\SmsFindResultWnd.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\SmsFindResultWnd.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\SmsFindWnd.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\SmsFindWnd.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\UI\SmsLookCtorWnd.cpp"
 					>
 				</File>

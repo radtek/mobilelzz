@@ -6,22 +6,26 @@
 //  创建和初始化窗体
 //  按钮控件的使用及其命令消息的处理
 
-#include"ContactorsWnd.h"
-#include"EasySmsMainWnd.h"
+#include "ContactorsWnd.h"
+#include "EasySmsMainWnd.h"
 #include "SmsLookCtorWnd.h"
 #include "SmsLookMsgWnd.h"
 #include "SmsUnReadWnd.h"
 #include "EasySmsWndBase.h"
 #include "SmsLookMsgDetailWnd.h"
+#include "SmsFindWnd.h"
+#include "SmsFindResultWnd.h"
 
-MZ_IMPLEMENT_DYNAMIC(CEasySmsWndBase)
-MZ_IMPLEMENT_DYNAMIC(CContactorsWnd)
-MZ_IMPLEMENT_DYNAMIC(CNewSmsWnd)
-MZ_IMPLEMENT_DYNAMIC(CEasySmsMainWnd)
-MZ_IMPLEMENT_DYNAMIC(CSmsLookCtorWnd)
-MZ_IMPLEMENT_DYNAMIC(CSmsLookMsgWnd)
-MZ_IMPLEMENT_DYNAMIC(CSmsUnReadWnd)
-MZ_IMPLEMENT_DYNAMIC(CSmsLookMsgDetailWnd)
+MZ_IMPLEMENT_DYNAMIC( CEasySmsWndBase )
+MZ_IMPLEMENT_DYNAMIC( CContactorsWnd )
+MZ_IMPLEMENT_DYNAMIC( CNewSmsWnd )
+MZ_IMPLEMENT_DYNAMIC( CEasySmsMainWnd )
+MZ_IMPLEMENT_DYNAMIC( CSmsLookCtorWnd )
+MZ_IMPLEMENT_DYNAMIC( CSmsLookMsgWnd )
+MZ_IMPLEMENT_DYNAMIC( CSmsUnReadWnd )
+MZ_IMPLEMENT_DYNAMIC( CSmsLookMsgDetailWnd )
+MZ_IMPLEMENT_DYNAMIC( CSmsFindResultWnd )
+MZ_IMPLEMENT_DYNAMIC( CSmsFindWnd )
 
 class CMainApp: public CMzApp
 {

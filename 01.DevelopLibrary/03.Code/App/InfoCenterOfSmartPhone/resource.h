@@ -7,7 +7,7 @@
 #define IDR_RCDATA_N_V					113
 #define IDR_PNG_EMAILICON				114
 
-//IDC Max	:	131
+//IDC Max	:	141
 //EasySmsMainWnd.h	 
 #define MZ_IDC_LOOK_SMS					110
 #define MZ_IDC_SEND_SMS					111
@@ -58,6 +58,21 @@
 //SmsUnReadWnd.h
 #define	MZ_IDC_SMS_UNREAD_TOOLBAR						125
 #define	MZ_IDC_SMS_UNREAD_LIST							126
+
+//SmsFindWnd.h
+
+#define MZ_IDC_FIND_CONTACTORS							132
+#define MZ_IDC_FIND_CONTACTORS_BTN						133
+#define MZ_IDC_FIND_TOOLBAR								134
+#define MZ_IDC_FIND_INFO								135
+
+//SmsFindResult.h
+#define MZ_IDC_FIND_RESULT_LIST							136
+#define MZ_IDC_FIND_RESULT_TOOLBAR						137
+#define	MZ_IDC_FIND_RESULT_ALL_SELECT					138
+#define	MZ_IDC_FIND_RESULT_LOCK							139
+#define	MZ_IDC_FIND_RESULT_DELETE						140
+#define	MZ_IDC_FIND_RESULT_BACK							141
 
 // Next default values for new objects
 // 

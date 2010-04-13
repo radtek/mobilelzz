@@ -12,6 +12,12 @@ public:
 		m_lDynamicArrayDataCount = 0;
 		m_lDynamicArrayDataMemoryCount = 0;
 	}
+	CDynamicArray(T* pTArray, long lCount)
+	{
+		m_pDynamicArrayData = pTArray;
+		m_lDynamicArrayDataCount = lCount;
+		m_lDynamicArrayDataMemoryCount = lCount;
+	}
 	virtual ~CDynamicArray()
 	{
 		delete[] m_pDynamicArrayData;

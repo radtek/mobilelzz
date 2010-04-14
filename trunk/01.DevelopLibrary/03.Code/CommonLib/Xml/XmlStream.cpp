@@ -394,11 +394,28 @@ CXmlStream::~CXmlStream()
 
 //public:
 
-APP_Result	CXmlStream::GetXmlStream( wchar_t* pwcStream, long lSize )
+APP_Result	CXmlStream::GetXmlStream( wchar_t** ppwcStream, long *plSize )
 {
+	if ( NULL == ppwcStream || NULL == plSize )
+	{
+		return	APP_Result_Param_Invalid;
+	}
+
 	m_strBuf << *m_pTiXmlDocument;
 
-	MB2WC( pwcStream, m_strBuf.c_str() );
+	long	lSize	=	m_strBuf.length();
+
+	*ppwcStream	=	new	wchar_t		[ lSize ];
+	if ( NULL == *ppwcStream )
+	{
+		return	APP_Result_Memory_Full;
+	}
+	
+	memset( *ppwcStream, 0x0, lSize * sizeof( wchar_t ) );
+
+	MB2WC( *ppwcStream, m_strBuf.c_str() );
+
+	*plSize	=	lSize;
 
 	return	APP_Result_S_OK;
 }

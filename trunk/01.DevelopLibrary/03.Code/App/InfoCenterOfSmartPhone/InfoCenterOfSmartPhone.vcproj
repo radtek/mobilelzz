@@ -256,6 +256,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\UI\SmsEncrytpCtorWnd.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\SmsEncrytpCtorWnd.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\UI\SmsFindResultWnd.cpp"
 					>
 				</File>
@@ -293,6 +301,14 @@
 				</File>
 				<File
 					RelativePath="..\..\UI\SmsLookMsgWnd.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\SmsPassInputWnd.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\SmsPassInputWnd.h"
 					>
 				</File>
 				<File

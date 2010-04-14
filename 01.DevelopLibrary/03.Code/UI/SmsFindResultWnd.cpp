@@ -84,7 +84,8 @@ BOOL	CSmsFindResultWnd::SubInitialize()
 
 	m_list_base.SetID( MZ_IDC_SMS_UNREAD_LIST );
 	m_list_base.EnableDragModeH(true);
-//	m_list_base.SetMultiSelectMode( UILISTEX_MULTISELECT_RIGHT );
+	m_list_base.SetMultiSelectMode( UILISTEX_MULTISELECT_LEFT );
+	m_list_base.SetSplitLineMode ( UILISTEX_SPLITLINE_RIGHT ); 
 	AddUiWin( &m_list_base );
 
 

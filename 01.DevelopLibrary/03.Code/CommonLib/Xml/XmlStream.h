@@ -96,8 +96,9 @@ class COMMONLIB_API CXmlStream
 		//在创建XML文件时，该方法根据传入的Path，创建指定的Node
 		//外部使用完pclXmlNode之后，需要释放
 		APP_Result SelectNode( wchar_t* pwcsNodePath, CXmlNode** pclXmlNode );
-
-		APP_Result	GetXmlStream( wchar_t* pwcStream, long lSize );
+		
+		//ppwcStream在内部申请内存，需要由外部释放，申请内存的大小有plSize参数传出
+		APP_Result	GetXmlStream( wchar_t** ppwcStream, long *plSize );
 
 	private:
 	

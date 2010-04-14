@@ -64,8 +64,9 @@
 				// for contactors list
 				<id></id>
 				<name></name>
+				<firstletter></firstletter>
 				<icon></icon>
-				<defaultno></defaultno>
+				<defaultno></defaultno>				
 				// for phone no list
 				<key id = "" value = ""></key>
 			</rec>
@@ -75,6 +76,7 @@
 			<rec>
 				<basicinfo>
 					<name></name>
+					<firstletter></firstletter>
 					<ring></ring>
 					<birthday></birthday>
 					<icon></icon>

@@ -22,6 +22,10 @@ enum COMMONLIB_API APP_Result{
 	APP_Result_File_NotExist		= 0x80000031,
 	APP_Result_File_EOF				= 0x80000032,
 	APP_Result_File_InvalidOffset	= 0x80000033,
+	
+	APP_Result_Xml_Error			= 0x80000040,
+	APP_Result_Xml_NodeNotExist		= 0x80000041,
+
 };
 
 #define FAILED_App(appR) ((long)(appR) < 0)

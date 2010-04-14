@@ -11,65 +11,67 @@ void UiWidget_Sms::PaintWin( HDC hdcDst, RECT* prcWin, RECT* prcUpdate )
 
 
 	/*描画插件背景*/	
-	RECT rcImg;
-	rcImg.left	= rcBg.left;
-	rcImg.top	= rcBg.top;
-	rcImg.right	= rcImg.left + 400;
-	rcImg.bottom= rcImg.top + 240;
-
-    ImagingHelper* pImgBg = m_imgContainer.LoadImage(GetModuleHandle(L"SmsWidget.dll"), IDR_JPG_PIC1, true);
-    pImgBg->Draw(hdcDst, &rcImg, true);
-
-	::SetTextColor(hdcDst, RGB(27,163,228));
-	::SetBkMode(hdcDst, TRANSPARENT);
+// 	RECT rcImg;
+// 	rcImg.left	= rcBg.left;
+// 	rcImg.top	= rcBg.top;
+// 	rcImg.right	= rcImg.left + 400;
+// 	rcImg.bottom= rcImg.top + 240;
+// 
+//     ImagingHelper* pImgBg = m_imgContainer.LoadImage(GetModuleHandle(L"SmsWidget.dll"), IDR_JPG_PIC1, true);
+//     pImgBg->Draw(hdcDst, &rcImg, true);
+// 
+// 	::SetTextColor(hdcDst, RGB(27,163,228));
+// 	::SetBkMode(hdcDst, TRANSPARENT);
 
 
 	/*将消息的内容描画在插件上*/
 
-	HFONT font = FontHelper::GetFont(20, FW_NORMAL,0,0,0,FONT_QUALITY_CLEARTYPE);
-	HGDIOBJ oldfont = SelectObject(hdcDst, font);
-
-	RECT rcText;
-	rcText.left		= rcBg.left +30 ;
-	rcText.top		= rcBg.top  +70;
-	rcText.right	= rcBg.left + 350;
-	rcText.bottom	= rcBg.top +  150;
-
-	int Height = MzDrawText(hdcDst, m_Message[m_CurIndex].C_Str(), &rcText, DT_WORDBREAK |DT_CALCRECT|DT_LEFT);
-	MzDrawText(hdcDst, m_Message[m_CurIndex].C_Str(), &rcText, DT_WORDBREAK|DT_LEFT);
-	SelectObject(hdcDst, oldfont);
+// 	HFONT font = FontHelper::GetFont(20, FW_NORMAL,0,0,0,FONT_QUALITY_CLEARTYPE);
+// 	HGDIOBJ oldfont = SelectObject(hdcDst, font);
+// 
+// 	RECT rcText;
+// 	rcText.left		= rcBg.left +30 ;
+// 	rcText.top		= rcBg.top  +70;
+// 	rcText.right	= rcBg.left + 350;
+// 	rcText.bottom	= rcBg.top +  150;
+// 
+// 	int Height = MzDrawText(hdcDst, m_Message[m_CurIndex].C_Str(), &rcText, DT_WORDBREAK |DT_CALCRECT|DT_LEFT);
+// 	MzDrawText(hdcDst, m_Message[m_CurIndex].C_Str(), &rcText, DT_WORDBREAK|DT_LEFT);
+// 	SelectObject(hdcDst, oldfont);
 
 
 	/*将手机号码描画在插件上*/
-	font = FontHelper::GetFont(25, FW_NORMAL,0,0,0,FONT_QUALITY_DEFAULT);
-	oldfont = SelectObject(hdcDst, font);
-	
-	RECT rcNum;
-	rcNum.left	= rcBg.left +55 ;
-	rcNum.top	= rcBg.top  ;
-	rcNum.right	= rcBg.left + 290;
-	rcNum.bottom= rcBg.top +  60;
-
-	MzDrawText(hdcDst, m_PhoneNum[m_CurIndex].C_Str(), &rcNum, DT_VCENTER|DT_LEFT);
-	SelectObject(hdcDst, oldfont);
+// 	font = FontHelper::GetFont(25, FW_NORMAL,0,0,0,FONT_QUALITY_DEFAULT);
+// 	oldfont = SelectObject(hdcDst, font);
+// 	
+// 	RECT rcNum;
+// 	rcNum.left	= rcBg.left +55 ;
+// 	rcNum.top	= rcBg.top  ;
+// 	rcNum.right	= rcBg.left + 290;
+// 	rcNum.bottom= rcBg.top +  60;
+// 
+// 	MzDrawText(hdcDst, m_PhoneNum[m_CurIndex].C_Str(), &rcNum, DT_VCENTER|DT_LEFT);
+// 	SelectObject(hdcDst, oldfont);
 
 
 
 	/*描画当前的索引和总件数*/
-	font = FontHelper::GetFont(25, FW_NORMAL,0,0,0,FONT_QUALITY_DEFAULT);
-	oldfont = SelectObject(hdcDst, font);
+// 	font = FontHelper::GetFont(25, FW_NORMAL,0,0,0,FONT_QUALITY_DEFAULT);
+// 	oldfont = SelectObject(hdcDst, font);
+// 
+// 	RECT rcCnt;
+// 	rcCnt.left	= rcBg.left +40 ;
+// 	rcCnt.right	= rcBg.left + 100;
+// 	rcCnt.top	= rcBg.top +200;
+// 	rcCnt.bottom = rcCnt.top +40;
+// 	
+// 	WCHAR ToTalCount[15] ={0};
+// 	wsprintf(ToTalCount,L"%d/%d", m_CurIndex+1, m_TotalCount);
+// 	MzDrawText(hdcDst, ToTalCount, &rcCnt, DT_VCENTER|DT_LEFT);
+// 
+// 	SelectObject(hdcDst, oldfont);
 
-	RECT rcCnt;
-	rcCnt.left	= rcBg.left +40 ;
-	rcCnt.right	= rcBg.left + 100;
-	rcCnt.top	= rcBg.top +200;
-	rcCnt.bottom = rcCnt.top +40;
-	
-	WCHAR ToTalCount[15] ={0};
-	wsprintf(ToTalCount,L"%d/%d", m_CurIndex+1, m_TotalCount);
-	MzDrawText(hdcDst, ToTalCount, &rcCnt, DT_VCENTER|DT_LEFT);
 
-	SelectObject(hdcDst, oldfont);
 
 
 
@@ -136,10 +138,10 @@ bool UiWidget_Sms::StartWidget()
     if(id==0)
         return false;
 
-	AddMessage(L"10086", L"尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。");
-	AddMessage(L"13587458741", L"猪的四大理想：四周栏杆都烂掉，天上纷纷下饲料，世上屠夫都死掉，全国人民信回教。");
-
-	m_CurIndex = 0;
+// 	AddMessage(L"10086", L"尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。");
+// 	AddMessage(L"13587458741", L"猪的四大理想：四周栏杆都烂掉，天上纷纷下饲料，世上屠夫都死掉，全国人民信回教。");
+// 
+// 	m_CurIndex = 0;
 
 	Invalidate();
 	Update();

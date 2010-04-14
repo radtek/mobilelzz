@@ -15,6 +15,8 @@
 #include "SmsLookMsgDetailWnd.h"
 #include "SmsFindWnd.h"
 #include "SmsFindResultWnd.h"
+#include "SmsEncrytpCtorWnd.h"
+#include "SmsPassInputWnd.h"
 
 MZ_IMPLEMENT_DYNAMIC( CEasySmsWndBase )
 MZ_IMPLEMENT_DYNAMIC( CContactorsWnd )
@@ -26,6 +28,10 @@ MZ_IMPLEMENT_DYNAMIC( CSmsUnReadWnd )
 MZ_IMPLEMENT_DYNAMIC( CSmsLookMsgDetailWnd )
 MZ_IMPLEMENT_DYNAMIC( CSmsFindResultWnd )
 MZ_IMPLEMENT_DYNAMIC( CSmsFindWnd )
+MZ_IMPLEMENT_DYNAMIC( CSmsEncrytpCtorWnd )
+MZ_IMPLEMENT_DYNAMIC( CSmsPassInputWnd )
+
+
 
 class CMainApp: public CMzApp
 {

@@ -5,6 +5,7 @@
 #include "SmsLookCtorWnd.h"
 #include "SmsUnReadWnd.h"
 #include "SmsFindWnd.h"
+#include "SmsEncrytpCtorWnd.h"
 
 
 CEasySmsMainWnd::CEasySmsMainWnd(void)
@@ -72,6 +73,9 @@ void CEasySmsMainWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 
 		case MZ_IDC_ENCRYTP_SMS:
 		{
+			CSmsEncrytpCtorWnd	clCSmsEncrytpCtorWnd;
+			iRlt	=	DoModalBase( &clCSmsEncrytpCtorWnd );
+
 			break;
 		}
 			

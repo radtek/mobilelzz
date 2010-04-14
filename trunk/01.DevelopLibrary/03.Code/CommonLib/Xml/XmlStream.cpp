@@ -412,7 +412,6 @@ APP_Result	CXmlStream::GetXmlStream( wchar_t** ppwcStream, long *plSize )
 	}
 	
 	memset( *ppwcStream, 0x0, lSize * sizeof( wchar_t ) );
-
 	MB2WC( *ppwcStream, m_strBuf.c_str() );
 
 	*plSize	=	lSize;
@@ -800,7 +799,7 @@ APP_Result	CXmlStream::ParseXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 		if ( NULL == pPreNode )
 		{
 			_ASSERT(0);
-			hr	=	APP_Result_E_Fail;
+			hr	=	APP_Result_Xml_NodeNotExist;
 			break;
 		}
 				

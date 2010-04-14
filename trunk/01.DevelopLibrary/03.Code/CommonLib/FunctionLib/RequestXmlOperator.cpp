@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "Errors.h"
+#include "XmlStream.h"
 #include "RequestXmlOperator.h"
+
+#include "FuncLib.h"
+#include "DynamicArray.h"
 
 CRequestXmlOperator::CRequestXmlOperator()
 {

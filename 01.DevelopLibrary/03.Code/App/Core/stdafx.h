@@ -6,13 +6,14 @@
 #ifndef __Stdafx_h__
 #define __Stdafx_h__
 
-//#pragma warning( disable : C4251 )
+#pragma warning( disable : 4251 )
 // Windows Header Files:
 #include <windows.h>
 #include "CommonLib.h"
 #include "Core.h"
 #include "Errors.h"
 #include "FuncLib.h"
+#include "DynamicArray.h"
 
 
 #endif//__Stdafx_h__

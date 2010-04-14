@@ -7,10 +7,16 @@
 #define __Stdafx_h__
 
 // Windows Header Files:
-
+#pragma warning( disable : 4996 )
+#pragma warning( disable : 4251 )
 #include <windows.h>
 
 #include<mzfc/MzString.h>
+
+#include<xstring>
+using namespace std;
+
+#include <memory>
 
 #include "CommonLib.h"
 #include "Errors.h"

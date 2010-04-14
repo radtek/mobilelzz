@@ -1,6 +1,4 @@
 #include "stdafx.h"
-#include<xstring>
-using namespace std;
 #include "XmlStream.h"
 
 //class

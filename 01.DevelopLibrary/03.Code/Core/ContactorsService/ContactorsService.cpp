@@ -1,8 +1,10 @@
 #include"stdafx.h"
 #include"BasicService.h"
+#include "XmlStream.h"
+#include "RequestXmlOperator.h"
 #include"ContactorsService.h"
 
-#include "XmlStream.h"
+
 
 #define   SQL_GET_CONTACTS  L"select ABPerson.ROWID, ABPerson.Name , ABPhones.*  from ABPerson, ABPhones where ABPerson.ROWID = ABPhones.record_id "
 #define   SQL_GET_FIRSTLETER  L"select token  from ABLookupFirstLetter where source = ?"
@@ -125,7 +127,7 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 	if ( FAILED_App(hr) ){
 		return hr;
 	}
-	auto_ptr<CXmlNode> sp(pNode);
+	auto_ptr<CXmlNode> spNode(pNode);
 	NodeAttribute_t stTemp[3];
 	memset(stTemp, 0x0, sizeof(stTemp));
 	F_wcscpyn(stTemp[0].wcsName, L"type", sizeof(stTemp[0].wcsName)/sizeof(stTemp[0].wcsName[0]));
@@ -178,7 +180,7 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 	}
 	F_wcscpyn(stTemp[0].wcsName, L"count", sizeof(stTemp[0].wcsName)/sizeof(stTemp[0].wcsName[0]));
 	wchar_t awcsCount[5] = L"";
-	wsprintf(awcsID, L"%d", lListCount);
+	wsprintf(awcsCount, L"%d", lListCount);
 	F_wcscpyn(stTemp[0].wcsValue, awcsCount, sizeof(stTemp[0].wcsValue)/sizeof(stTemp[0].wcsValue[0]));
 	hr = pNode->SetNodeContent( NULL, NULL, stTemp, 1 );
 	if ( FAILED_App(hr) ){

@@ -48,6 +48,7 @@ protected:
 	
 private:
 	void				MakeFirstLetter(wchar_t* pwcsFirstLetter, long lPID );
+	APP_Result			ExcuteForList(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
 private:
 	CSQL_query*			m_pQFirstLetter;
 	long				m_lID_QFirstLetter;

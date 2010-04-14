@@ -8,22 +8,26 @@ class CDynamicArray
 public:
 	CDynamicArray()
 	{
+		bOwn = TRUE;
 		m_pDynamicArrayData = NULL;
 		m_lDynamicArrayDataCount = 0;
 		m_lDynamicArrayDataMemoryCount = 0;
 	}
 	CDynamicArray(T* pTArray, long lCount)
 	{
+		bOwn = TRUE;
 		m_pDynamicArrayData = pTArray;
 		m_lDynamicArrayDataCount = lCount;
 		m_lDynamicArrayDataMemoryCount = lCount;
 	}
 	virtual ~CDynamicArray()
 	{
-		delete[] m_pDynamicArrayData;
-		m_pDynamicArrayData = NULL;
-		m_lDynamicArrayDataCount = 0;
-		m_lDynamicArrayDataMemoryCount = 0;
+		if ( bOwn ){
+			delete[] m_pDynamicArrayData;
+			m_pDynamicArrayData = NULL;
+			m_lDynamicArrayDataCount = 0;
+			m_lDynamicArrayDataMemoryCount = 0;
+		}		
 	}
 
 	long GetItemCount()
@@ -97,11 +101,17 @@ public:
 		m_lDynamicArrayDataCount = 0;
 		//m_lDynamicArrayDataMemoryCount = 0;
 	}
+	T* Detatch()
+	{
+		bOwn = FALSE;
+		return m_pDynamicArrayData;
+	}
 private:
 	T* m_pDynamicArrayData;
 	long m_lDynamicArrayDataCount;
 	long m_lDynamicArrayDataMemoryCount;
-
+	
+	BOOL bOwn;
 };
 
 #endif // __DynamicArray_h__

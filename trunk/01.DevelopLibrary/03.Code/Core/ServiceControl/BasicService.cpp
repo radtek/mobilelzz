@@ -3,12 +3,12 @@
 
 CBasicService::CBasicService()
 {
-	m_pclSqlDBSession = NULL;
+	m_pclSqlSessionManager = NULL;
 }
 
 CBasicService::~CBasicService()
 {
-
+	m_pclSqlSessionManager->ReleaseInstance();
 }
 
 APP_Result CBasicService::Excute(wchar_t* pwcsRequestXML, wchar_t** ppwcsResultXML)
@@ -49,13 +49,9 @@ APP_Result CBasicService::MakeResult(wchar_t** ppwcsResultXML)
 
 APP_Result CBasicService::Initialize()
 {
-	CSQL_sessionManager*  pm =CSQL_sessionManager::GetInstance();
-	if( NULL == pm ) 
+	CSQL_sessionManager*  m_pclSqlSessionManager =CSQL_sessionManager::GetInstance();
+	if( NULL == m_pclSqlSessionManager ) 
 		return APP_Result_NullPointer;
-
-	APP_Result hr = pm->Session_Connect(L"contact", L".\\Documents and Settings\\", L"sms.db", &m_pclSqlDBSession );
-	if(FAILED(hr) || m_pclSqlDBSession == NULL)	
-		return APP_Result_E_Fail;
 
 	return APP_Result_S_OK;
 }

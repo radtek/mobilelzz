@@ -56,6 +56,8 @@ private:
 	long				m_lID_QContactorsList;
 
 	Contactors_RequestData		m_stRequestData;
+
+	CSQL_session*		m_pclSqlDBSession;
 };
 
 #endif __ContactorsService_h__

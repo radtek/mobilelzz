@@ -5,19 +5,24 @@
 #include"ContactorsService.h"
 
 
-
-#define   SQL_GET_CONTACTS  L"select ABPerson.ROWID, ABPerson.Name , ABPhones.*  from ABPerson, ABPhones where ABPerson.ROWID = ABPhones.record_id "
-#define   SQL_GET_FIRSTLETER  L"select token  from ABLookupFirstLetter where source = ?"
-
-
 CContactorsService::CContactorsService()
 {
 	m_pQFirstLetter = NULL;
 	m_pQContactorsList = NULL;
+	m_pclSqlDBSession = NULL;
 }
 
 CContactorsService::~CContactorsService()
 {
+	m_pQFirstLetter->Finalize();
+	m_pQContactorsList->Finalize();
+
+	m_pclSqlDBSession->Query_Delete(m_lID_QFirstLetter);
+	m_pclSqlDBSession->Query_Delete(m_lID_QContactorsList);
+
+	BOOL bIsDBClosed = FALSE;
+	m_pclSqlSessionManager->Session_DisConnect( L"contacts", &bIsDBClosed );
+	
 }
 
 APP_Result CContactorsService::MakeParam(wchar_t* pwcsRequestXML)
@@ -81,17 +86,21 @@ APP_Result CContactorsService::Initialize()
 	if(FAILED(hr))	
 		return hr;
 
+	APP_Result hr = m_pclSqlSessionManager->Session_Connect(L"contacts", L".\\Documents and Settings\\", L"contacts.db", &m_pclSqlDBSession );
+	if(FAILED(hr) || m_pclSqlDBSession == NULL)	
+		return APP_Result_E_Fail;
+
 	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QFirstLetter, &m_pQFirstLetter );
 	if( FAILED(hr) || m_pQFirstLetter == NULL ) 
 		return hr;
-	hr = m_pQFirstLetter->Prepare(SQL_GET_CONTACTS);
+	hr = m_pQFirstLetter->Prepare(Contactors_SQL_GET_CONTACTS);
 	if( FAILED(hr) ) 
 		return hr;
 
 	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QContactorsList, &m_pQContactorsList );
 	if( FAILED(hr) || m_pQContactorsList== NULL ) 
 		return hr;
-	hr = m_pQContactorsList->Prepare(SQL_GET_FIRSTLETER);
+	hr = m_pQContactorsList->Prepare(Contactors_SQL_GET_FIRSTLETER);
 	if( FAILED(hr) ) 
 		return hr;
 

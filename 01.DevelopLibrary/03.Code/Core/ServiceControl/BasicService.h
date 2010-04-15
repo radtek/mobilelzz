@@ -17,7 +17,8 @@ protected:
 	virtual APP_Result MakeResult(wchar_t** ppwcsResultXML);	
 	
 protected:
-	CSQL_session*		m_pclSqlDBSession;
+	
+	CSQL_sessionManager*	m_pclSqlSessionManager;
 
 private:
 	

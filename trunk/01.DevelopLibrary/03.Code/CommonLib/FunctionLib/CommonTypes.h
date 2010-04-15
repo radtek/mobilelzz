@@ -35,6 +35,6 @@ extern COMMONLIB_API CDynamicArray<MyListItemData> g_ReciversList;
 extern  COMMONLIB_API BOOL  g_bContactShow;
 
 #define	LICENSE
-
+#define Invalid_ID			0xFFFFFFFF
 
 #endif // __CommonTypes_h__

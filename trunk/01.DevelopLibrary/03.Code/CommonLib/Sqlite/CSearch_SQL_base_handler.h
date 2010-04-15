@@ -6,6 +6,16 @@
 #include <vector>
 using namespace std;
 
+#define   Contactors_SQL_GET_CONTACTS  L"select ABPerson.ROWID, ABPerson.Name , ABPhones.*  from ABPerson, ABPhones where ABPerson.ROWID = ABPhones.record_id "
+#define   Contactors_SQL_GET_FIRSTLETER  L"select token  from ABLookupFirstLetter where source = ?"
+
+#define   Sms_SQL_GET_UnReadSms					L"select *  from SmsDetail where readstatus = 0"
+#define   Sms_SQL_GET_SmsList					L"select *  from SmsDetail"
+#define   Sms_SQL_GET_SmsListByContactor		L"select *  from SmsDetail where pid = ?"
+
+#define   Sms_SQL_GET_SmsGroupInfo	L"select *  from SmsGroup where sgid = ?"
+#define   Sms_SQL_SET_ReadStatus	L"update SmsDetail set readstatus = ? where sid = ?"
+#define   Sms_SQL_SET_LockStatus	L"update SmsDetail set lockstatus = ? where sid = ?"
 
 
 //====================================================================================

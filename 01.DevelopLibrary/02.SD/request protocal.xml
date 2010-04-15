@@ -1,10 +1,11 @@
 <request>
 	<unique id></unique id>//client make it,server return the result file by name the file of this id
 	<data type = "sms">
-		<operation type = "list" kind = "unread">
+		<operation type = "list">
 			<condition name = "sort" value = "time"></condition>
 		</operation>
 		<operation type = "list">
+			<condition name = "unread"></condition>
 			<condition name = "contactor" value = "id"></condition>
 			<condition name = "decode" value = "code"></condition>
 		</operation>
@@ -46,6 +47,9 @@
 				<id></id>//server make it,client get it by list info
 				<detail></detail>
 			</content>
+		</operation>
+		<operation type = "count">
+			<condition name = "pid" value = "pidvalue"></condition>
 		</operation>
 	</data>
 	

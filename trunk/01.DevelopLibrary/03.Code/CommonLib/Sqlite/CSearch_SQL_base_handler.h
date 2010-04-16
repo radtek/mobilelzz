@@ -13,9 +13,11 @@ using namespace std;
 #define   Sms_SQL_GET_SmsList					L"select *  from SmsDetail"
 #define   Sms_SQL_GET_SmsListByContactor		L"select *  from SmsDetail where pid = ?"
 
-#define   Sms_SQL_GET_SmsGroupInfo	L"select *  from SmsGroup where sgid = ?"
+#define   Sms_SQL_GET_SmsGroupInfo	L"select *  from SmsGroup where pid = ?"
 #define   Sms_SQL_SET_ReadStatus	L"update SmsDetail set readstatus = ? where sid = ?"
 #define   Sms_SQL_SET_LockStatus	L"update SmsDetail set lockstatus = ? where sid = ?"
+
+#define   Sms_SQL_CheckCode			L"select * from SmsCode where pid = ?"
 
 
 //====================================================================================

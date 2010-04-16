@@ -43,6 +43,11 @@ class COMMONLIB_API CXmlNode
 		//从根目录开始指定Path
 		APP_Result SetNodeContent( wchar_t* pwcsNodePath, wchar_t* pwcsNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount );
 		
+		//从根目录开始指定Path
+		APP_Result SetNodeContent( wchar_t* pwcsNodePath, long lNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount );
+		//从根目录开始指定Path
+		APP_Result SetNodeContent( wchar_t* pwcsNodePath, double dNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount );
+
 		//Move到它的兄弟节点
 		EN_MOVE	MoveNext();
 		

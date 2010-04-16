@@ -13,8 +13,18 @@ protected:
 	virtual APP_Result MakeResult(wchar_t** ppwcsResultXML);	
 private:
 	APP_Result ExcuteForList(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
-	APP_Result DecideQuery(ListCondition* pConditions, long lConditionCount, CSQL_query** ppQueryNeeded, BOOL& bIsPermitDecode);
-	APP_Result MakeSmsList(CRequestXmlOperator& clXmlOpe, CSQL_query* pQHandle, CXmlStream& clResultXml, BOOL bIsPermitDecode);
+	APP_Result DecideQuery(ListCondition* pConditions, long lConditionCount, 
+					CSQL_query** ppQueryNeeded, BOOL& bIsPermitDecode);
+	APP_Result MakeSmsList(CRequestXmlOperator& clXmlOpe, CSQL_query* pQHandle, 
+					CXmlStream& clResultXml, BOOL bIsPermitDecode);
+	APP_Result MakeSmsListRecs( CSQL_query* pQHandle, CXmlNode* pNodeList, BOOL bIsPermitDecode,
+					long& lListCount, long& lEncodeCount );
+	APP_Result CheckCode(long lPID, BOOL& bNeedDecode, 
+					wchar_t* pwcsDBCode, long lCodeSize);
+	APP_Result ConvertDisplayCode2DBCode(wchar_t* pwcsCode, wchar_t* pwcsInputCodeCompared, 
+					long lInputCodeCount );
+	APP_Result ConvertDBCode2DisplayCode(wchar_t* pDBCode, wchar_t* pwcsCode, 
+					long lCodeCount);
 private:
 	CSQL_query*			m_pQUnReadSms;
 	long				m_lID_QUnReadSms;
@@ -32,7 +42,10 @@ private:
 	long				m_lID_QSmsReadStatus;
 
 	CSQL_query*			m_pQUpdateLockStatus;
-	long				m_lID_QSmsReadStatus;
+	long				m_lID_QUpdateLockStatus;
+
+	CSQL_query*			m_pQCheckCode;
+	long				m_lID_QCheckCode;
 
 	CSQL_session*		m_pclSqlDBSession;
 	

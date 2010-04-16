@@ -254,6 +254,26 @@ APP_Result CXmlNode::SetNodeContent( wchar_t* pwcsNodePath, wchar_t* pwcsNodeVal
 	return	hr;
 }
 
+APP_Result CXmlNode::SetNodeContent( wchar_t* pwcsNodePath, long lNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount )
+{
+	APP_Result	hr	=	APP_Result_S_OK;
+	wchar_t pwcsNodeValue[128] = L"";
+	_ltow(lNodeValue, pwcsNodeValue, 10);
+	hr = SetNodeContent(pwcsNodePath, pwcsNodeValue, ppAttributes, lAttributesCount);
+
+	return	hr;
+}
+
+APP_Result CXmlNode::SetNodeContent( wchar_t* pwcsNodePath, double dNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount )
+{
+	APP_Result	hr	=	APP_Result_S_OK;
+	wchar_t pwcsNodeValue[128] = L"";
+	_ltow(dNodeValue, pwcsNodeValue, 10);
+	hr = SetNodeContent(pwcsNodePath, pwcsNodeValue, ppAttributes, lAttributesCount);
+
+	return	hr;
+}
+
 APP_Result CXmlNode::SubSetNodeContent( TiXmlElement* pNode, wchar_t* pwcsNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount )
 {
 //	if ( NULL != pwcsNodeValue )

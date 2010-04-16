@@ -236,6 +236,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\UI\EasySmsUiCtrl.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\EasySmsUiCtrl.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\UI\EasySmsWndBase.cpp"
 					>
 				</File>

@@ -3,6 +3,7 @@
 
 #include "SmsUnReadWnd.h"
 #include "SmsLookMsgDetailWnd.h"
+#include "EasySmsUiCtrl.h"
 
 class ListItemData
 {
@@ -71,6 +72,10 @@ BOOL	CSmsUnReadWnd::SubInitialize()
 
 
 	/////////////test/////////////////////////////////////////////////////////////
+	CEasySmsUiCtrl	clCEasySmsUiCtrl;
+	wchar_t	*pBuf	=	NULL;
+	long	lSize	=	0;
+	clCEasySmsUiCtrl.MakeUnReadRltListReq( &pBuf, &lSize );
 
 	CMzString content = L"¶ÌÐÅÄÚÈÝ SmsContent%d:";
 	CMzString stime = L"12:20";

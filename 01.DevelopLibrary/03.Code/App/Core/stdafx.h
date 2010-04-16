@@ -9,11 +9,15 @@
 #pragma warning( disable : 4251 )
 // Windows Header Files:
 #include <windows.h>
+#include<mzfc/MzString.h>
+
 #include "CommonLib.h"
 #include "Core.h"
+#include "DynamicArray.h"
+#include "CommonTypes.h"
 #include "Errors.h"
 #include "FuncLib.h"
-#include "DynamicArray.h"
+
 
 
 #endif//__Stdafx_h__

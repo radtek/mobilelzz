@@ -53,7 +53,7 @@ APP_Result CContactorsService::ExcuteParam(wchar_t* pwcsRequestXML, wchar_t** pp
 	NodeAttribute_t stTemp;
 	F_wcscpyn(stTemp.wcsName, L"type", sizeof(stTemp.wcsName)/sizeof(stTemp.wcsName[0]));
 	F_wcscpyn(stTemp.wcsValue, L"contactors", sizeof(stTemp.wcsValue)/sizeof(stTemp.wcsValue[0]));
-	hr = pNode->SetNodeContent( NULL, NULL, &stTemp, 1 );
+	hr = pNode->SetNodeContent( NULL, (wchar_t*)NULL, &stTemp, 1 );
 	if ( FAILED_App(hr) ){
 		return hr;
 	}
@@ -86,7 +86,7 @@ APP_Result CContactorsService::Initialize()
 	if(FAILED(hr))	
 		return hr;
 
-	APP_Result hr = m_pclSqlSessionManager->Session_Connect(L"contacts", L".\\Documents and Settings\\", L"contacts.db", &m_pclSqlDBSession );
+	hr = m_pclSqlSessionManager->Session_Connect(L"contacts", L".\\Documents and Settings\\", L"contacts.db", &m_pclSqlDBSession );
 	if(FAILED(hr) || m_pclSqlDBSession == NULL)	
 		return APP_Result_E_Fail;
 
@@ -145,7 +145,7 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 	F_wcscpyn(stTemp[1].wcsValue, L"0", sizeof(stTemp[1].wcsValue)/sizeof(stTemp[1].wcsValue[0]));
 	F_wcscpyn(stTemp[2].wcsName, L"kind", sizeof(stTemp[2].wcsName)/sizeof(stTemp[2].wcsName[0]));
 	F_wcscpyn(stTemp[2].wcsValue, L"contactors", sizeof(stTemp[2].wcsValue)/sizeof(stTemp[2].wcsValue[0]));
-	hr = pNode->SetNodeContent( NULL, NULL, stTemp, 3 );
+	hr = pNode->SetNodeContent( NULL, (wchar_t*)NULL, stTemp, 3 );
 	if ( FAILED_App(hr) ){
 		return hr;
 	}
@@ -191,7 +191,7 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 	wchar_t awcsCount[5] = L"";
 	wsprintf(awcsCount, L"%d", lListCount);
 	F_wcscpyn(stTemp[0].wcsValue, awcsCount, sizeof(stTemp[0].wcsValue)/sizeof(stTemp[0].wcsValue[0]));
-	hr = pNode->SetNodeContent( NULL, NULL, stTemp, 1 );
+	hr = pNode->SetNodeContent( NULL, (wchar_t*)NULL, stTemp, 1 );
 	if ( FAILED_App(hr) ){
 		return hr;
 	}

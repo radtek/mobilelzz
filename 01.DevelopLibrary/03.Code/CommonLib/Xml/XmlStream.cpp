@@ -434,6 +434,13 @@ APP_Result	CXmlStream::GetXmlStream( wchar_t** ppwcStream, long *plSize )
 
 	*plSize	=	lSize;
 
+#ifdef _DEBUG
+	if ( NULL != m_pTiXmlDocument )
+	{
+		m_pTiXmlDocument->SaveFile( "./FileName.xml" );
+	}
+#endif
+
 	return	APP_Result_S_OK;
 }
 
@@ -528,7 +535,7 @@ APP_Result CXmlStream::SelectNode( wchar_t* pwcsNodePath, CXmlNode** pclXmlNode 
 	{
 		long	lSize	=	wcslen( pwcsNodePath) + 1;
 		char *pTemp	=	new	char [ lSize ];
-		if ( NULL == *pTemp )
+		if ( NULL == pTemp )
 		{
 			_ASSERT(0);
 			hr	=	APP_Result_E_Fail, *pclXmlNode	=	NULL;		

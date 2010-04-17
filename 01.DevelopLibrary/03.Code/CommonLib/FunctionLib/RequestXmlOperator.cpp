@@ -79,7 +79,7 @@ APP_Result CRequestXmlOperator::GetListKind( wchar_t* pwcsKindBuf, long lBufCoun
 	return APP_Result_S_OK;
 }
 
-APP_Result CRequestXmlOperator::GetListConditions( ListCondition** ppwcsConditionBuf, long* plBufCount )
+APP_Result CRequestXmlOperator::GetOperationConditions( OperationCondition** ppwcsConditionBuf, long* plBufCount )
 {
 	APP_Result appR = APP_Result_E_Fail;
 	CXmlNode* pNode = NULL;
@@ -88,7 +88,7 @@ APP_Result CRequestXmlOperator::GetListConditions( ListCondition** ppwcsConditio
 		return APP_Result_S_OK;
 	}
 	auto_ptr<CXmlNode> sp(pNode);
-	CDynamicArray<ListCondition>	spConditions;
+	CDynamicArray<OperationCondition>	spConditions;
 	EN_MOVE enR = MOVE_OK;
 	while(enR!= MOVE_END)
 	{
@@ -99,7 +99,7 @@ APP_Result CRequestXmlOperator::GetListConditions( ListCondition** ppwcsConditio
 			return appR;
 		}
 		CDynamicArray<NodeAttribute_t> spTempMem(pAttribute, lAttributeCount);
-		ListCondition stCondition;
+		OperationCondition stCondition;
 		memset( &stCondition, 0x0, sizeof(stCondition) );
 		if ( 0 == wcscmp(L"name", pAttribute->wcsName) ){
 			F_wcscpyn( stCondition.wcsConditionName, pAttribute->wcsValue, 

@@ -13,7 +13,8 @@ protected:
 	virtual APP_Result MakeResult(wchar_t** ppwcsResultXML);	
 private:
 	APP_Result ExcuteForList(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
-	APP_Result DecideQuery(ListCondition* pConditions, long lConditionCount, 
+	APP_Result ExcuteForEncode(CRequestXmlOperator& clReqXmlOpe, CXmlStream& clResultXml);
+	APP_Result DecideQuery(OperationCondition* pConditions, long lConditionCount, 
 					CSQL_query** ppQueryNeeded, BOOL& bIsPermitDecode);
 	APP_Result MakeSmsList(CRequestXmlOperator& clXmlOpe, CSQL_query* pQHandle, 
 					CXmlStream& clResultXml, BOOL bIsPermitDecode);
@@ -21,10 +22,12 @@ private:
 					long& lListCount, long& lEncodeCount );
 	APP_Result CheckCode(long lPID, BOOL& bNeedDecode, 
 					wchar_t* pwcsDBCode, long lCodeSize);
-	APP_Result ConvertDisplayCode2DBCode(wchar_t* pwcsCode, wchar_t* pwcsInputCodeCompared, 
-					long lInputCodeCount );
+	APP_Result ConvertDisplayCode2DBCode(wchar_t* pwcsCode, wchar_t* pwcsDBCode, 
+		long lDBCodeCount );
 	APP_Result ConvertDBCode2DisplayCode(wchar_t* pDBCode, wchar_t* pwcsCode, 
 					long lCodeCount);
+
+	APP_Result CSmsService::EncodeSmsContentByContactor(long lPID);
 private:
 	CSQL_query*			m_pQUnReadSms;
 	long				m_lID_QUnReadSms;
@@ -46,6 +49,12 @@ private:
 
 	CSQL_query*			m_pQCheckCode;
 	long				m_lID_QCheckCode;
+
+	CSQL_query*			m_pQInsertCode;
+	long				m_lID_QInsertCode;
+
+	CSQL_query*			m_pQUpdateSmsContent;
+	long				m_lID_QUpdateSmsContent;
 
 	CSQL_session*		m_pclSqlDBSession;
 	

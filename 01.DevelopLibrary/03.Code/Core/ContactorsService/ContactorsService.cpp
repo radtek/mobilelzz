@@ -123,13 +123,13 @@ void CContactorsService::MakeFirstLetter(wchar_t* pwcsFirstLetter, long lPID )
 APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml)
 {
 	APP_Result hr = APP_Result_E_Fail;
-	ListCondition* pConditions = NULL;
+	OperationCondition* pConditions = NULL;
 	long lConditionCount = 0;
-	hr = clXmlOpe.GetListConditions(&pConditions, &lConditionCount);
+	hr = clXmlOpe.GetOperationConditions(&pConditions, &lConditionCount);
 	if ( FAILED_App(hr) ){
 		return hr;
 	}
-	CDynamicArray<ListCondition> sp(pConditions, lConditionCount);
+	CDynamicArray<OperationCondition> sp(pConditions, lConditionCount);
 
 	CXmlNode* pNode = NULL;
 	hr = clResultXml.SelectNode(L"result/data/data/", &pNode);
@@ -149,7 +149,7 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 	if ( FAILED_App(hr) ){
 		return hr;
 	}
-
+	m_pQContactorsList->Reset();
 	hr = m_pQContactorsList->Step();
 	long lListCount = 0;
 	while ( hr != APP_Result_E_Fail && hr != APP_Result_S_OK )

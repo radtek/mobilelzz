@@ -10,11 +10,6 @@
 			<condition name = "decode" value = "code"></condition>
 		</operation>
 		
-		<operation type = "encode">
-			<condition name = "contactor" value = "id"></condition>
-			<condition name = "code" value = "code"></condition>
-		</operation>
-		
 		<operation type = "detail">
 			<content>
 				<id></id>
@@ -42,11 +37,16 @@
 			<id></id>
 			<id></id>
 		</operation>
-		<operation type = "edit">
-			<content>
-				<id></id>//server make it,client get it by list info
+		<operation type = "edit" kind = "protectdata\sms">
+			<sms>
+				<sid></sid>//server make it,client get it by list info
 				<detail></detail>
-			</content>
+			</sms>
+			<protectdata kind = "add\edit\delete">
+				<pid></pid>
+				<code></code>		// for add edit delete	
+				<newcode></newcode>	// for edit	
+			</protectdata>
 		</operation>
 		<operation type = "count">
 			<condition name = "pid" value = "pidvalue"></condition>

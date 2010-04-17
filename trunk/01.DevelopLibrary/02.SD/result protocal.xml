@@ -1,7 +1,7 @@
 <result>
 	<unique id></unique id>//client make it,server return the result file by name the file of this id
 	<data type = "sms">
-		<data type = "list" count = "">
+		<data type = "list" count = "" encode = "all\part\none">
 			<rec encode = "true">
 				<sid></sid>
 				<pid></pid>

@@ -26,6 +26,8 @@ enum COMMONLIB_API APP_Result{
 	APP_Result_Xml_Error			= 0x80000040,
 	APP_Result_Xml_NodeNotExist		= 0x80000041,
 
+	APP_Result_ProtectData_Error	= 0x80000050,
+	APP_Result_ProtectData_NeedCode	= 0x80000051,
 };
 
 #define FAILED_App(appR) ((long)(appR) < 0)

@@ -13,7 +13,8 @@ CSmsService::CSmsService()
 	m_pQUpdateReadStatus = NULL;
 	m_pQUpdateLockStatus = NULL;
 	m_pQCheckCode = NULL;
-	
+	m_pQInsertCode = NULL;
+	m_pQUpdateSmsContent = NULL;
 
 }
 
@@ -26,6 +27,8 @@ CSmsService::~CSmsService()
 	m_pQUpdateReadStatus->Finalize();
 	m_pQUpdateLockStatus->Finalize();
 	m_pQCheckCode->Finalize();
+	m_pQInsertCode->Finalize();
+	m_pQUpdateSmsContent->Finalize();
 
 	m_pclSqlDBSession->Query_Delete(m_lID_QUnReadSms);
 	m_pclSqlDBSession->Query_Delete(m_lID_QSmsList);
@@ -34,6 +37,8 @@ CSmsService::~CSmsService()
 	m_pclSqlDBSession->Query_Delete(m_lID_QSmsReadStatus);
 	m_pclSqlDBSession->Query_Delete(m_lID_QUpdateLockStatus);
 	m_pclSqlDBSession->Query_Delete(m_lID_QCheckCode);
+	m_pclSqlDBSession->Query_Delete(m_lID_QInsertCode);
+	m_pclSqlDBSession->Query_Delete(m_lID_QUpdateSmsContent);
 
 	BOOL bIsDBClosed = FALSE;
 	m_pclSqlSessionManager->Session_DisConnect( L"sms", &bIsDBClosed );
@@ -75,6 +80,11 @@ APP_Result CSmsService::ExcuteParam(wchar_t* pwcsRequestXML, wchar_t** ppwcsResu
 	}
 	if ( 0 == wcscmp(L"list", awcsOpeType) ){
 		hr = ExcuteForList(clReqXmlOpe, clResultXml);
+		if ( FAILED_App(hr) ){
+			return hr;
+		}
+	}else if ( 0 == wcscmp(L"encode", awcsOpeType) ){
+		hr = ExcuteForEncode(clReqXmlOpe, clResultXml);
 		if ( FAILED_App(hr) ){
 			return hr;
 		}
@@ -151,7 +161,21 @@ APP_Result CSmsService::Initialize()
 	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QCheckCode, &m_pQCheckCode );
 	if( FAILED(hr) || m_pQCheckCode== NULL ) 
 		return hr;
-	hr = m_pQCheckCode->Prepare(Sms_SQL_CheckCode);
+	hr = m_pQCheckCode->Prepare(Sms_SQL_GET_SmsCode);
+	if( FAILED(hr) ) 
+		return hr;
+
+	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QInsertCode, &m_pQInsertCode );
+	if( FAILED(hr) || m_pQInsertCode== NULL ) 
+		return hr;
+	hr = m_pQInsertCode->Prepare(Sms_SQL_INSERT_SmsCode);
+	if( FAILED(hr) ) 
+		return hr;
+
+	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QUpdateSmsContent, &m_pQUpdateSmsContent );
+	if( FAILED(hr) || m_pQUpdateSmsContent== NULL ) 
+		return hr;
+	hr = m_pQUpdateSmsContent->Prepare(Sms_SQL_SET_SmsContent);
 	if( FAILED(hr) ) 
 		return hr;
 
@@ -161,13 +185,13 @@ APP_Result CSmsService::Initialize()
 APP_Result CSmsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml)
 {	
 	APP_Result hr = APP_Result_E_Fail;
-	ListCondition* pConditions = NULL;
+	OperationCondition* pConditions = NULL;
 	long lConditionCount = 0;
-	hr = clXmlOpe.GetListConditions(&pConditions, &lConditionCount);
+	hr = clXmlOpe.GetOperationConditions(&pConditions, &lConditionCount);
 	if ( FAILED_App(hr) ){
 		return hr;
 	}
-	CDynamicArray<ListCondition> sp(pConditions, lConditionCount);
+	CDynamicArray<OperationCondition> sp(pConditions, lConditionCount);
 	CSQL_query* pQNeeded = NULL;
 	BOOL bIsPermitDecode = FALSE;
 	hr = DecideQuery(pConditions, lConditionCount, &pQNeeded, bIsPermitDecode);
@@ -186,7 +210,7 @@ APP_Result CSmsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXmlStream&
 	return APP_Result_S_OK;
 }
 
-APP_Result CSmsService::DecideQuery(ListCondition* pConditions, long lConditionCount, 
+APP_Result CSmsService::DecideQuery(OperationCondition* pConditions, long lConditionCount, 
 									CSQL_query** ppQueryNeeded, BOOL& bIsPermitDecode)
 {
 	APP_Result hr = APP_Result_E_Fail;
@@ -213,20 +237,25 @@ APP_Result CSmsService::DecideQuery(ListCondition* pConditions, long lConditionC
 		}
 		if ( bNeedDecode ){
 			//process code
-			wchar_t wcsInputCodeCompared[20] = L"";
-			hr = ConvertDisplayCode2DBCode(wcsCode, wcsInputCodeCompared, 
-								sizeof(wcsInputCodeCompared)/sizeof(wcsInputCodeCompared[0]));
-			if ( FAILED_App(hr) ){
-				return APP_Result_E_Fail;
+			if ( L'\0' != wcsCode[0] ){
+				wchar_t wcsInputCodeCompared[20] = L"";
+				hr = ConvertDisplayCode2DBCode(wcsCode, wcsInputCodeCompared, 
+					sizeof(wcsInputCodeCompared)/sizeof(wcsInputCodeCompared[0]));
+				if ( FAILED_App(hr) ){
+					return APP_Result_E_Fail;
+				}
+				if ( 0 == wcscmp( wcsDBCode, wcsInputCodeCompared ) ){
+					m_pQSmsListByContactor->Bind(1,lPID);
+					*ppQueryNeeded = m_pQSmsListByContactor;
+					bIsPermitDecode = TRUE;
+				}else{
+					*ppQueryNeeded = NULL;
+					bIsPermitDecode = FALSE;
+				}		
 			}
-			if ( 0 == wcscmp( wcsDBCode, wcsInputCodeCompared ) ){
-				m_pQSmsListByContactor->Bind(1,lPID);
-				*ppQueryNeeded = m_pQSmsListByContactor;
-				bIsPermitDecode = TRUE;
-			}else{
-				*ppQueryNeeded = NULL;
-				bIsPermitDecode = FALSE;
-			}				
+			else{
+				return APP_Result_ProtectData_NeedCode;
+			}
 		}else{
 			m_pQSmsListByContactor->Bind(1,lPID);
 			*ppQueryNeeded = m_pQSmsListByContactor;
@@ -258,18 +287,18 @@ APP_Result CSmsService::CheckCode(long lPID, BOOL& bNeedDecode,
 	return APP_Result_S_OK;
 }
 
-APP_Result CSmsService::ConvertDisplayCode2DBCode(wchar_t* pwcsCode, wchar_t* pwcsInputCodeCompared, 
-						long lInputCodeCount )
+APP_Result CSmsService::ConvertDisplayCode2DBCode(wchar_t* pwcsCode, wchar_t* pwcsDBCode, 
+						long lDBCodeCount )
 {
 	unsigned short usMask = 0x0007;
 	long lCount = wcslen(pwcsCode);
-	if ( lCount > lInputCodeCount ){
+	if ( lCount > lDBCodeCount ){
 		return APP_Result_E_Fail;
 	}
 	for ( int i = 0; i < lCount; i++ )
 	{
 		unsigned short usTemp = (pwcsCode[i] & usMask)<<13;
-		pwcsInputCodeCompared[i] = (pwcsCode[i]>>3)|usTemp;
+		pwcsDBCode[i] = (pwcsCode[i]>>3)|usTemp;
 	}
 
 	return APP_Result_S_OK;
@@ -351,6 +380,7 @@ APP_Result CSmsService::MakeSmsListRecs( CSQL_query* pQHandle, CXmlNode* pNodeLi
 										long& lListCount, long& lEncodeCount )
 {
 	APP_Result hr = APP_Result_E_Fail;
+	pQHandle->Reset();
 	hr = pQHandle->Step();
 
 	while ( hr != APP_Result_E_Fail && hr != APP_Result_S_OK )
@@ -434,5 +464,77 @@ APP_Result CSmsService::MakeSmsListRecs( CSQL_query* pQHandle, CXmlNode* pNodeLi
 		hr = pQHandle->Step();
 	}
 	
+	return APP_Result_S_OK;
+}
+
+APP_Result CSmsService::ExcuteForEncode(CRequestXmlOperator& clReqXmlOpe, CXmlStream& clResultXml)
+{
+	APP_Result hr = APP_Result_E_Fail;
+	// get contactor's id,and code
+	OperationCondition* pOperationCondition = NULL;
+	long lConditionBufCount = 0;
+	hr = clReqXmlOpe.GetOperationConditions(&pOperationCondition, &lConditionBufCount);
+	if ( FAILED_App(hr) ){
+		return hr;
+	}
+	//save code
+	long lPID = Invalid_ID;
+	if ( 0 == wcscmp(L"contactor", pOperationCondition[0].wcsConditionName) ){
+		lPID = _wtol(pOperationCondition[0].wcsConditionValue);
+	}
+	if ( Invalid_ID != lPID ){
+		if ( 0 == wcscmp(L"code", pOperationCondition[1].wcsConditionName) ){
+			m_pQInsertCode->Reset();
+			m_pQInsertCode->Bind( 1, lPID );
+			m_pQInsertCode->Bind( 2, pOperationCondition[1].wcsConditionValue, 
+								sizeof(pOperationCondition[1].wcsConditionValue)/sizeof(pOperationCondition[1].wcsConditionValue[0]) );
+			hr = m_pQInsertCode->Step();
+			if ( FAILED_App(hr) ){
+				return hr;
+			}
+		}		
+		else{
+			return APP_Result_E_Fail;
+		}
+	}else{
+		return APP_Result_E_Fail;
+	}
+	
+	//loop to encode sms content
+	hr = EncodeSmsContentByContactor(lPID);
+	if ( FAILED_App(hr) ){
+		return hr;
+	}
+	
+	return APP_Result_S_OK;
+}
+
+APP_Result CSmsService::EncodeSmsContentByContactor(long lPID)
+{
+	APP_Result hr = APP_Result_E_Fail;
+	m_pQSmsListByContactor->Reset();
+	m_pQSmsListByContactor->Bind(1, lPID);
+	hr = m_pQSmsListByContactor->Step();
+	while ( hr != APP_Result_E_Fail && hr != APP_Result_S_OK )
+	{	
+		long lSID = 0;
+		m_pQSmsListByContactor->GetField(0, &lSID);
+		wchar_t* pContent = NULL;
+		m_pQSmsListByContactor->GetField(3, &pContent);	
+		wchar_t wcsDBContent[256] = L"";
+		hr = ConvertDisplayCode2DBCode(pContent, wcsDBContent, sizeof(wcsDBContent)/sizeof(wcsDBContent[0]));
+		if ( FAILED_App(hr) ){
+			return APP_Result_E_Fail;
+		}
+		m_pQUpdateSmsContent->Reset();
+		m_pQUpdateSmsContent->Bind(2, lSID);
+		m_pQUpdateSmsContent->Bind(1, wcsDBContent, sizeof(wcsDBContent)/sizeof(wcsDBContent[0]));
+		hr = m_pQUpdateSmsContent->Step();
+		if ( FAILED_App(hr) ){
+			return APP_Result_E_Fail;
+		}
+		hr = m_pQSmsListByContactor->Step();
+	}
+
 	return APP_Result_S_OK;
 }

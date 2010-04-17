@@ -12,7 +12,7 @@
 		
 		<operation type = "encode">
 			<condition name = "contactor" value = "id"></condition>
-			<condition name = "encode" value = "code"></condition>
+			<condition name = "code" value = "code"></condition>
 		</operation>
 		
 		<operation type = "detail">
@@ -37,10 +37,10 @@
 			</content>
 		</operation>
 		
-		<operation type = "delete">
-			<content>
-				<id></id>
-			</content>
+		<operation type = "delete" kind = "all/ids">		
+			<id></id>
+			<id></id>
+			<id></id>
 		</operation>
 		<operation type = "edit">
 			<content>

@@ -1,22 +1,25 @@
 <result>
 	<unique id></unique id>//client make it,server return the result file by name the file of this id
 	<data type = "sms">
-		<data type = "list" count = "" decode = "true">
-			<rec decode = "true">
+		<data type = "list" count = "">
+			<rec encode = "true">
+				<sid></sid>
+				<pid></pid>
+				<type></type>
+				<content></content>
+				<address></address>
+				<time></time>
+				<lockstatus>0</lockstatus>
+				<readstatus>0</readstatus>				
+			</rec>
+			<rec encode = "false">
 				<id></id>
 				<from></from>
 				<to></to>
 				<date></date>
 				<detail></detail>
 			</rec>
-			<rec decode = "false">
-				<id></id>
-				<from></from>
-				<to></to>
-				<date></date>
-				<detail></detail>
-			</rec>
-			<rec decode = "true">
+			<rec encode = "true">
 				<id></id>
 				<from></from>
 				<to></to>

@@ -87,7 +87,7 @@ HRESULT		CEasySmsUiCtrl::MakeNode( CXmlStream	*pCXmlStream, wchar_t *pNodePath, 
 
 	auto_ptr<CXmlNode>	CXmlNodePtr( pCXmlNode );
 
-	hr	=	CXmlNodePtr->SetNodeContent( NULL, NULL, pNodeAttribute_t, lCnt );
+	hr	=	CXmlNodePtr->SetNodeContent( NULL, (wchar_t*)NULL, pNodeAttribute_t, lCnt );
 	if ( FAILED( hr ) )												return	E_FAIL;
 
 	return	S_OK;

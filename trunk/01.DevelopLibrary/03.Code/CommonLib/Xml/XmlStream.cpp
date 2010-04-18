@@ -98,6 +98,11 @@ EN_MOVE	CXmlNode::MoveNext()
 		_ASSERT(0);
 		return	MOVE_END;
 	}
+	if ( NULL == m_CurElement->NextSibling() )
+	{
+		return	MOVE_END;
+	}
+
 	m_CurElement	=	/*(TiXmlElement*)*/(m_CurElement->NextSibling())->ToElement();
 	if ( NULL == m_CurElement )
 	{
@@ -507,12 +512,13 @@ APP_Result CXmlStream::Load( wchar_t* pwcsXmlBuf, long lSize )
 		delete	[] pTemp;
 
 		m_pTiXmlDocument->Parse( m_strBuf.c_str() );
-		if ( m_pTiXmlDocument->Error() )
-		{
-			_ASSERT(0);
-			hr	=	APP_Result_E_Fail;
-			break;
-		}
+// 		bool	bflg	=	m_pTiXmlDocument->Error();
+// 		if ( false != bflg )
+// 		{
+// 			_ASSERT(0);
+// 			hr	=	APP_Result_E_Fail;
+// 			break;
+// 		}
 
 	} while (FALSE);
 

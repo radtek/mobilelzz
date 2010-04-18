@@ -12,8 +12,17 @@ protected:
 	virtual APP_Result ExcuteParam(wchar_t* pwcsRequestXML, wchar_t** ppwcsResultXML);
 	virtual APP_Result MakeResult(wchar_t** ppwcsResultXML);	
 private:
+	APP_Result ExcuteForSearch(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
+	APP_Result ExcuteForDelete(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
+	APP_Result ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
+	APP_Result ExcuteForEdit(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
 	APP_Result ExcuteForList(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
-	APP_Result ExcuteForEncode(CRequestXmlOperator& clReqXmlOpe, CXmlStream& clResultXml);
+
+	APP_Result AddProtectDatta(CRequestXmlOperator& clReqXmlOpe, CXmlStream& clResultXml);
+	APP_Result EditProtectDatta(CRequestXmlOperator& clReqXmlOpe, CXmlStream& clResultXml);
+	APP_Result DeleteProtectDatta(CRequestXmlOperator& clReqXmlOpe, CXmlStream& clResultXml);
+
+
 	APP_Result DecideQuery(OperationCondition* pConditions, long lConditionCount, 
 					CSQL_query** ppQueryNeeded, BOOL& bIsPermitDecode);
 	APP_Result MakeSmsList(CRequestXmlOperator& clXmlOpe, CSQL_query* pQHandle, 
@@ -27,7 +36,16 @@ private:
 	APP_Result ConvertDBCode2DisplayCode(wchar_t* pDBCode, wchar_t* pwcsCode, 
 					long lCodeCount);
 
-	APP_Result CSmsService::EncodeSmsContentByContactor(long lPID);
+	APP_Result EncodeSmsContentByContactor(long lPID);
+
+	APP_Result CheckInputCode(long lPID, wchar_t* pwcsInputCode);
+	APP_Result UpdateCode(long lPID, wchar_t* pwcsInputCode);
+	APP_Result DeleteCode(long lPID);
+
+	APP_Result UpdateSmsInfo(CRequestXmlOperator& clReqXmlOpe, CXmlStream& clResultXml);
+	APP_Result UpdateSmsRecInfo(long lSID, CSQL_query* pQHandle, wchar_t* pwcsValue);
+
+	APP_Result GetPIDByAddress(wchar_t* pwcsAddress, long& lPID);
 private:
 	CSQL_query*			m_pQUnReadSms;
 	long				m_lID_QUnReadSms;

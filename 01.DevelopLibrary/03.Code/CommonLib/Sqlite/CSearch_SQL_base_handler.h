@@ -5,10 +5,17 @@
 #include <windows.h>
 #include <vector>
 using namespace std;
+#define   Sms_SQL_CREATETABLE_SmsDetail	L"create talbe IF NOT EXISTS SmsDetail(sid integer PRIMARY KEY ASC, \
+											pid integer, type integer, content text, address text, time integer,\
+											lockstatus integer, readstatus integer)"
+#define   Sms_SQL_CREATETABLE_SmsCode	L"create talbe IF NOT EXISTS SmsCode(pid integer PRIMARY KEY ASC, \
+											code text)"
+#define   Sms_SQL_CREATETABLE_SmsGroup	L"create talbe IF NOT EXISTS SmsGroup(pid integer PRIMARY KEY ASC, \
+											msgcount integer)"
 
 #define   Contactors_SQL_GET_CONTACTS  L"select ABPerson.ROWID, ABPerson.Name , ABPhones.*  from ABPerson, ABPhones where ABPerson.ROWID = ABPhones.record_id "
 #define   Contactors_SQL_GET_FIRSTLETER  L"select token  from ABLookupFirstLetter where source = ?"
-
+#define   Sms_SQL_GET_PID_ByAddress				L"select ROWID  from ABPhones where number = ?"
 #define   Sms_SQL_GET_UnReadSms					L"select *  from SmsDetail where readstatus = 0"
 #define   Sms_SQL_GET_SmsList					L"select *  from SmsDetail"
 #define   Sms_SQL_GET_SmsListByContactor		L"select *  from SmsDetail where pid = ?"
@@ -19,7 +26,13 @@ using namespace std;
 
 #define   Sms_SQL_GET_SmsCode				L"select * from SmsCode where pid = ?"
 #define   Sms_SQL_INSERT_SmsCode			L"insert into SmsCode values(?,?)"
-#define   Sms_SQL_SET_SmsContent			L"update SmsCode set content = ? where sid = ?"
+#define   Sms_SQL_SET_SmsContent			L"update SmsDetail set content = ? where sid = ?"
+#define   Sms_SQL_SET_SmsCode				L"update SmsCode set code = ? where pid = ?"
+#define   Sms_SQL_DELETE_SmsCode			L"delete from SmsCode where pid = ?"
+#define   Sms_SQL_DELETE_SmsDetail			L"delete from SmsDetail where sid = ?"
+#define   Sms_SQL_DELETE_ALLSmsDetail		L"delete from SmsDetail where lockstatus != 1"
+
+#define   Sms_SQL_INSERT_SmsDetail			L"insert into SmsDetail values(?,?,?,?,?,?,?)"
 
 //====================================================================================
 //____________________________________________________________________________________
@@ -268,6 +281,23 @@ class COMMONLIB_API	CSQL_sessionManager
 		
 		
 		
+};
+
+class COMMONLIB_API	CSQL_SmartQuery
+{
+public:
+	CSQL_SmartQuery(CSQL_session* pSession);
+	CSQL_SmartQuery(CSQL_query* pQuery, CSQL_session* pSession);
+	virtual~ CSQL_SmartQuery();
+public:
+	CSQL_query* Get();
+	void Detach();
+	CSQL_query** operator&();
+	CSQL_query* operator->();
+private:
+	BOOL				m_bOwn;
+	CSQL_query*			m_pQuery;
+	CSQL_session*		m_pSession;
 };
 
 #endif //__CSEARCH_SQL_BASE_HANDLER_H__

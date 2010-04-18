@@ -1,12 +1,6 @@
 #include "stdafx.h"
-#include "BasicService.h"
-#include "XmlStream.h"
-#include "RequestXmlOperator.h"
-#include "SmsService.h"
-#include "ContactorsService.h"
-#include "CoreService.h"
 
-#include "XmlStream.h"
+#include "CoreService.h"
 
 #define DataTypeSms				L"sms"	
 #define DataTypeContactors		L"contactors"	

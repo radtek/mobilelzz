@@ -1,6 +1,12 @@
 #ifndef __CoreService_h__
 #define __CoreService_h__
 
+#include "BasicService.h"
+#include "XmlStream.h"
+#include "RequestXmlOperator.h"
+#include "SmsService.h"
+#include "ContactorsService.h"
+
 class CORE_API CCoreService
 {
 public:

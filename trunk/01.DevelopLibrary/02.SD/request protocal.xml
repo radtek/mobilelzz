@@ -18,9 +18,7 @@
 		</operation>
 		
 		<operation type = "search">
-			<content>
-				<condition name = "keyword" value = "word"></condition>
-			</content>
+			<condition name = "keyword" value = "word"></condition>
 		</operation>
 		
 		<operation type = "add">

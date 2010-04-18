@@ -1,6 +1,10 @@
 #ifndef __EASYSMSWNDBASE_h__
 #define __EASYSMSWNDBASE_h__
 
+#define		UI_TEST
+
+#include "../CommonLib/FunctionLib/CommonTypes.h"
+
 class CEasySmsWndBase;
 
 /////////////////CEasySmsListBase/////////////////////////////////////////////////////////

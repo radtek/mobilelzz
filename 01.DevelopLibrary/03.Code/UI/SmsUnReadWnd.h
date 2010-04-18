@@ -4,6 +4,7 @@
 #include "ContactorsWnd.h"
 #include "NewSmsWnd.h"
 #include "EasySmsWndBase.h"
+#include "EasySmsUiCtrl.h"
 
 class CSmsUnReadWnd	:	public	CEasySmsWndBase
 {
@@ -26,12 +27,15 @@ class CSmsUnReadWnd	:	public	CEasySmsWndBase
 
 		virtual void	DoSthForItemBtnUpSelect( ListItemEx* pItem );
 
+		virtual	void	DoSthForItemRemove( ListItemEx* pItem );
+
 	private:
 
 		BOOL	SubInitialize();
 
 	private:
 
+	CEasySmsUiCtrl		m_clCEasySmsUiCtrl;
 };
 
 #endif

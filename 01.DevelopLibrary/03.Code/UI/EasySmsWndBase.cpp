@@ -13,6 +13,17 @@ CEasySmsListBase::CEasySmsListBase()
 
 CEasySmsListBase::~CEasySmsListBase()
 {
+	long	lCnt	=	GetItemCount();
+	for ( int i = 0; i < lCnt; ++i )
+	{
+		ListItemEx	*pListItemEx	=	GetItem ( i );
+		if ( NULL != pListItemEx )
+		{
+			delete	pListItemEx;
+			pListItemEx	=	NULL;
+		}
+	}
+	
 	RemoveAll();
 }
 
@@ -97,7 +108,7 @@ LRESULT CEasySmsWndBase::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam
 		//处理删除某项时的消息
 		case MZ_WM_ITEM_ONREMOVE:
 		{
-			int			index	=	wParam;
+			int			index	=	lParam;
 			ListItemEx* pItem	=	m_list_base.GetItem( index );
 
 			DoSthForItemRemove( pItem );

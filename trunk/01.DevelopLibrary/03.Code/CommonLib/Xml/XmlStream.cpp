@@ -112,7 +112,7 @@ APP_Result CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeV
 	APP_Result	hr			=	APP_Result_S_OK;
 
 	BOOL	bIsFind		=	TRUE;
-	*lAttributesCount	=	0;
+//	*lAttributesCount	=	0;
 	//从当前位置取得信息
 	if ( NULL == pwcsNodePath )
 	{
@@ -136,7 +136,7 @@ APP_Result CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeV
 	{
 		long	lSize	=	wcslen( pwcsNodePath) + 1;
 		char	*pTemp	=	new	char [ lSize ];
-		if ( NULL == *pTemp )
+		if ( NULL == pTemp )
 		{
 			_ASSERT(0);
 			hr	=	APP_Result_E_Fail;		

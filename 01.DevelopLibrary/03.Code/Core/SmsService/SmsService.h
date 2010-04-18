@@ -46,6 +46,8 @@ private:
 	APP_Result UpdateSmsRecInfo(long lSID, CSQL_query* pQHandle, wchar_t* pwcsValue);
 
 	APP_Result GetPIDByAddress(wchar_t* pwcsAddress, long& lPID);
+
+	APP_Result CreateTable(wchar_t* pSqlCommand);
 private:
 	CSQL_query*			m_pQUnReadSms;
 	long				m_lID_QUnReadSms;

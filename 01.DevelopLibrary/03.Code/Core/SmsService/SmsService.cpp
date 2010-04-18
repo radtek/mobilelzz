@@ -123,6 +123,24 @@ APP_Result CSmsService::MakeResult(wchar_t** ppwcsRequestXML)
 	return APP_Result_S_OK;
 }
 
+APP_Result CSmsService::CreateTable(wchar_t* pSqlCommand)
+{
+	//SELECT name FROM sqlite_master WHERE name='" + tableName + "'";
+	APP_Result hr = APP_Result_E_Fail;
+	CSQL_SmartQuery pQCreate(m_pclSqlDBSession);
+	hr = m_pclSqlDBSession->Query_Create(NULL, &pQCreate );
+	if( FAILED(hr) || pQCreate.Get() == NULL ) 
+		return hr;
+	hr = pQCreate->Prepare(pSqlCommand);
+	if( FAILED(hr) ) 
+		return hr;
+	hr = pQCreate->Step();
+	if( FAILED(hr) ) 
+		return hr;
+
+	return APP_Result_S_OK;
+}
+
 APP_Result CSmsService::Initialize()
 {
 	APP_Result hr = APP_Result_E_Fail;
@@ -132,40 +150,18 @@ APP_Result CSmsService::Initialize()
 	hr = m_pclSqlSessionManager->Session_Connect(L"sms", L".\\Documents and Settings\\", L"sms.db", &m_pclSqlDBSession );
 	if(FAILED(hr) || m_pclSqlDBSession == NULL)	
 		return APP_Result_E_Fail;
-	
-	//SELECT name FROM sqlite_master WHERE name='" + tableName + "'";
-	CSQL_SmartQuery pQCreateSmsDetail(m_pclSqlDBSession);
-	hr = m_pclSqlDBSession->Query_Create(NULL, &pQCreateSmsDetail );
-	if( FAILED(hr) || pQCreateSmsDetail.Get() == NULL ) 
+	hr = CreateTable(Sms_SQL_CREATETABLE_SmsDetail);
+	if ( FAILED_App(hr) ){
 		return hr;
-	hr = pQCreateSmsDetail->Prepare(Sms_SQL_CREATETABLE_SmsDetail);
-	if( FAILED(hr) ) 
+	}
+	hr = CreateTable(Sms_SQL_CREATETABLE_SmsCode);
+	if ( FAILED_App(hr) ){
 		return hr;
-	hr = pQCreateSmsDetail->Step();
-	if( FAILED(hr) ) 
+	}
+	hr = CreateTable(Sms_SQL_CREATETABLE_SmsGroup);
+	if ( FAILED_App(hr) ){
 		return hr;
-
-	CSQL_SmartQuery pQCreateSmsCode(m_pclSqlDBSession);
-	hr = m_pclSqlDBSession->Query_Create(NULL, &pQCreateSmsCode );
-	if( FAILED(hr) || pQCreateSmsCode.Get() == NULL ) 
-		return hr;
-	hr = pQCreateSmsCode->Prepare(Sms_SQL_CREATETABLE_SmsDetail);
-	if( FAILED(hr) ) 
-		return hr;
-	hr = pQCreateSmsCode->Step();
-	if( FAILED(hr) ) 
-		return hr;
-
-	CSQL_SmartQuery pQCreateSmsGroup(m_pclSqlDBSession);
-	hr = m_pclSqlDBSession->Query_Create(NULL, &pQCreateSmsGroup );
-	if( FAILED(hr) || pQCreateSmsGroup.Get() == NULL ) 
-		return hr;
-	hr = pQCreateSmsGroup->Prepare(Sms_SQL_CREATETABLE_SmsDetail);
-	if( FAILED(hr) ) 
-		return hr;
-	hr = pQCreateSmsGroup->Step();
-	if( FAILED(hr) ) 
-		return hr;
+	}
 
 	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QUnReadSms, &m_pQUnReadSms );
 	if( FAILED(hr) || m_pQUnReadSms == NULL ) 

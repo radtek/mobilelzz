@@ -28,6 +28,7 @@ enum COMMONLIB_API APP_Result{
 
 	APP_Result_ProtectData_Error	= 0x80000050,
 	APP_Result_ProtectData_NeedCode	= 0x80000051,
+	APP_Result_ProtectData_CodeWrong= 0x80000052,
 };
 
 #define FAILED_App(appR) ((long)(appR) < 0)

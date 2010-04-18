@@ -24,8 +24,7 @@
 		</operation>
 		
 		<operation type = "add">
-			<sid></sid>
-			<pid></pid>
+			<sid>12</sid>
 			<type></type>
 			<content></content>
 			<address></address>
@@ -34,11 +33,13 @@
 			<readstatus>0</readstatus>
 		</operation>
 		
-		<operation type = "delete" kind = "all/ids">		
-			<id></id>
-			<id></id>
-			<id></id>
+		<operation type = "delete" kind = "all/sids">		
+			<sid></sid>
+			<sid></sid>
+			<sid></sid>
+			<sid></sid>
 		</operation>
+		
 		<operation type = "edit" kind = "protectdata\sms">
 			<sms>
 				<sid></sid>//server make it,client get it by list info

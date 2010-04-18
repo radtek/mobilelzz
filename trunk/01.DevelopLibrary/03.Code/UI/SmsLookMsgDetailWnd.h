@@ -13,6 +13,7 @@ class CSmsLookMsgDetailWnd	:	public	CEasySmsWndBase
 	public:
 
 		CSmsLookMsgDetailWnd(void);
+		CSmsLookMsgDetailWnd( LPCTSTR text );
 
 		virtual ~CSmsLookMsgDetailWnd(void);
 
@@ -37,6 +38,8 @@ class CSmsLookMsgDetailWnd	:	public	CEasySmsWndBase
 		UiEdit						m_UiEdit;
 
 		MzGridMenu					m_GridMenu;
+
+		CMzString					m_WndText;
 
 
 };

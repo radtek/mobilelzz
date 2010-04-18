@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "resource.h"
 
+
 #include "SmsUnReadWnd.h"
 #include "SmsLookMsgDetailWnd.h"
-#include "EasySmsUiCtrl.h"
+
 
 class ListItemData
 {
@@ -61,8 +62,8 @@ void CSmsUnReadWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 BOOL	CSmsUnReadWnd::SubInitialize()
 {
 	//ini list
-
 	m_list_base.SetID( MZ_IDC_SMS_UNREAD_LIST );
+	m_list_base.EnableDragModeH(true);
 	AddUiWin( &m_list_base );
 
 
@@ -71,12 +72,57 @@ BOOL	CSmsUnReadWnd::SubInitialize()
 	AddUiWin( &m_toolBar_base );
 
 
-	/////////////test/////////////////////////////////////////////////////////////
-	CEasySmsUiCtrl	clCEasySmsUiCtrl;
-	wchar_t	*pBuf	=	NULL;
-	long	lSize	=	0;
-	clCEasySmsUiCtrl.MakeUnReadRltListReq( &pBuf, &lSize );
+/////////////test/////////////////////////////////////////////////////////////
+	wchar_t	*pBuf		=	NULL;
+	long	lSize		=	0;
+//	wchar_t	*pwcResult	=	NULL;
 
+
+	HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeUnReadRltListReq( &pBuf, &lSize );
+	if ( FAILED ( hr ) )										return	FALSE;
+
+	
+
+#ifdef	UI_TEST
+	wchar_t* pwcResult =	L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+							L"<result>"
+								L"<data type = \"sms\">"
+									L"<data type = \"list\" count = \"2\">"
+										L"<rec encode = \"true\">"
+											L"<sid>1</sid>"
+											L"<pid>2</pid>"
+											L"<type>1</type>"
+											L"<content>我是第一条短信，来点我吧！！！！！！</content>"
+											L"<address>妞妞</address>"
+											L"<time></time>"
+											L"<lockstatus>0</lockstatus>"
+											L"<readstatus>0</readstatus>"
+										L"</rec>"
+										L"<rec encode = \"true\">"
+											L"<sid>2</sid>"
+											L"<pid>3</pid>"
+											L"<type>0</type>"
+											L"<content>我是第二条短信，来点我吧！！！！！！</content>"
+											L"<address>妮妮</address>"
+											L"<time></time>"
+											L"<lockstatus>0</lockstatus>"
+											L"<readstatus>0</readstatus>"
+										L"</rec>"
+									L"</data>"
+								L"</data>"
+							L"</result>";
+#else
+	
+	CCoreService	*pCCoreService	=	CCoreService::GetInstance();
+	if ( NULL == pCCoreService )								return	FALSE;
+
+	hr	=	pCCoreService->Request( pBuf, &pwcResult );
+	if ( FAILED ( hr ) )										return	FALSE;
+#endif
+	hr	=	m_clCEasySmsUiCtrl.MakeUnReadListRlt( m_list_base, pwcResult );
+	if ( FAILED ( hr ) )										return	FALSE;
+
+#if 0
 	CMzString content = L"短信内容 SmsContent%d:";
 	CMzString stime = L"12:20";
 
@@ -109,7 +155,7 @@ BOOL	CSmsUnReadWnd::SubInitialize()
 		m_list_base.AddItem(item);
 	}
 
-
+#endif
 	/////////////test/////////////////////////////////////////////////////////////
 
 	return	TRUE;
@@ -117,14 +163,21 @@ BOOL	CSmsUnReadWnd::SubInitialize()
 
 void	CSmsUnReadWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 {
-	CSmsLookMsgDetailWnd	clCSmsLookMsgDetailWnd;
-	//Test
-	wchar_t chTemp[ 256 ]	=	L"为什么屏幕就是竖着的呢？？？？";
-	//
-	clCSmsLookMsgDetailWnd.SetText( chTemp );
+	CSmsLookMsgDetailWnd	clCSmsLookMsgDetailWnd( pItem->m_textTitle );
+
+	clCSmsLookMsgDetailWnd.SetText( pItem->m_textDescription );
 	int iRlt	=	DoModalBase( &clCSmsLookMsgDetailWnd );
 	if ( ID_CASCADE_EXIT == iRlt )
 	{
 		ReturnToMainWnd();
+	}
+}
+
+void	CSmsUnReadWnd::DoSthForItemRemove( ListItemEx* pItem )
+{
+	if ( NULL != pItem )
+	{
+		delete	pItem;
+		pItem	=	NULL;
 	}
 }

@@ -22,7 +22,7 @@ BOOL CSmsLookMsgDetailWnd::OnInitDialog()
 		return FALSE;
 	}
 
-	SetWindowText( L"Í«≥∆/∫≈¬Î" );
+	SetWindowText( m_WndText );
 
 	return	SubInitialize();
 }
@@ -134,5 +134,10 @@ BOOL	CSmsLookMsgDetailWnd::SubInitialize()
 
 void	CSmsLookMsgDetailWnd::SetText( LPCTSTR text )
 {
-	m_UiEdit.SetText( text, true );
+	m_UiEdit.SetText( text );
+}
+
+CSmsLookMsgDetailWnd::CSmsLookMsgDetailWnd( LPCTSTR text )
+{
+	m_WndText	=	text;
 }

@@ -18,7 +18,12 @@
 		</operation>
 		
 		<operation type = "search">
-			<condition name = "keyword" value = "word"></condition>
+			<condition name = "keyword" value = "love"></condition>
+			<condition name = "pid" value = "2"></condition>
+			<condition name = "type" value = "0"></condition>
+			<condition name = "beforetime" value = "1234123"></condition>
+			<condition name = "aftertime" value = "1230984"></condition>
+			<condition name = "betweentime" value = "beforetime+aftertime"></condition>
 		</operation>
 		
 		<operation type = "add">

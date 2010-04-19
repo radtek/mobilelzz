@@ -55,8 +55,12 @@
 				<newcode></newcode>	// for edit	
 			</protectdata>
 		</operation>
-		<operation type = "count">
-			<condition name = "pid" value = "pidvalue"></condition>
+		<operation type = "groupinfo">
+			<pid></pid>
+			<pid></pid>
+			<pid></pid>
+			<pid></pid>
+			<pid></pid>
 		</operation>
 	</data>
 	

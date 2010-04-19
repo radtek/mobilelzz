@@ -37,6 +37,20 @@
 				<detail></detail>
 			</rec>
 		</data>
+		<data type = "groupinfo" count = "">
+			<rec>
+				<pid></pid>
+				<count></count>
+			</rec>
+			<rec>
+				<pid></pid>
+				<count></count>
+			</rec>
+			<rec>
+				<pid></pid>
+				<count></count>
+			</rec>
+		</data>
 	</data>
 	
 	<data type = "group">

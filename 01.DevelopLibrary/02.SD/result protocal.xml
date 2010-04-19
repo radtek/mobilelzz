@@ -5,6 +5,7 @@
 			<rec encode = "true">
 				<sid></sid>
 				<pid></pid>
+				<name></name>
 				<type></type>
 				<content></content>
 				<address></address>

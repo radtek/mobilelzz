@@ -48,35 +48,39 @@ private:
 	APP_Result GetPIDByAddress(wchar_t* pwcsAddress, long& lPID);
 
 	APP_Result CreateTable(wchar_t* pSqlCommand);
+	APP_Result CreateQuery(CSQL_session* pclSqlDBSession, wchar_t* pSqlCommand, CSQL_SmartQuery& spQuery);
 private:
-	CSQL_query*			m_pQUnReadSms;
+	CSQL_SmartQuery			m_pQUnReadSms;
 	long				m_lID_QUnReadSms;
 
-	CSQL_query*			m_pQSmsList;
+	CSQL_SmartQuery			m_pQSmsList;
 	long				m_lID_QSmsList;
 
-	CSQL_query*			m_pQSmsListByContactor;
+	CSQL_SmartQuery			m_pQSmsListByContactor;
 	long				m_lID_QSmsListByContactor;
 
-	CSQL_query*			m_pQSmsGroupInfo;
+	CSQL_SmartQuery			m_pQSmsGroupInfo;
 	long				m_lID_QSmsGroupInfo;
 
-	CSQL_query*			m_pQUpdateReadStatus;
+	CSQL_SmartQuery			m_pQUpdateReadStatus;
 	long				m_lID_QSmsReadStatus;
 
-	CSQL_query*			m_pQUpdateLockStatus;
+	CSQL_SmartQuery			m_pQUpdateLockStatus;
 	long				m_lID_QUpdateLockStatus;
 
-	CSQL_query*			m_pQCheckCode;
+	CSQL_SmartQuery			m_pQCheckCode;
 	long				m_lID_QCheckCode;
 
-	CSQL_query*			m_pQInsertCode;
+	CSQL_SmartQuery			m_pQInsertCode;
 	long				m_lID_QInsertCode;
 
-	CSQL_query*			m_pQUpdateSmsContent;
+	CSQL_SmartQuery		m_pQUpdateSmsContent;
 	long				m_lID_QUpdateSmsContent;
 
+	CSQL_SmartQuery			m_pQGetNameByPID;
+
 	CSQL_session*		m_pclSqlDBSession;
+	CSQL_session*		m_pclSqlContactsDBSession;
 	
 };
 

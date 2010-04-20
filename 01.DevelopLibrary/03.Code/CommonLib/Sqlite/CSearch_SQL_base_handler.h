@@ -15,7 +15,9 @@ using namespace std;
 
 #define   Contactors_SQL_GET_CONTACTS  L"select ABPerson.ROWID, ABPerson.Name , ABPhones.*  from ABPerson, ABPhones where ABPerson.ROWID = ABPhones.record_id "
 #define   Contactors_SQL_GET_FIRSTLETER  L"select token  from ABLookupFirstLetter where source = ?"
-#define   Sms_SQL_GET_PID_ByAddress				L"select ROWID  from ABPhones where number = ?"
+#define   Sms_SQL_GET_PID_ByAddress				L"select ROWID  from ABPerson where number = ?"
+#define		Sms_SQL_GET_Name_ByPID			L"select Name  from ABPhones where ROWID = ?"
+
 #define   Sms_SQL_GET_UnReadSms					L"select *  from SmsDetail where readstatus = 0"
 #define   Sms_SQL_GET_SmsList					L"select *  from SmsDetail"
 #define   Sms_SQL_GET_SmsListByContactor		L"select *  from SmsDetail where pid = ?"
@@ -33,6 +35,13 @@ using namespace std;
 #define   Sms_SQL_DELETE_ALLSmsDetail		L"delete from SmsDetail where lockstatus != 1"
 
 #define   Sms_SQL_INSERT_SmsDetail			L"insert into SmsDetail values(?,?,?,?,?,?,?)"
+
+#define		Sms_SQL_Search_SmsDetail_AfterDate		L"select * from SmsDetail where pid = ? and content like ?\
+														and time > ? and type = ?"
+#define		Sms_SQL_Search_SmsDetail_BeforeDate		L"select * from SmsDetail where pid = ? and content like ?\
+														and time < ? and type = ?"
+#define		Sms_SQL_Search_SmsDetail_BetweenDate	L"select * from SmsDetail where pid = ? and content like ?\
+														and time < ? and time > ? and type = ?"
 
 //====================================================================================
 //____________________________________________________________________________________
@@ -286,12 +295,15 @@ class COMMONLIB_API	CSQL_sessionManager
 class COMMONLIB_API	CSQL_SmartQuery
 {
 public:
+	CSQL_SmartQuery();
 	CSQL_SmartQuery(CSQL_session* pSession);
 	CSQL_SmartQuery(CSQL_query* pQuery, CSQL_session* pSession);
 	virtual~ CSQL_SmartQuery();
 public:
 	CSQL_query* Get();
-	void Detach();
+	CSQL_query* Detach();
+	void Release();
+	void Initialize(CSQL_session* pSession);
 	CSQL_query** operator&();
 	CSQL_query* operator->();
 private:

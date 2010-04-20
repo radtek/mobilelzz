@@ -223,9 +223,110 @@ APP_Result CSmsService::ExcuteForSearch(CRequestXmlOperator& clXmlOpe, CXmlStrea
 	if ( FAILED_App(hr) ){
 		return APP_Result_Param_Invalid;
 	}
-	CDynamicArray<OperationCondition> sp(pstConditions, lConditionCount);
+	CDynamicArray<OperationCondition> spConditions(pstConditions, lConditionCount);
+	//
+	Search_DateKind enDateKind = Search_DateKind_Before;
+	CSQL_SmartQuery pQHandle(m_pclSqlDBSession);
+	DecideSearchCommond(spConditions, enDateKind, pQHandle);
+	//ini bind param to null
+	InitSearchParam(enDateKind, pQHandle);
+	//bind param by conditions
+	SetSearchParamByConditions(spConditions, enDateKind, pQHandle);
+	//make recs
+	hr = MakeSmsList(clXmlOpe, pQHandle.Get(), clResultXml, FALSE);
+	if ( FAILED_App(hr) ){
+		return hr;
+	}
 
+	return APP_Result_S_OK;
+}
 
+APP_Result CSmsService::DecideSearchCommond(CDynamicArray<OperationCondition>&spConditions, 
+											Search_DateKind& enDateKind,CSQL_SmartQuery& pQHandle)
+{
+	APP_Result hr = APP_Result_E_Fail;
+	long lC = spConditions.GetItemCount();
+	for ( int i = 0; i < lC; i++ )
+	{
+		if ( 0 == wcscmp( L"beforetime", spConditions.GetItem(i)->wcsConditionName ) ){
+			enDateKind = Search_DateKind_Before;
+		}else if ( 0 == wcscmp( L"aftertime", spConditions.GetItem(i)->wcsConditionName ) ){
+			enDateKind = Search_DateKind_After;
+		}
+		else if ( 0 == wcscmp( L"betweentime", spConditions.GetItem(i)->wcsConditionName ) ){
+			enDateKind = Search_DateKind_Between;
+		}else{
+
+		}
+	}
+	if ( Search_DateKind_Before == enDateKind ){
+		hr = pQHandle->Prepare(Sms_SQL_Search_SmsDetail_BeforeDate);
+		if ( FAILED_App(hr) ){
+			return hr;
+		}
+	}else if ( Search_DateKind_After == enDateKind ){
+		hr = pQHandle->Prepare(Sms_SQL_Search_SmsDetail_AfterDate);
+		if ( FAILED_App(hr) ){
+			return hr;
+		}
+	}else if ( Search_DateKind_Between == enDateKind ){
+		hr = pQHandle->Prepare(Sms_SQL_Search_SmsDetail_BetweenDate);
+		if ( FAILED_App(hr) ){
+			return hr;
+		}
+	}else{
+
+	}
+
+	return APP_Result_S_OK;
+}
+
+APP_Result CSmsService::InitSearchParam(Search_DateKind& enDateKind,CSQL_SmartQuery& pQHandle)
+{
+	APP_Result hr = APP_Result_E_Fail;
+	pQHandle->Bind(1);
+	pQHandle->Bind(2);
+	pQHandle->Bind(3);
+	pQHandle->Bind(4);
+	if(enDateKind == Search_DateKind_Between){
+		pQHandle->Bind(5);
+	}
+	return APP_Result_S_OK;
+}
+
+APP_Result CSmsService::SetSearchParamByConditions(CDynamicArray<OperationCondition>&spConditions, 
+											Search_DateKind& enDateKind,CSQL_SmartQuery& pQHandle)
+{
+	APP_Result hr = APP_Result_E_Fail;
+	long lC = spConditions.GetItemCount();
+	for ( int i = 0; i < lC; i++ )
+	{
+		if ( 0 == wcscmp( L"pid", spConditions.GetItem(i)->wcsConditionName ) ){
+			long lPID = _wtol(spConditions.GetItem(i)->wcsConditionValue);
+			pQHandle->Bind(1, lPID);
+		}else if ( 0 == wcscmp( L"keword", spConditions.GetItem(i)->wcsConditionName ) ){
+			wchar_t wcsSearchString[256] = L"";
+			F_wcscpyn(wcsSearchString, L"%", sizeof(wcsSearchString)/sizeof(wcsSearchString[0]));
+			F_wcscatn(wcsSearchString, spConditions.GetItem(i)->wcsConditionValue, sizeof(wcsSearchString)/sizeof(wcsSearchString[0]));
+			F_wcscatn(wcsSearchString, L"%", sizeof(wcsSearchString)/sizeof(wcsSearchString[0]));
+			pQHandle->Bind(2, wcsSearchString, sizeof(wcsSearchString)/sizeof(wcsSearchString[0]));
+		}else if ( 0 == wcscmp( L"type", spConditions.GetItem(i)->wcsConditionName ) ){
+			long lType = _wtol(spConditions.GetItem(i)->wcsConditionValue);
+			pQHandle->Bind(3, lType);
+		}else if ( 0 == wcscmp( L"beforetime", spConditions.GetItem(i)->wcsConditionName ) ){
+			double lTime = _wtoll(spConditions.GetItem(i)->wcsConditionValue);
+			pQHandle->Bind(4, lTime);
+		}else if ( 0 == wcscmp( L"aftertime", spConditions.GetItem(i)->wcsConditionName ) ){
+			double lTime = _wtoll(spConditions.GetItem(i)->wcsConditionValue);
+			if ( enDateKind = Search_DateKind_Between ){				
+				pQHandle->Bind(5, lTime);
+			}else{
+				pQHandle->Bind(4, lTime);
+			}		
+		}else{
+
+		}
+	}
 	return APP_Result_S_OK;
 }
 
@@ -419,6 +520,8 @@ APP_Result CSmsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXmlStream&
 APP_Result CSmsService::DecideQuery(OperationCondition* pConditions, long lConditionCount, 
 									CSQL_query** ppQueryNeeded, BOOL& bIsPermitDecode)
 {
+	m_pQSmsListByContactor->Reset();
+	m_pQUnReadSms->Reset();
 	APP_Result hr = APP_Result_E_Fail;
 	long lPID = Invalid_ID;
 	wchar_t wcsCode[20] = L"";
@@ -593,7 +696,7 @@ APP_Result CSmsService::MakeSmsListRecs( CSQL_query* pQHandle, CXmlNode* pNodeLi
 										long& lListCount, long& lEncodeCount )
 {
 	APP_Result hr = APP_Result_E_Fail;
-	pQHandle->Reset();
+	//pQHandle->Reset();
 	hr = pQHandle->Step();
 
 	while ( hr != APP_Result_E_Fail && hr != APP_Result_S_OK )

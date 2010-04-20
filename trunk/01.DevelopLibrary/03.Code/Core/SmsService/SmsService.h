@@ -1,6 +1,12 @@
 #ifndef __SmsService_h__
 #define __SmsService_h__
 
+enum Search_DateKind{
+	Search_DateKind_Before,
+	Search_DateKind_After,
+	Search_DateKind_Between
+};
+
 class CSmsService : public CBasicService
 {
 public:
@@ -49,6 +55,12 @@ private:
 
 	APP_Result CreateTable(wchar_t* pSqlCommand);
 	APP_Result CreateQuery(CSQL_session* pclSqlDBSession, wchar_t* pSqlCommand, CSQL_SmartQuery& spQuery);
+
+	APP_Result DecideSearchCommond(CDynamicArray<OperationCondition>&spConditions, 
+					Search_DateKind& enDateKind,CSQL_SmartQuery& pQHandle);
+	APP_Result InitSearchParam(Search_DateKind& enDateKind,CSQL_SmartQuery& pQHandle);
+	APP_Result SetSearchParamByConditions(CDynamicArray<OperationCondition>&spConditions, 
+					Search_DateKind& enDateKind,CSQL_SmartQuery& pQHandle);
 private:
 	CSQL_SmartQuery			m_pQUnReadSms;
 	long				m_lID_QUnReadSms;

@@ -37,11 +37,11 @@ using namespace std;
 #define   Sms_SQL_INSERT_SmsDetail			L"insert into SmsDetail values(?,?,?,?,?,?,?)"
 
 #define		Sms_SQL_Search_SmsDetail_AfterDate		L"select * from SmsDetail where pid = ? and content like ?\
-														and time > ? and type = ?"
+														and type = ? and time > ?"
 #define		Sms_SQL_Search_SmsDetail_BeforeDate		L"select * from SmsDetail where pid = ? and content like ?\
-														and time < ? and type = ?"
+														and type = ? and time < ?"
 #define		Sms_SQL_Search_SmsDetail_BetweenDate	L"select * from SmsDetail where pid = ? and content like ?\
-														and time < ? and time > ? and type = ?"
+														and type = ? and time < ? and time > ?"
 
 //====================================================================================
 //____________________________________________________________________________________

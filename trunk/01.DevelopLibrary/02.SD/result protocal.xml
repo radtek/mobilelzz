@@ -37,20 +37,6 @@
 				<detail></detail>
 			</rec>
 		</data>
-		<data type = "groupinfo" count = "">
-			<rec>
-				<pid></pid>
-				<count></count>
-			</rec>
-			<rec>
-				<pid></pid>
-				<count></count>
-			</rec>
-			<rec>
-				<pid></pid>
-				<count></count>
-			</rec>
-		</data>
 	</data>
 	
 	<data type = "group">
@@ -80,11 +66,12 @@
 			<default>key-id</default>
 			<rec>
 				// for contactors list
-				<id></id>
+				<pid></pid>
 				<name></name>
 				<firstletter></firstletter>
 				<icon></icon>
-				<defaultno></defaultno>				
+				<defaultno></defaultno>	
+				<smscount><smscount>			
 				// for phone no list
 				<key id = "" value = ""></key>
 			</rec>

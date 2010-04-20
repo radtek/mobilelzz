@@ -55,13 +55,6 @@
 				<newcode></newcode>	// for edit	
 			</protectdata>
 		</operation>
-		<operation type = "groupinfo">
-			<pid></pid>
-			<pid></pid>
-			<pid></pid>
-			<pid></pid>
-			<pid></pid>
-		</operation>
 	</data>
 	
 	<data type = "contactors">

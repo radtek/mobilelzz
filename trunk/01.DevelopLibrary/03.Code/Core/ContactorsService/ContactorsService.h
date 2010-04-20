@@ -48,6 +48,7 @@ protected:
 	
 private:
 	void				MakeFirstLetter(wchar_t* pwcsFirstLetter, long lPID );
+	void				MakeSmsCount(wchar_t* pwcsSmsCount, long lPID );
 	APP_Result			ExcuteForList(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
 private:
 	CSQL_query*			m_pQFirstLetter;
@@ -55,9 +56,13 @@ private:
 	CSQL_query*			m_pQContactorsList;
 	long				m_lID_QContactorsList;
 
+	CSQL_query*			m_pQSmsGroupInfo;
+
 	Contactors_RequestData		m_stRequestData;
 
 	CSQL_session*		m_pclSqlDBSession;
+
+	CSQL_session*		m_pclSqlSmsDBSession;
 };
 
 #endif __ContactorsService_h__

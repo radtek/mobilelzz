@@ -20,28 +20,20 @@ CSmsService::CSmsService()
 
 CSmsService::~CSmsService()
 {
-	m_pQUnReadSms->Finalize();
-	m_pQSmsList->Finalize();
-	m_pQSmsListByContactor->Finalize();
-	m_pQSmsGroupInfo->Finalize();
-	m_pQUpdateReadStatus->Finalize();
-	m_pQUpdateLockStatus->Finalize();
-	m_pQCheckCode->Finalize();
-	m_pQInsertCode->Finalize();
-	m_pQUpdateSmsContent->Finalize();
-
-	m_pclSqlDBSession->Query_Delete(m_lID_QUnReadSms);
-	m_pclSqlDBSession->Query_Delete(m_lID_QSmsList);
-	m_pclSqlDBSession->Query_Delete(m_lID_QSmsListByContactor);
-	m_pclSqlDBSession->Query_Delete(m_lID_QSmsGroupInfo);
-	m_pclSqlDBSession->Query_Delete(m_lID_QSmsReadStatus);
-	m_pclSqlDBSession->Query_Delete(m_lID_QUpdateLockStatus);
-	m_pclSqlDBSession->Query_Delete(m_lID_QCheckCode);
-	m_pclSqlDBSession->Query_Delete(m_lID_QInsertCode);
-	m_pclSqlDBSession->Query_Delete(m_lID_QUpdateSmsContent);
+	m_pQUnReadSms.Release();
+	m_pQSmsList.Release();
+	m_pQSmsListByContactor.Release();
+	m_pQSmsGroupInfo.Release();
+	m_pQUpdateReadStatus.Release();
+	m_pQUpdateLockStatus.Release();
+	m_pQCheckCode.Release();
+	m_pQInsertCode.Release();
+	m_pQUpdateSmsContent.Release();
+	m_pQGetNameByPID.Release();
 
 	BOOL bIsDBClosed = FALSE;
 	m_pclSqlSessionManager->Session_DisConnect( L"sms", &bIsDBClosed );
+	m_pclSqlSessionManager->Session_DisConnect( L"sms_contacts", &bIsDBClosed );
 }
 
 APP_Result CSmsService::MakeParam(wchar_t* pwcsRequestXML)
@@ -141,6 +133,21 @@ APP_Result CSmsService::CreateTable(wchar_t* pSqlCommand)
 	return APP_Result_S_OK;
 }
 
+APP_Result CSmsService::CreateQuery(CSQL_session* pclSqlDBSession, wchar_t* pSqlCommand, CSQL_SmartQuery& spQuery)
+{
+	//SELECT name FROM sqlite_master WHERE name='" + tableName + "'";
+	APP_Result hr = APP_Result_E_Fail;
+	spQuery.Initialize(pclSqlDBSession);
+	hr = pclSqlDBSession->Query_Create(NULL, &spQuery );
+	if( FAILED(hr) || m_pQUnReadSms.Get() == NULL ) 
+		return hr;
+	hr = spQuery->Prepare(pSqlCommand);
+	if( FAILED(hr) ) 
+		return hr;
+
+	return APP_Result_S_OK;
+}
+
 APP_Result CSmsService::Initialize()
 {
 	APP_Result hr = APP_Result_E_Fail;
@@ -163,68 +170,46 @@ APP_Result CSmsService::Initialize()
 		return hr;
 	}
 
-	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QUnReadSms, &m_pQUnReadSms );
-	if( FAILED(hr) || m_pQUnReadSms == NULL ) 
+	hr = CreateQuery(m_pclSqlDBSession, Sms_SQL_GET_UnReadSms, m_pQUnReadSms);
+	if ( FAILED_App(hr) ){
 		return hr;
-	hr = m_pQUnReadSms->Prepare(Sms_SQL_GET_UnReadSms);
-	if( FAILED(hr) ) 
+	}
+	hr = CreateQuery(m_pclSqlDBSession, Sms_SQL_GET_SmsList, m_pQSmsList);
+	if ( FAILED_App(hr) ){
 		return hr;
+	}
+	hr = CreateQuery(m_pclSqlDBSession, Sms_SQL_GET_SmsListByContactor, m_pQSmsListByContactor);
+	if ( FAILED_App(hr) ){
+		return hr;
+	}
+	hr = CreateQuery(m_pclSqlDBSession, Sms_SQL_SET_ReadStatus, m_pQUpdateReadStatus);
+	if ( FAILED_App(hr) ){
+		return hr;
+	}
+	hr = CreateQuery(m_pclSqlDBSession, Sms_SQL_SET_LockStatus, m_pQUpdateLockStatus);
+	if ( FAILED_App(hr) ){
+		return hr;
+	}
+	hr = CreateQuery(m_pclSqlDBSession, Sms_SQL_GET_SmsCode, m_pQCheckCode);
+	if ( FAILED_App(hr) ){
+		return hr;
+	}
+	hr = CreateQuery(m_pclSqlDBSession, Sms_SQL_INSERT_SmsCode, m_pQInsertCode);
+	if ( FAILED_App(hr) ){
+		return hr;
+	}
+	hr = CreateQuery(m_pclSqlDBSession, Sms_SQL_SET_SmsContent, m_pQUpdateSmsContent);
+	if ( FAILED_App(hr) ){
+		return hr;
+	}
 
-	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QSmsList, &m_pQSmsList );
-	if( FAILED(hr) || m_pQSmsList== NULL ) 
+	hr = m_pclSqlSessionManager->Session_Connect(L"sms_contacts", L".\\Documents and Settings\\", L"contacts.db", &m_pclSqlContactsDBSession );
+	if(FAILED(hr) || m_pclSqlDBSession == NULL)	
+		return APP_Result_E_Fail;
+	hr = CreateQuery(m_pclSqlContactsDBSession, Sms_SQL_GET_Name_ByPID, m_pQGetNameByPID);
+	if ( FAILED_App(hr) ){
 		return hr;
-	hr = m_pQSmsList->Prepare(Sms_SQL_GET_SmsList);
-	if( FAILED(hr) ) 
-		return hr;
-
-	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QSmsListByContactor, &m_pQSmsListByContactor );
-	if( FAILED(hr) || m_pQSmsListByContactor== NULL ) 
-		return hr;
-	hr = m_pQSmsListByContactor->Prepare(Sms_SQL_GET_SmsList);
-	if( FAILED(hr) ) 
-		return hr;
-
-	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QSmsGroupInfo, &m_pQSmsGroupInfo );
-	if( FAILED(hr) || m_pQSmsGroupInfo== NULL ) 
-		return hr;
-	hr = m_pQSmsGroupInfo->Prepare(Sms_SQL_GET_SmsGroupInfo);
-	if( FAILED(hr) ) 
-		return hr;
-
-	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QSmsReadStatus, &m_pQUpdateReadStatus );
-	if( FAILED(hr) || m_pQUpdateReadStatus== NULL ) 
-		return hr;
-	hr = m_pQUpdateReadStatus->Prepare(Sms_SQL_SET_ReadStatus);
-	if( FAILED(hr) ) 
-		return hr;
-
-	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QSmsReadStatus, &m_pQUpdateLockStatus );
-	if( FAILED(hr) || m_pQUpdateLockStatus== NULL ) 
-		return hr;
-	hr = m_pQUpdateLockStatus->Prepare(Sms_SQL_SET_LockStatus);
-	if( FAILED(hr) ) 
-		return hr;
-
-	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QCheckCode, &m_pQCheckCode );
-	if( FAILED(hr) || m_pQCheckCode== NULL ) 
-		return hr;
-	hr = m_pQCheckCode->Prepare(Sms_SQL_GET_SmsCode);
-	if( FAILED(hr) ) 
-		return hr;
-
-	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QInsertCode, &m_pQInsertCode );
-	if( FAILED(hr) || m_pQInsertCode== NULL ) 
-		return hr;
-	hr = m_pQInsertCode->Prepare(Sms_SQL_INSERT_SmsCode);
-	if( FAILED(hr) ) 
-		return hr;
-
-	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QUpdateSmsContent, &m_pQUpdateSmsContent );
-	if( FAILED(hr) || m_pQUpdateSmsContent== NULL ) 
-		return hr;
-	hr = m_pQUpdateSmsContent->Prepare(Sms_SQL_SET_SmsContent);
-	if( FAILED(hr) ) 
-		return hr;
+	}
 
 	return APP_Result_S_OK;
 }
@@ -232,6 +217,14 @@ APP_Result CSmsService::Initialize()
 APP_Result CSmsService::ExcuteForSearch(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml)
 {	
 	APP_Result hr = APP_Result_E_Fail;
+	OperationCondition* pstConditions = NULL;
+	long lConditionCount = 0;
+	hr = clXmlOpe.GetOperationConditions(&pstConditions, &lConditionCount);
+	if ( FAILED_App(hr) ){
+		return APP_Result_Param_Invalid;
+	}
+	CDynamicArray<OperationCondition> sp(pstConditions, lConditionCount);
+
 
 	return APP_Result_S_OK;
 }
@@ -333,9 +326,9 @@ APP_Result CSmsService::GetPIDByAddress(wchar_t* pwcsAddress, long& lPID)
 {
 	APP_Result hr = APP_Result_E_Fail;
 	//CSQL_query*			pQHandle;
-	CSQL_SmartQuery pQHandle(m_pclSqlDBSession);
+	CSQL_SmartQuery pQHandle(m_pclSqlContactsDBSession);
 	long lQID = 0;
-	hr = m_pclSqlDBSession->Query_Create((int*)&lQID, &pQHandle );
+	hr = m_pclSqlContactsDBSession->Query_Create((int*)&lQID, &pQHandle );
 	if( FAILED(hr) || pQHandle.Get() == NULL ) 
 		return hr;
 	//CSQL_SmartQuery spQ(pQHandle, m_pclSqlDBSession);
@@ -432,7 +425,7 @@ APP_Result CSmsService::DecideQuery(OperationCondition* pConditions, long lCondi
 	for ( int i = 0; i < lConditionCount; i++ )
 	{
 		if ( 0 == wcscmp(pConditions[i].wcsConditionName, L"unread") ){
-			*ppQueryNeeded = m_pQUnReadSms;
+			*ppQueryNeeded = m_pQUnReadSms.Get();
 			bIsPermitDecode = FALSE;
 		}else if ( 0 == wcscmp(pConditions[i].wcsConditionName, L"contactor") ){
 			lPID = _wtol(pConditions[i].wcsConditionValue);
@@ -459,7 +452,7 @@ APP_Result CSmsService::DecideQuery(OperationCondition* pConditions, long lCondi
 				}
 				if ( 0 == wcscmp( wcsDBCode, wcsInputCodeCompared ) ){
 					m_pQSmsListByContactor->Bind(1,lPID);
-					*ppQueryNeeded = m_pQSmsListByContactor;
+					*ppQueryNeeded = m_pQSmsListByContactor.Get();
 					bIsPermitDecode = TRUE;
 				}else{
 					*ppQueryNeeded = NULL;
@@ -474,7 +467,7 @@ APP_Result CSmsService::DecideQuery(OperationCondition* pConditions, long lCondi
 			}
 		}else{
 			m_pQSmsListByContactor->Bind(1,lPID);
-			*ppQueryNeeded = m_pQSmsListByContactor;
+			*ppQueryNeeded = m_pQSmsListByContactor.Get();
 			bIsPermitDecode = TRUE;
 		}		
 	}
@@ -615,6 +608,14 @@ APP_Result CSmsService::MakeSmsListRecs( CSQL_query* pQHandle, CXmlNode* pNodeLi
 		pQHandle->GetField(1, &lPID);
 		CXmlNode clNodePID(L"pid");
 		clNodePID.SetNodeContent(NULL, lPID, NULL, 0);
+			
+		wchar_t* pName = NULL;
+		m_pQGetNameByPID->Reset();
+		m_pQGetNameByPID->Bind(lPID);
+		m_pQGetNameByPID->Step();
+		m_pQGetNameByPID->GetField(0, &pName);
+		CXmlNode clNodeName(L"name");
+		clNodePID.SetNodeContent(NULL, pName, NULL, 0);
 
 		long lType = 0;
 		pQHandle->GetField(2, &lType);
@@ -920,12 +921,12 @@ APP_Result CSmsService::UpdateSmsInfo(CRequestXmlOperator& clReqXmlOpe, CXmlStre
 	}
 	if ( Invalid_ID != lSID ){
 		if ( 0 == wcscmp(L"readstatus", pEditSmsInfos[1].wcsNodeName) ){
-			hr = UpdateSmsRecInfo(lSID, m_pQUpdateReadStatus, pEditSmsInfos[1].wcsNodeValue);
+			hr = UpdateSmsRecInfo(lSID, m_pQUpdateReadStatus.Get(), pEditSmsInfos[1].wcsNodeValue);
 			if ( FAILED_App(hr) ){
 				return hr;
 			}
 		}else if ( 0 == wcscmp(L"lockstatus", pEditSmsInfos[1].wcsNodeName) ){
-			hr = UpdateSmsRecInfo(lSID, m_pQUpdateLockStatus, pEditSmsInfos[1].wcsNodeValue);
+			hr = UpdateSmsRecInfo(lSID, m_pQUpdateLockStatus.Get(), pEditSmsInfos[1].wcsNodeValue);
 			if ( FAILED_App(hr) ){
 				return hr;
 			}

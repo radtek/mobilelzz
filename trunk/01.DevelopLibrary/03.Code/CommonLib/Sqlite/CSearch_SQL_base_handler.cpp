@@ -779,6 +779,13 @@ APP_Result		CSQL_sessionManager::Session_DisConnect(const wchar_t* _pname, BOOL*
 	return	APP_Result_S_OK;
 }
 
+CSQL_SmartQuery::CSQL_SmartQuery()
+{
+	m_pQuery = NULL;
+	m_bOwn = TRUE;
+	m_pSession = NULL;
+}
+
 CSQL_SmartQuery::CSQL_SmartQuery(CSQL_session* pSession)
 {
 	m_pQuery = NULL;
@@ -796,16 +803,32 @@ CSQL_SmartQuery::CSQL_SmartQuery(CSQL_query* pQuery, CSQL_session* pSession)
 CSQL_SmartQuery::~CSQL_SmartQuery()
 {
 	if ( m_bOwn ){
-		if ( m_pQuery ){
+		if ( m_pQuery && m_pSession ){
 			m_pQuery->Finalize();
 			m_pSession->Query_Delete(m_pQuery->GetQh());
 		}		
 	}
 }
 
-void CSQL_SmartQuery::Detach()
+void CSQL_SmartQuery::Release()
+{
+	if ( m_bOwn ){
+		if ( m_pQuery && m_pSession ){
+			m_pQuery->Finalize();
+			m_pSession->Query_Delete(m_pQuery->GetQh());
+		}		
+	}
+}
+
+void CSQL_SmartQuery::Initialize(CSQL_session* pSession)
+{
+	m_pSession = pSession;
+}
+
+CSQL_query* CSQL_SmartQuery::Detach()
 {
 	m_bOwn = FALSE;
+	return m_pQuery;
 }
 
 CSQL_query** CSQL_SmartQuery::operator&()

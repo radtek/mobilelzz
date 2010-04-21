@@ -2,6 +2,15 @@
 #include"UiEditControl.h"
 #include"ContactorsWnd.h"
 
+bool MyCompareListItem(const ListItem & item1, const ListItem &item2)
+{
+	if ( 0 < wcscmp(((MyListItemData *)item1.Data)->wcsNameLetter, ((MyListItemData *)item2.Data)->wcsNameLetter) ){
+		return true;
+	}else{
+		return false;
+	}
+	return false;
+}
 
 BOOL CContactorsWnd::OnInitDialog()
 {
@@ -124,9 +133,10 @@ BOOL CContactorsWnd::OnInitDialog()
 		wsprintf(strTitle.C_Str(), PName, i);
 		wsprintf(strDescription.C_Str(), pNumber, i);
 
+		wchar_t	awcsNameLetter[10] = L"";
 		wchar_t awcsFirstLetter[2] = L"";
-		MakeFirstLetter(awcsFirstLetter, pQFirstLetter, lPID);
-
+		MakeLetters(awcsNameLetter, awcsFirstLetter, pQFirstLetter, lPID);
+		
 		// 设置列表项的自定义数据
 		MyListItemData *pmlid = new MyListItemData;
 		pmlid->StringTitle = strTitle;
@@ -134,15 +144,16 @@ BOOL CContactorsWnd::OnInitDialog()
 		pmlid->Selected = false;
 		pmlid->lPID = lPID;
 		pmlid->wcsfirstLetter[0] = awcsFirstLetter[0];
+		wcsncpy(pmlid->wcsNameLetter, awcsNameLetter, wcslen(awcsNameLetter));
 		UpdateItem(pmlid);
 		// 列表项的自定义数据指针设置到ListItem::Data
 		li.Data = pmlid;
 		m_List.AddItem(li);
-
+		
 		hr = pq->Step();
 		i++;
 	}
-
+	m_List.SortItems(MyCompareListItem, 0, m_List.GetItemCount());
 	bool DisConect  = false;
 
 	pq->Finalize();
@@ -366,7 +377,7 @@ void CContactorsWnd::UpdateItem(MyListItemData* pmlid)
 	}
 }
 
-void CContactorsWnd::MakeFirstLetter(wchar_t* pwcsFirstLetter, CSQL_query* pQFirstLetter, long lPID )
+void CContactorsWnd::MakeLetters(wchar_t* pwcsNameLetters, wchar_t* pwcsFirstLetter, CSQL_query* pQFirstLetter, long lPID )
 {
 	pQFirstLetter->Reset();
 	pQFirstLetter->Bind(1, lPID);
@@ -376,5 +387,6 @@ void CContactorsWnd::MakeFirstLetter(wchar_t* pwcsFirstLetter, CSQL_query* pQFir
 	wchar_t* pTemp = NULL;
 	pQFirstLetter->GetField(0,&pTemp);
 	pwcsFirstLetter[0] = pTemp[0];
+	wcsncpy( pwcsNameLetters, pTemp, wcslen(pTemp) );
 	
 }

@@ -209,7 +209,7 @@ LRESULT CContactorsWnd::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam)
 					break;
 				  case SCREEN_PORTRAIT_N:
 					{
-						MzChangeDisplaySettingsEx(DMDO_270);
+						//MzChangeDisplaySettingsEx(DMDO_270);
 						g_bH = FALSE;
 					}
 					break;

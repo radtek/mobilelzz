@@ -4,7 +4,7 @@
 
 bool MyCompareListItem(const ListItem & item1, const ListItem &item2)
 {
-	if ( 0 < wcscmp(((MyListItemData *)item1.Data)->wcsNameLetter, ((MyListItemData *)item2.Data)->wcsNameLetter) ){
+	if ( 0 > wcscmp(((MyListItemData *)item1.Data)->wcsNameLetter, ((MyListItemData *)item2.Data)->wcsNameLetter) ){
 		return true;
 	}else{
 		return false;

@@ -80,7 +80,7 @@ public:
       int nIndex = CalcIndexOfPos(xPos, yPos);
       if(nIndex>=0)
       {
-        bool bSelect = IsMultiSelect(nIndex);
+        BOOL bSelect = IsMultiSelect(nIndex);
 
         // 改变项的选中状态
         MultiSelectItem(nIndex, !bSelect);
@@ -106,7 +106,7 @@ public:
     MyListItemData *pmlid = (MyListItemData*)pItem->Data;
 
     // 是否被选中
-    bool bSelected = pmlid->Selected;
+    BOOL bSelected = pmlid->Selected;
 
 	RECT rc = {0};
 	int height = 0;
@@ -216,7 +216,7 @@ protected:
   
 private:
 	
-	void MakeFirstLetter(wchar_t* pwcsFirstLetter, CSQL_query* pQFirstLetter, long lPID );
+	void MakeLetters(wchar_t* pwcsNameLetters, wchar_t* pwcsFirstLetter, CSQL_query* pQFirstLetter, long lPID );
 };
 
 

@@ -20,6 +20,8 @@ extern BOOL g_bH;
 
 extern  BOOL  g_bContactShow;
 
+
+
 // 列表项的自定义数据
 class MyListItemData
 {
@@ -29,6 +31,7 @@ public:
 		Selected = FALSE;
 		lPID = 0;
 		memset(wcsfirstLetter, 0x0, sizeof(wcsfirstLetter));
+		memset(wcsNameLetter, 0x0, sizeof(wcsNameLetter));
 	}
 	BOOL Compare(MyListItemData* pTarget)
 	{
@@ -46,6 +49,7 @@ public:
 	BOOL Selected; // 项是否被选中
 	long lPID;
 	wchar_t	wcsfirstLetter[2];
+	wchar_t	wcsNameLetter[10];
 };
 
 #define DEFAULT_Recivers_List_MemoryBlock		20

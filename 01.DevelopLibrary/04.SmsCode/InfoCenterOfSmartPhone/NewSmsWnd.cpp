@@ -17,10 +17,6 @@ INT g_iUsbNotifyMsg = 0;
 
 BOOL CNewSmsWnd::OnInitDialog()
 {
-	if(!LicenseProtect())
-	{
-		exit(0);
-	}
 
 	// 必须先调用基类的初始化
 	if (!CMzWndEx::OnInitDialog())
@@ -208,7 +204,7 @@ LRESULT CNewSmsWnd::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		  case SCREEN_PORTRAIT_N:
 			{
-				MzChangeDisplaySettingsEx(DMDO_270);
+				//MzChangeDisplaySettingsEx(DMDO_270);
 				g_bH = FALSE;
 			}
 			break;
@@ -327,13 +323,13 @@ void CNewSmsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
 	if (devMode.dmDisplayOrientation == DMDO_180 || devMode.dmDisplayOrientation == DMDO_0)
 	{
 		g_bH = FALSE;
-		RECT rc = MzGetWorkArea();
-		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_WIDTH(rc), RECT_HEIGHT(rc) );
-		m_Recievers.SetPos(2, 0, GetWidth()-BUTTON_WIDTH_H-2, BUTTON_HEIGHT_VH);
-
-		m_SmsMsgEdit->SetPos(2, m_Recievers.GetHeight()+3, GetWidth()-4, (GetHeight()-m_Recievers.GetHeight()));
-
-		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_H),0,BUTTON_WIDTH_H-2,BUTTON_HEIGHT_VH);
+			RECT rc = MzGetWorkArea();
+			SetWindowPos(m_hWnd, rc.left, rc.top,RECT_WIDTH(rc), RECT_HEIGHT(rc) );
+			m_Recievers.SetPos(2, 0, GetWidth()-BUTTON_WIDTH_H-2, BUTTON_HEIGHT_VH);
+	
+			m_SmsMsgEdit->SetPos(2, m_Recievers.GetHeight()+3, GetWidth()-4, (GetHeight()-m_Recievers.GetHeight()));
+	
+			m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_H),0,BUTTON_WIDTH_H-2,BUTTON_HEIGHT_VH);
 	}
 }
 

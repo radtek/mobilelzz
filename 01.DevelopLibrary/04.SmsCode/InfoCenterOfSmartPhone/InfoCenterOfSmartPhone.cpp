@@ -24,11 +24,11 @@ public:
   virtual BOOL Init()
   {
 
-	  if(!LicenseProtect())
-	  {
-		  MzMessageBoxEx(NULL,L"授权文件校验失败，请重新下载安装",MB_OK);
-		  exit(0);
-	  }
+// 	  if(!LicenseProtect())
+// 	  {
+// 		  MzMessageBoxEx(NULL,L"授权文件校验失败，请重新下载安装",MB_OK);
+// 		  exit(0);
+// 	  }
 
 	// 初始化 COM 组件
 

@@ -351,7 +351,6 @@ void CNewSmsWnd::UpdateData( MyListItemData* pRecivers,long lReciversCount )
 *************************************/
 bool CNewSmsWnd::SendSMS(IN LPCTSTR lpNumber,IN LPCTSTR lpszMessage)
 {
-
         HRESULT hRes; 
         SMS_HANDLE   smsHandle=NULL; 
         SMS_ADDRESS   smsaDestination; 
@@ -414,15 +413,15 @@ bool CNewSmsWnd::SendSMS_Wrapper(IN CMzString&  Number)
 {
 	bool SendFlag = false;
 	CMzString  NewNumber ;
-	if(Number.C_Str()[0] ==L'1')
-	{
-		NewNumber = L"+86";
+//	if(Number.C_Str()[0] ==L'1')
+//	{
+//		NewNumber = L"+86";
 		NewNumber += Number;
-	}
-	else
-	{
-		NewNumber = Number;
-	}
+//	}
+// 	else
+// 	{
+// 		NewNumber = Number;
+// 	}
 
 
 	CMzString  SMS_Content = m_SmsMsgEdit->GetText().C_Str();
@@ -676,3 +675,5 @@ BOOL CNewSmsWnd::Normal()
 
 	return FALSE;
 }
+
+

@@ -104,7 +104,9 @@ protected:
   void OnTimer(UINT_PTR nIDEvent);
 
   virtual void OnLButtonUp  ( UINT  fwKeys,  int  xPos,  int  yPos );
-	static DWORD WINAPI ReadMessage(LPVOID lpParameter);
+	
+  static DWORD WINAPI ReadMessage(LPVOID lpParameter);
+
 private:
 	void ReadMessage();
 

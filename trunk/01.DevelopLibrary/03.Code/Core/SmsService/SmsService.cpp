@@ -662,11 +662,11 @@ APP_Result CSmsService::MakeSmsList(CRequestXmlOperator& clXmlOpe, CSQL_query* p
 
 	wchar_t wcsEncodeType[20] = L"";
 	if ( 0 == lEncodeCount ){
-		F_wcscpyn(wcsEncodeType, L"none", sizeof(wcsEncodeType)/sizeof(wcsEncodeType));
+		F_wcscpyn(wcsEncodeType, L"none", sizeof(wcsEncodeType)/sizeof(wcsEncodeType[0]));
 	}else if ( lListCount == lEncodeCount ){
-		F_wcscpyn(wcsEncodeType, L"all", sizeof(wcsEncodeType)/sizeof(wcsEncodeType));
+		F_wcscpyn(wcsEncodeType, L"all", sizeof(wcsEncodeType)/sizeof(wcsEncodeType[0]));
 	}else if ( lListCount > lEncodeCount ){
-		F_wcscpyn(wcsEncodeType, L"part", sizeof(wcsEncodeType)/sizeof(wcsEncodeType));
+		F_wcscpyn(wcsEncodeType, L"part", sizeof(wcsEncodeType)/sizeof(wcsEncodeType[0]));
 	}
 
 	NodeAttribute_t stAttribute;

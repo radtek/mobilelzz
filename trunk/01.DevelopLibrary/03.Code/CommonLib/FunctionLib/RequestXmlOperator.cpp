@@ -20,6 +20,7 @@ CRequestXmlOperator::~CRequestXmlOperator()
 APP_Result CRequestXmlOperator::Initialize(wchar_t* pwcsRequestXML)
 {
 	APP_Result appR = APP_Result_E_Fail;
+	m_clXmlStream.Initialize();
 	long lXmlBufSize = wcslen(pwcsRequestXML);
 	appR = m_clXmlStream.Load(pwcsRequestXML, lXmlBufSize);
 	if ( FAILED_App(appR) ){
@@ -134,12 +135,14 @@ APP_Result CRequestXmlOperator::GetOperationConditions( OperationCondition** ppw
 		}else{
 			return APP_Result_E_Fail;
 		}
-		if ( 0 == wcscmp(L"value", pAttribute[1].wcsName) ){
-			F_wcscpyn( stCondition.wcsConditionValue, pAttribute[1].wcsValue, 
-				sizeof(stCondition.wcsConditionValue)/sizeof(stCondition.wcsConditionValue[0]) );
-		}else{
-			return APP_Result_E_Fail;
-		}
+		if ( lAttributeCount > 1 ){
+			if ( 0 == wcscmp(L"value", pAttribute[1].wcsName) ){
+				F_wcscpyn( stCondition.wcsConditionValue, pAttribute[1].wcsValue, 
+					sizeof(stCondition.wcsConditionValue)/sizeof(stCondition.wcsConditionValue[0]) );
+			}else{
+				return APP_Result_E_Fail;
+			}
+		}		
 		spConditions.AppendItem(&stCondition);
 		enR = pNode->MoveNext();
 	}

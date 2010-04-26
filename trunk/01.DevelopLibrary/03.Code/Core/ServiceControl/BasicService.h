@@ -15,11 +15,11 @@ protected:
 	virtual APP_Result MakeParam(wchar_t* pwcsRequestXML);
 	virtual APP_Result ExcuteParam(wchar_t* pwcsRequestXML, wchar_t** ppwcsResultXML);
 	virtual APP_Result MakeResult(wchar_t** ppwcsResultXML);	
-	
+	APP_Result CreateQuery(CSQL_session* pclSqlDBSession, wchar_t* pSqlCommand, CSQL_SmartQuery& spQuery);
 protected:
 	
-	CSQL_sessionManager*	m_pclSqlSessionManager;
-
+	static CSQL_sessionManager*	m_pclSqlSessionManager;
+	
 private:
 	
 };

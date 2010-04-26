@@ -46,21 +46,21 @@ HRESULT		CEasySmsUiCtrl::MakeUnReadRltListReq( wchar_t **ppBuf, long *lSize )
 		wcscpy( stNodeAttr.wcsName, L"type" );
 		wcscpy( stNodeAttr.wcsValue, L"sms" );
 
-		hr	=	MakeNode( pCXmlStream, L"result/data/", &stNodeAttr, 1 );
+		hr	=	MakeNode( pCXmlStream, L"request/data/", &stNodeAttr, 1 );
 
 		//////////////////////////////////////////////////////////////////////////
 		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
 		wcscpy( stNodeAttr.wcsName , L"type" );
 		wcscpy( stNodeAttr.wcsValue, L"list" );
 
-		hr	=	MakeNode( pCXmlStream, L"result/data/operation/", &stNodeAttr, 1 );
+		hr	=	MakeNode( pCXmlStream, L"request/data/operation/", &stNodeAttr, 1 );
 		if ( FAILED( hr ) )													break;
 
 		//////////////////////////////////////////////////////////////////////////
 		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
 		wcscpy( stNodeAttr.wcsName , L"name" );
 		wcscpy( stNodeAttr.wcsValue, L"unread" );
-		hr	=	MakeNode( pCXmlStream, L"result/data/operation/condition/", &stNodeAttr, 1 );
+		hr	=	MakeNode( pCXmlStream, L"request/data/operation/condition/", &stNodeAttr, 1 );
 		if ( FAILED( hr ) )													break;
 
 		//////////////////////////////////////////////////////////////////////////
@@ -82,7 +82,7 @@ HRESULT		CEasySmsUiCtrl::MakeNode( CXmlStream	*pCXmlStream, wchar_t *pNodePath, 
 {
 	CXmlNode	*	pCXmlNode	=	NULL;
 	
-	HRESULT	hr	=	pCXmlStream->SelectNode( L"result/data/", &pCXmlNode );
+	HRESULT	hr	=	pCXmlStream->SelectNode( pNodePath, &pCXmlNode );
 	if ( FAILED( hr ) )												return	E_FAIL;
 
 	auto_ptr<CXmlNode>	CXmlNodePtr( pCXmlNode );

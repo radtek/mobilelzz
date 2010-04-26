@@ -5,18 +5,18 @@
 #include <windows.h>
 #include <vector>
 using namespace std;
-#define   Sms_SQL_CREATETABLE_SmsDetail	L"create talbe IF NOT EXISTS SmsDetail(sid integer PRIMARY KEY ASC, \
+#define   Sms_SQL_CREATETABLE_SmsDetail	L"create table IF NOT EXISTS SmsDetail(sid integer PRIMARY KEY ASC, \
 											pid integer, type integer, content text, address text, time integer,\
 											lockstatus integer, readstatus integer)"
-#define   Sms_SQL_CREATETABLE_SmsCode	L"create talbe IF NOT EXISTS SmsCode(pid integer PRIMARY KEY ASC, \
+#define   Sms_SQL_CREATETABLE_SmsCode	L"create table IF NOT EXISTS SmsCode(pid integer PRIMARY KEY ASC, \
 											code text)"
-#define   Sms_SQL_CREATETABLE_SmsGroup	L"create talbe IF NOT EXISTS SmsGroup(pid integer PRIMARY KEY ASC, \
+#define   Sms_SQL_CREATETABLE_SmsGroup	L"create table IF NOT EXISTS SmsGroup(pid integer PRIMARY KEY ASC, \
 											msgcount integer)"
 
 #define   Contactors_SQL_GET_CONTACTS  L"select ABPerson.ROWID, ABPerson.Name , ABPhones.*  from ABPerson, ABPhones where ABPerson.ROWID = ABPhones.record_id "
 #define   Contactors_SQL_GET_FIRSTLETER  L"select token  from ABLookupFirstLetter where source = ?"
 #define   Sms_SQL_GET_PID_ByAddress				L"select ROWID  from ABPerson where number = ?"
-#define		Sms_SQL_GET_Name_ByPID			L"select Name  from ABPhones where ROWID = ?"
+#define		Sms_SQL_GET_Name_ByPID			L"select Name from ABPerson where ROWID = ?"
 
 #define   Sms_SQL_GET_UnReadSms					L"select *  from SmsDetail where readstatus = 0"
 #define   Sms_SQL_GET_SmsList					L"select *  from SmsDetail"

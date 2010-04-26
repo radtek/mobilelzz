@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "BasicService.h"
 
+CSQL_sessionManager*	CBasicService::m_pclSqlSessionManager = NULL;
+
 CBasicService::CBasicService()
 {
-	m_pclSqlSessionManager = NULL;
+//	m_pclSqlSessionManager = NULL;
 }
 
 CBasicService::~CBasicService()
@@ -49,9 +51,26 @@ APP_Result CBasicService::MakeResult(wchar_t** ppwcsResultXML)
 
 APP_Result CBasicService::Initialize()
 {
-	CSQL_sessionManager*  m_pclSqlSessionManager =CSQL_sessionManager::GetInstance();
-	if( NULL == m_pclSqlSessionManager ) 
-		return APP_Result_NullPointer;
+	if ( NULL == m_pclSqlSessionManager ){
+		m_pclSqlSessionManager =CSQL_sessionManager::GetInstance();
+		if( NULL == m_pclSqlSessionManager ) 
+			return APP_Result_NullPointer;
+	}	
+
+	return APP_Result_S_OK;
+}
+
+APP_Result CBasicService::CreateQuery(CSQL_session* pclSqlDBSession, wchar_t* pSqlCommand, CSQL_SmartQuery& spQuery)
+{
+	//SELECT name FROM sqlite_master WHERE name='" + tableName + "'";
+	APP_Result hr = APP_Result_E_Fail;
+	spQuery.Initialize(pclSqlDBSession);
+	hr = pclSqlDBSession->Query_Create(NULL, &spQuery );
+	if( FAILED(hr) || spQuery.Get() == NULL ) 
+		return hr;
+	hr = spQuery->Prepare(pSqlCommand);
+	if( FAILED(hr) ) 
+		return hr;
 
 	return APP_Result_S_OK;
 }

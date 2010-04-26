@@ -1,9 +1,6 @@
 #ifndef __CoreService_h__
 #define __CoreService_h__
 
-#include "BasicService.h"
-#include "XmlStream.h"
-#include "RequestXmlOperator.h"
 class CSmsService;
 class CContactorsService;
 

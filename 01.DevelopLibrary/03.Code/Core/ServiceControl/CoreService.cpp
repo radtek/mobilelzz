@@ -1,5 +1,7 @@
 #include "stdafx.h"
-
+#include "BasicService.h"
+#include "XmlStream.h"
+#include "RequestXmlOperator.h"
 #include "CoreService.h"
 #include "SmsService.h"
 #include "ContactorsService.h"

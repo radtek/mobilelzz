@@ -4,8 +4,8 @@
 #include "BasicService.h"
 #include "XmlStream.h"
 #include "RequestXmlOperator.h"
-#include "SmsService.h"
-#include "ContactorsService.h"
+class CSmsService;
+class CContactorsService;
 
 class CORE_API CCoreService
 {
@@ -26,8 +26,8 @@ private:
 private:
 	static CCoreService*	m_Instance;
 
-	CSmsService				m_clSmsService;
-	CContactorsService		m_clContactorsService;
+	CSmsService*				m_pclSmsService;
+	CContactorsService*			m_pclContactorsService;
 
 };
 

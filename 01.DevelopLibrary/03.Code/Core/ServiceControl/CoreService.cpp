@@ -75,6 +75,7 @@ APP_Result CCoreService::GetDataType(wchar_t* pwcsRequestXML, wchar_t* pwcsDataT
 {
 	APP_Result appR = APP_Result_E_Fail;
 	CXmlStream clXmlStream;
+	clXmlStream.Initialize();
 	long lXmlBufSize = wcslen(pwcsRequestXML);
 	appR = clXmlStream.Load(pwcsRequestXML, lXmlBufSize);
 	if ( FAILED_App(appR) ){

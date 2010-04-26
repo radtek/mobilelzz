@@ -108,16 +108,14 @@ APP_Result CContactorsService::Initialize()
 	if( FAILED(hr) ) 
 		return hr;
 
-	hr = m_pclSqlSessionManager->Session_Connect(L"contacts_sms", L".\\Documents and Settings\\", L"sms.db", &m_pclSqlSmsDBSession );
-	if(FAILED(hr) || m_pclSqlDBSession == NULL)	
+	hr = m_pclSqlSessionManager->Session_Connect(L"sms", L".\\Documents and Settings", L"easysms.db", &m_pclSqlSmsDBSession );
+	if(FAILED(hr) || m_pclSqlSmsDBSession == NULL)	
 		return APP_Result_E_Fail;
 
-	hr = m_pclSqlDBSession->Query_Create(NULL, &m_pQSmsGroupInfo );
-	if( FAILED(hr) || m_pQFirstLetter == NULL ) 
+	hr = CreateQuery(m_pclSqlSmsDBSession, Sms_SQL_GET_SmsGroupInfo, m_pQSmsGroupInfo);
+	if ( FAILED_App(hr) ){
 		return hr;
-	hr = m_pQSmsGroupInfo->Prepare(Sms_SQL_GET_SmsGroupInfo);
-	if( FAILED(hr) ) 
-		return hr;
+	}
 
 	return APP_Result_S_OK;
 }

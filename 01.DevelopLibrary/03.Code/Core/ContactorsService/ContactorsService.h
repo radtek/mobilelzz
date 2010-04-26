@@ -56,7 +56,7 @@ private:
 	CSQL_query*			m_pQContactorsList;
 	long				m_lID_QContactorsList;
 
-	CSQL_query*			m_pQSmsGroupInfo;
+	CSQL_SmartQuery			m_pQSmsGroupInfo;
 
 	Contactors_RequestData		m_stRequestData;
 

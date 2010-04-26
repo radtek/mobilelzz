@@ -54,7 +54,6 @@ private:
 	APP_Result GetPIDByAddress(wchar_t* pwcsAddress, long& lPID);
 
 	APP_Result CreateTable(wchar_t* pSqlCommand);
-	APP_Result CreateQuery(CSQL_session* pclSqlDBSession, wchar_t* pSqlCommand, CSQL_SmartQuery& spQuery);
 
 	APP_Result DecideSearchCommond(CDynamicArray<OperationCondition>&spConditions, 
 					Search_DateKind& enDateKind,CSQL_SmartQuery& pQHandle);

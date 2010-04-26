@@ -10,6 +10,7 @@ CCoreService* CCoreService::m_Instance = NULL;
 
 CCoreService::CCoreService()
 {
+
 	m_pclSmsService = new CSmsService;
 	m_pclSmsService->Initialize();
 	m_pclContactorsService = new CContactorsService;

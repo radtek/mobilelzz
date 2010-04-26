@@ -133,28 +133,13 @@ APP_Result CSmsService::CreateTable(wchar_t* pSqlCommand)
 	return APP_Result_S_OK;
 }
 
-APP_Result CSmsService::CreateQuery(CSQL_session* pclSqlDBSession, wchar_t* pSqlCommand, CSQL_SmartQuery& spQuery)
-{
-	//SELECT name FROM sqlite_master WHERE name='" + tableName + "'";
-	APP_Result hr = APP_Result_E_Fail;
-	spQuery.Initialize(pclSqlDBSession);
-	hr = pclSqlDBSession->Query_Create(NULL, &spQuery );
-	if( FAILED(hr) || m_pQUnReadSms.Get() == NULL ) 
-		return hr;
-	hr = spQuery->Prepare(pSqlCommand);
-	if( FAILED(hr) ) 
-		return hr;
-
-	return APP_Result_S_OK;
-}
-
 APP_Result CSmsService::Initialize()
 {
 	APP_Result hr = APP_Result_E_Fail;
 	hr = CBasicService::Initialize();
 	if(FAILED(hr))	
 		return hr;
-	hr = m_pclSqlSessionManager->Session_Connect(L"sms", L".\\Documents and Settings\\", L"sms.db", &m_pclSqlDBSession );
+	hr = m_pclSqlSessionManager->Session_Connect(L"sms", L".\\Documents and Settings", L"easysms.db", &m_pclSqlDBSession );
 	if(FAILED(hr) || m_pclSqlDBSession == NULL)	
 		return APP_Result_E_Fail;
 	hr = CreateTable(Sms_SQL_CREATETABLE_SmsDetail);
@@ -203,8 +188,8 @@ APP_Result CSmsService::Initialize()
 		return hr;
 	}
 
-	hr = m_pclSqlSessionManager->Session_Connect(L"sms_contacts", L".\\Documents and Settings\\", L"contacts.db", &m_pclSqlContactsDBSession );
-	if(FAILED(hr) || m_pclSqlDBSession == NULL)	
+	hr = m_pclSqlSessionManager->Session_Connect(L"contacts", L".\\Documents and Settings\\", L"contacts.db", &m_pclSqlContactsDBSession );
+	if(FAILED(hr) || m_pclSqlContactsDBSession == NULL)	
 		return APP_Result_E_Fail;
 	hr = CreateQuery(m_pclSqlContactsDBSession, Sms_SQL_GET_Name_ByPID, m_pQGetNameByPID);
 	if ( FAILED_App(hr) ){

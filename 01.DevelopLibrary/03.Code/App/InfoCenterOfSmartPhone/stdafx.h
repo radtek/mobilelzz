@@ -14,10 +14,13 @@
 #include <vector>
 using namespace std;
 
+
 #include "CommonLib.h"
 #include "Errors.h"
 #include"FuncLib.h"
 #include"DynamicArray.h"
 #include"CommonTypes.h"
+
+#include "Core.h"
 
 // TODO: 在此处引用程序需要的其他头文件

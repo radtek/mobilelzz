@@ -4,7 +4,7 @@
 
 #include "SmsUnReadWnd.h"
 #include "SmsLookMsgDetailWnd.h"
-
+#include "CoreService.h"
 
 class ListItemData
 {
@@ -75,7 +75,7 @@ BOOL	CSmsUnReadWnd::SubInitialize()
 /////////////test/////////////////////////////////////////////////////////////
 	wchar_t	*pBuf		=	NULL;
 	long	lSize		=	0;
-//	wchar_t	*pwcResult	=	NULL;
+	wchar_t	*pwcResult	=	NULL;
 
 
 	HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeUnReadRltListReq( &pBuf, &lSize );
@@ -115,7 +115,7 @@ BOOL	CSmsUnReadWnd::SubInitialize()
 	
 	CCoreService	*pCCoreService	=	CCoreService::GetInstance();
 	if ( NULL == pCCoreService )								return	FALSE;
-
+	
 	hr	=	pCCoreService->Request( pBuf, &pwcResult );
 	if ( FAILED ( hr ) )										return	FALSE;
 #endif

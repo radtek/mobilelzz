@@ -1,7 +1,8 @@
 #include "stdafx.h"
 
 #include "CoreService.h"
-
+#include "SmsService.h"
+#include "ContactorsService.h"
 #define DataTypeSms				L"sms"	
 #define DataTypeContactors		L"contactors"	
 
@@ -9,8 +10,10 @@ CCoreService* CCoreService::m_Instance = NULL;
 
 CCoreService::CCoreService()
 {
-	m_clSmsService.Initialize();
-	m_clContactorsService.Initialize();
+	m_pclSmsService = new CSmsService;
+	m_pclSmsService->Initialize();
+	m_pclContactorsService = new CContactorsService;
+	m_pclContactorsService->Initialize();
 }
 
 CCoreService::~CCoreService()
@@ -36,6 +39,8 @@ CCoreService* CCoreService::GetInstance()
 void CCoreService::DeleteInstance()
 {
 	if ( m_Instance ){
+		//delete m_pclSmsService;
+		//delete m_pclContactorsService;
 		delete m_Instance;
 	}
 	
@@ -52,11 +57,11 @@ APP_Result CCoreService::Request(wchar_t* pwcsRequestXML, wchar_t** ppwcsResultX
 	
 	if ( 0 == wcscmp(awcsDataType, DataTypeSms) )
 	{
-		m_clSmsService.Excute(pwcsRequestXML, ppwcsResultXML);
+		m_pclSmsService->Excute(pwcsRequestXML, ppwcsResultXML);
 	} 
 	else if( 0 == wcscmp(awcsDataType, DataTypeContactors) )
 	{
-		m_clContactorsService.Excute(pwcsRequestXML, ppwcsResultXML);
+		m_pclContactorsService->Excute(pwcsRequestXML, ppwcsResultXML);
 	}
 	else{
 		

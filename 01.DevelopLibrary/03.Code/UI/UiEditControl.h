@@ -26,6 +26,12 @@ public:
 	//zds 2010/03/21 19:39
 	int OnLButtonUp123  ( UINT  fwKeys,  int  xPos,  int  yPos );
 	//zds 2010/03/21 19:39
-	
+	virtual int OnLButtonUp  ( UINT  fwKeys,  
+		int  xPos,  
+		int  yPos   
+		);
+
+	virtual int  OnKeyDown (int nVirtKey, DWORD lKeyData);
+
 };
 #endif //__UiEditControl_h__

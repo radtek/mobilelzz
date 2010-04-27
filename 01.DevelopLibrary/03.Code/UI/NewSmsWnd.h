@@ -99,7 +99,7 @@ class CNewSmsWnd : public /*CMzWndEx*/ CEasySmsWndBase
 
 		void OnTimer( UINT_PTR nIDEvent );
 
-		virtual void  OnLButtonUp  ( UINT  fwKeys,  int  xPos,  int  yPos );
+		//virtual void  OnLButtonUp  ( UINT  fwKeys,  int  xPos,  int  yPos );
 		static  DWORD WINAPI ReadMessage( LPVOID lpParameter );
 
 		private:
@@ -111,5 +111,7 @@ class CNewSmsWnd : public /*CMzWndEx*/ CEasySmsWndBase
 
 		ImageContainer		m_imgContainer;
 		BOOL Normal();
+private:
+	
 };
 #endif //__NewSmsWnd_h__

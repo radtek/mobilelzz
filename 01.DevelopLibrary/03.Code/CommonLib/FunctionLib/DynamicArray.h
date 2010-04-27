@@ -106,7 +106,7 @@ public:
 		bOwn = FALSE;
 		return m_pDynamicArrayData;
 	}
-private:
+protected:
 	T* m_pDynamicArrayData;
 	long m_lDynamicArrayDataCount;
 	long m_lDynamicArrayDataMemoryCount;

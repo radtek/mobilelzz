@@ -3,5 +3,5 @@
 #include"CommonTypes.h"
 
 BOOL g_bH = FALSE;
-CDynamicArray<MyListItemData> g_ReciversList;
+CRecieversDynamicArray g_ReciversList;
 BOOL	g_bContactShow = FALSE;

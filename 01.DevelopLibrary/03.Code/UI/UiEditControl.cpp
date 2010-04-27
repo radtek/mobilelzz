@@ -80,19 +80,24 @@ void UiEditControl::UpdateData( long lFlag )
 	}
 	else
 	{
-		long lReciversCount = g_ReciversList.GetItemCount();
-		wchar_t wcsReciversName[512] = L"";
-		wcscat(wcsReciversName, L"收件人:" );
-		for(int i  = 0; i < lReciversCount; i++)
-		{
-			wcscat(wcsReciversName, g_ReciversList.GetItem(i)->StringTitle );
-			//wcscat(wcsReciversName, L";" );
-		}
-		SetText(wcsReciversName);
+		UpdateTextByRecievers();		
 	}
 	ReleaseCapture();
 	
 	
+}
+
+void UiEditControl::UpdateTextByRecievers()
+{
+	long lReciversCount = g_ReciversList.GetItemCount();
+	wchar_t wcsReciversName[512] = L"";
+	wcscat(wcsReciversName, L"收件人:" );
+	for(int i  = 0; i < lReciversCount; i++)
+	{
+		wcscat(wcsReciversName, g_ReciversList.GetItem(i)->StringTitle );
+		//wcscat(wcsReciversName, L";" );
+	}
+	SetText(wcsReciversName);
 }
 
 int UiEditControl::OnKeyDown (int nVirtKey, DWORD lKeyData)
@@ -100,12 +105,20 @@ int UiEditControl::OnKeyDown (int nVirtKey, DWORD lKeyData)
 	if ( 8 ==  nVirtKey){//delete button down
 		int b = 0;
 		// get cur pos
+		long lCursorPos = 0;
 		// delete item from recievers by pos
-
+		g_ReciversList.DeleteItemByCursorPos(lCursorPos);
+		//update edit
+		UpdateTextByRecievers();
 	}else if ( 3 == nVirtKey ){//';' button down
 		int b = 0;
 		//get numbers until before ;
+		long lPos = 0;	//make pos
+
+		MyListItemData stTemp;	//make item to insert
+
 		//insert reciever in the pos
+		g_ReciversList.InsertItemByPos(&stTemp, lPos);
 	}
 
 	return 0;

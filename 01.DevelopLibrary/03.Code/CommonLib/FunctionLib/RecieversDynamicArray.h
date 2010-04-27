@@ -48,7 +48,7 @@ public:
 		//append ; to item name
 
 		CDynamicArray<MyListItemData>::AppendItem(pT);
-		//calc item pos range
+		//calc last item pos range
 		
 	}
 	void DeleteItemByCursorPos(long lCursorPos)
@@ -58,11 +58,13 @@ public:
 		//CDynamicArray<MyListItemData>::DeleteItem(/*index*/);
 		
 	}
-	void InsertItemByPos(long lPos)
+	void InsertItemByPos(MyListItemData* pT, long lPos)
 	{
 		//find pos
 
 		//CDynamicArray<MyListItemData>::InsertItem(/*index*/);
+		
+		//calc iter pos range include new item and after new item
 
 	}
 

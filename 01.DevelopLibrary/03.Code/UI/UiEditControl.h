@@ -19,6 +19,7 @@ public:
 
 	void UpdateData(  long lFlag  );
 
+	void UpdateTextByRecievers();
 
 	virtual void  OnFocused (UiWin *pWinPrev);
 

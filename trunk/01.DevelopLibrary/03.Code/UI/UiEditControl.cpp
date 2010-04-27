@@ -58,6 +58,15 @@ int UiEditControl::OnLButtonUp123  ( UINT  fwKeys,  int  xPos,  int  yPos )
 }
 //zds 2010/03/21 19:39  
 
+int UiEditControl::OnLButtonUp  ( UINT  fwKeys,  
+				  int  xPos,  
+				  int  yPos   
+				  )
+{
+	MzOpenSip();
+	return UiSingleLineEdit::OnLButtonUp(fwKeys, xPos, yPos);
+}
+
 
 void UiEditControl::SetParent(void* pParent)
 {
@@ -77,11 +86,27 @@ void UiEditControl::UpdateData( long lFlag )
 		for(int i  = 0; i < lReciversCount; i++)
 		{
 			wcscat(wcsReciversName, g_ReciversList.GetItem(i)->StringTitle );
-			wcscat(wcsReciversName, L";" );
+			//wcscat(wcsReciversName, L";" );
 		}
 		SetText(wcsReciversName);
 	}
 	ReleaseCapture();
 	
 	
+}
+
+int UiEditControl::OnKeyDown (int nVirtKey, DWORD lKeyData)
+{
+	if ( 8 ==  nVirtKey){//delete button down
+		int b = 0;
+		// get cur pos
+		// delete item from recievers by pos
+
+	}else if ( 3 == nVirtKey ){//';' button down
+		int b = 0;
+		//get numbers until before ;
+		//insert reciever in the pos
+	}
+
+	return 0;
 }

@@ -551,13 +551,13 @@ void	CNewSmsWnd::Run()
 	m_SmsMsgEdit->SetText(L"");
 }
 
-void CNewSmsWnd::OnLButtonUp ( UINT fwKeys, int  xPos, int yPos )
-{
-	m_Recievers.OnLButtonUp123( fwKeys, xPos, yPos );
-	m_SmsMsgEdit->OnLButtonUp123( fwKeys, xPos, yPos );
-	
-	return CMzWndEx::OnLButtonUp( fwKeys, xPos, yPos );
-}
+//void CNewSmsWnd::OnLButtonUp ( UINT fwKeys, int  xPos, int yPos )
+//{
+//	m_Recievers.OnLButtonUp123( fwKeys, xPos, yPos );
+//	m_SmsMsgEdit->OnLButtonUp123( fwKeys, xPos, yPos );
+//	
+//	return CMzWndEx::OnLButtonUp( fwKeys, xPos, yPos );
+//}
 
 DWORD CNewSmsWnd::ReadMessage( LPVOID lpParameter )
 {

@@ -104,7 +104,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 	m_SmsMsgEdit->SetEditBgType(UI_EDIT_BGTYPE_ROUND_RECT); 
 	m_SmsMsgEdit->SetColorBg(RGB(250,250,250));
 	m_SmsMsgEdit->EnableInsideScroll(true);
-	m_SmsMsgEdit->EnableZoomIn(true);   
+//	m_SmsMsgEdit->EnableZoomIn(true);   
 	m_SmsMsgEdit->SetTip(L"在这里输入短信内容");
 
 	AddUiWin(m_SmsMsgEdit); // don't forget to add the control to the window
@@ -360,11 +360,11 @@ bool CNewSmsWnd::SendSMS(IN LPCTSTR lpNumber,IN LPCTSTR lpszMessage)
         hRes=SmsOpen(SMS_MSGTYPE_TEXT,SMS_MODE_SEND,&smsHandle,NULL); 
         if   (FAILED(hRes)) 
         { 
-                return   false; 
+              return   false; 
         } 
 
         //地址方式注意国内号码前加"+86"
-        smsaDestination.smsatAddressType = SMSAT_INTERNATIONAL; 
+        smsaDestination.smsatAddressType = SMSAT_NATIONAL; 
         _tcsncpy(smsaDestination.ptsAddress, lpNumber,SMS_MAX_ADDRESS_LENGTH); 
 
         tpsd.dwMessageOptions  = PS_MESSAGE_OPTION_NONE; 

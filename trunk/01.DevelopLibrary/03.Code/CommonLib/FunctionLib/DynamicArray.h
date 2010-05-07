@@ -118,6 +118,9 @@ public:
 	{
 		long lBeginPos = 0;
 		if ( Move_Direction_Backward == enDirection ){
+			if ( (lIndex + lCount + lSteps) > m_lDynamicArrayDataCount ){
+				return;
+			}
 			lBeginPos = lIndex+lCount-1;
 			for (int i = 0; i < lCount; i++ )
 			{
@@ -125,6 +128,9 @@ public:
 				lBeginPos--;
 			}
 		}else{
+			if ( (lIndex - lSteps) < 0 ){
+				return;
+			}
 			lBeginPos = lIndex;
 			for (int i = 0; i < lCount; i++ )
 			{

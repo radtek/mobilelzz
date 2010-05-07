@@ -2,6 +2,11 @@
 #define __DynamicArray_h__
 
 #define DEFAULT_Recivers_List_MemoryBlock		20
+enum Move_Direction{
+	Move_Direction_Forward,
+	Move_Direction_Backward
+};
+
 template<class T>
 class CDynamicArray
 {
@@ -94,6 +99,40 @@ public:
 				}
 			}
 		}
+	}
+	void DeleteItem(long lIndex)
+	{
+		//copy items move one pos before
+		MoveItemsByStep((lIndex+1), (m_lDynamicArrayDataCount-(lIndex+1)), Move_Direction_Forward, 1);
+		//update item count
+		m_lDynamicArrayDataCount -= 1;
+	}
+	void InsertItem(long lIndex, T* pT)
+	{
+		//move last item one pos after
+		AppendItem(&m_pDynamicArrayData[m_lDynamicArrayDataCount-1]);
+		MoveItemsByStep(lIndex, (m_lDynamicArrayDataCount-lIndex-1), Move_Direction_Backward, 1);
+		m_pDynamicArrayData[lIndex] = *pT;
+	}
+	void MoveItemsByStep(long lIndex, long lCount, Move_Direction enDirection, long lSteps)
+	{
+		long lBeginPos = 0;
+		if ( Move_Direction_Backward == enDirection ){
+			lBeginPos = lIndex+lCount-1;
+			for (int i = 0; i < lCount; i++ )
+			{
+				m_pDynamicArrayData[lBeginPos+lSteps] = m_pDynamicArrayData[lBeginPos];
+				lBeginPos--;
+			}
+		}else{
+			lBeginPos = lIndex;
+			for (int i = 0; i < lCount; i++ )
+			{
+				m_pDynamicArrayData[lBeginPos-lSteps] = m_pDynamicArrayData[lBeginPos];
+				lBeginPos++;
+			}
+		}
+
 	}
 	void Clear()
 	{

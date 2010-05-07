@@ -4,6 +4,7 @@
 
 
 #include "UiEditControl.h"
+#include "ContactorsWnd.h"
 #include "NewSmsWnd.h"
 #include "UsbNotifyApi.h"
 #include "CallNotifyApi.h"
@@ -16,6 +17,22 @@
 
 INT g_iUsbNotifyMsg = 0;
 
+CNewSmsWnd::~CNewSmsWnd()
+{
+
+	MzAccClose();  
+	m_imgContainer.RemoveAll();
+	if ( NULL != m_SmsMsgEdit )
+	{
+		delete m_SmsMsgEdit;
+		m_SmsMsgEdit	=	NULL;
+	}
+	if(NULL != m_pclContactorsWnd )
+	{
+		delete m_pclContactorsWnd ;
+		m_pclContactorsWnd  = NULL;	
+	}
+}
 
 BOOL CNewSmsWnd::OnInitDialog()
 {
@@ -201,7 +218,22 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 			if ( 2 == nIndex )
 			{
 				this->EndModal( ID_CANCEL );	//退出
+			}else if ( 1 == nIndex )
+			{	//联系人
+				if(NULL != m_pclContactorsWnd )
+				{
+					delete m_pclContactorsWnd ;
+					m_pclContactorsWnd  = NULL;
+				}
+
+				m_pclContactorsWnd = new CContactorsWnd;
+				//m_pclContactorsWnd->SetParent(this);
+				RECT rcWork = MzGetWorkArea();
+				m_pclContactorsWnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0, 0);
+
+				m_pclContactorsWnd->Show();
 			}
+
 		}
 
 	  break;
@@ -311,7 +343,7 @@ void CNewSmsWnd::ReadMessage()
 {
 	HRESULT				hRes				=	S_OK; 
 	SMS_HANDLE			smsHandle			=	NULL; 
-	SMS_ADDRESS			smsaDestination; 
+	//SMS_ADDRESS			smsaDestination; 
 	SMS_MESSAGE_ID		smsmidMessageID		=	0; 
 
 	hRes	=	SmsOpen( SMS_MSGTYPE_TEXT, SMS_MODE_RECEIVE, &smsHandle, NULL );

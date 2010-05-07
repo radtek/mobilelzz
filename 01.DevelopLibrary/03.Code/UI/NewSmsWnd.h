@@ -37,7 +37,7 @@ public:
 };
 
 
-
+class CContactorsWnd;
 class CNewSmsWnd : public /*CMzWndEx*/ CEasySmsWndBase
 {
 
@@ -48,19 +48,9 @@ class CNewSmsWnd : public /*CMzWndEx*/ CEasySmsWndBase
 	   {
 			m_lCurProgress = 0;
 			m_SmsMsgEdit = new CMyEdit;
+			m_pclContactorsWnd  = NULL;	
 	   }
-	   virtual ~CNewSmsWnd()
-	   {
-		
-			MzAccClose();  
-			m_imgContainer.RemoveAll();
-			if ( NULL != m_SmsMsgEdit )
-			{
-				delete m_SmsMsgEdit;
-				m_SmsMsgEdit	=	NULL;
-			}
-	   
-		}
+	   virtual ~CNewSmsWnd();
 
 	   static DWORD WINAPI   ProxyRun(LPVOID lp);
 
@@ -112,6 +102,6 @@ class CNewSmsWnd : public /*CMzWndEx*/ CEasySmsWndBase
 		ImageContainer		m_imgContainer;
 		BOOL Normal();
 private:
-	
+	CContactorsWnd* m_pclContactorsWnd;
 };
 #endif //__NewSmsWnd_h__

@@ -75,19 +75,19 @@ void UiEditControl::SetParent(void* pParent)
 
 void UiEditControl::UpdateData( long lFlag )
 {
-	if(lFlag == 0)
-	{
-	}
-	else
-	{
+	//if(lFlag == 0)
+	//{
+	//}
+	//else
+	//{
 		UpdateTextByRecievers();		
-	}
-	ReleaseCapture();
+	//}
+	//ReleaseCapture();
 	
 	
 }
 
-void UiEditControl::UpdateTextByRecievers()
+void UiEditControl::UpdateTextByRecievers(BOOL bIsAddChar)
 {
 	long lReciversCount = g_ReciversList.GetItemCount();
 	wchar_t wcsReciversName[512] = L"";
@@ -96,6 +96,9 @@ void UiEditControl::UpdateTextByRecievers()
 	{
 		wcscat(wcsReciversName, g_ReciversList.GetItem(i)->StringTitle );
 		//wcscat(wcsReciversName, L";" );
+	}
+	if ( bIsAddChar ){
+		wcscat(wcsReciversName, L";" );
 	}
 	SetText(wcsReciversName);
 }
@@ -107,9 +110,12 @@ int UiEditControl::OnKeyDown (int nVirtKey, DWORD lKeyData)
 		// get cur pos
 		long lCursorPos = GetCursePos();
 		// delete item from recievers by pos
-		g_ReciversList.DeleteItemByCursorPos(lCursorPos);
-		//update edit
-		UpdateTextByRecievers();
+		if ( -1 != lCursorPos ){
+			g_ReciversList.DeleteItemByCursorPos(lCursorPos);
+			//update edit
+			UpdateTextByRecievers(TRUE);
+		}
+		
 	}else if ( 3 == nVirtKey ){//';' button down
 		int b = 0;
 		//get numbers until before ;

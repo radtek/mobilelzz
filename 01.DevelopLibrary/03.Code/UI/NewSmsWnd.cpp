@@ -227,7 +227,7 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 				}
 
 				m_pclContactorsWnd = new CContactorsWnd;
-				//m_pclContactorsWnd->SetParent(this);
+				m_pclContactorsWnd->SetParent(&m_Recievers);
 				RECT rcWork = MzGetWorkArea();
 				m_pclContactorsWnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0, 0);
 

@@ -2,14 +2,13 @@
 #define __UiEditControl_h__
 
 #define UiEditControl_Click		1001
-class CContactorsWnd;
 
 class UiEditControl: public UiSingleLineEdit
 {
 	long m_lFlag;
 
 	void* m_pParent;
-	CContactorsWnd* m_pclContactorsWnd;
+	//CContactorsWnd* m_pclContactorsWnd;
 public:
 	UiEditControl();
 

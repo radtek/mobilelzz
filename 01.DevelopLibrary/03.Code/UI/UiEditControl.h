@@ -20,18 +20,18 @@ public:
 
 	void UpdateTextByRecievers(BOOL bIsAddChar = FALSE, long lWillPos = Invalid_4Byte);
 
-	virtual void  OnFocused (UiWin *pWinPrev);
+	//virtual void  OnFocused(UiWin *pWinPrev);
 
 	
 	//zds 2010/03/21 19:39
-	int OnLButtonUp123  ( UINT  fwKeys,  int  xPos,  int  yPos );
+	int OnLButtonUp123 ( UINT  fwKeys,  int  xPos,  int  yPos );
 	//zds 2010/03/21 19:39
-	virtual int OnLButtonUp  ( UINT  fwKeys,  
+	virtual int OnLButtonUp( UINT  fwKeys,  
 		int  xPos,  
 		int  yPos   
 		);
 
-	virtual int  OnKeyDown (int nVirtKey, DWORD lKeyData);
+	virtual int  OnKeyDown(int nVirtKey, DWORD lKeyData);
 	//virtual int OnChar(TCHAR chCharCode, LPARAM lKeyData);
 };
 #endif //__UiEditControl_h__

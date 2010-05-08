@@ -122,7 +122,10 @@ BOOL CNewSmsWnd::OnInitDialog()
 	m_Recievers.SetTip( L"联系人编辑区域:" );					// set the tips text
 	m_Recievers.SetID( MZ_IDC_RECIEVERS_EDIT );
 	m_Recievers.SetParent( (void*)this );
+	m_Recievers.EnableUpdateDis(true); 
+	m_Recievers.SetText(L"");
 	m_Recievers.SetCursePos(0);
+
 	AddUiWin( &m_Recievers ); 
 	// 初始化短信文本控件，并添加到窗口中
 	

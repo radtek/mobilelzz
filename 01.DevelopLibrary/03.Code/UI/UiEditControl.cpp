@@ -22,11 +22,11 @@ UiEditControl::~UiEditControl()
 
 }
 
-void UiEditControl::OnFocused (UiWin *pWinPrev) 
-{
-
-}
- 
+//void UiEditControl::OnFocused (UiWin *pWinPrev) 
+//{
+//
+//}
+// 
 
 //zds 2010/03/21 19:39
 int UiEditControl::OnLButtonUp123  ( UINT  fwKeys,  int  xPos,  int  yPos )
@@ -112,7 +112,7 @@ void UiEditControl::UpdateTextByRecievers(BOOL bIsAddChar, long lWillPos)
 //	return 0;
 //}
 
-int UiEditControl::OnKeyDown (int nVirtKey, DWORD lKeyData)
+int UiEditControl::OnKeyDown(int nVirtKey, DWORD lKeyData)
 {
 	if ( 8 ==  nVirtKey){//delete button down
 		int b = 0;
@@ -158,5 +158,5 @@ int UiEditControl::OnKeyDown (int nVirtKey, DWORD lKeyData)
 		}		
 	}
 
-	return 0;
+	return UiSingleLineEdit::OnKeyDown(nVirtKey, lKeyData);
 }

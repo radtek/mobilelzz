@@ -64,7 +64,9 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 				  )
 {
 	MzOpenSip();
-	return UiSingleLineEdit::OnLButtonUp(fwKeys, xPos, yPos);
+	int r = UiSingleLineEdit::OnLButtonUp(fwKeys, xPos, yPos);
+	long lCursorPos = GetCursePos();
+	return r;
 }
 
 
@@ -106,14 +108,25 @@ void UiEditControl::UpdateTextByRecievers(BOOL bIsAddChar, long lWillPos)
 //	}
 }
 
-//int UiEditControl::OnChar(TCHAR chCharCode, LPARAM lKeyData)
+//void UiEditControl::OnClick( size_t  nIndex )
 //{
+//	UiSingleLineEdit::OnClick(nIndex);
+//	long lCursorPos = GetCursePos();
 //	int b  =0;
-//	return 0;
+//	return;
 //}
+
+int UiEditControl::OnChar( TCHAR  chCharCode, LPARAM  lKeyData )
+{
+	CMzString& wcsControlText = GetText();
+	int b  =0;
+	return 0;
+}
 
 int UiEditControl::OnKeyDown(int nVirtKey, DWORD lKeyData)
 {
+	int r = UiSingleLineEdit::OnKeyDown(nVirtKey, lKeyData);
+
 	if ( 8 ==  nVirtKey){//delete button down
 		int b = 0;
 		// get cur pos
@@ -158,5 +171,5 @@ int UiEditControl::OnKeyDown(int nVirtKey, DWORD lKeyData)
 		}		
 	}
 
-	return UiSingleLineEdit::OnKeyDown(nVirtKey, lKeyData);
+	return r;
 }

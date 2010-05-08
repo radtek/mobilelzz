@@ -87,21 +87,30 @@ void UiEditControl::UpdateData( long lFlag )
 	
 }
 
-void UiEditControl::UpdateTextByRecievers(BOOL bIsAddChar)
+void UiEditControl::UpdateTextByRecievers(BOOL bIsAddChar, long lWillPos)
 {
 	long lReciversCount = g_ReciversList.GetItemCount();
 	wchar_t wcsReciversName[512] = L"";
-	wcscat(wcsReciversName, L"收件人:" );
+	//wcscat(wcsReciversName, L"收件人:" );
 	for(int i  = 0; i < lReciversCount; i++)
 	{
 		wcscat(wcsReciversName, g_ReciversList.GetItem(i)->StringTitle );
 		//wcscat(wcsReciversName, L";" );
 	}
-	if ( bIsAddChar ){
-		wcscat(wcsReciversName, L";" );
-	}
+// 	if ( bIsAddChar ){
+// 		wcscat(wcsReciversName, L";" );
+// 	}
 	SetText(wcsReciversName);
+//	if ( Invalid_4Byte != lWillPos ){
+		SetCursePos(0);
+//	}
 }
+
+//int UiEditControl::OnChar(TCHAR chCharCode, LPARAM lKeyData)
+//{
+//	int b  =0;
+//	return 0;
+//}
 
 int UiEditControl::OnKeyDown (int nVirtKey, DWORD lKeyData)
 {
@@ -110,21 +119,43 @@ int UiEditControl::OnKeyDown (int nVirtKey, DWORD lKeyData)
 		// get cur pos
 		long lCursorPos = GetCursePos();
 		// delete item from recievers by pos
-		if ( -1 != lCursorPos ){
-			g_ReciversList.DeleteItemByCursorPos(lCursorPos);
+		if ( (-1 != lCursorPos) && (0 != lCursorPos) ){
+			long lWillPos = 0;
+			g_ReciversList.DeleteItemByCursorPos((lCursorPos-1), &lWillPos);
 			//update edit
-			UpdateTextByRecievers(TRUE);
+			UpdateTextByRecievers(TRUE, lWillPos);
 		}
 		
 	}else if ( 3 == nVirtKey ){//';' button down
 		int b = 0;
 		//get numbers until before ;
-		long lPos = 0;	//make pos
-
-		MyListItemData stTemp;	//make item to insert
-
-		//insert reciever in the pos
-		g_ReciversList.InsertItemByPos(&stTemp, lPos);
+		long lCursorPos = GetCursePos();
+		if ( (-1 != lCursorPos) && (0 != lCursorPos) ){
+			long lPos = 0;	//make pos
+			CMzString& wcsControlText = GetText();
+			wchar_t* pwcsControlText = wcsControlText.C_Str();
+			long lCur = 0;
+			while ( (L'\0' != (*pwcsControlText)) &&(pwcsControlText) && (lCur <= lCursorPos))
+			{
+				if ( L';' == (*pwcsControlText) ){
+					lPos = lCur+1;
+				}
+				pwcsControlText++;
+				lCur++;
+			}
+			wchar_t awcsTemp[30] = L"";
+			pwcsControlText = wcsControlText.C_Str();
+			F_wcscpyn(awcsTemp, pwcsControlText, sizeof(awcsTemp)/sizeof(awcsTemp[0]));
+			wchar_t* pNumber = awcsTemp;
+			pNumber[lCursorPos] = L'\0';
+			pNumber += lPos;
+			MyListItemData stTemp;	//make item to insert
+			stTemp.StringDescription = pNumber;
+			stTemp.StringTitle = pNumber;
+			//insert reciever in the pos
+			g_ReciversList.InsertItemByPos(&stTemp, lPos);
+			UpdateTextByRecievers();
+		}		
 	}
 
 	return 0;

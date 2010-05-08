@@ -18,7 +18,7 @@ public:
 
 	void UpdateData(  long lFlag  );
 
-	void UpdateTextByRecievers(BOOL bIsAddChar = FALSE);
+	void UpdateTextByRecievers(BOOL bIsAddChar = FALSE, long lWillPos = Invalid_4Byte);
 
 	virtual void  OnFocused (UiWin *pWinPrev);
 
@@ -32,6 +32,6 @@ public:
 		);
 
 	virtual int  OnKeyDown (int nVirtKey, DWORD lKeyData);
-
+	//virtual int OnChar(TCHAR chCharCode, LPARAM lKeyData);
 };
 #endif //__UiEditControl_h__

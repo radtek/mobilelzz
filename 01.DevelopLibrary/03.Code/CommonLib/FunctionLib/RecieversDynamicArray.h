@@ -10,7 +10,7 @@ public:
 	MyListItemData()
 	{
 		Selected = FALSE;
-		lPID = 0;
+		lPID = Invalid_4Byte;
 		memset(wcsfirstLetter, 0x0, sizeof(wcsfirstLetter));
 		lBeginPos = 0;
 		lEndPos = 0;
@@ -51,7 +51,7 @@ class COMMONLIB_API CRecieversDynamicArray : public CDynamicArray<MyListItemData
 public:
 	CRecieversDynamicArray()
 	{
-		m_lInitPos = 4;
+		m_lInitPos = 0;
 	}
 
 	virtual ~CRecieversDynamicArray()
@@ -62,7 +62,7 @@ public:
 	{
 		//append ; to item name
 		pT->StringTitle += L";";
-		pT->lEndPos = pT->StringTitle.Length();
+		pT->lEndPos = pT->StringTitle.Length()-1;
 		if ( m_lDynamicArrayDataCount ){
 			MyListItemData* pTempLast = CDynamicArray<MyListItemData>::GetItem(m_lDynamicArrayDataCount-1);
 			if ( pTempLast ){
@@ -76,10 +76,10 @@ public:
 		}
 		CDynamicArray<MyListItemData>::AppendItem(pT);
 	}
-	void DeleteItemByCursorPos(long lCursorPos)
+	void DeleteItemByCursorPos(long lCursorPos, long* plWillCursorPos)
 	{
 		//find item index by pos
-		long lIndex = FindItemIndexByPos(lCursorPos);
+		long lIndex = FindItemIndexByPos(lCursorPos, plWillCursorPos);
 		DeleteItem(lIndex);
 		UpdateItemPosRangeFromIdx(lIndex);
 	}
@@ -87,15 +87,21 @@ public:
 	{
 		//find item index by pos
 		long lIndex = FindItemIndexByPos(lPos);
+		pT->StringTitle += L";";
 		InsertItem(lIndex, pT);
 		UpdateItemPosRangeFromIdx(lIndex);
 	}
-	long FindItemIndexByPos(long lPos)
+	long FindItemIndexByPos(long lPos, long* plWillCursorPos = NULL)
 	{
 		for ( int i = 0; i < m_lDynamicArrayDataCount; i++ )
 		{
 			if ( (m_pDynamicArrayData[i].lBeginPos <= lPos) && 
 				(m_pDynamicArrayData[i].lEndPos >= lPos) ){
+					if ( plWillCursorPos ){
+						if ( i >= 1 ){
+							*plWillCursorPos = m_pDynamicArrayData[i-1].lEndPos+1;
+						}						
+					}
 					return i;
 			}
 		}
@@ -107,12 +113,27 @@ public:
 		MyListItemData* pTemp = GetItem(lIndex-1);
 		for ( int i = 0; i < (m_lDynamicArrayDataCount-lIndex); i++ )
 		{
-			m_pDynamicArrayData[lIndex+i].lBeginPos = pTemp->lEndPos+1;
+			if ( pTemp ){
+				m_pDynamicArrayData[lIndex+i].lBeginPos = pTemp->lEndPos+1;
+			}else{
+				m_pDynamicArrayData[lIndex+i].lBeginPos = 0;
+			}			
 			m_pDynamicArrayData[lIndex+i].lEndPos = 
 				m_pDynamicArrayData[lIndex+i].lBeginPos+m_pDynamicArrayData[lIndex+i].StringTitle.Length()-1;
 			pTemp = &m_pDynamicArrayData[lIndex+i];
 		}
 
+	}
+
+	MyListItemData* FindItemByPID(long lPID)
+	{
+		for( int i = 0; i < m_lDynamicArrayDataCount; i++ )
+		{
+			if ( lPID == m_pDynamicArrayData[i].lPID ){
+				return &m_pDynamicArrayData[i];
+			}
+		}
+		return NULL;
 	}
 
 private:

@@ -252,7 +252,7 @@ void CContactorsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 			}
 			if (nIndex==2)
 			{
-				g_ReciversList.Clear();
+				//g_ReciversList.Clear();
 				long lCount = m_List.GetItemCount();
 				for(int i = 0; i < lCount; i++)
 				{
@@ -264,7 +264,10 @@ void CContactorsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 					  {
 						if(mlid->Selected)
 						{
-							g_ReciversList.AppendItem(mlid);					
+							MyListItemData*pT = g_ReciversList.FindItemByPID(mlid->lPID);
+							if ( !pT ){
+								g_ReciversList.AppendItem(mlid);		
+							}										
 						}
 					  }				   
 					}			

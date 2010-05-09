@@ -101,12 +101,15 @@ void UiEditControl::UpdateTextByRecievers(BOOL bIsAddChar, long lWillPos)
 	for(int i  = 0; i < lReciversCount; i++)
 	{
 		wcscat(wcsReciversName, g_ReciversList.GetItem(i)->StringTitle );
-		//wcscat(wcsReciversName, L";" );
+		if ( bIsAddChar ){
+			if ( lWillPos == (g_ReciversList.GetItem(i)->lEndPos+1) ){
+				wcscat(wcsReciversName, L";" );
+			}			
+		}
 	}
-// 	if ( bIsAddChar ){
-// 		wcscat(wcsReciversName, L";" );
-// 	}
+ 	
 	SetText(wcsReciversName);
+//	Update();
 //	if ( Invalid_4Byte != lWillPos ){
 		//SetCursePos(0);
 //	}
@@ -131,17 +134,17 @@ int UiEditControl::OnKeyDown(int nVirtKey, DWORD lKeyData)
 {
 	int r = UiSingleLineEdit::OnKeyDown(nVirtKey, lKeyData);
 
-	if ( 8 ==  nVirtKey){//delete button down
+	if ( (8 ==  nVirtKey) && ( lKeyData == 0 )){//delete button down
 		int b = 0;
 		// get cur pos
 		long lCursorPos = GetCursePos();
-		long lWillPos = 0;
+		long lWillPos = -1;
 		// delete item from recievers by pos
 		if ( (-1 != lCursorPos) && (0 != lCursorPos) ){			
 			g_ReciversList.DeleteItemByCursorPos((lCursorPos-1), &lWillPos);	
 			UpdateTextByRecievers(TRUE, lWillPos);
-		}		
-		SetCursePos(0/*lWillPos*/);
+		}				
+		SetCursePos(lWillPos+1);		
 	}else if ( 3 == nVirtKey ){//';' button down
 		int b = 0;
 		//get numbers until before ;

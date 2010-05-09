@@ -158,6 +158,11 @@ BOOL	CSmsUnReadWnd::SubInitialize()
 #endif
 	/////////////test/////////////////////////////////////////////////////////////
 
+	if ( NULL != pBuf )
+	{
+		delete	pBuf, pBuf	=	NULL;
+	}
+
 	return	TRUE;
 }
 

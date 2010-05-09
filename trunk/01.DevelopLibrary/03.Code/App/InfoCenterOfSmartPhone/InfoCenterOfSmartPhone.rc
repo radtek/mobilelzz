@@ -72,6 +72,8 @@ IDR_PNG_MainWndSmsSendBtnUp					   RCDATA                  "MainWndSmsSendBtnUp.
 IDR_PNG_EditWndBack					   				RCDATA                  "EditWndBack.PNG"
 IDR_PNG_CTR_LIST_READ					   				RCDATA                  "sms_list_read.png"
 
+IDR_PNG_MAIN_WND_BACKGROUND					   				RCDATA                  "MAINWND.png"
+
 #endif    // 中文(中华人民共和国) resources
 /////////////////////////////////////////////////////////////////////////////
 

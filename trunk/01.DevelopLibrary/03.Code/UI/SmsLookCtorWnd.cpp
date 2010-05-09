@@ -86,7 +86,14 @@ BOOL	CSmsLookCtorWnd::SubInitialize()
 
 
 	/////////////test/////////////////////////////////////////////////////////////
-	
+	wchar_t	*pBuf		=	NULL;
+	long	lSize		=	0;
+	wchar_t	*pwcResult	=	NULL;
+
+	HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeCtorRltListReq( &pBuf, &lSize );
+	if ( FAILED ( hr ) )									return	FALSE;
+
+#if 0	
 	CMzString name = L"ÐÕÃû%d";
 //	CMzString content = L"¶ÌÐÅÄÚÈÝ SmsContent%d:";
 	CMzString stime = L"Count: 100";
@@ -116,7 +123,12 @@ BOOL	CSmsLookCtorWnd::SubInitialize()
 		m_list_base.AddItem(item);
 	}
 
+#endif
 
+	if ( NULL != pBuf )
+	{
+		delete	pBuf, pBuf	=	NULL;
+	}
 /////////////test/////////////////////////////////////////////////////////////
 
 	return	TRUE;

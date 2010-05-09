@@ -20,8 +20,10 @@ class CEasySmsUiCtrl
 	public:
 	
 		HRESULT		MakeUnReadRltListReq (  wchar_t **ppBuf, long *lSize );
+		HRESULT		MakeUnReadListRlt    ( CEasySmsListBase &clCEasySmsListBase, wchar_t *pwcRltStream );
 
-		HRESULT		MakeUnReadListRlt ( CEasySmsListBase &clCEasySmsListBase, wchar_t *pwcRltStream );
+		HRESULT		MakeCtorRltListReq (  wchar_t **ppBuf, long *lSize );
+		HRESULT		MakeCtorRltList    ( CEasySmsListBase &clCEasySmsListBase, wchar_t *pwcRltStream );
 
 	public:
 

@@ -107,7 +107,17 @@ public:
 		}
 		return Invalid_4Byte;
 	}
-	
+	void FindWillPos(long lCurPos, long& lWillPos)
+	{
+		long lIndex = FindItemIndexByPos(lCurPos);
+		if ( Invalid_4Byte != lIndex ){
+			if ( Invalid_4Byte != m_pDynamicArrayData[lIndex].lPID ){
+				lWillPos = m_pDynamicArrayData[lIndex].lEndPos+1;
+			}
+		}
+		
+		return;
+	}
 	void UpdateItemPosRangeFromIdx(long lIndex)
 	{
 		MyListItemData* pTemp = GetItem(lIndex-1);

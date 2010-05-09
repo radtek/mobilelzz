@@ -33,6 +33,6 @@ public:
 
 	virtual int  OnKeyDown(int nVirtKey, DWORD lKeyData);
 	//virtual void OnClick( size_t  nIndex );
-	virtual int OnChar( TCHAR  chCharCode, LPARAM  lKeyData );
+	//virtual int OnChar( TCHAR  chCharCode, LPARAM  lKeyData );
 };
 #endif //__UiEditControl_h__

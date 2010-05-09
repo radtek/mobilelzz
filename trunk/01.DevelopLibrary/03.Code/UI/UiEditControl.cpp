@@ -66,6 +66,10 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 	MzOpenSip();
 	int r = UiSingleLineEdit::OnLButtonUp(fwKeys, xPos, yPos);
 	long lCursorPos = GetCursePos();
+	long lWillPos = lCursorPos;
+	g_ReciversList.FindWillPos(lCursorPos, lWillPos);
+	SetCursePos(lWillPos);
+
 	return r;
 }
 
@@ -116,12 +120,12 @@ void UiEditControl::UpdateTextByRecievers(BOOL bIsAddChar, long lWillPos)
 //	return;
 //}
 
-int UiEditControl::OnChar( TCHAR  chCharCode, LPARAM  lKeyData )
-{
-	CMzString& wcsControlText = GetText();
-	int b  =0;
-	return 0;
-}
+//int UiEditControl::OnChar( TCHAR  chCharCode, LPARAM  lKeyData )
+//{
+//	CMzString& wcsControlText = GetText();
+//	int b  =0;
+//	return 0;
+//}
 
 int UiEditControl::OnKeyDown(int nVirtKey, DWORD lKeyData)
 {
@@ -131,14 +135,13 @@ int UiEditControl::OnKeyDown(int nVirtKey, DWORD lKeyData)
 		int b = 0;
 		// get cur pos
 		long lCursorPos = GetCursePos();
+		long lWillPos = 0;
 		// delete item from recievers by pos
-		if ( (-1 != lCursorPos) && (0 != lCursorPos) ){
-			long lWillPos = 0;
-			g_ReciversList.DeleteItemByCursorPos((lCursorPos-1), &lWillPos);
-			//update edit
+		if ( (-1 != lCursorPos) && (0 != lCursorPos) ){			
+			g_ReciversList.DeleteItemByCursorPos((lCursorPos-1), &lWillPos);	
 			UpdateTextByRecievers(TRUE, lWillPos);
-		}
-		SetCursePos(0);
+		}		
+		SetCursePos(0/*lWillPos*/);
 	}else if ( 3 == nVirtKey ){//';' button down
 		int b = 0;
 		//get numbers until before ;

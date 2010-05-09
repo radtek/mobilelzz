@@ -80,8 +80,10 @@ public:
 	{
 		//find item index by pos
 		long lIndex = FindItemIndexByPos(lCursorPos, plWillCursorPos);
-		DeleteItem(lIndex);
-		UpdateItemPosRangeFromIdx(lIndex);
+		if ( Invalid_4Byte != lIndex ){
+			DeleteItem(lIndex);
+			UpdateItemPosRangeFromIdx(lIndex);
+		}			
 	}
 	void InsertItemByPos(MyListItemData* pT, long lPos)
 	{
@@ -111,9 +113,9 @@ public:
 	{
 		long lIndex = FindItemIndexByPos(lCurPos);
 		if ( Invalid_4Byte != lIndex ){
-			if ( Invalid_4Byte != m_pDynamicArrayData[lIndex].lPID ){
+			//if ( Invalid_4Byte != m_pDynamicArrayData[lIndex].lPID ){
 				lWillPos = m_pDynamicArrayData[lIndex].lEndPos+1;
-			}
+			//}
 		}
 		
 		return;

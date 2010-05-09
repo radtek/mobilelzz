@@ -104,7 +104,7 @@ void UiEditControl::UpdateTextByRecievers(BOOL bIsAddChar, long lWillPos)
 // 	}
 	SetText(wcsReciversName);
 //	if ( Invalid_4Byte != lWillPos ){
-		SetCursePos(0);
+		//SetCursePos(0);
 //	}
 }
 
@@ -138,7 +138,7 @@ int UiEditControl::OnKeyDown(int nVirtKey, DWORD lKeyData)
 			//update edit
 			UpdateTextByRecievers(TRUE, lWillPos);
 		}
-		
+		SetCursePos(0);
 	}else if ( 3 == nVirtKey ){//';' button down
 		int b = 0;
 		//get numbers until before ;
@@ -167,7 +167,7 @@ int UiEditControl::OnKeyDown(int nVirtKey, DWORD lKeyData)
 			stTemp.StringTitle = pNumber;
 			//insert reciever in the pos
 			g_ReciversList.InsertItemByPos(&stTemp, lPos);
-			UpdateTextByRecievers();
+			//UpdateTextByRecievers();
 		}		
 	}
 

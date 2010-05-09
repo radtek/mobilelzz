@@ -12,6 +12,60 @@ CEasySmsUiCtrl::~CEasySmsUiCtrl( void )
 
 }
 
+// <request>
+// 	<data type = "contactors">
+//	 	<operation type = "list">
+//	 	</operation>
+//	<data type>
+// </request>
+
+HRESULT		CEasySmsUiCtrl::MakeCtorRltListReq (  wchar_t **ppBuf, long *lSize )
+{
+	CXmlStream	*pCXmlStream	=	new	CXmlStream;
+
+	if ( NULL == pCXmlStream )
+	{
+		return	E_FAIL;
+	}
+
+	HRESULT	hr		=		S_OK;
+
+	do 
+	{
+		hr	=	pCXmlStream->Initialize();
+		if ( FAILED( hr ) )													break;
+
+		NodeAttribute_t  stNodeAttr;
+		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
+
+		wcscpy( stNodeAttr.wcsName, L"type" );
+		wcscpy( stNodeAttr.wcsValue, L"contactors" );
+
+		hr	=	MakeNode( pCXmlStream, L"request/data/", &stNodeAttr, 1 );
+		if ( FAILED( hr ) )													break;
+
+		//////////////////////////////////////////////////////////////////////////
+		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
+		wcscpy( stNodeAttr.wcsName , L"type" );
+		wcscpy( stNodeAttr.wcsValue, L"list" );
+
+		hr	=	MakeNode( pCXmlStream, L"request/data/operation/", &stNodeAttr, 1 );
+		if ( FAILED( hr ) )													break;
+
+		//////////////////////////////////////////////////////////////////////////
+
+		hr	=	pCXmlStream->GetXmlStream( ppBuf, lSize );
+		if ( FAILED( hr ) )													break;
+
+	} while ( FALSE );
+
+	if ( NULL != pCXmlStream )
+	{
+		delete	pCXmlStream;
+	}
+
+	return	hr;
+}
 
 // <request>
 // 	<data type = "sms">
@@ -47,6 +101,7 @@ HRESULT		CEasySmsUiCtrl::MakeUnReadRltListReq( wchar_t **ppBuf, long *lSize )
 		wcscpy( stNodeAttr.wcsValue, L"sms" );
 
 		hr	=	MakeNode( pCXmlStream, L"request/data/", &stNodeAttr, 1 );
+		if ( FAILED( hr ) )													break;
 
 		//////////////////////////////////////////////////////////////////////////
 		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
@@ -108,6 +163,7 @@ HRESULT		CEasySmsUiCtrl::MakeUnReadListRlt ( CEasySmsListBase &clCEasySmsListBas
 	}
 
 	HRESULT	hr		=		S_OK;
+
 	do 
 	{
 		hr	=	pCXmlStream->Initialize();
@@ -217,4 +273,39 @@ HRESULT		CEasySmsUiCtrl::AppendList( CXmlNode *pCXmlNode, CEasySmsListBase &clCE
 	pCXmlNode->MoveNext();
 
 	return	S_OK;
+}
+
+HRESULT		CEasySmsUiCtrl::MakeCtorRltList    ( CEasySmsListBase &clCEasySmsListBase, wchar_t *pwcRltStream )
+{
+	if ( NULL == pwcRltStream )
+	{
+		return	E_FAIL;
+	}
+
+	CXmlStream	*pCXmlStream	=	new	CXmlStream;
+
+	if ( NULL == pCXmlStream )
+	{
+		return	E_FAIL;
+	}
+
+	HRESULT	hr		=		S_OK;
+
+	do 
+	{
+		hr	=	pCXmlStream->Initialize();
+		if ( FAILED( hr ) )													break;
+
+		hr	=	pCXmlStream->Load( pwcRltStream, wcslen( pwcRltStream ) );
+		if ( FAILED( hr ) )													break;
+
+		long	lCnt	=	0;
+		hr	=	GetListCnt( pCXmlStream, lCnt );
+		if ( FAILED( hr ) )													break;
+
+		CXmlNode	*	pCXmlNode	=	NULL;
+		hr	=	pCXmlStream->SelectNode( L"result/data/data/rec/", &pCXmlNode );
+		if ( FAILED( hr ) )													break;
+
+	} while ( FALSE );
 }

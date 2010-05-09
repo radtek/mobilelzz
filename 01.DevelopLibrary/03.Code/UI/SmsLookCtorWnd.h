@@ -4,6 +4,7 @@
 #include "UiEditControl.h"
 #include "NewSmsWnd.h"
 #include "EasySmsWndBase.h"
+#include "EasySmsUiCtrl.h"
 
 
 class CSmsLookCtorWnd	:	public	CEasySmsWndBase
@@ -35,6 +36,8 @@ class CSmsLookCtorWnd	:	public	CEasySmsWndBase
 	private:
 
 		UiAlphabetBar				m_AlpBar;
+
+		CEasySmsUiCtrl				m_clCEasySmsUiCtrl;
 
 };
 

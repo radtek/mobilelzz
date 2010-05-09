@@ -40,6 +40,10 @@ class CEasySmsMainWnd : public CEasySmsWndBase
 
 		UiButton_Image		m_UnSetUpSmsBtnImg;
 
+		UiPicture			m_Picture;
+
+		int					m_modeIndex;
+
 	private:
 
 };

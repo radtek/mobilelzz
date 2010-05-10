@@ -68,8 +68,12 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 	long lCursorPos = GetCursePos();
 	long lWillPos = lCursorPos;
 	g_ReciversList.FindWillPos(lCursorPos, lWillPos);
-	SetCursePos(lWillPos);
-
+	if ( lWillPos >= 0 ){
+		SetCursePos(lWillPos);
+	}else{
+		SetCursePos(0);
+	}
+	
 	return r;
 }
 

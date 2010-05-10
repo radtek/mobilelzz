@@ -88,10 +88,15 @@ public:
 	void InsertItemByPos(MyListItemData* pT, long lPos)
 	{
 		//find item index by pos
-		long lIndex = FindItemIndexByPos(lPos);
-		pT->StringTitle += L";";
-		InsertItem(lIndex, pT);
-		UpdateItemPosRangeFromIdx(lIndex);
+		if ( m_lDynamicArrayDataCount > 0 ){
+			long lIndex = FindItemIndexByPos(lPos);
+			pT->StringTitle += L";";
+			InsertItem(lIndex, pT);
+			UpdateItemPosRangeFromIdx(lIndex);
+		}else{
+			AppendItem(pT);
+		}
+		
 	}
 	long FindItemIndexByPos(long lPos, long* plWillCursorPos = NULL)
 	{

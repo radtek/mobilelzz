@@ -110,6 +110,12 @@ public:
 		//update item count
 		m_lDynamicArrayDataCount -= 1;
 	}
+	void DeleteItem(T* pT)
+	{
+		long lIndex = (pT-m_pDynamicArrayData)/sizeof(pT);
+		//copy items move one pos before
+		DeleteItem(lIndex);
+	}
 	void InsertItem(long lIndex, T* pT)
 	{
 		//move last item one pos after

@@ -88,8 +88,8 @@ public:
 	void InsertItemByPos(MyListItemData* pT, long lPos)
 	{
 		//find item index by pos
-		if ( m_lDynamicArrayDataCount > 0 ){
-			long lIndex = FindItemIndexByPos(lPos);
+		long lIndex = FindItemIndexByPos(lPos);
+		if ( lIndex != Invalid_4Byte ){			
 			pT->StringTitle += L";";
 			InsertItem(lIndex, pT);
 			UpdateItemPosRangeFromIdx(lIndex);

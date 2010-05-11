@@ -259,17 +259,19 @@ void CContactorsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 					ListItem* pItem = m_List.GetItem(i);
 					if(pItem)
 					{
-					  MyListItemData* mlid = (MyListItemData*)pItem->Data;
-					  if(mlid)
-					  {
-						if(mlid->Selected)
+						MyListItemData* mlid = (MyListItemData*)pItem->Data;
+						if(mlid)
 						{
 							MyListItemData*pT = g_ReciversList.FindItemByPID(mlid->lPID);
 							if ( !pT ){
-								g_ReciversList.AppendItem(mlid);		
-							}										
-						}
-					  }				   
+								if(mlid->Selected)
+								{
+									g_ReciversList.AppendItem(mlid);	
+								}else{
+									g_ReciversList.DeleteItem(pT);
+								}							  	
+							}							
+						}				   
 					}			
 				}
 				

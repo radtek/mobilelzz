@@ -71,7 +71,9 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 	if ( lWillPos >= 0 ){
 		SetCursePos(lWillPos);
 	}else{
-//		SetCursePos(0);
+		CMzString& clTempStr = GetText();
+		long lLength = clTempStr.Length();
+		SetCursePos(lLength);
 	}
 
 	Update();

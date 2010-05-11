@@ -7,16 +7,6 @@
 #include "SmsFindWnd.h"
 #include "SmsEncrytpCtorWnd.h"
 
-//显示图片的不同模式
-static DWORD modeId[4]=
-{
-	MZ_PAINTMODE_NORMAL,                    //正常显示
-	MZ_PAINTMODE_TILE,                      //平铺
-	MZ_PAINTMODE_STRETCH_H,                 //水平方向拉伸 (不设置边距)
-	MZ_PAINTMODE_STRETCH_H                  //水平方向拉伸 (设置边距)
-};
-
-
 CEasySmsMainWnd::CEasySmsMainWnd(void)
 {
 
@@ -121,8 +111,7 @@ void CEasySmsMainWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 BOOL	CEasySmsMainWnd::SubInitialize()
 {
 
-/*设置背景图片*/
-
+	/*设置背景图片*/
 	m_modeIndex	=	0;
 	m_Picture.SetID( MZ_IDC_MAIN_PICTURE );
 	m_Picture.SetPos( 0, 0, GetWidth(), GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR );

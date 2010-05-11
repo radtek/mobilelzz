@@ -64,7 +64,6 @@ BOOL	CSmsUnReadWnd::SubInitialize()
 	//ini list
 	m_list_base.SetID( MZ_IDC_SMS_UNREAD_LIST );
 	m_list_base.EnableDragModeH(true);
-	AddUiWin( &m_list_base );
 
 
 	//ini toolbar
@@ -120,7 +119,24 @@ BOOL	CSmsUnReadWnd::SubInitialize()
 	if ( FAILED ( hr ) )										return	FALSE;
 #endif
 	hr	=	m_clCEasySmsUiCtrl.MakeUnReadListRlt( m_list_base, pwcResult );
-	if ( FAILED ( hr ) )										return	FALSE;
+	if ( E_ACCESSDENIED == hr )
+	{
+		/*…Ë÷√±≥æ∞Õº∆¨*/
+		m_modeIndex	=	0;
+		m_Picture.SetID( MZ_IDC_MAIN_PICTURE );
+		m_Picture.SetPos( 0, 0, GetWidth(), GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR );
+		m_Picture.SetPaintMode( modeId[ m_modeIndex ] );
+		m_Picture.LoadImage( MzGetInstanceHandle(), RT_RCDATA, MAKEINTRESOURCE( IDR_PNG_MAIN_WND_BACKGROUND ) );
+		AddUiWin( &m_Picture );	
+	}
+	else if ( FAILED ( hr ) )
+	{
+		return	FALSE;
+	}
+	else
+	{
+		AddUiWin( &m_list_base );
+	}
 
 #if 0
 	CMzString content = L"∂Ã–≈ƒ⁄»› SmsContent%d:";

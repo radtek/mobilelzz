@@ -35,7 +35,11 @@ class CSmsUnReadWnd	:	public	CEasySmsWndBase
 
 	private:
 
-	CEasySmsUiCtrl		m_clCEasySmsUiCtrl;
+		CEasySmsUiCtrl		m_clCEasySmsUiCtrl;
+
+		UiPicture			m_Picture;
+
+		int					m_modeIndex;
 };
 
 #endif

@@ -252,10 +252,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\UI\MainWnd.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\UI\NewSmsWnd.cpp"
 					>
 				</File>

@@ -23,4 +23,13 @@ using namespace std;
 
 #include "Core.h"
 
+//显示图片的不同模式
+static DWORD modeId[4]=
+{
+	MZ_PAINTMODE_NORMAL,                    //正常显示
+	MZ_PAINTMODE_TILE,                      //平铺
+	MZ_PAINTMODE_STRETCH_H,                 //水平方向拉伸 (不设置边距)
+	MZ_PAINTMODE_STRETCH_H                  //水平方向拉伸 (设置边距)
+};
+
 // TODO: 在此处引用程序需要的其他头文件

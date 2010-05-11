@@ -18,12 +18,27 @@
 #define MZ_IDC_UNREAD_SMS				131
 
 
-#define IDR_PNG_MainWndSmsLookBtnDown	120
-#define IDR_PNG_MainWndSmsLookBtnUp		121
+#define IDR_PNG_UNREAD_UP				120
+#define IDR_PNG_UNREAD_DOWN				121
 #define	IDR_TOOLBAR_MAIN_WND			122
 
-#define IDR_PNG_MainWndSmsSendBtnDown	122
-#define IDR_PNG_MainWndSmsSendBtnUp		123
+#define IDR_PNG_SMS_UP					125
+#define	IDR_PNG_SMS_DOWN				126
+
+#define IDR_PNG_NEW_UP					127
+#define	IDR_PNG_NEW_DOWN				128
+
+#define IDR_PNG_FIND_UP					129
+#define	IDR_PNG_FIND_DOWN				130
+
+#define IDR_PNG_ENCRYPT_UP				131
+#define	IDR_PNG_ENCRYPT_DOWN			132
+
+#define IDR_PNG_SYNC_UP					133
+#define	IDR_PNG_SYNC_DOWN				134
+
+#define IDR_PNG_SETUP_UP				135
+#define	IDR_PNG_SETUP_DOWN				136
 
 //NewSmsWnd.h
 #define MZ_IDC_SEND_SMS_BTN				101
@@ -41,8 +56,8 @@
 #define	MZ_IDC_SMSLOOKCTOR_TOOLBAR		115
 #define	MZ_IDC_SMSLOOKCTOR_ALPBAR		116
 
-#define IDR_PNG_CTR_LIST_READ			125
-#define IDR_PNG_MAIN_WND_BACKGROUND     126
+#define IDR_PNG_CTR_LIST_READ			200
+#define IDR_PNG_MAIN_WND_BACKGROUND     201
 
 //SmsLookMsgWnd.h
 #define	MZ_IDC_SMSLOOKMSG_LIST			117

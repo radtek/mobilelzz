@@ -207,15 +207,32 @@ HRESULT		CEasySmsUiCtrl::MakeUnReadListRlt ( CEasySmsListBase &clCEasySmsListBas
 
 HRESULT		CEasySmsUiCtrl::GetListCnt( CXmlStream	*pCXmlStream, long	&lCnt )
 {
+	if ( NULL == pCXmlStream )
+	{
+		return	E_FAIL;
+	}
+
+	lCnt	=	0;
+	
 	CXmlNode	*	pCXmlNode	=	NULL;
 	pCXmlStream->SelectNode( L"result/data/data/", &pCXmlNode );
 
 	auto_ptr<CXmlNode>	CXmlNodePtr( pCXmlNode );
 
 	NodeAttribute_t		*pAttributes	=	NULL;
+	long				lAttrCnt		=	0;
 
-	HRESULT	hr	=	CXmlNodePtr->GetNodeContent( NULL, NULL, &pAttributes, &lCnt );
+	HRESULT	hr	=	CXmlNodePtr->GetNodeContent( NULL, NULL, &pAttributes, &lAttrCnt );
 	if ( FAILED( hr ) )												return	E_FAIL;
+
+	for ( int i = 0; i < lAttrCnt; ++i )
+	{
+		if ( 0 == wcsncmp( pAttributes[i].wcsName, L"count", wcslen( L"count" ) ) )
+		{
+			lCnt	=	_wtol( pAttributes[i].wcsValue );
+			break;
+		}
+	}
 	
 	return	S_OK;
 }

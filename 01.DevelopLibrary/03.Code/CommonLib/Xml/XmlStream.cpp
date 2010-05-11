@@ -842,15 +842,16 @@ APP_Result	CXmlStream::ParseXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 			{
 				break;
 			}
-			if ( NULL == pPreNode )
-			{
-				bIsFind	=	FALSE;
-				break;
-			}			
 			pCurNode	=	pPreNode->FirstChildElement( pTemp );
 
 			pPreNode	=	pCurNode;
 			pCurNode	=	NULL;
+
+			if ( NULL == pPreNode )
+			{
+				bIsFind	=	FALSE;
+				break;
+			}	
 		}		
 
 	} while ( FALSE );

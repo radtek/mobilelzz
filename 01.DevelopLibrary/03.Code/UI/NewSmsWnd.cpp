@@ -149,8 +149,8 @@ BOOL CNewSmsWnd::OnInitDialog()
 	RegisterShellMessage( m_hWnd, WM_MZSH_SHOW_NOTIFY_WND );
 
 	//back
-	ImagingHelper* imgNormalBack	=	m_imgContainer.LoadImage(MzGetInstanceHandle(), 
-										/*IDR_PNG_EditWndBack*/IDR_PNG_MainWndSmsSendBtnDown, true );
+// 	ImagingHelper* imgNormalBack	=	m_imgContainer.LoadImage(MzGetInstanceHandle(), 
+// 										/*IDR_PNG_EditWndBack*/IDR_PNG_MainWndSmsSendBtnDown, true );
 
 	// zhu.t add 初始化窗口中的Toolbar控件
 	m_toolBar_base.SetID( MZ_IDC_NEWSMS_TOOLBAR );

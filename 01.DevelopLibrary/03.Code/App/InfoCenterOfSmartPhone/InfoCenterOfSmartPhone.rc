@@ -63,11 +63,27 @@ IDR_RCDATA_N_H             RCDATA               "Person_H.png"
 IDR_RCDATA_N_V             RCDATA               "Person_V.png"
 IDR_PNG_EMAILICON					 RCDATA                  "Send.png"
 
-IDR_PNG_MainWndSmsLookBtnDown					 RCDATA                  "MainWndSmsLookBtnDown.PNG"
-IDR_PNG_MainWndSmsLookBtnUp					   RCDATA                  "MainWndSmsLookBtnUp.PNG"
+IDR_PNG_UNREAD_UP					 RCDATA                  "未读_up.png"
+IDR_PNG_UNREAD_DOWN					 RCDATA                  "未读_down.png"
 
-IDR_PNG_MainWndSmsSendBtnDown					 RCDATA                  "MainWndSmsSendBtnDown.PNG"
-IDR_PNG_MainWndSmsSendBtnUp					   RCDATA                  "MainWndSmsSendBtnUp.PNG"
+IDR_PNG_SMS_UP					 	RCDATA                  "短信_up.png"
+IDR_PNG_SMS_DOWN					RCDATA                  "短信_down.png"
+
+IDR_PNG_NEW_UP					 	RCDATA                  "新建_up.png"
+IDR_PNG_NEW_DOWN					RCDATA                  "新建_down.png"
+
+IDR_PNG_FIND_UP					 	RCDATA                  "查找_up.png"
+IDR_PNG_FIND_DOWN					RCDATA                  "查找_down.png"
+
+
+IDR_PNG_ENCRYPT_UP					RCDATA                  "加密_up.png"
+IDR_PNG_ENCRYPT_DOWN					RCDATA                  "加密_down.png"
+
+IDR_PNG_SYNC_UP						RCDATA                  "同步_up.png"
+IDR_PNG_SYNC_DOWN					RCDATA                  "同步_down.png"
+
+IDR_PNG_SETUP_UP					RCDATA                  "设置_up.png"
+IDR_PNG_SETUP_DOWN					RCDATA                  "设置_down.png"
 
 IDR_PNG_EditWndBack					   				RCDATA                  "EditWndBack.PNG"
 IDR_PNG_CTR_LIST_READ					   				RCDATA                  "sms_list_read.png"

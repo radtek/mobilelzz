@@ -176,10 +176,15 @@ HRESULT		CEasySmsUiCtrl::MakeUnReadListRlt ( CEasySmsListBase &clCEasySmsListBas
 		hr	=	GetListCnt( pCXmlStream, lCnt );
 		if ( FAILED( hr ) )													break;
 
-
 		CXmlNode	*	pCXmlNode	=	NULL;
 		hr	=	pCXmlStream->SelectNode( L"result/data/data/rec/", &pCXmlNode );
 		if ( FAILED( hr ) )													break;
+
+		if ( NULL == pCXmlNode || 0 == lCnt )
+		{
+			hr	=	E_ACCESSDENIED;
+			break;
+		}
 
 		auto_ptr<CXmlNode>	CXmlNodePtr( pCXmlNode );
 

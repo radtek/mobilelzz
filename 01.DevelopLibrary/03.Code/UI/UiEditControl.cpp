@@ -71,9 +71,10 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 	if ( lWillPos >= 0 ){
 		SetCursePos(lWillPos);
 	}else{
-		SetCursePos(0);
+//		SetCursePos(0);
 	}
-	
+
+	Update();
 	return r;
 }
 

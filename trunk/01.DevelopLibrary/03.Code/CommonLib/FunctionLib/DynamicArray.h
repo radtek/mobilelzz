@@ -103,7 +103,10 @@ public:
 	void DeleteItem(long lIndex)
 	{
 		//copy items move one pos before
-		MoveItemsByStep((lIndex+1), (m_lDynamicArrayDataCount-(lIndex+1)), Move_Direction_Forward, 1);
+		if ( lIndex > 0 )
+		{
+			MoveItemsByStep((lIndex+1), (m_lDynamicArrayDataCount-(lIndex+1)), Move_Direction_Forward, 1);
+		}
 		//update item count
 		m_lDynamicArrayDataCount -= 1;
 	}
@@ -128,7 +131,7 @@ public:
 				lBeginPos--;
 			}
 		}else{
-			if ( (lIndex - lSteps) < 0 ){
+			if ( ((lIndex - lSteps) < 0) || (lIndex > (m_lDynamicArrayDataCount-1)) ){
 				return;
 			}
 			lBeginPos = lIndex;

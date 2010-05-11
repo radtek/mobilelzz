@@ -220,6 +220,7 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 			int nIndex	=	lParam;
 			if ( 2 == nIndex )
 			{
+				g_ReciversList.Clear();
 				this->EndModal( ID_CANCEL );	//退出
 			}else if ( 1 == nIndex )
 			{	//联系人

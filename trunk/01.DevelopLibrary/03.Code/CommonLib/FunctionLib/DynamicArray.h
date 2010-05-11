@@ -103,7 +103,7 @@ public:
 	void DeleteItem(long lIndex)
 	{
 		//copy items move one pos before
-		if ( lIndex > 0 )
+		if ( lIndex < (m_lDynamicArrayDataCount-1) )
 		{
 			MoveItemsByStep((lIndex+1), (m_lDynamicArrayDataCount-(lIndex+1)), Move_Direction_Forward, 1);
 		}
@@ -112,7 +112,9 @@ public:
 	}
 	void DeleteItem(T* pT)
 	{
-		long lIndex = (pT-m_pDynamicArrayData)/sizeof(pT);
+		//long lUnit = sizeof(*pT);
+		long lRange = (long)(pT-m_pDynamicArrayData);
+		long lIndex = lRange;
 		//copy items move one pos before
 		DeleteItem(lIndex);
 	}

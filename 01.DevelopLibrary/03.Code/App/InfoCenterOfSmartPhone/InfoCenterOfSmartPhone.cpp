@@ -68,6 +68,12 @@ public:
 	{
 		RECT rcWork = MzGetWorkArea();
 		m_MainWnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0);
+
+		if ( MzGetParam ( MZGP_APP_START_ANIMATION ) ==TRUE )   
+		{
+			m_MainWnd.AnimateWindow( getScreenRandom() , true);
+		}
+
 		m_MainWnd.Show();
 	}
 // 	else if ( )

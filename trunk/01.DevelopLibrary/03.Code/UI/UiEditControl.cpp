@@ -116,7 +116,7 @@ void UiEditControl::UpdateTextByRecievers(BOOL bIsAddChar, long lWillPos)
 	}
  	
 	SetText(wcsReciversName);
-//	Update();
+	
 //	if ( Invalid_4Byte != lWillPos ){
 		//SetCursePos(0);
 //	}
@@ -151,7 +151,8 @@ int UiEditControl::OnKeyDown(int nVirtKey, DWORD lKeyData)
 			g_ReciversList.DeleteItemByCursorPos((lCursorPos-1), &lWillPos);	
 			UpdateTextByRecievers(TRUE, lWillPos);
 		}				
-		SetCursePos(lWillPos+1);		
+		SetCursePos(lWillPos+1);
+		//Update();
 	}else if ( 3 == nVirtKey ){//';' button down
 		int b = 0;
 		//get numbers until before ;

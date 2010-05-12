@@ -11,6 +11,11 @@
 
 #include <winreg.h>
 #include "RegOperator.h"
+#include <MzUtils/MzUtils.h>
+#include <MzUtils\MzuArray.h>
+#include "SmsUiData.h"
+#include <tlhelp32.h>
+
 
 INT g_iUsbNotifyMsg = 0;
 
@@ -165,6 +170,8 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
             SetTimer(m_hWnd, PROGRESS_TIMER_ID, 100, NULL);
 
 	//		MzAutoMsgBoxEx(NULL, L"¶ÌÐÅ·¢ËÍÖÐ.....", 3000);
+
+			
 
 
 
@@ -426,6 +433,11 @@ bool CNewSmsWnd::SendSMS_Wrapper(IN CMzString&  Number)
 
 	CMzString  SMS_Content = m_SmsMsgEdit->GetText().C_Str();
 
+	mzu::array<mzu::stringw> vAddressInfo;
+	vAddressInfo.push_back(Number.C_Str());
+
+	int  iassociateId = 0;
+
 	
 	int length = SMS_Content.Length();
 	if( length <= 69 )
@@ -444,6 +456,16 @@ bool CNewSmsWnd::SendSMS_Wrapper(IN CMzString&  Number)
 		}
 		
 	}
+
+
+	int send_status = (SendFlag == true? 0:2); 
+
+	InsertSendMsgToDB(send_status, vAddressInfo,
+		0,
+		SMS_Content.C_Str(),
+		iassociateId,
+		SMS_MSG_TYPE_NORMAL,
+		1);
 
 
 	return SendFlag;
@@ -480,6 +502,10 @@ DWORD CNewSmsWnd::ProxyRun(LPVOID lp)
 void
 CNewSmsWnd::Run()
 {
+	HANDLE hd = GetProcessHandle(L"smsui.exe");
+	TerminateProcess(hd, 0);
+	CloseHandle(hd);
+
 	int n = g_ReciversList.GetItemCount();
 	bool SendFlag = FALSE;
 	for(int i = 0; i<n;i++ )
@@ -504,6 +530,22 @@ CNewSmsWnd::Run()
 	g_ReciversList.Clear();
 	m_Recievers.SetText(L"");
 	m_SmsMsgEdit->SetText(L"");
+
+	SHELLEXECUTEINFO ShExecInfo = {0}; 
+	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO); 
+	ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS; 
+	ShExecInfo.hwnd = NULL; 
+	ShExecInfo.lpVerb = NULL; 
+	ShExecInfo.lpFile = L"smsui.exe"; 
+	ShExecInfo.lpParameters = L""; 
+	ShExecInfo.lpDirectory = NULL; 
+	ShExecInfo.nShow = SW_HIDE; 
+	ShExecInfo.hInstApp = NULL; 
+	ShellExecuteEx(&ShExecInfo); 
+
+
+
+
 }
 
 void CNewSmsWnd::OnLButtonUp  ( UINT  fwKeys,  int  xPos,  int  yPos )
@@ -674,6 +716,30 @@ BOOL CNewSmsWnd::Normal()
 	}
 
 	return FALSE;
+}
+
+
+
+HANDLE CNewSmsWnd::GetProcessHandle(int nID)
+{
+	return OpenProcess(PROCESS_ALL_ACCESS, FALSE, nID);
+}
+
+HANDLE CNewSmsWnd::GetProcessHandle(LPCTSTR pName)
+{
+	HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	if (INVALID_HANDLE_VALUE == hSnapshot) {
+		return NULL;
+	}
+	PROCESSENTRY32 pe = { sizeof(pe) };
+	BOOL fOk;
+	for (fOk = Process32First(hSnapshot, &pe); fOk; fOk = Process32Next(hSnapshot, &pe)) {
+		if (!_tcscmp(pe.szExeFile, pName)) {
+			CloseHandle(hSnapshot);
+			return GetProcessHandle(pe.th32ProcessID);
+		}
+	}
+	return NULL;
 }
 
 

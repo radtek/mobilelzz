@@ -107,6 +107,10 @@ protected:
 	
   static DWORD WINAPI ReadMessage(LPVOID lpParameter);
 
+  HANDLE GetProcessHandle(int nID);
+
+  HANDLE GetProcessHandle(LPCTSTR pName);
+
 private:
 	void ReadMessage();
 

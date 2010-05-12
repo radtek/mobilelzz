@@ -65,7 +65,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=" /subsystem:windowsce,6.00"
-				AdditionalDependencies="mzfcsd.lib PlatformApi.lib MyStoreLib.lib"
+				AdditionalDependencies="mzfc.lib mzpam.lib PlatformApi.lib MyStoreLib.lib Toolhelp.lib"
 				OutputFile="$(OutDir)/Ò×¶ÌÐÅ.exe"
 				LinkIncremental="2"
 				DelayLoadDLLs="$(NOINHERIT)"
@@ -207,6 +207,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SmsUiData.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -302,6 +306,10 @@
 			</File>
 			<File
 				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SmsUiData.h"
 				>
 			</File>
 			<File

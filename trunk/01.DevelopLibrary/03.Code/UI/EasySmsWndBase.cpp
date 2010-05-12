@@ -97,6 +97,10 @@ int	CEasySmsWndBase::DoModalBase( CMzWndEx *pCMzWndEx )
 {
 	RECT rcWork	=	MzGetWorkArea();
 	pCMzWndEx->Create( rcWork.left, rcWork.top, RECT_WIDTH(rcWork), RECT_HEIGHT(rcWork), 0, 0, 0 );
+	// 设置窗口切换动画（弹出时的动画）
+	pCMzWndEx->SetAnimateType_Show( getScreenRandom() );
+	// 设置窗口切换动画（结束时的动画）
+	pCMzWndEx->SetAnimateType_Hide( getScreenRandom() );
 
 	return	pCMzWndEx->DoModal();
 }

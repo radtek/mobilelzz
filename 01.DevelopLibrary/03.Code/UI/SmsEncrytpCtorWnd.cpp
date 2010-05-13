@@ -120,8 +120,8 @@ BOOL	CSmsEncrytpCtorWnd::SubInitialize()
 void	CSmsEncrytpCtorWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 {
 	CSmsPassInputWnd	clCSmsPassInputWnd;
-	clCSmsPassInputWnd.CreateModalDialog( 50, 100, 400, 300, this->m_hWnd );
-	clCSmsPassInputWnd.SetBgColor ( RGB( 228, 240, 0 ) );
+	clCSmsPassInputWnd.CreateModalDialog( 50, 100, 350, 250, this->m_hWnd );
+//	clCSmsPassInputWnd.SetBgColor ( RGB( 228, 240, 0 ) );
 	int iRlt	=	DoModalBase( &clCSmsPassInputWnd );
 	if ( ID_CASCADE_EXIT == iRlt )
 	{

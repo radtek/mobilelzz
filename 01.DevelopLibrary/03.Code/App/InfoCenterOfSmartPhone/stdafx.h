@@ -32,5 +32,5 @@ static DWORD modeId[4]=
 	MZ_PAINTMODE_STRETCH_H                  //水平方向拉伸 (设置边距)
 };
 
-long	getScreenRandom ();
+long	getScreenRandom ( int iRan = 16 );
 // TODO: 在此处引用程序需要的其他头文件

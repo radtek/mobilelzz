@@ -36,6 +36,10 @@ class CSmsPassInputWnd	:	public	CEasySmsWndBase
 
 		UiSingleLineEdit					m_PassInput_Again;
 
+		UiPicture							m_Picture;
+
+		int									m_modeIndex;
+
 };
 
 #endif

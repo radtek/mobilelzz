@@ -56,6 +56,16 @@ void CSmsPassInputWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 
 BOOL	CSmsPassInputWnd::SubInitialize()
 {
+	
+	/*…Ë÷√±≥æ∞Õº∆¨*/
+	m_modeIndex	=	0;
+	m_Picture.SetID( MZ_IDC_PASS_PICTURE );
+	m_Picture.SetPos( 0, 0, 350, 250 );
+	m_Picture.SetPaintMode( modeId[ m_modeIndex ] );
+	m_Picture.LoadImage( MzGetInstanceHandle(), RT_RCDATA, MAKEINTRESOURCE( IDR_ENCRYPT_INPUT ) );
+	AddUiWin( &m_Picture );
+	
+	
 	//ini toolbar			
 	m_toolBar_base.SetPos( 0, GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR , GetWidth() , MZM_HEIGHT_TEXT_TOOLBAR );
 	m_toolBar_base.SetButton( 0, true, true, L"»∑∂®" );
@@ -69,7 +79,7 @@ BOOL	CSmsPassInputWnd::SubInitialize()
 	//ini	InfoEdit
 	m_PassInput.SetID( MZ_IDC_FIND_INFO );
 	m_PassInput.SetTextColor( RGB( 255, 0, 0 ) );
-	m_PassInput.SetPos( 40, 20, GetWidth() - MZM_MARGIN_MAX * 2, 70 );
+	m_PassInput.SetPos( 80, 60, GetWidth() - MZM_MARGIN_MAX * 4, 40 );
 	m_PassInput.SetTip( L"«Î ‰»Î√‹¬Î" );
 	m_PassInput.EnablePassWord(); 
 	m_PassInput.SetSipMode( IM_SIP_MODE_ADDRESSEE_123, MZM_HEIGHT_TEXT_TOOLBAR );
@@ -78,7 +88,7 @@ BOOL	CSmsPassInputWnd::SubInitialize()
 	//ini	InfoEdit
 	m_PassInput_Again.SetID( MZ_IDC_FIND_INFO );
 	m_PassInput_Again.SetTextColor( RGB( 255, 0, 0 ) );
-	m_PassInput_Again.SetPos( 40, 100, GetWidth() - MZM_MARGIN_MAX * 2, 70 );
+	m_PassInput_Again.SetPos( 80, 120, GetWidth() - MZM_MARGIN_MAX * 4, 40 );
 	m_PassInput_Again.SetTip( L"«Î‘Ÿ¥Œ ‰»Î√‹¬Î" );
 	m_PassInput_Again.EnablePassWord();
 	m_PassInput_Again.SetSipMode( IM_SIP_MODE_ADDRESSEE_123, MZM_HEIGHT_TEXT_TOOLBAR );

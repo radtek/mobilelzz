@@ -40,6 +40,8 @@
 #define IDR_PNG_SETUP_UP				135
 #define	IDR_PNG_SETUP_DOWN				136
 
+#define	IDR_ENCRYPT_INPUT				137
+
 //NewSmsWnd.h
 #define MZ_IDC_SEND_SMS_BTN				101
 #define IDC_PPM_OK						102
@@ -101,6 +103,7 @@
 #define MZ_IDC_PASS_TOOLBAR								147
 //Main Wnd
 #define MZ_IDC_MAIN_PICTURE								148
+#define MZ_IDC_PASS_PICTURE								149
 
 // Next default values for new objects
 // 

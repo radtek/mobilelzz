@@ -85,6 +85,8 @@ IDR_PNG_SYNC_DOWN					RCDATA                  "同步_down.png"
 IDR_PNG_SETUP_UP					RCDATA                  "设置_up.png"
 IDR_PNG_SETUP_DOWN					RCDATA                  "设置_down.png"
 
+IDR_ENCRYPT_INPUT					RCDATA                  "PasswordGreen.png"
+
 IDR_PNG_EditWndBack					   				RCDATA                  "EditWndBack.PNG"
 IDR_PNG_CTR_LIST_READ					   				RCDATA                  "sms_list_read.png"
 

@@ -13,6 +13,7 @@
 // 从 CMzWndEx 派生的主窗口类
 
 #include "EasySmsWndBase.h"
+#include "EasySmsUiCtrl.h"
 
 class CMyEdit: public UiEdit
 {
@@ -102,6 +103,8 @@ class CNewSmsWnd : public /*CMzWndEx*/ CEasySmsWndBase
 		ImageContainer		m_imgContainer;
 		BOOL Normal();
 private:
-	CContactorsWnd* m_pclContactorsWnd;
+		CContactorsWnd*		m_pclContactorsWnd;
+
+		CEasySmsUiCtrl		m_clCEasySmsUiCtrl;
 };
 #endif //__NewSmsWnd_h__

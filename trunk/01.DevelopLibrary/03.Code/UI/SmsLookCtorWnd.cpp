@@ -3,7 +3,7 @@
 
 #include "SmsLookCtorWnd.h"
 #include "SmsLookMsgWnd.h"
-
+#include "CoreService.h"
 
 class ListItemData
 {
@@ -93,6 +93,35 @@ BOOL	CSmsLookCtorWnd::SubInitialize()
 	HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeCtorRltListReq( &pBuf, &lSize );
 	if ( FAILED ( hr ) )									return	FALSE;
 
+	CCoreService	*pCCoreService	=	CCoreService::GetInstance();
+	if ( NULL == pCCoreService )							return	FALSE;
+
+#ifdef	UI_TEST
+		 pwcResult =	L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+							L"<result>"
+								L"<data type = \"contactors\">"
+									L"<data type = \"list\" count = \"2\">"
+										L"<rec encode = \"true\">"
+											L"<pid>2</pid>"
+											L"<name>张三</name>"
+											L"<defaultno>13600000001</defaultno>"
+											L"<smscount>9<smscount>"
+										L"</rec>"
+										L"<rec encode = \"true\">"
+											L"<pid>3</pid>"
+											L"<name>李四</name>"
+											L"<defaultno>13600000002</defaultno>"
+											L"<smscount>88<smscount>"
+										L"</rec>"
+									L"</data>"
+								L"</data>"
+							L"</result>";
+#else
+	hr	=	pCCoreService->Request( pBuf, &pwcResult );
+	if ( FAILED ( hr ) )									return	FALSE;
+#endif
+
+	hr	=	m_clCEasySmsUiCtrl.MakeCtorRltList( m_list_base, pwcResult );
 #if 0	
 	CMzString name = L"姓名%d";
 //	CMzString content = L"短信内容 SmsContent%d:";

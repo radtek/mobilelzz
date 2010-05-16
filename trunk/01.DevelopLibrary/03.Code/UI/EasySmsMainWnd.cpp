@@ -139,7 +139,7 @@ BOOL	CEasySmsMainWnd::SubInitialize()
 	m_UnReadSmsBtnImg.EnableTextSinkOnPressed( TRUE );
 	m_UnReadSmsBtnImg.SetMode( UI_BUTTON_IMAGE_MODE_NORMAL );
 	m_UnReadSmsBtnImg.SwapImageZOrder( true );
-	m_UnReadSmsBtnImg.SetPos( 30, 80, 140, 140 );
+	m_UnReadSmsBtnImg.SetPos( 30, 80, 140, 180 );
 	AddUiWin( &m_UnReadSmsBtnImg );
 
 	// sms look 
@@ -156,7 +156,7 @@ BOOL	CEasySmsMainWnd::SubInitialize()
 	m_LookSmsBtnImg.EnableTextSinkOnPressed( TRUE );
 	m_LookSmsBtnImg.SetMode( UI_BUTTON_IMAGE_MODE_NORMAL );
 	m_LookSmsBtnImg.SwapImageZOrder( true );
-	m_LookSmsBtnImg.SetPos( 170, 80, 140, 140 );
+	m_LookSmsBtnImg.SetPos( 170, 80, 140, 180 );
 
 	AddUiWin( &m_LookSmsBtnImg );
 
@@ -177,7 +177,7 @@ BOOL	CEasySmsMainWnd::SubInitialize()
 	m_SendSmsBtnImg.EnableTextSinkOnPressed(TRUE);
 	m_SendSmsBtnImg.SetMode( UI_BUTTON_IMAGE_MODE_NORMAL );
 	m_SendSmsBtnImg.SwapImageZOrder( true );
-	m_SendSmsBtnImg.SetPos( 310, 80, 140, 140 );
+	m_SendSmsBtnImg.SetPos( 310, 80, 140, 180 );
 
 	AddUiWin( &m_SendSmsBtnImg );
 
@@ -198,7 +198,7 @@ BOOL	CEasySmsMainWnd::SubInitialize()
 	m_UnFindSmsBtnImg.EnableTextSinkOnPressed( TRUE );
 	m_UnFindSmsBtnImg.SetMode( UI_BUTTON_IMAGE_MODE_NORMAL );
 	m_UnFindSmsBtnImg.SwapImageZOrder( true );
-	m_UnFindSmsBtnImg.SetPos( 30, 260, 140, 140 );
+	m_UnFindSmsBtnImg.SetPos( 30, 260, 140, 180 );
 
 	AddUiWin( &m_UnFindSmsBtnImg );
 
@@ -217,7 +217,7 @@ BOOL	CEasySmsMainWnd::SubInitialize()
 	m_UnEncryptSmsBtnImg.EnableTextSinkOnPressed( TRUE );
 	m_UnEncryptSmsBtnImg.SetMode( UI_BUTTON_IMAGE_MODE_NORMAL );
 	m_UnEncryptSmsBtnImg.SwapImageZOrder( true );
-	m_UnEncryptSmsBtnImg.SetPos( 30, 440, 140, 140 );
+	m_UnEncryptSmsBtnImg.SetPos( 30, 440, 140, 180 );
 
 	AddUiWin( &m_UnEncryptSmsBtnImg );
 
@@ -238,7 +238,7 @@ BOOL	CEasySmsMainWnd::SubInitialize()
 	m_UnSyncSmsBtnImg.EnableTextSinkOnPressed( TRUE );
 	m_UnSyncSmsBtnImg.SetMode( UI_BUTTON_IMAGE_MODE_NORMAL );
 	m_UnSyncSmsBtnImg.SwapImageZOrder( true );
-	m_UnSyncSmsBtnImg.SetPos( 170, 260, 140, 140 );
+	m_UnSyncSmsBtnImg.SetPos( 170, 260, 140, 180 );
 
 	AddUiWin( &m_UnSyncSmsBtnImg );
 	
@@ -261,7 +261,7 @@ BOOL	CEasySmsMainWnd::SubInitialize()
 	m_UnSetUpSmsBtnImg.SwapImageZOrder( true );
 //	m_UnSetUpSmsBtnImg.SetTextColor( RGB( 0, 0, 0 ) );
 
-	m_UnSetUpSmsBtnImg.SetPos( 310, 260, 140, 140 );
+	m_UnSetUpSmsBtnImg.SetPos( 310, 260, 140, 180 );
 
 	AddUiWin( &m_UnSetUpSmsBtnImg );
 

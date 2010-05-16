@@ -83,7 +83,7 @@ BOOL	CSmsUnReadWnd::SubInitialize()
 	
 
 #ifdef	UI_TEST
-	wchar_t* pwcResult =	L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+		 pwcResult =	L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 							L"<result>"
 								L"<data type = \"sms\">"
 									L"<data type = \"list\" count = \"2\">"

@@ -14,6 +14,7 @@
 
 #include <winreg.h>
 #include "RegOperator.h"
+#include "CoreService.h"
 
 INT g_iUsbNotifyMsg = 0;
 
@@ -173,11 +174,11 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 	{
 		case MZ_IDC_SEND_SMS_BTN:
 		{		
-			if ( !Normal() )
-			{
-				MzMessageBoxEx( NULL, L"试用达到最大限制,谢谢您的试用!", MB_OK );
-				return;
-			}
+// 			if ( !Normal() )
+// 			{
+// 				MzMessageBoxEx( NULL, L"试用达到最大限制,谢谢您的试用!", MB_OK );
+// 				return;
+// 			}
 
 			RECT	rect	=	MzGetVisibleDesktopRect();
 			RECT	rc		=	{0};
@@ -201,7 +202,22 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 			}
 
 			 m_lCurProgress	=	0;
+			
+///////////////////////////////SaveMessage///////////////////////////////////////////
+			 wchar_t	*pBuf		=	NULL;
+			 long		lSize		=	0;
+			 wchar_t	*pwcResult	=	NULL;
 
+			 HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeSendSmsInfo( &pBuf, &lSize, m_SmsMsgEdit->GetText().C_Str() );
+			 if ( FAILED ( hr ) )									return	_ASSERT ( 0 );
+
+			 CCoreService	*pCCoreService	=	CCoreService::GetInstance();
+			 if ( NULL == pCCoreService )							return	_ASSERT ( 0 );
+
+			 hr	=	pCCoreService->Request( pBuf, &pwcResult );
+			 if ( FAILED ( hr ) )									return	_ASSERT ( 0 );
+
+//////////////////////////////////////////////////////////////////////////
             // 初始化 MzPopupProgress 控件
             m_progress.SetRange( 0, 200 );
             m_progress.SetCurrentValue( m_lCurProgress );

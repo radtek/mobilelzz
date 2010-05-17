@@ -23,15 +23,6 @@ public:
   // 应用程序的初始化
   virtual BOOL Init()
   {
-
-// 	  if(!LicenseProtect())
-// 	  {
-// 		  MzMessageBoxEx(NULL,L"授权文件校验失败，请重新下载安装",MB_OK);
-// 		  exit(0);
-// 	  }
-
-	// 初始化 COM 组件
-
 	  HANDLE  hSem = CreateSemaphore(NULL, 1,1, L"LZZEasySMS");
 	  if( GetLastError() == ERROR_ALREADY_EXISTS )
 	  {
@@ -46,6 +37,17 @@ public:
 		  }
 		  exit(1); 
 	  }
+
+
+	  if(!LicenseProtect())
+	  {
+		  MzMessageBoxEx(NULL,L"授权文件校验失败，请重新下载安装",MB_OK);
+		  exit(0);
+	  }
+
+	// 初始化 COM 组件
+
+
 
 
     CoInitializeEx(0, COINIT_MULTITHREADED);

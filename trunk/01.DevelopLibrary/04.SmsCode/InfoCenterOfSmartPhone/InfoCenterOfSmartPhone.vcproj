@@ -152,7 +152,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=" /subsystem:windowsce,6.00"
-				AdditionalDependencies="mzfcsd.lib PlatformApi.lib MyStoreLib.lib"
+				AdditionalDependencies="mzfc.lib mzpam.lib PlatformApi.lib MyStoreLib.lib Toolhelp.lib"
 				OutputFile="$(OutDir)/Ò×¶ÌÐÅ.exe"
 				LinkIncremental="1"
 				DelayLoadDLLs="$(NOINHERIT)"

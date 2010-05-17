@@ -458,9 +458,10 @@ bool CNewSmsWnd::SendSMS_Wrapper(IN CMzString&  Number)
 	}
 
 
-	int send_status = (SendFlag == true? 0:2); 
+	int send_status = (SendFlag == true ? 0:2); 
 
-	InsertSendMsgToDB(send_status, vAddressInfo,
+	InsertSendMsgToDB(send_status,	//·¢ËÍ³É¹¦0£¬Ê§°Ü2
+		vAddressInfo,
 		0,
 		SMS_Content.C_Str(),
 		iassociateId,

@@ -61,6 +61,12 @@ public:
 		m_SmsMsgEdit = new CMyEdit;
    }
    virtual ~CNewSmsWnd(){
+
+	   if( NULL != m_SmsMsgEdit )
+	   {
+		   delete m_SmsMsgEdit;
+		   m_SmsMsgEdit = NULL;
+	   }
 	
 		MzAccClose();  
    

@@ -381,27 +381,41 @@ APP_Result CSmsService::ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& 
 	hr = pQHandle->Prepare(Sms_SQL_INSERT_SmsDetail);
 	if( FAILED(hr) ) 
 		return hr;
-
-	/*long lSID = _wtol(pstNodeDataInfos[0].wcsNodeValue);
-	pQHandle->Bind(1, lSID);*/
-	long lType = _wtol(pstNodeDataInfos[2].wcsNodeValue);
-	pQHandle->Bind(3, lType);
-	long lSize = wcslen(pstNodeDataInfos[3].wcsNodeValue);
-	pQHandle->Bind(4, pstNodeDataInfos[3].wcsNodeValue, lSize);//content
-	lSize = wcslen(pstNodeDataInfos[4].wcsNodeValue);
-	pQHandle->Bind(5, pstNodeDataInfos[4].wcsNodeValue, lSize);//address
-	double dTime = _wtoll(pstNodeDataInfos[5].wcsNodeValue);
-	pQHandle->Bind(6, dTime);
-	long lLockStatus = _wtol(pstNodeDataInfos[6].wcsNodeValue);
-	pQHandle->Bind(7, lLockStatus);
-	long lReadStatus = _wtol(pstNodeDataInfos[7].wcsNodeValue);
-	pQHandle->Bind(8, lReadStatus);
-	long lPID = 0;
-	hr = GetPIDByAddress(pstNodeDataInfos[4].wcsNodeValue, lPID);
-	if ( FAILED_App(hr) ){
-		return hr;
+	for ( int i = 0; i < lNodeDataInfoCount; i++ )
+	{
+		if ( 0 == wcscmp( L"type", pstNodeDataInfos[i].wcsNodeName )  ){
+			long lType = _wtol(pstNodeDataInfos[i].wcsNodeValue);
+			pQHandle->Bind(3, lType);
+		}else if ( 0 == wcscmp( L"content", pstNodeDataInfos[i].wcsNodeName )  ){
+			long lSize = wcslen(pstNodeDataInfos[i].wcsNodeValue);
+			pQHandle->Bind(4, pstNodeDataInfos[i].wcsNodeValue, lSize);//content
+		}else if ( 0 == wcscmp( L"address", pstNodeDataInfos[i].wcsNodeName )  ){
+			long lSize = wcslen(pstNodeDataInfos[i].wcsNodeValue);
+			pQHandle->Bind(5, pstNodeDataInfos[i].wcsNodeValue, lSize);//address
+			long lPID = 0;
+			hr = GetPIDByAddress(pstNodeDataInfos[i].wcsNodeValue, lPID);
+			if ( FAILED_App(hr) ){
+				return hr;
+			}
+			pQHandle->Bind(2, lPID);
+		}else if ( 0 == wcscmp( L"time", pstNodeDataInfos[i].wcsNodeName )  ){
+			double dTime = _wtoll(pstNodeDataInfos[i].wcsNodeValue);
+			pQHandle->Bind(6, dTime);
+		}else if ( 0 == wcscmp( L"lookstatus", pstNodeDataInfos[i].wcsNodeName )  ){
+			long lLockStatus = _wtol(pstNodeDataInfos[6].wcsNodeValue);
+			pQHandle->Bind(7, lLockStatus);
+		}else if ( 0 == wcscmp( L"readstatus", pstNodeDataInfos[i].wcsNodeName )  ){
+			long lReadStatus = _wtol(pstNodeDataInfos[7].wcsNodeValue);
+			pQHandle->Bind(8, lReadStatus);
+		}
 	}
-	pQHandle->Bind(2, lPID);
+	SYSTEMTIME stTime;
+	memset(&stTime,0x0,sizeof(stTime));
+	GetSystemTime(&stTime);
+	double dTime = 0;
+	SystemTimeToVariantTime(&stTime, &dTime);
+	pQHandle->Bind(6, dTime);
+
 	hr = pQHandle->Step();
 	if ( FAILED_App(hr) ){
 		return hr;

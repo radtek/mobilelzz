@@ -16,6 +16,7 @@ enum	EnType
 	EN_WCHAR
 };
 
+
 class CEasySmsUiCtrl
 {
 	public:
@@ -34,6 +35,7 @@ class CEasySmsUiCtrl
 
 		HRESULT		MakeSendSmsInfo		( wchar_t **ppBuf, long *lSize, wchar_t *pwcSmsInfo, wchar_t* pwcsNumber );
 
+
 	public:
 
 	private:
@@ -46,6 +48,8 @@ class CEasySmsUiCtrl
 		HRESULT		AppendUnReadList( CXmlNode *pCXmlNode, CEasySmsListBase &clCEasySmsListBase );
 
 		HRESULT		AppendLookCtorList( CXmlNode *pCXmlNode, CEasySmsListBase &clCEasySmsListBase );
+
+		HRESULT		GetOtherInfo( IN CXmlNode *pCXmlNode, OUT stItemData	*pstItemData );
 
 	private:
 

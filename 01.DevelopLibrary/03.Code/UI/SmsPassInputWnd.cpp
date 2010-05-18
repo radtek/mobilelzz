@@ -96,3 +96,9 @@ BOOL	CSmsPassInputWnd::SubInitialize()
 
 	return	TRUE;
 }
+
+
+void	CSmsPassInputWnd::SetID ( long id )
+{
+	m_id	=	id;
+}

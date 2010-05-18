@@ -62,6 +62,14 @@ void CSmsFindWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 
 BOOL	CSmsFindWnd::SubInitialize()
 {
+	/*…Ë÷√±≥æ∞Õº∆¨*/
+	m_modeIndex	=	0;
+	m_Picture.SetID( MZ_IDC_MAIN_PICTURE );
+	m_Picture.SetPos( 0, 0, GetWidth(), GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR );
+	m_Picture.SetPaintMode( modeId[ m_modeIndex ] );
+	m_Picture.LoadImage( MzGetInstanceHandle(), RT_RCDATA, MAKEINTRESOURCE( IDR_PNG_MAIN_WND_BACKGROUND ) );
+	AddUiWin( &m_Picture );
+	
 	//ini toolbar			
 	m_toolBar_base.SetPos( 0, GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR , GetWidth() , MZM_HEIGHT_TEXT_TOOLBAR );
 	m_toolBar_base.SetButton( 1, true, true, L"»∑∂®" );

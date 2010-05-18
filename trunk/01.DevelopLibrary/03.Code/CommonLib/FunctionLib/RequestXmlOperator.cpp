@@ -238,9 +238,10 @@ APP_Result CRequestXmlOperator::AppendNodeInfo(wchar_t* pPath, wchar_t* pNodeNam
 	APP_Result hr = APP_Result_E_Fail;	
 	CXmlNode* pNode = NULL;
 	hr = m_clXmlStream.SelectNode(pPath, &pNode);
-	if ( SUCCEEDED_App(hr) ){
+	if ( SUCCEEDED_App(hr) && (pNode)){
 		auto_ptr<CXmlNode> sp(pNode);
 		NodeDataInfo stTemp;
+		memset(&stTemp,0x0,sizeof(stTemp));
 		F_wcscpyn(stTemp.wcsNodeName, pNodeName, 
 			sizeof(stTemp.wcsNodeName)/sizeof(stTemp.wcsNodeName[0]));
 		wchar_t* pNodeContent = NULL;

@@ -34,7 +34,8 @@ using namespace std;
 #define   Sms_SQL_DELETE_SmsDetail			L"delete from SmsDetail where sid = ?"
 #define   Sms_SQL_DELETE_ALLSmsDetail		L"delete from SmsDetail where lockstatus != 1"
 
-#define   Sms_SQL_INSERT_SmsDetail			L"insert into SmsDetail values(?,?,?,?,?,?,?)"
+#define   Sms_SQL_INSERT_SmsDetail			L"insert into SmsDetail(sid,pid,type,content,address,time,\
+												lockstatus,readstatus) values(?,?,?,?,?,?,?,?)"
 
 #define		Sms_SQL_Search_SmsDetail_AfterDate		L"select * from SmsDetail where pid = ? and content like ?\
 														and type = ? and time > ?"

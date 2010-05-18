@@ -408,7 +408,7 @@ HRESULT		CEasySmsUiCtrl::AppendLookCtorList( CXmlNode *pCXmlNode, CEasySmsListBa
 	return	S_OK;
 }
 
-HRESULT		CEasySmsUiCtrl::MakeSendSmsInfo	( wchar_t **ppBuf, long *lSize, wchar_t *pwcSmsInfo )
+HRESULT		CEasySmsUiCtrl::MakeSendSmsInfo	( wchar_t **ppBuf, long *lSize, wchar_t *pwcSmsInfo, wchar_t* pwcsNumber )
 {
 	CXmlStream	*pCXmlStream	=	new	CXmlStream;
 	
@@ -446,23 +446,23 @@ HRESULT		CEasySmsUiCtrl::MakeSendSmsInfo	( wchar_t **ppBuf, long *lSize, wchar_t
 		//////////////////////////////////////////////////////////////////////////
 		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
 		long	sid	=	123;
-		hr	=	MakeNode ( pCXmlStream, L"request/data/operation/sid/", &stNodeAttr, 1, (void*)&sid, EN_LONG );
+		hr	=	MakeNode ( pCXmlStream, L"request/data/operation/sid/", NULL, 0, (void*)&sid, EN_LONG );
 		if ( FAILED( hr ) )													break;
 
 		//////////////////////////////////////////////////////////////////////////
 		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
 		long	type	=	1;
-		hr	=	MakeNode ( pCXmlStream, L"request/data/operation/type/", &stNodeAttr, 1, (void*)&type, EN_LONG );
+		hr	=	MakeNode ( pCXmlStream, L"request/data/operation/type/", NULL, 0, (void*)&type, EN_LONG );
 		if ( FAILED( hr ) )													break;
 
 		//////////////////////////////////////////////////////////////////////////
 		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
-		hr	=	MakeNode ( pCXmlStream, L"request/data/operation/content/", &stNodeAttr, 1, pwcSmsInfo, EN_WCHAR );
+		hr	=	MakeNode ( pCXmlStream, L"request/data/operation/content/", NULL, 0, pwcSmsInfo, EN_WCHAR );
 		if ( FAILED( hr ) )													break;
 
 		//////////////////////////////////////////////////////////////////////////
 		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
-		hr	=	MakeNode ( pCXmlStream, L"request/data/operation/address/", &stNodeAttr, 1, L"13800000009", EN_WCHAR );
+		hr	=	MakeNode ( pCXmlStream, L"request/data/operation/address/", NULL, 0, pwcsNumber, EN_WCHAR );
 		if ( FAILED( hr ) )													break;
 
 		hr	=	pCXmlStream->GetXmlStream( ppBuf, lSize );

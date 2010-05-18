@@ -203,21 +203,6 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 
 			 m_lCurProgress	=	0;
 			
-///////////////////////////////SaveMessage///////////////////////////////////////////
-			 wchar_t	*pBuf		=	NULL;
-			 long		lSize		=	0;
-			 wchar_t	*pwcResult	=	NULL;
-
-			 HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeSendSmsInfo( &pBuf, &lSize, m_SmsMsgEdit->GetText().C_Str() );
-			 if ( FAILED ( hr ) )									return	_ASSERT ( 0 );
-
-			 CCoreService	*pCCoreService	=	CCoreService::GetInstance();
-			 if ( NULL == pCCoreService )							return	_ASSERT ( 0 );
-
-			 hr	=	pCCoreService->Request( pBuf, &pwcResult );
-			 if ( FAILED ( hr ) )									return	_ASSERT ( 0 );
-
-//////////////////////////////////////////////////////////////////////////
             // 初始化 MzPopupProgress 控件
             m_progress.SetRange( 0, 200 );
             m_progress.SetCurrentValue( m_lCurProgress );
@@ -544,9 +529,25 @@ bool CNewSmsWnd::SendSMS_Wrapper( IN CMzString& Number )
 			SendFlag	=	SendSMS(NewNumber.C_Str(), Single_Content.C_Str() );
 		}	
 	}
+	if ( SendFlag ){
+		///////////////////////////////SaveMessage///////////////////////////////////////////
+		wchar_t	*pBuf		=	NULL;
+		long		lSize		=	0;
+		wchar_t	*pwcResult	=	NULL;
+
+		HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeSendSmsInfo( &pBuf, &lSize, m_SmsMsgEdit->GetText().C_Str(), NewNumber.C_Str() );
+		//if ( FAILED ( hr ) )									return	_ASSERT ( 0 );
+
+		CCoreService	*pCCoreService	=	CCoreService::GetInstance();
+		//if ( NULL == pCCoreService )							return	_ASSERT ( 0 );
+
+		hr	=	pCCoreService->Request( pBuf, &pwcResult );
+		//if ( FAILED ( hr ) )									return	_ASSERT ( 0 );
+
+		//////////////////////////////////////////////////////////////////////////
+	}
 
 	return SendFlag;
-
 }
 
 // 定时器触发的消息函数

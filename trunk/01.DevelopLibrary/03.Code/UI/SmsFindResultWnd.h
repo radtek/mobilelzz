@@ -32,7 +32,7 @@ class CSmsFindResultWnd	:	public	CEasySmsWndBase
 
 	private:
 
-		MzGridMenu m_GridMenu;
+		MzGridMenu			m_GridMenu;
 
 };
 

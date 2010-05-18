@@ -3,7 +3,7 @@
 
 #include "SmsEncrytpCtorWnd.h"
 #include "SmsPassInputWnd.h"
-
+#include "CoreService.h"
 
 
 class ListItemData
@@ -52,6 +52,7 @@ void CSmsEncrytpCtorWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 			{
 				this->EndModal( ID_CANCEL );
 			}
+
 			break;
 		}
 
@@ -81,7 +82,44 @@ BOOL	CSmsEncrytpCtorWnd::SubInitialize()
 
 
 	/////////////test/////////////////////////////////////////////////////////////
-	
+	wchar_t	*pBuf		=	NULL;
+	long	lSize		=	0;
+	wchar_t	*pwcResult	=	NULL;
+
+	HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeCtorRltListReq( &pBuf, &lSize );
+	if ( FAILED ( hr ) )									return	FALSE;
+
+	CCoreService	*pCCoreService	=	CCoreService::GetInstance();
+	if ( NULL == pCCoreService )							return	FALSE;
+
+
+#ifdef	UI_TEST
+		pwcResult =	L"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+		L"<result>"
+		L"<data type = \"contactors\">"
+		L"<data type = \"list\" count = \"2\">"
+		L"<rec encode = \"true\">"
+		L"<pid>2</pid>"
+		L"<name>张三</name>"
+		L"<defaultno>13600000001</defaultno>"
+		L"<smscount>9<smscount>"
+		L"</rec>"
+		L"<rec encode = \"true\">"
+		L"<pid>3</pid>"
+		L"<name>李四</name>"
+		L"<defaultno>13600000002</defaultno>"
+		L"<smscount>88<smscount>"
+		L"</rec>"
+		L"</data>"
+		L"</data>"
+		L"</result>";
+#else
+	hr	=	pCCoreService->Request( pBuf, &pwcResult );
+	if ( FAILED ( hr ) )									return	FALSE;
+#endif
+
+	hr	=	m_clCEasySmsUiCtrl.MakeCtorRltList( m_list_base, pwcResult );
+#if 0	
 	CMzString name = L"姓名%d";
 //	CMzString content = L"短信内容 SmsContent%d:";
 	CMzString stime = L"Count: 100";
@@ -111,7 +149,12 @@ BOOL	CSmsEncrytpCtorWnd::SubInitialize()
 		m_list_base.AddItem(item);
 	}
 
+#endif
 
+	if ( NULL != pBuf )
+	{
+		delete	pBuf, pBuf	=	NULL;
+	}
 /////////////test/////////////////////////////////////////////////////////////
 
 	return	TRUE;
@@ -119,12 +162,18 @@ BOOL	CSmsEncrytpCtorWnd::SubInitialize()
 
 void	CSmsEncrytpCtorWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 {
-	CSmsPassInputWnd	clCSmsPassInputWnd;
-	clCSmsPassInputWnd.CreateModalDialog( 50, 100, 350, 250, this->m_hWnd );
-//	clCSmsPassInputWnd.SetBgColor ( RGB( 228, 240, 0 ) );
-	int iRlt	=	DoModalBase( &clCSmsPassInputWnd );
-	if ( ID_CASCADE_EXIT == iRlt )
+	stItemData	*pstItemData	=	( stItemData* )( pItem->m_pData );
+	if ( NULL != pstItemData )
 	{
-		ReturnToMainWnd();
+		CSmsPassInputWnd	clCSmsPassInputWnd;
+		clCSmsPassInputWnd.SetID( pstItemData->lSid );
+		clCSmsPassInputWnd.CreateModalDialog( 50, 100, 350, 250, this->m_hWnd );
+		//	clCSmsPassInputWnd.SetBgColor ( RGB( 228, 240, 0 ) );
+		int iRlt	=	DoModalBase( &clCSmsPassInputWnd );
+		if ( ID_CASCADE_EXIT == iRlt )
+		{
+			ReturnToMainWnd();
+		}
 	}
+
 }

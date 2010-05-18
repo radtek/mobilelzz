@@ -36,8 +36,11 @@ class CSmsFindWnd	:	public	CEasySmsWndBase
 
 		UiButton							m_ContactorsBtn;
 
-
 		UiSingleLineEdit					m_InfoEdit;
+
+		UiPicture							m_Picture;
+
+		int									m_modeIndex;
 
 };
 

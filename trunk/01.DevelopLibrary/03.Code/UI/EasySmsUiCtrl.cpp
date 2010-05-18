@@ -270,41 +270,71 @@ HRESULT		CEasySmsUiCtrl::GetListCnt( CXmlStream	*pCXmlStream, long	&lCnt )
 HRESULT		CEasySmsUiCtrl::AppendUnReadList( CXmlNode *pCXmlNode, CEasySmsListBase &clCEasySmsListBase )
 {
 	ListItemEx*		item		=	new		ListItemEx;
-	if ( NULL == item )									return	E_FAIL;
-	wchar_t DetailInfo[512]		=	L"";	
-	wchar_t	*		pValue		=	DetailInfo;
+	if ( NULL == item )									return	E_FAIL;	
+	wchar_t	*		pValue		=	NULL;
 	HRESULT			hr			=	S_OK;
 
-	//Insert MessageInfo
-	hr	=	pCXmlNode->GetNodeContent( L"content/", &pValue, NULL, NULL );
+	/*OtherInfo*/
+	stItemData	*pstItemData	=	new	stItemData;
+	if ( NULL == pstItemData )
+	{
+		delete item;									return	E_FAIL;
+	}
+	memset( pstItemData, 0x0, sizeof( stItemData ) );
+
+	hr	=	GetOtherInfo( pCXmlNode, pstItemData );
+	if ( FAILED ( hr ) )
+	{
+		delete item, pstItemData;						return	E_FAIL;
+	}
+
+	item->m_pData	=	( void* )( pstItemData );
+
+	/*end*/
+	
+	if ( !( pstItemData->bIsLock ) )
+	{
+		//Insert MessageInfo
+		hr	=	pCXmlNode->GetNodeContent( L"content/", &pValue, NULL, NULL );
+		if ( FAILED ( hr ) )
+		{
+			delete item;									return	E_FAIL;
+		}
+		item->m_textDescription	=	pValue;
+
+		if ( NULL != pValue )								delete	pValue, pValue	=	NULL;
+	}
+	else
+	{	
+		item->m_textDescription	=	L"该信息被加密";
+	}
+
+
+	//Time
+	hr	=	pCXmlNode->GetNodeContent( L"time/", &pValue, NULL, NULL );
 	if ( FAILED ( hr ) )
 	{
 		delete item;									return	E_FAIL;
 	}
-	item->m_textDescription	=	pValue;
-
-	//Insert Tel
-	memset( DetailInfo, 0x0, sizeof( DetailInfo ) );
-	hr	=	pCXmlNode->GetNodeContent( L"address/", &pValue, NULL, NULL );
-	if ( FAILED ( hr ) )
+	if ( NULL != pValue && *pValue != L'\0' )
 	{
-		delete item;									return	E_FAIL;
-	}
-	item->m_textTitle		=	pValue;
+		wchar_t*	stopstring	=	NULL;
 
+		double  vtime	=	wcstod( pValue, &stopstring );
+	}
+	
 	//Set message type
-	memset( DetailInfo, 0x0, sizeof( DetailInfo ) );
 	hr	=	pCXmlNode->GetNodeContent( L"type/", &pValue, NULL, NULL );
 	if ( FAILED ( hr ) )
 	{
 		delete item;									return	E_FAIL;
 	}
 
-	if ( L'1' == DetailInfo[0] )
+	if ( L'1' == *pValue )
 	{
 		item->m_itemBgType	=	UILIST_ITEM_BGTYPE_YELLOW;
 	}
-	else if ( L'0' == DetailInfo[0] )
+	else if ( L'0' == *pValue )
 	{
 		item->m_itemBgType	=	UILIST_ITEM_BGTYPE_NONE ;
 	}
@@ -313,6 +343,26 @@ HRESULT		CEasySmsUiCtrl::AppendUnReadList( CXmlNode *pCXmlNode, CEasySmsListBase
 		_ASSERT( 0 );
 	}
 
+	/*Name*/
+	hr	=	pCXmlNode->GetNodeContent( L"name/", &pValue, NULL, NULL );
+	if ( FAILED ( hr ) )
+	{
+		delete item;									return	E_FAIL;
+	}
+
+	if ( L'\0' == *pValue )
+	{
+		//Insert Tel
+		hr	=	pCXmlNode->GetNodeContent( L"address/", &pValue, NULL, NULL );
+		if ( FAILED ( hr ) )
+		{
+			delete item;								return	E_FAIL;
+		}
+
+	}
+
+	item->m_textTitle		=	pValue;
+	if ( NULL != pValue )								delete	pValue, pValue	=	NULL;
 
 	item->m_pImgFirst = m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_CTR_LIST_READ, true);
 	clCEasySmsListBase.AddItem( item );
@@ -320,6 +370,84 @@ HRESULT		CEasySmsUiCtrl::AppendUnReadList( CXmlNode *pCXmlNode, CEasySmsListBase
 	pCXmlNode->MoveNext();
 
 	return	S_OK;
+}
+
+HRESULT		CEasySmsUiCtrl::GetOtherInfo( IN CXmlNode *pCXmlNode, OUT stItemData	*pstItemData )
+{
+	//sid
+	wchar_t * pValue	=	NULL;
+
+	HRESULT	hr	=	pCXmlNode->GetNodeContent( L"sid/", &pValue, NULL, NULL );
+	if ( FAILED ( hr ) )
+	{
+		return	E_FAIL;
+	}
+	if ( NULL != pValue && *pValue != L'\0')
+	{
+		pstItemData->lSid	=	_wtol( pValue );
+		delete	pValue, pValue	=	NULL;
+	}
+	
+	//pid
+	hr	=	pCXmlNode->GetNodeContent( L"pid/", &pValue, NULL, NULL );
+	if ( FAILED ( hr ) )
+	{
+		return	E_FAIL;
+	}
+	if ( NULL != pValue && *pValue != L'\0')
+	{
+		pstItemData->lPid	=	_wtol( pValue );
+		delete	pValue, pValue	=	NULL;
+	}
+	//lockstatus
+	hr	=	pCXmlNode->GetNodeContent( L"lockstatus/", &pValue, NULL, NULL );
+	if ( FAILED ( hr ) )
+	{
+		return	E_FAIL;
+	}
+	if ( NULL != pValue && *pValue != L'\0')
+	{
+		pstItemData->bIsLock	=	( bool )( _wtol( pValue ) );
+		delete	pValue, pValue	=	NULL;
+	}
+	
+	//readstatus
+	hr	=	pCXmlNode->GetNodeContent( L"readstatus/", &pValue, NULL, NULL );
+	if ( FAILED ( hr ) )
+	{
+		return	E_FAIL;
+	}
+	if ( NULL != pValue && *pValue != L'\0')
+	{
+		pstItemData->bIsRead	=	( bool )( _wtol( pValue ) );
+		delete	pValue, pValue	=	NULL;
+	}
+
+	//count
+	hr	=	pCXmlNode->GetNodeContent( L"smscount/", &pValue, NULL, NULL );
+	if ( FAILED ( hr ) )
+	{
+		return	E_FAIL;
+	}
+	if ( NULL != pValue && *pValue != L'\0')
+	{
+		pstItemData->lCnt		=	_wtol( pValue );
+		delete	pValue, pValue	=	NULL;
+	}
+	//firstletter
+	hr	=	pCXmlNode->GetNodeContent( L"firstletter/", &pValue, NULL, NULL );
+	if ( FAILED ( hr ) )
+	{
+		return	E_FAIL;
+	}
+	if ( NULL != pValue && *pValue != L'\0')
+	{
+		pstItemData->cFirst		=	*pValue;
+		delete	pValue, pValue	=	NULL;
+	}
+
+	return	S_OK;
+	
 }
 
 HRESULT		CEasySmsUiCtrl::MakeCtorRltList    ( CEasySmsListBase &clCEasySmsListBase, wchar_t *pwcRltStream )
@@ -388,8 +516,7 @@ HRESULT		CEasySmsUiCtrl::AppendLookCtorList( CXmlNode *pCXmlNode, CEasySmsListBa
 	ListItemEx*		item		=	new		ListItemEx;
 	if ( NULL == item )									return	E_FAIL;
 	
-	wchar_t DetailInfo[512]		=	L"";	
-	wchar_t	*		pValue		=	DetailInfo;
+	wchar_t	*		pValue		=	NULL;
 	
 	//Insert MessageInfo
 	HRESULT	hr	=	pCXmlNode->GetNodeContent ( L"name/", &pValue, NULL, NULL );
@@ -399,6 +526,10 @@ HRESULT		CEasySmsUiCtrl::AppendLookCtorList( CXmlNode *pCXmlNode, CEasySmsListBa
 	}
 
 	item->m_textTitle	=	pValue;
+	if ( NULL != pValue )
+	{
+		delete	pValue,	pValue	=	NULL;
+	}
 
 	item->m_pImgFirst	=	m_imgContainer.LoadImage ( MzGetInstanceHandle(), IDR_PNG_CTR_LIST_READ, true );
 	clCEasySmsListBase.AddItem( item );

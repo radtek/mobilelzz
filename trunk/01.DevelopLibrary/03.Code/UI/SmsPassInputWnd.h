@@ -26,6 +26,8 @@ class CSmsPassInputWnd	:	public	CEasySmsWndBase
 
 		BOOL	SubInitialize();
 
+		void	SetID ( long id );
+
 	private:
 		
 	protected:
@@ -39,6 +41,7 @@ class CSmsPassInputWnd	:	public	CEasySmsWndBase
 		UiPicture							m_Picture;
 
 		int									m_modeIndex;
+		int									m_id;
 
 };
 

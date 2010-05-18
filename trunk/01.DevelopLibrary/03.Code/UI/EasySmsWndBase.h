@@ -7,6 +7,19 @@
 
 class CEasySmsWndBase;
 
+typedef struct ItemData_t
+{
+	long	lPid;
+	long	lSid;
+//	double	lTime;
+	long	lCnt;
+	bool	bIsLock;
+	bool	bIsRead;
+	wchar_t	cFirst;
+//	char	cIcon;
+
+}stItemData;
+
 /////////////////CEasySmsListBase/////////////////////////////////////////////////////////
 class CEasySmsListBase	:	public	UiListEx
 {

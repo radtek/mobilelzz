@@ -342,6 +342,9 @@ APP_Result	CXmlNode::SubGetNodeContent( TiXmlElement* pNode, wchar_t** ppwcsNode
 		}
 		else
 		{
+			long lLength = strlen(pText);
+			*ppwcsNodeValue = new wchar_t[lLength+1];
+			memset(*ppwcsNodeValue, 0x0, sizeof(wchar_t)*(lLength+1));
 			MB2WC( *ppwcsNodeValue, pText );
 		}
 	}

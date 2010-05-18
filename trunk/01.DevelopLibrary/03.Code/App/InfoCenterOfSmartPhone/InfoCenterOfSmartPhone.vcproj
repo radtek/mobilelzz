@@ -153,7 +153,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=" /subsystem:windowsce,6.00"
-				AdditionalDependencies="mzfcsd.lib PlatformApi.lib SqliteOpenSource.lib MyStoreLib.lib PhoneAdapter.lib CommonLib.lib Core.lib"
+				AdditionalDependencies="mzfcs.lib PlatformApi.lib SqliteOpenSource.lib MyStoreLib.lib PhoneAdapter.lib CommonLib.lib Core.lib"
 				OutputFile="../Release/InfoCenterOfSmartPhone.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../Release"

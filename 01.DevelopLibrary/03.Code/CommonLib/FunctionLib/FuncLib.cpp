@@ -66,10 +66,14 @@ long F_wcscatn_pos(wchar_t* pwstrDest, wchar_t* pwstrSrc, long sizeMax, long lBe
 
 wchar_t* F_wcscpyn( wchar_t *pwstrDest, const wchar_t *pwstrSrc, unsigned long sizeMax )
 {
-	if( sizeMax > 0 )
+	if( (sizeMax > 0) && (pwstrDest) && (pwstrSrc) )
 	{
-		wcsncpy( pwstrDest, pwstrSrc, sizeMax-1 );
-		pwstrDest[sizeMax-1]	=	L'\0';
+		if ( L'\0' != pwstrSrc[0] ){
+			wcsncpy( pwstrDest, pwstrSrc, sizeMax-1 );
+			pwstrDest[sizeMax-1]	=	L'\0';
+		}else{
+			pwstrDest[0]	=	L'\0';
+		}		
 	}
 	return pwstrDest;
 }

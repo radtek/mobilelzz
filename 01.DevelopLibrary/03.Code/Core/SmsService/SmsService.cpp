@@ -103,7 +103,9 @@ APP_Result CSmsService::ExcuteParam(wchar_t* pwcsRequestXML, wchar_t** ppwcsResu
 	long lSize = 0;
 	hr = clResultXml.GetXmlStream(&pResult, &lSize);
 	if ( SUCCEEDED_App(hr) ){
-		*ppwcsResultXML = pResult;
+		if ( *ppwcsResultXML ){
+			*ppwcsResultXML = pResult;
+		}		
 	}
 	return APP_Result_S_OK;
 }

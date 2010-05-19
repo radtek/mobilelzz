@@ -295,6 +295,7 @@ HRESULT		CEasySmsUiCtrl::AppendUnReadList( CXmlNode *pCXmlNode, CEasySmsListBase
 	if ( !( pstItemData->bIsLock ) )
 	{
 		//Insert MessageInfo
+		pValue	=	NULL;
 		hr	=	pCXmlNode->GetNodeContent( L"content/", &pValue, NULL, NULL );
 		if ( FAILED ( hr ) )
 		{
@@ -306,11 +307,12 @@ HRESULT		CEasySmsUiCtrl::AppendUnReadList( CXmlNode *pCXmlNode, CEasySmsListBase
 	}
 	else
 	{	
-		item->m_textDescription	=	L"该信息被加密";
+		item->m_textDescription	=	L"该信息被加密***";
 	}
 
 
 	//Time
+	pValue	=	NULL;
 	hr	=	pCXmlNode->GetNodeContent( L"time/", &pValue, NULL, NULL );
 	if ( FAILED ( hr ) )
 	{
@@ -324,6 +326,7 @@ HRESULT		CEasySmsUiCtrl::AppendUnReadList( CXmlNode *pCXmlNode, CEasySmsListBase
 	}
 	
 	//Set message type
+	pValue	=	NULL;
 	hr	=	pCXmlNode->GetNodeContent( L"type/", &pValue, NULL, NULL );
 	if ( FAILED ( hr ) )
 	{
@@ -344,13 +347,9 @@ HRESULT		CEasySmsUiCtrl::AppendUnReadList( CXmlNode *pCXmlNode, CEasySmsListBase
 	}
 
 	/*Name*/
+	pValue	=	NULL;
 	hr	=	pCXmlNode->GetNodeContent( L"name/", &pValue, NULL, NULL );
-	if ( FAILED ( hr ) )
-	{
-		delete item;									return	E_FAIL;
-	}
-
-	if ( L'\0' == *pValue )
+	if ( NULL == pValue )
 	{
 		//Insert Tel
 		hr	=	pCXmlNode->GetNodeContent( L"address/", &pValue, NULL, NULL );
@@ -378,10 +377,6 @@ HRESULT		CEasySmsUiCtrl::GetOtherInfo( IN CXmlNode *pCXmlNode, OUT stItemData	*p
 	wchar_t * pValue	=	NULL;
 
 	HRESULT	hr	=	pCXmlNode->GetNodeContent( L"sid/", &pValue, NULL, NULL );
-	if ( FAILED ( hr ) )
-	{
-		return	E_FAIL;
-	}
 	if ( NULL != pValue && *pValue != L'\0')
 	{
 		pstItemData->lSid	=	_wtol( pValue );
@@ -389,22 +384,16 @@ HRESULT		CEasySmsUiCtrl::GetOtherInfo( IN CXmlNode *pCXmlNode, OUT stItemData	*p
 	}
 	
 	//pid
+	pValue	=	NULL;
 	hr	=	pCXmlNode->GetNodeContent( L"pid/", &pValue, NULL, NULL );
-	if ( FAILED ( hr ) )
-	{
-		return	E_FAIL;
-	}
 	if ( NULL != pValue && *pValue != L'\0')
 	{
 		pstItemData->lPid	=	_wtol( pValue );
 		delete	pValue, pValue	=	NULL;
 	}
 	//lockstatus
+	pValue	=	NULL;
 	hr	=	pCXmlNode->GetNodeContent( L"lockstatus/", &pValue, NULL, NULL );
-	if ( FAILED ( hr ) )
-	{
-		return	E_FAIL;
-	}
 	if ( NULL != pValue && *pValue != L'\0')
 	{
 		pstItemData->bIsLock	=	( bool )( _wtol( pValue ) );
@@ -412,11 +401,8 @@ HRESULT		CEasySmsUiCtrl::GetOtherInfo( IN CXmlNode *pCXmlNode, OUT stItemData	*p
 	}
 	
 	//readstatus
+	pValue	=	NULL;
 	hr	=	pCXmlNode->GetNodeContent( L"readstatus/", &pValue, NULL, NULL );
-	if ( FAILED ( hr ) )
-	{
-		return	E_FAIL;
-	}
 	if ( NULL != pValue && *pValue != L'\0')
 	{
 		pstItemData->bIsRead	=	( bool )( _wtol( pValue ) );
@@ -424,22 +410,16 @@ HRESULT		CEasySmsUiCtrl::GetOtherInfo( IN CXmlNode *pCXmlNode, OUT stItemData	*p
 	}
 
 	//count
+	pValue	=	NULL;
 	hr	=	pCXmlNode->GetNodeContent( L"smscount/", &pValue, NULL, NULL );
-	if ( FAILED ( hr ) )
-	{
-		return	E_FAIL;
-	}
 	if ( NULL != pValue && *pValue != L'\0')
 	{
 		pstItemData->lCnt		=	_wtol( pValue );
 		delete	pValue, pValue	=	NULL;
 	}
 	//firstletter
+	pValue	=	NULL;
 	hr	=	pCXmlNode->GetNodeContent( L"firstletter/", &pValue, NULL, NULL );
-	if ( FAILED ( hr ) )
-	{
-		return	E_FAIL;
-	}
 	if ( NULL != pValue && *pValue != L'\0')
 	{
 		pstItemData->cFirst		=	*pValue;

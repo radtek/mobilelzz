@@ -4,6 +4,7 @@
 
 #include "SmsUnReadWnd.h"
 #include "SmsLookMsgDetailWnd.h"
+#include "SmsPassConfirmWnd.h"
 #include "CoreService.h"
 
 class ListItemData
@@ -184,20 +185,43 @@ BOOL	CSmsUnReadWnd::SubInitialize()
 
 void	CSmsUnReadWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 {
-	CSmsLookMsgDetailWnd	clCSmsLookMsgDetailWnd( pItem->m_textTitle );
+	int iRlt	=	-1;
+	bool	bIsLock		=	( ( stItemData* )( pItem->m_pData ) )->bIsLock;
 
-	clCSmsLookMsgDetailWnd.SetText( pItem->m_textDescription );
-	int iRlt	=	DoModalBase( &clCSmsLookMsgDetailWnd );
+	if ( bIsLock )
+	{
+		CSmsPassConfirmWnd	clCSmsPassConfirmWnd;
+		clCSmsPassConfirmWnd.CreateModalDialog( 50, 100, 350, 250, this->m_hWnd );
+		iRlt	=	DoModalBase( &clCSmsPassConfirmWnd );
+
+	}
+	else
+	{
+		CSmsLookMsgDetailWnd	clCSmsLookMsgDetailWnd( pItem->m_textTitle );
+
+		clCSmsLookMsgDetailWnd.SetText( pItem->m_textDescription );
+		iRlt	=	DoModalBase( &clCSmsLookMsgDetailWnd );
+
+	}
+
 	if ( ID_CASCADE_EXIT == iRlt )
 	{
 		ReturnToMainWnd();
 	}
+	
+
 }
 
 void	CSmsUnReadWnd::DoSthForItemRemove( ListItemEx* pItem )
 {
 	if ( NULL != pItem )
 	{
+		if ( NULL != pItem->m_pData )
+		{
+			delete	pItem->m_pData;
+			pItem->m_pData	=	NULL;
+		}
+
 		delete	pItem;
 		pItem	=	NULL;
 	}

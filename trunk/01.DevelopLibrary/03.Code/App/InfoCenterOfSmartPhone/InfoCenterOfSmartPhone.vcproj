@@ -308,6 +308,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\UI\SmsPassConfirmWnd.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\SmsPassConfirmWnd.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\UI\SmsPassInputWnd.cpp"
 					>
 				</File>

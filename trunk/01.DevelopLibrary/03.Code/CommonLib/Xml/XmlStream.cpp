@@ -168,7 +168,7 @@ APP_Result CXmlNode::GetNodeContent( wchar_t* pwcsNodePath, wchar_t** ppwcsNodeV
 		pPreNode = m_CurElement->FirstChildElement( pBuf );
 		if ( NULL == pPreNode )
 		{
-			_ASSERT(0);
+//			_ASSERT(0);
 			hr	=	APP_Result_E_Fail;
 			break;
 		}

@@ -17,6 +17,7 @@
 #include "SmsFindResultWnd.h"
 #include "SmsEncrytpCtorWnd.h"
 #include "SmsPassInputWnd.h"
+#include "SmsPassConfirmWnd.h"
 
 MZ_IMPLEMENT_DYNAMIC( CEasySmsWndBase )
 MZ_IMPLEMENT_DYNAMIC( CContactorsWnd )
@@ -30,6 +31,7 @@ MZ_IMPLEMENT_DYNAMIC( CSmsFindResultWnd )
 MZ_IMPLEMENT_DYNAMIC( CSmsFindWnd )
 MZ_IMPLEMENT_DYNAMIC( CSmsEncrytpCtorWnd )
 MZ_IMPLEMENT_DYNAMIC( CSmsPassInputWnd )
+MZ_IMPLEMENT_DYNAMIC( CSmsPassConfirmWnd )
 
 
 

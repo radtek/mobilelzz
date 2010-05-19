@@ -535,7 +535,7 @@ bool CNewSmsWnd::SendSMS_Wrapper( IN CMzString& Number )
 		long		lSize		=	0;
 		wchar_t	*pwcResult	=	NULL;
 
-		HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeSendSmsInfo( &pBuf, &lSize, m_SmsMsgEdit->GetText().C_Str(), NewNumber.C_Str() );
+		HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeSendSmsInfo( &pBuf, &lSize, m_SmsMsgEdit->GetText().C_Str(), Number.C_Str() );
 		//if ( FAILED ( hr ) )									return	_ASSERT ( 0 );
 
 		CCoreService	*pCCoreService	=	CCoreService::GetInstance();

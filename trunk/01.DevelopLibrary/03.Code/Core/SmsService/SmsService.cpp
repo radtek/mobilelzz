@@ -401,8 +401,8 @@ APP_Result CSmsService::ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& 
 		}else if ( 0 == wcscmp( L"time", pstNodeDataInfos[i].wcsNodeName )  ){
 			double dTime = _wtoll(pstNodeDataInfos[i].wcsNodeValue);
 			pQHandle->Bind(6, dTime);
-		}else if ( 0 == wcscmp( L"lookstatus", pstNodeDataInfos[i].wcsNodeName )  ){
-			long lLockStatus = _wtol(pstNodeDataInfos[6].wcsNodeValue);
+		}else if ( 0 == wcscmp( L"lockstatus", pstNodeDataInfos[i].wcsNodeName )  ){
+			long lLockStatus = _wtol(pstNodueDataInfos[6].wcsNodeValue);
 			pQHandle->Bind(7, lLockStatus);
 		}else if ( 0 == wcscmp( L"readstatus", pstNodeDataInfos[i].wcsNodeName )  ){
 			long lReadStatus = _wtol(pstNodeDataInfos[7].wcsNodeValue);
@@ -428,15 +428,19 @@ APP_Result CSmsService::GetPIDByAddress(wchar_t* pwcsAddress, long& lPID)
 {
 	APP_Result hr = APP_Result_E_Fail;
 	//CSQL_query*			pQHandle;
-	CSQL_SmartQuery pQHandle(m_pclSqlContactsDBSession);
-	long lQID = 0;
-	hr = m_pclSqlContactsDBSession->Query_Create((int*)&lQID, &pQHandle );
-	if( FAILED(hr) || pQHandle.Get() == NULL ) 
+	CSQL_SmartQuery pQHandle;
+	hr = CreateQuery(m_pclSqlContactsDBSession, Sms_SQL_GET_PID_ByAddress, pQHandle);
+	if ( FAILED_App(hr) ){
 		return hr;
-	//CSQL_SmartQuery spQ(pQHandle, m_pclSqlDBSession);
-	hr = pQHandle->Prepare(Sms_SQL_GET_PID_ByAddress);
-	if( FAILED(hr) ) 
-		return hr;
+	}
+	//long lQID = 0;
+	//hr = m_pclSqlContactsDBSession->Query_Create((int*)&lQID, &pQHandle );
+	//if( FAILED(hr) || pQHandle.Get() == NULL ) 
+	//	return hr;
+	////CSQL_SmartQuery spQ(pQHandle, m_pclSqlDBSession);
+	//hr = pQHandle->Prepare(Sms_SQL_GET_PID_ByAddress);
+	//if( FAILED(hr) ) 
+	//	return hr;
 	pQHandle->Bind(1, pwcsAddress, wcslen(pwcsAddress));
 
 	hr = pQHandle->Step();

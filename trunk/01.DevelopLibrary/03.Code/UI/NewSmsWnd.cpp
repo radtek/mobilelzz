@@ -23,11 +23,11 @@ CNewSmsWnd::~CNewSmsWnd()
 
 	MzAccClose();  
 	m_imgContainer.RemoveAll();
-	if ( NULL != m_SmsMsgEdit )
-	{
-		delete m_SmsMsgEdit;
-		m_SmsMsgEdit	=	NULL;
-	}
+	//if ( NULL != m_SmsMsgEdit )
+	//{
+	//	delete m_SmsMsgEdit;
+	//	m_SmsMsgEdit	=	NULL;
+	//}
 	if(NULL != m_pclContactorsWnd )
 	{
 		delete m_pclContactorsWnd ;
@@ -76,10 +76,10 @@ BOOL CNewSmsWnd::OnInitDialog()
 // 		lHeight			=	GetHeight();
 		m_Recievers.SetPos( 2, 0, GetWidth() - BUTTON_WIDTH_H - 2, BUTTON_HEIGHT_VH );
 
-		m_SmsMsgEdit->SetPos(	2, m_Recievers.GetHeight() + 3, GetWidth() - 4, 
+		m_SmsMsgEdit.SetPos(	2, m_Recievers.GetHeight() + 3, GetWidth() - 4, 
 								( GetHeight() - m_Recievers.GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR ) );	//add toolbar by zhu.t
 //add by zhu.t for toobar
-// 		m_toolBar_base.SetPos( 2, m_Recievers.GetHeight() + 3 + m_SmsMsgEdit->GetHeight(), 
+// 		m_toolBar_base.SetPos( 2, m_Recievers.GetHeight() + 3 + m_SmsMsgEdit.GetHeight(), 
 // 								GetWidth() - 4, MZM_HEIGHT_TEXT_TOOLBAR );
 		m_toolBar_base.SetPos( 0, GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR , GetWidth() , MZM_HEIGHT_TEXT_TOOLBAR );
 //
@@ -96,10 +96,10 @@ BOOL CNewSmsWnd::OnInitDialog()
 		SetWindowPos( m_hWnd, rc3.left, rc3.top, RECT_WIDTH( rc3 ), RECT_HEIGHT( rc3 ) );
 
 		m_Recievers.SetPos( 2, 0, lWidth - BUTTON_WIDTH_V - 2, BUTTON_HEIGHT_VH );
-		m_SmsMsgEdit->SetPos(	 2, m_Recievers.GetHeight() + 3, GetWidth() - 4,
+		m_SmsMsgEdit.SetPos(	 2, m_Recievers.GetHeight() + 3, GetWidth() - 4,
 								(lHeight - m_Recievers.GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR ) ); //add toolbar by zhu.t
 		//add by zhu.t for toobar
-// 		m_toolBar_base.SetPos( 2, m_Recievers.GetHeight() + 3 + m_SmsMsgEdit->GetHeight(), 
+// 		m_toolBar_base.SetPos( 2, m_Recievers.GetHeight() + 3 + m_SmsMsgEdit.GetHeight(), 
 // 								GetWidth() - 4, MZM_HEIGHT_TEXT_TOOLBAR );
 		m_toolBar_base.SetPos( 0, GetHeight() - MZM_HEIGHT_TEXT_TOOLBAR , GetWidth() , MZM_HEIGHT_TEXT_TOOLBAR );
 		//
@@ -126,24 +126,25 @@ BOOL CNewSmsWnd::OnInitDialog()
 	m_Recievers.EnableUpdateDis(true); 
 	m_Recievers.SetText(L"");
 	m_Recievers.SetCursePos(0);
-
+	m_Recievers.EnableScrollBarH(true);
+	m_Recievers.EnableScrollableParent(true);
 	AddUiWin( &m_Recievers ); 
 	// 初始化短信文本控件，并添加到窗口中
 	
-	m_SmsMsgEdit->SetSipMode( IM_SIP_MODE_GEL_PY, MZM_HEIGHT_TEXT_TOOLBAR );
-	m_SmsMsgEdit->SetTextColor( RGB( 94, 94, 94 ) );			// you could also set the color of text
-	m_SmsMsgEdit->SetEditBgType( UI_EDIT_BGTYPE_ROUND_RECT ); 
-	m_SmsMsgEdit->SetColorBg( RGB( 250, 250, 250 ) );
-	m_SmsMsgEdit->EnableInsideScroll( true );
-	m_SmsMsgEdit->EnableZoomIn( true );   
-	m_SmsMsgEdit->SetTip( L"在这里输入短信内容" );
+	m_SmsMsgEdit.SetSipMode( IM_SIP_MODE_GEL_PY, MZM_HEIGHT_TEXT_TOOLBAR );
+	m_SmsMsgEdit.SetTextColor( RGB( 94, 94, 94 ) );			// you could also set the color of text
+	m_SmsMsgEdit.SetEditBgType( UI_EDIT_BGTYPE_ROUND_RECT ); 
+	m_SmsMsgEdit.SetColorBg( RGB( 250, 250, 250 ) );
+	m_SmsMsgEdit.EnableInsideScroll( true );
+	m_SmsMsgEdit.EnableZoomIn( true );   
+	m_SmsMsgEdit.SetTip( L"在这里输入短信内容" );
 
-	AddUiWin( m_SmsMsgEdit );
+	AddUiWin( &m_SmsMsgEdit );
 
 	m_smsMsg			=	GetSmsRegisterMessage();
 
 	WinManager* pMng	=	GetWinManager();
-	pMng->SetFocusedWinBeforeDeactivate( m_SmsMsgEdit );
+	pMng->SetFocusedWinBeforeDeactivate( &m_SmsMsgEdit );
 
 	DWORD lReadMessageThreadThreadID	=	0;
 	m_uShowNotifyWnd	=	GetShellNotifyMsg_ShowNotifyWnd();
@@ -385,7 +386,7 @@ void CNewSmsWnd::ReadMessage()
 		//	return   false; 
 	}
 
-	m_SmsMsgEdit->SetText( strMessage );
+	m_SmsMsgEdit.SetText( strMessage );
 	SmsClose( smsHandle );
 }
 
@@ -410,7 +411,7 @@ void CNewSmsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
 		
 		m_Recievers.SetPos( 2, 0, GetWidth() - BUTTON_WIDTH_V - 2, BUTTON_HEIGHT_VH );
 
-		m_SmsMsgEdit->SetPos(	2, m_Recievers.GetHeight() + 3, GetWidth() - 4, 
+		m_SmsMsgEdit.SetPos(	2, m_Recievers.GetHeight() + 3, GetWidth() - 4, 
 								(GetHeight() - m_Recievers.GetHeight() ) );
 
 		m_SendSmsBtn.SetPos( ( GetWidth() - BUTTON_WIDTH_V ), 0, BUTTON_WIDTH_V - 2, BUTTON_HEIGHT_VH );
@@ -426,7 +427,7 @@ void CNewSmsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
 
 		m_Recievers.SetPos( 2, 0, GetWidth() - BUTTON_WIDTH_H - 2, BUTTON_HEIGHT_VH) ;
 
-		m_SmsMsgEdit->SetPos(	2, m_Recievers.GetHeight() + 3, GetWidth() - 4,
+		m_SmsMsgEdit.SetPos(	2, m_Recievers.GetHeight() + 3, GetWidth() - 4,
 								( GetHeight() - m_Recievers.GetHeight() ) );
 
 		m_SendSmsBtn.SetPos( ( GetWidth() - BUTTON_WIDTH_H ), 0, BUTTON_WIDTH_H - 2,BUTTON_HEIGHT_VH );
@@ -512,12 +513,12 @@ bool CNewSmsWnd::SendSMS_Wrapper( IN CMzString& Number )
 		NewNumber	=	Number;
 	}
 
-	CMzString	SMS_Content	=	m_SmsMsgEdit->GetText().C_Str();
+	CMzString	SMS_Content	=	m_SmsMsgEdit.GetText().C_Str();
 
 	int length	=	SMS_Content.Length();
 	if( length <= 69 )
 	{
-	 	SendFlag = SendSMS( NewNumber.C_Str(), m_SmsMsgEdit->GetText().C_Str() );
+	 	SendFlag = SendSMS( NewNumber.C_Str(), m_SmsMsgEdit.GetText().C_Str() );
 	}
 	else
 	{
@@ -535,7 +536,7 @@ bool CNewSmsWnd::SendSMS_Wrapper( IN CMzString& Number )
 		long		lSize		=	0;
 		wchar_t	*pwcResult	=	NULL;
 
-		HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeSendSmsInfo( &pBuf, &lSize, m_SmsMsgEdit->GetText().C_Str(), Number.C_Str() );
+		HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeSendSmsInfo( &pBuf, &lSize, m_SmsMsgEdit.GetText().C_Str(), Number.C_Str() );
 		//if ( FAILED ( hr ) )									return	_ASSERT ( 0 );
 
 		CCoreService	*pCCoreService	=	CCoreService::GetInstance();
@@ -601,13 +602,13 @@ void	CNewSmsWnd::Run()
 
 	g_ReciversList.Clear();
 	m_Recievers.SetText(L"");
-	m_SmsMsgEdit->SetText(L"");
+	m_SmsMsgEdit.SetText(L"");
 }
 
 //void CNewSmsWnd::OnLButtonUp ( UINT fwKeys, int  xPos, int yPos )
 //{
 //	m_Recievers.OnLButtonUp123( fwKeys, xPos, yPos );
-//	m_SmsMsgEdit->OnLButtonUp123( fwKeys, xPos, yPos );
+//	m_SmsMsgEdit.OnLButtonUp123( fwKeys, xPos, yPos );
 //	
 //	return CMzWndEx::OnLButtonUp( fwKeys, xPos, yPos );
 //}
@@ -655,7 +656,7 @@ DWORD CNewSmsWnd::ReadMessage( LPVOID lpParameter )
 								dwSize,(PBYTE)&tpsd, sizeof(TEXT_PROVIDER_SPECIFIC_DATA), &dwRead );
 		if (hr == ERROR_SUCCESS)
 		{
-			pNewSmsWnd->m_SmsMsgEdit->SetText( (wchar_t*) pMessage );
+			pNewSmsWnd->m_SmsMsgEdit.SetText( (wchar_t*) pMessage );
 		} 
 
 		free( pMessage );

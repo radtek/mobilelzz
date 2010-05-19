@@ -75,7 +75,9 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 		long lLength = clTempStr.Length();
 		SetCursePos(lLength);
 	}
-
+	Invalidate();
+	//UpdateCharsPos();
+	//ScrollChar(1);
 	Update();
 	return r;
 }
@@ -116,10 +118,8 @@ void UiEditControl::UpdateTextByRecievers(BOOL bIsAddChar, long lWillPos)
 	}
  	
 	SetText(wcsReciversName);
-	
-//	if ( Invalid_4Byte != lWillPos ){
-		//SetCursePos(0);
-//	}
+	Invalidate();
+	Update();
 }
 
 //void UiEditControl::OnClick( size_t  nIndex )
@@ -150,9 +150,11 @@ int UiEditControl::OnKeyDown(int nVirtKey, DWORD lKeyData)
 		if ( (-1 != lCursorPos) && (0 != lCursorPos) ){			
 			g_ReciversList.DeleteItemByCursorPos((lCursorPos-1), &lWillPos);	
 			UpdateTextByRecievers(TRUE, lWillPos);
-		}				
-		SetCursePos(lWillPos+1);
-		//Update();
+		}		
+		SetCursePos(lWillPos+1);	
+		Invalidate();
+		//UpdateCharsPos();
+		Update();
 	}else if ( 3 == nVirtKey ){//';' button down
 		int b = 0;
 		//get numbers until before ;

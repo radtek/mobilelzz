@@ -402,10 +402,10 @@ APP_Result CSmsService::ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& 
 			double dTime = _wtoll(pstNodeDataInfos[i].wcsNodeValue);
 			pQHandle->Bind(6, dTime);
 		}else if ( 0 == wcscmp( L"lockstatus", pstNodeDataInfos[i].wcsNodeName )  ){
-			long lLockStatus = _wtol(pstNodueDataInfos[6].wcsNodeValue);
+			long lLockStatus = _wtol(pstNodeDataInfos[i].wcsNodeValue);
 			pQHandle->Bind(7, lLockStatus);
 		}else if ( 0 == wcscmp( L"readstatus", pstNodeDataInfos[i].wcsNodeName )  ){
-			long lReadStatus = _wtol(pstNodeDataInfos[7].wcsNodeValue);
+			long lReadStatus = _wtol(pstNodeDataInfos[i].wcsNodeValue);
 			pQHandle->Bind(8, lReadStatus);
 		}
 	}

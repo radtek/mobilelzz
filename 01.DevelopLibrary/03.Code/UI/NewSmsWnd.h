@@ -48,7 +48,7 @@ class CNewSmsWnd : public /*CMzWndEx*/ CEasySmsWndBase
 	   CNewSmsWnd()
 	   {
 			m_lCurProgress = 0;
-			m_SmsMsgEdit = new CMyEdit;
+			//m_SmsMsgEdit = new CMyEdit;
 			m_pclContactorsWnd  = NULL;	
 	   }
 	   virtual ~CNewSmsWnd();
@@ -67,7 +67,7 @@ class CNewSmsWnd : public /*CMzWndEx*/ CEasySmsWndBase
 		UINT						m_uShowNotifyWnd;
 		// ÎÄ±¾
 		UiEditControl				m_Recievers;
-		CMyEdit*					m_SmsMsgEdit;
+		CMyEdit						m_SmsMsgEdit;
 
 		DWORD						m_accMsg;
 		DWORD						m_smsMsg;

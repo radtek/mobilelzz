@@ -7,6 +7,9 @@ BOOL g_bH = FALSE;
 CReciversList g_ReciversList;
 
 BOOL	g_bContactShow = FALSE;
+
+//是否是试用版的flg
+BOOL	g_bIsTrial		=	FALSE;
 // TODO: 在 STDAFX.H 中
 // 引用任何所需的附加头文件，而不是在此文件中引用
 

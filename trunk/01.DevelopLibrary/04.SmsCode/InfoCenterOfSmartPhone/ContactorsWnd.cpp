@@ -123,6 +123,13 @@ BOOL CContactorsWnd::OnInitDialog()
 
 	while ( hr != E_FAIL && hr != S_OK )
 	{
+		if ( g_bIsTrial )
+		{
+			if ( i > 10 )
+			{
+				break;
+			}
+		}
 		wchar_t* PName = NULL;
 		pq->GetField(1, &PName);
 		long lPID = 0;

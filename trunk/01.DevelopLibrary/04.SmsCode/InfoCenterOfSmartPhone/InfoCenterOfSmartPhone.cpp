@@ -41,8 +41,10 @@ public:
 
 	  if(!LicenseProtect())
 	  {
-		  MzMessageBoxEx(NULL,L"授权文件校验失败，请重新下载安装",MB_OK);
-		  exit(0);
+//		  MzMessageBoxEx(NULL,L"授权文件校验失败，请重新下载安装",MB_OK);
+		  MzMessageBoxEx(NULL,L"授权文件校验失败，您目前使用的是该软件的试用版",MB_OK);
+		  g_bIsTrial	=	TRUE;
+//		  exit(0);
 	  }
 
 	// 初始化 COM 组件

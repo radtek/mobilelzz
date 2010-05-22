@@ -15,7 +15,7 @@ using namespace std;
 
 #define   Contactors_SQL_GET_CONTACTS  L"select ABPerson.ROWID, ABPerson.Name , ABPhones.*  from ABPerson, ABPhones where ABPerson.ROWID = ABPhones.record_id "
 #define   Contactors_SQL_GET_FIRSTLETER  L"select token  from ABLookupFirstLetter where source = ?"
-#define   Sms_SQL_GET_PID_ByAddress				L"select record_id  from ABPhones where number = ? COLLATE BINARY"
+#define   Sms_SQL_GET_PID_ByAddress				L"select record_id  from ABPhones where number = ? COLLATE PHONE_NUMBER_COL"
 #define		Sms_SQL_GET_Name_ByPID			L"select Name from ABPerson where ROWID = ?"
 
 #define   Sms_SQL_GET_UnReadSms					L"select *  from SmsDetail where readstatus = 0"
@@ -43,6 +43,8 @@ using namespace std;
 														and type = ? and time < ?"
 #define		Sms_SQL_Search_SmsDetail_BetweenDate	L"select * from SmsDetail where pid = ? and content like ?\
 														and type = ? and time < ? and time > ?"
+
+#define		 S_ROW			((APP_Result)0x00000002L)
 
 //====================================================================================
 //____________________________________________________________________________________

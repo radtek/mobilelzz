@@ -260,6 +260,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\UI\RecieversStringParser.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\RecieversStringParser.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\UI\SmsEncrytpCtorWnd.cpp"
 					>
 				</File>

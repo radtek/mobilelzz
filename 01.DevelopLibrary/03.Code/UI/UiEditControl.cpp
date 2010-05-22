@@ -4,12 +4,10 @@
 #include"UiEditControl.h"
 //#include"NewSmsWnd.h"
 #include"ContactorsWnd.h"
+#include "RecieversStringParser.h"
 
 UiEditControl::UiEditControl()
 {
-	m_lFlag = 0;
-	m_pParent = NULL;
-//	m_pclContactorsWnd  = NULL;	
 }
 
 UiEditControl::~UiEditControl()
@@ -64,42 +62,56 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 				  )
 {
 	MzOpenSip();
-	int r = UiSingleLineEdit::OnLButtonUp(fwKeys, xPos, yPos);
-	long lCursorPos = GetCursePos();
-	long lWillPos = lCursorPos;
-	g_ReciversList.FindWillPos(lCursorPos, lWillPos);
-	if ( lWillPos >= 0 ){
-		SetCursePos(lWillPos);
-	}else{
-		CMzString& clTempStr = GetText();
-		long lLength = clTempStr.Length();
-		SetCursePos(lLength);
+	int r = UiEdit::OnLButtonUp(fwKeys, xPos, yPos);
+	long lCurRow = Invalid_4Byte;
+	long lCurCol = Invalid_4Byte;
+	GetCaretPos((size_t*)&lCurRow, (size_t*)&lCurCol);
+	if ( (Invalid_4Byte!=lCurRow)&&(Invalid_4Byte!=lCurCol) ){
+		long lPos = Invalid_4Byte;
+		ConvertRowCol2LinePos(lCurRow, lCurCol, lPos);
+		CRecieversStringParser clParser;
+		CMzString& clText = GetText();
+		long lWSize = 0;
+		wchar_t* pwcsTextBuf = clParser.GetWStringBuf(lWSize);
+		F_wcscpyn(pwcsTextBuf, clText.C_Str(), lWSize);
+		long lBeginPos = Invalid_4Byte;
+		long lEndPos = Invalid_4Byte;
+		
+		clParser.GetContactorRangeByPos(lPos, lBeginPos, lEndPos);
+		BOOL b = clParser.IsContactor(lBeginPos, lEndPos);
+		if ( !b ){
+			lBeginPos = Invalid_4Byte;
+			lEndPos = Invalid_4Byte;
+		}
+		if( (lBeginPos!=Invalid_4Byte)&&(lEndPos!=Invalid_4Byte) ){
+			long lRowBegin = 0;
+			long lRowEnd = 0;
+			long lColBegin = 0;
+			long lColEnd = 0;
+			ConvertLinePos2RowCol(lBeginPos, lRowBegin, lColBegin);
+			ConvertLinePos2RowCol(lEndPos, lRowEnd, lColEnd);
+
+			UpdateFontColor(RGB(167,137,63), lRowBegin, lColBegin, lRowEnd, lColEnd);
+			SetCaretPos(lRowEnd, (lColEnd+1));
+			Invalidate();
+			Update();
+		}
 	}
-	Invalidate();
-	//UpdateCharsPos();
-	//ScrollChar(1);
-	Update();
+
 	return r;
-}
-
-
-void UiEditControl::SetParent(void* pParent)
-{
-	m_pParent = pParent;
 }
 
 void UiEditControl::UpdateData( long lFlag )
 {
-	//if(lFlag == 0)
-	//{
-	//}
-	//else
-	//{
-		UpdateTextByRecievers();		
-	//}
-	//ReleaseCapture();
-	
-	
+	CRecieversStringParser clParser;
+	CMzString& clText = GetText();
+	long lWSize = 0;
+	wchar_t* pwcsTextBuf = clParser.GetWStringBuf(lWSize);
+	F_wcscpyn(pwcsTextBuf, clText.C_Str(), lWSize);	
+	clParser.UpdateStringByContactors();
+	SetText(clParser.GetWStringBuf(lWSize));
+	Invalidate();
+	Update();
 }
 
 void UiEditControl::UpdateTextByRecievers(BOOL bIsAddChar, long lWillPos)
@@ -139,53 +151,83 @@ void UiEditControl::UpdateTextByRecievers(BOOL bIsAddChar, long lWillPos)
 
 int UiEditControl::OnKeyDown(int nVirtKey, DWORD lKeyData)
 {
-	int r = UiSingleLineEdit::OnKeyDown(nVirtKey, lKeyData);
-
-	if ( (8 ==  nVirtKey) && ( lKeyData == 0 )){//delete button down
-		int b = 0;
-		// get cur pos
-		long lCursorPos = GetCursePos();
-		long lWillPos = -1;
-		// delete item from recievers by pos
-		if ( (-1 != lCursorPos) && (0 != lCursorPos) ){			
-			g_ReciversList.DeleteItemByCursorPos((lCursorPos-1), &lWillPos);	
-			UpdateTextByRecievers(TRUE, lWillPos);
-		}		
-		SetCursePos(lWillPos+1);	
-		Invalidate();
-		//UpdateCharsPos();
-		Update();
-	}else if ( 3 == nVirtKey ){//';' button down
-		int b = 0;
-		//get numbers until before ;
-		long lCursorPos = GetCursePos();
-		if ( (-1 != lCursorPos) && (0 != lCursorPos) ){
-			long lPos = 0;	//make pos
-			CMzString& wcsControlText = GetText();
-			wchar_t* pwcsControlText = wcsControlText.C_Str();
-			long lCur = 0;
-			while ( (L'\0' != (*pwcsControlText)) &&(pwcsControlText) && (lCur <= lCursorPos))
-			{
-				if ( L';' == (*pwcsControlText) ){
-					lPos = lCur+1;
-				}
-				pwcsControlText++;
-				lCur++;
-			}
-			wchar_t awcsTemp[30] = L"";
-			pwcsControlText = wcsControlText.C_Str();
-			F_wcscpyn(awcsTemp, pwcsControlText, sizeof(awcsTemp)/sizeof(awcsTemp[0]));
-			wchar_t* pNumber = awcsTemp;
-			pNumber[lCursorPos] = L'\0';
-			pNumber += lPos;
-			MyListItemData stTemp;	//make item to insert
-			stTemp.StringDescription = pNumber;
-			stTemp.StringTitle = pNumber;
-			//insert reciever in the pos
-			g_ReciversList.InsertItemByPos(&stTemp, lPos);
-			//UpdateTextByRecievers();
-		}		
+	int r = UiEdit::OnKeyDown(nVirtKey, lKeyData);
+	long lCurRow = Invalid_4Byte;
+	long lCurCol = Invalid_4Byte;
+	long lPos = Invalid_4Byte;
+	GetCaretPos((size_t*)&lCurRow, (size_t*)&lCurCol);
+	if ( (Invalid_4Byte!=lCurRow)&&(Invalid_4Byte!=lCurCol) ){	
+		ConvertRowCol2LinePos(lCurRow, lCurCol, lPos);
 	}
+	CRecieversStringParser clParser;
+	CMzString& clText = GetText();
+	long lWSize = 0;
+	wchar_t* pwcsTextBuf = clParser.GetWStringBuf(lWSize);
+	F_wcscpyn(pwcsTextBuf, clText.C_Str(), lWSize);	
+	long lWillPos = 0;
+	if ( (8 ==  nVirtKey) && ( lKeyData == 0 )){//delete button down
+		lWillPos = clParser.DeleteContentByPos(lPos);
+		ConvertLinePos2RowCol(lWillPos, lCurRow, lCurCol);
+	}else if ( (48 <= nVirtKey)&&(57>=nVirtKey)){//numbers button down
+		clParser.AddSeparator(lPos);
+		
+	}else{
+		//cancel input
+	}
+	SetText(clParser.GetWStringBuf(lWSize));
+	SetCaretPos(lCurRow, lCurCol);
+	Invalidate();
+	Update();
 
 	return r;
+}
+
+void UiEditControl::ConvertLinePos2RowCol(long lLinePos, long& lRow, long& lCol)
+{
+	long lRowCount = GetRowCount();
+	long lTotalCharCount = 0;
+	for ( int i  = 0; i < lRowCount; i++ )
+	{
+		if ( (i+1) < (lRowCount-1) ){
+			long lCurRowCharCount = GetCharCount(i,0,(i+1),0);
+			long lTemp = lTotalCharCount+lCurRowCharCount;
+			if ( lLinePos < (lTemp) ){
+				lRow = i;
+				lCol = lLinePos-lTotalCharCount;
+				break;
+			}
+			lTotalCharCount=lTemp;
+		}
+		else{
+			lRow = i;
+			lCol = lLinePos-lTotalCharCount;
+			break;
+		}
+	}
+
+}
+
+void UiEditControl::ConvertRowCol2LinePos(long lRow, long lCol, long& lLinePos)
+{
+	lLinePos = GetCharCount(0,0,lRow,lCol);
+}
+
+void UiEditControl::UpdateRecievers()
+{
+	CRecieversStringParser clParser;
+	CMzString& clText = GetText();
+	long lWSize = 0;
+	wchar_t* pwcsTextBuf = clParser.GetWStringBuf(lWSize);
+	F_wcscpyn(pwcsTextBuf, clText.C_Str(), lWSize);	
+	clParser.UpdateRecievers();
+}
+
+void UiEditControl::UpdateContactors()
+{
+	CRecieversStringParser clParser;
+	CMzString& clText = GetText();
+	long lWSize = 0;
+	wchar_t* pwcsTextBuf = clParser.GetWStringBuf(lWSize);
+	F_wcscpyn(pwcsTextBuf, clText.C_Str(), lWSize);	
+	clParser.UpdateContactors();
 }

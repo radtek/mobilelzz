@@ -447,7 +447,9 @@ APP_Result CSmsService::GetPIDByAddress(wchar_t* pwcsAddress, long& lPID)
 	if ( FAILED_App(hr) ){
 		return hr;
 	}
-	pQHandle->GetField(0, &lPID);
+	if ( S_ROW == hr ){
+		pQHandle->GetField(0, &lPID);
+	}
 
 	return APP_Result_S_OK;
 }

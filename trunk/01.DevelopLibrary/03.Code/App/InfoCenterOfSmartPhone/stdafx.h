@@ -33,4 +33,6 @@ static DWORD modeId[4]=
 };
 
 long	getScreenRandom ( int iRan = 16 );
+
+#define UI_Recievers_String_Length			(512)
 // TODO: 在此处引用程序需要的其他头文件

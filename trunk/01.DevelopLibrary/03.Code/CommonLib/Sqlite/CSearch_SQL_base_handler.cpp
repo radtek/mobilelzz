@@ -35,8 +35,6 @@
 #include <assert.h>
 #include "CSearch_SQL_base_common.h"
 
-#define		 S_ROW			((APP_Result)0x00000002L)
-
 CSQL_sessionManager*	CSQL_sessionManager::m_this	= 0;
 
 

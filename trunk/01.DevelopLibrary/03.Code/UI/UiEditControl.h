@@ -3,18 +3,12 @@
 
 #define UiEditControl_Click		1001
 
-class UiEditControl: public UiSingleLineEdit
+class UiEditControl: public UiEdit
 {
-	long m_lFlag;
-
-	void* m_pParent;
-	//CContactorsWnd* m_pclContactorsWnd;
 public:
 	UiEditControl();
 
 	virtual ~UiEditControl();
-
-	void SetParent(void* pParent);
 
 	void UpdateData(  long lFlag  );
 
@@ -34,5 +28,11 @@ public:
 	virtual int  OnKeyDown(int nVirtKey, DWORD lKeyData);
 	//virtual void OnClick( size_t  nIndex );
 	//virtual int OnChar( TCHAR  chCharCode, LPARAM  lKeyData );
+	void UpdateRecievers();
+	void UpdateContactors();
+private:
+	//long GetLinePos();
+	void ConvertLinePos2RowCol(long lLinePos, long& lRow, long& lCol);
+	void ConvertRowCol2LinePos(long lRow, long lCol, long& lLinePos);
 };
 #endif //__UiEditControl_h__

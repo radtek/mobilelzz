@@ -33,6 +33,7 @@ CNewSmsWnd::~CNewSmsWnd()
 		delete m_pclContactorsWnd ;
 		m_pclContactorsWnd  = NULL;	
 	}
+	MzCloseSip();
 }
 
 BOOL CNewSmsWnd::OnInitDialog()
@@ -122,12 +123,13 @@ BOOL CNewSmsWnd::OnInitDialog()
 
 	m_Recievers.SetTip( L"联系人编辑区域:" );					// set the tips text
 	m_Recievers.SetID( MZ_IDC_RECIEVERS_EDIT );
-	m_Recievers.SetParent( (void*)this );
-	m_Recievers.EnableUpdateDis(true); 
-	m_Recievers.SetText(L"");
-	m_Recievers.SetCursePos(0);
-	m_Recievers.EnableScrollBarH(true);
-	m_Recievers.EnableScrollableParent(true);
+	m_Recievers.SetEditBgType( UI_EDIT_BGTYPE_ROUND_RECT ); 
+	m_Recievers.EnableInsideScroll( true );
+	m_Recievers.EnableZoomIn( true );
+	m_Recievers.EnableRichTextFormat(true);
+	m_Recievers.SetFontSize(20);
+	m_Recievers.SetTopInvalid(5);
+	m_Recievers.SetBottomInvalid(5);
 	AddUiWin( &m_Recievers ); 
 	// 初始化短信文本控件，并添加到窗口中
 	
@@ -231,7 +233,7 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 					delete m_pclContactorsWnd ;
 					m_pclContactorsWnd  = NULL;
 				}
-
+				m_Recievers.UpdateContactors();
 				m_pclContactorsWnd = new CContactorsWnd;
 				m_pclContactorsWnd->SetParent(&m_Recievers);
 				RECT rcWork = MzGetWorkArea();
@@ -580,6 +582,7 @@ DWORD CNewSmsWnd::ProxyRun(LPVOID lp)
 
 void	CNewSmsWnd::Run()
 {
+	m_Recievers.UpdateRecievers();
 	int		n			=	g_ReciversList.GetItemCount();
 	bool	SendFlag	=	FALSE;
 	for(int i = 0; i < n; i++ )

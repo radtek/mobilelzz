@@ -95,7 +95,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 	ImagingHelper* imgNormalC = m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_Contactors, true);
 	m_ContactorsBtn.SetID(MZ_IDC_CONTACTORS_BTN);
 	m_ContactorsBtn.SetButtonType(MZC_BUTTON_NONE);
-	m_ContactorsBtn.SetImage_Normal(imgNormal);
+	m_ContactorsBtn.SetImage_Normal(imgNormalC);
 	m_ContactorsBtn.SetMode(UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL);
 	m_ContactorsBtn.SwapImageZOrder(true);
 	m_ContactorsBtn.SetTextColor(RGB(255,255,255));
@@ -111,7 +111,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 	m_Recievers.SetFontSize(20);
 	m_Recievers.SetTopInvalid(5);
 	m_Recievers.SetBottomInvalid(5);
-
+	m_Recievers.SetSipMode(IM_SIP_MODE_DIGIT,0);
 	AddUiWin(&m_Recievers); // don't forget to add the control to the window
 	// 初始化短信文本控件，并添加到窗口中
 	

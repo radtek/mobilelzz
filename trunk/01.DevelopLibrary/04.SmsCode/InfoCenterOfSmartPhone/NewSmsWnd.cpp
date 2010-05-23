@@ -187,11 +187,17 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 		}
 		case MZ_IDC_CONTACTORS_BTN:
 		{	
+			if(NULL != m_pclContactorsWnd )
+			{
+				delete m_pclContactorsWnd ;
+				m_pclContactorsWnd  = NULL;
+			}
 			m_Recievers.UpdateContactors();
-			m_clContactorsWnd.SetParent(&m_Recievers);
+			m_pclContactorsWnd = new CContactorsWnd;
+			m_pclContactorsWnd->SetParent(&m_Recievers);
 			RECT rcWork = MzGetWorkArea();
-			m_clContactorsWnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0, 0);
-			m_clContactorsWnd.Show();		
+			m_pclContactorsWnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0, 0);
+			m_pclContactorsWnd->Show();		
 			break;
 		}
 	  break;

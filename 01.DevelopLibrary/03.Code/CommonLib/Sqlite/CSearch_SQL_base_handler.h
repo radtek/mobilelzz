@@ -6,7 +6,7 @@
 #include <vector>
 using namespace std;
 #define   Sms_SQL_CREATETABLE_SmsDetail	L"create table IF NOT EXISTS SmsDetail(sid integer PRIMARY KEY ASC, \
-											pid integer, type integer, content text, address text, time integer,\
+											pid integer, type integer, content text, address text not null, time integer,\
 											lockstatus integer, readstatus integer)"
 #define   Sms_SQL_CREATETABLE_SmsCode	L"create table IF NOT EXISTS SmsCode(pid integer PRIMARY KEY ASC, \
 											code text)"

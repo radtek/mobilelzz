@@ -381,6 +381,7 @@ APP_Result CSmsService::ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& 
 	hr = pQHandle->Prepare(Sms_SQL_INSERT_SmsDetail);
 	if( FAILED(hr) ) 
 		return hr;
+	long lType = Invalid_4Byte;
 	for ( int i = 0; i < lNodeDataInfoCount; i++ )
 	{
 		if ( 0 == wcscmp( L"type", pstNodeDataInfos[i].wcsNodeName )  ){
@@ -408,6 +409,10 @@ APP_Result CSmsService::ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& 
 			long lReadStatus = _wtol(pstNodeDataInfos[i].wcsNodeValue);
 			pQHandle->Bind(8, lReadStatus);
 		}
+	}
+	if ( (lType != Invalid_4Byte)&&(lType == 1)){
+		long lReadStatus = 1;
+		pQHandle->Bind(8, lReadStatus);
 	}
 	SYSTEMTIME stTime;
 	memset(&stTime,0x0,sizeof(stTime));

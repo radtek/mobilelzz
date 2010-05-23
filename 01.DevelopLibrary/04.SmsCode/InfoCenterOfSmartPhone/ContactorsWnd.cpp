@@ -123,7 +123,7 @@ BOOL CContactorsWnd::OnInitDialog()
 
 	while ( hr != E_FAIL && hr != S_OK )
 	{
-		if ( g_bIsTrial )
+		if ( !g_bIsTrial )
 		{
 			if ( i > 10 )
 			{

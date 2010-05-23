@@ -27,6 +27,13 @@ class MyList:
   public UiList
 {
 public:
+	MyList()
+	{
+	}
+	virtual ~MyList()
+	{
+		m_ImageContainer.RemoveAll();
+	}
   // 当某一项即将被删除之前，delete 其自定义项数据
   virtual void OnRemoveItem(int nIndex)
   {

@@ -62,14 +62,19 @@ public:
    }
    virtual ~CNewSmsWnd(){
 
-	   if( NULL != m_SmsMsgEdit )
-	   {
+		if( NULL != m_SmsMsgEdit )
+		{
 		   delete m_SmsMsgEdit;
 		   m_SmsMsgEdit = NULL;
-	   }
-	
-		MzAccClose();  
-   
+		}
+		if(NULL != m_pclContactorsWnd )
+		{
+		   delete m_pclContactorsWnd ;
+		   m_pclContactorsWnd  = NULL;	
+		}
+		MzAccClose();
+		MzCloseSip();
+		m_imgContainer.RemoveAll();
    }
    static DWORD WINAPI   ProxyRun(LPVOID lp);
    void Run();
@@ -104,7 +109,7 @@ private:
 	void ReadMessage();
 	BOOL Normal();
 private:
-	CContactorsWnd				m_clContactorsWnd;			
+	CContactorsWnd*				m_pclContactorsWnd;			
 
 	MzPopupProgress				m_progress;
 	long						m_lCurProgress;

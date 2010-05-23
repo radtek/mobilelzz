@@ -27,13 +27,11 @@
 		</operation>
 		
 		<operation type = "add">
-			<sid>12</sid>
-			<type></type>
+			<type></type>//发送给别人的短信，Type为1，收到别人的短信，Type为0
 			<content></content>
-			<address></address>
-			<time></time>
-			<lockstatus>0</lockstatus>
-			<readstatus>0</readstatus>
+			<address></address>//该值必须有内容
+			<lockstatus>0</lockstatus>//不锁定为0，锁定为1,可以不设置，默认为0
+			<readstatus>0</readstatus>//未读为0，已读为1；如果Type为1，该值默认为1；如果Type为0，该值默认为0
 		</operation>
 		
 		<operation type = "delete" kind = "all/sids">		

@@ -195,6 +195,9 @@ public:
 	{
 		m_bInit = FALSE;
 	}
+	virtual ~CContactorsWnd()
+	{
+	}
   UiToolbar_Text m_Toolbar;
   //UiEditControl* m_pUIEditControl;
   // ап╠М©ь╪Ч

@@ -40,7 +40,7 @@ BOOL CContactorsWnd::OnInitDialog()
 
 	if(width>480)
 	{
-		g_bH = TRUE;
+		//g_bH = TRUE;
 		long lWidth = GetWidth();
 		long lHeight = GetHeight();
 		RECT rc = MzGetWindowRect();
@@ -57,7 +57,7 @@ BOOL CContactorsWnd::OnInitDialog()
 	}
 	else
 	{
-		g_bH = FALSE;
+		//g_bH = FALSE;
 		long lWidth = GetWidth();
 		long lHeight = GetHeight();
 		RECT rc = MzGetWindowRect();
@@ -222,25 +222,25 @@ LRESULT CContactorsWnd::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam)
 					case SCREEN_PORTRAIT_P:
 					{
 						MzChangeDisplaySettingsEx(DMDO_90);
-						g_bH = TRUE;
+						//g_bH = TRUE;
 					}
 					break;
 				  case SCREEN_PORTRAIT_N:
 					{
 						//MzChangeDisplaySettingsEx(DMDO_270);
-						g_bH = FALSE;
+						//g_bH = FALSE;
 					}
 					break;
 				  case SCREEN_LANDSCAPE_N:
 					{
 						MzChangeDisplaySettingsEx(DMDO_180);
-						g_bH = TRUE;
+						//g_bH = TRUE;
 					}
 					break;
 				  case SCREEN_LANDSCAPE_P:
 					{
 						MzChangeDisplaySettingsEx(DMDO_0);
-						g_bH = FALSE;
+						//g_bH = FALSE;
 					}
 				break;
 			  }
@@ -270,24 +270,32 @@ void CContactorsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 			}
 			if (nIndex==2)
 			{
-				g_ReciversList.Clear();
+				//g_ReciversList.Clear();
 				long lCount = m_List.GetItemCount();
 				for(int i = 0; i < lCount; i++)
 				{
 					ListItem* pItem = m_List.GetItem(i);
 					if(pItem)
 					{
-					  MyListItemData* mlid = (MyListItemData*)pItem->Data;
-					  if(mlid)
-					  {
-						if(mlid->Selected)
+						MyListItemData* mlid = (MyListItemData*)pItem->Data;
+						if(mlid)
 						{
-							g_ReciversList.AppendItem(mlid);					
-						}
-					  }				   
+							MyListItemData*pT = g_ReciversList.FindItemByPID(mlid->lPID);
+							if(mlid->Selected)
+							{								
+								if ( !pT ){									
+									g_ReciversList.AppendItem(mlid);							  	
+								}		
+							}else{
+								if ( pT ){									
+									g_ReciversList.DeleteItem(pT);							  	
+								}
+							}
+
+						}				   
 					}			
 				}
-				
+
 				m_pParent->UpdateData(1);
 				DestroyWindow();
 				g_bContactShow = FALSE;
@@ -336,7 +344,7 @@ void CContactorsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
 
   if (devMode.dmDisplayOrientation == DMDO_180 || devMode.dmDisplayOrientation == DMDO_0)
   {
-		g_bH = TRUE;
+		//g_bH = TRUE;
 		RECT rc = MzGetWorkArea();
 		//modify by zhaodsh  begin at 2010/03/21 12:45
 		//SetWindowPos(m_hWnd, rc.left, rc.top,RECT_HEIGHT(rc)+rc.top, RECT_WIDTH(rc)  );
@@ -353,7 +361,7 @@ void CContactorsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
     if (devMode.dmDisplayOrientation == DMDO_90 || devMode.dmDisplayOrientation == DMDO_270)
 	  
 	{
-		g_bH = FALSE;
+		//g_bH = FALSE;
 		RECT rc = MzGetWorkArea();
 		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_WIDTH(rc), RECT_HEIGHT(rc) );
 		m_List.SetPos(0,0,GetWidth(),GetHeight()-MZM_HEIGHT_TEXT_TOOLBAR);

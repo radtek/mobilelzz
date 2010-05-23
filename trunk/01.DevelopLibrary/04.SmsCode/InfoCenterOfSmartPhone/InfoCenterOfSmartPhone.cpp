@@ -7,11 +7,10 @@
 //  按钮控件的使用及其命令消息的处理
 
 #include"ContactorsWnd.h"
-#include"MainWnd.h"
+#include "NewSmsWnd.h"
 
 MZ_IMPLEMENT_DYNAMIC(CContactorsWnd)
 MZ_IMPLEMENT_DYNAMIC(CNewSmsWnd)
-MZ_IMPLEMENT_DYNAMIC(CMainWnd)
 
 // 从 CMzApp 派生的应用程序类
 class CMainApp: public CMzApp
@@ -37,24 +36,16 @@ public:
 		  }
 		  exit(1); 
 	  }
-
-
-	  if(!LicenseProtect())
+	  /*if(!F_LicenseProtect())
 	  {
 //		  MzMessageBoxEx(NULL,L"授权文件校验失败，请重新下载安装",MB_OK);
 		  MzMessageBoxEx(NULL,L"授权文件校验失败，您目前使用的是该软件的试用版",MB_OK);
 		  g_bIsTrial	=	TRUE;
 //		  exit(0);
-	  }
+	  }*/
 
 	// 初始化 COM 组件
-
-
-
-
     CoInitializeEx(0, COINIT_MULTITHREADED);
-
-
 	// 创建主窗口
     RECT rcWork = MzGetWorkArea();
     m_MainWnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0);

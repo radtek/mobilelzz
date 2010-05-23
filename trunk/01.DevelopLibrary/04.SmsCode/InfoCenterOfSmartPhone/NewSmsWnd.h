@@ -71,26 +71,9 @@ public:
 		MzAccClose();  
    
    }
-
    static DWORD WINAPI   ProxyRun(LPVOID lp);
-
-
    void Run();
- 
-   void UpdateData( MyListItemData* pRecivers,long lReciversCount );
-  // 按钮
-//  UiButton m_SendSmsBtn;
-  UiButton m_ContactorsBtn;
-  MzPopupProgress m_progress;
-  long m_lCurProgress;
-	UINT	m_uShowNotifyWnd;
-  // 文本
-  UiEditControl				m_Recievers;
-  CMyEdit*					m_SmsMsgEdit;
-
-  DWORD m_accMsg;
-  DWORD m_smsMsg;
-  HANDLE					m_hReadMessageThread;
+  
 protected:
   // 窗口的初始化
   virtual BOOL OnInitDialog();
@@ -119,10 +102,26 @@ protected:
 
 private:
 	void ReadMessage();
-
-	UiButton_Image m_SendSmsBtn;
-
-	ImageContainer m_imgContainer;
 	BOOL Normal();
+private:
+	CContactorsWnd				m_clContactorsWnd;			
+
+	MzPopupProgress				m_progress;
+	long						m_lCurProgress;
+	UINT						m_uShowNotifyWnd;
+	// 文本
+	UiEditControl				m_Recievers;
+	CMyEdit*					m_SmsMsgEdit;
+
+	DWORD						m_accMsg;
+	DWORD						m_smsMsg;
+	HANDLE						m_hReadMessageThread;
+
+	UiButton_Image				m_SendSmsBtn;
+
+	UiButton_Image				m_ContactorsBtn;
+
+	ImageContainer				m_imgContainer;
+
 };
 #endif //__NewSmsWnd_h__

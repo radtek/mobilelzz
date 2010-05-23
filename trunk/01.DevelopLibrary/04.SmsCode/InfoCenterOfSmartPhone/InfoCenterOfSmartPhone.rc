@@ -55,6 +55,7 @@ END
 IDR_RCDATA_N_H          RCDATA                  "Person_H.png"
 IDR_RCDATA_N_V          RCDATA                  "Person_V.png"
 IDR_PNG_EMAILICON       RCDATA                  "Send.png"
+IDR_PNG_Contactors       RCDATA                  "Contactors.png"
 
 /////////////////////////////////////////////////////////////////////////////
 //

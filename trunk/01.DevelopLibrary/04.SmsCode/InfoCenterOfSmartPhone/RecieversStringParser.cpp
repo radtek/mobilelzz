@@ -175,7 +175,7 @@ void CRecieversStringParser::GetContactorRangeByPos(long lCurcorPos,
 
 long CRecieversStringParser::DeleteContentByPos(long lCurcorPos)
 {
-	long lRtV = 0;
+	long lRtV = lCurcorPos;
 	if ( lCurcorPos > 0 ){
 		if ( UI_RecieversString_Separator == m_wcsStringNeedParsed[lCurcorPos-1] ){
 			long lBeginPos = Invalid_4Byte;

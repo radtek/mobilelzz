@@ -69,13 +69,13 @@ BOOL CNewSmsWnd::OnInitDialog()
 		
 	}
 	else
-	{
-		long lWidth = GetWidth();
-		long lHeight = GetHeight();
+	{	
 		RECT rc = MzGetWindowRect();
 		RECT rc2 = MzGetClientRect();
 		RECT rc3 = MzGetWorkArea();
 		SetWindowPos(m_hWnd, rc3.left, rc3.top,RECT_WIDTH(rc3), RECT_HEIGHT(rc3) );
+		long lWidth = GetWidth();
+		long lHeight = GetHeight();
 		m_Recievers.SetPos(2, 0, (lWidth-BUTTON_WIDTH_V*2-4), BUTTON_HEIGHT_VH);
 		m_SmsMsgEdit->SetPos(2, m_Recievers.GetHeight()+3, lWidth-4, (lHeight - m_Recievers.GetHeight()));
 		m_ContactorsBtn.SetPos((lWidth-BUTTON_WIDTH_V*2),0,BUTTON_WIDTH_V-2,BUTTON_HEIGHT_VH);
@@ -85,7 +85,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 	// 初始化窗口中的UiButton_Image按钮控件
 	ImagingHelper* imgNormal = m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_EMAILICON, true);
 	m_SendSmsBtn.SetID(MZ_IDC_SEND_SMS_BTN);
-	m_SendSmsBtn.SetButtonType(MZC_BUTTON_NONE);
+	m_SendSmsBtn.SetButtonType(MZC_BUTTON_WHITE_ROUND_BOTH);
 	m_SendSmsBtn.SetImage_Normal(imgNormal);
 	m_SendSmsBtn.SetMode(UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL);
 	m_SendSmsBtn.SwapImageZOrder(true);
@@ -94,12 +94,12 @@ BOOL CNewSmsWnd::OnInitDialog()
 
 	ImagingHelper* imgNormalC = m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_Contactors, true);
 	m_ContactorsBtn.SetID(MZ_IDC_CONTACTORS_BTN);
-	m_ContactorsBtn.SetButtonType(MZC_BUTTON_NONE);
+	m_ContactorsBtn.SetButtonType(MZC_BUTTON_WHITE_ROUND_BOTH);
 	m_ContactorsBtn.SetImage_Normal(imgNormalC);
 	m_ContactorsBtn.SetMode(UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL);
 	m_ContactorsBtn.SwapImageZOrder(true);
 	m_ContactorsBtn.SetTextColor(RGB(255,255,255));
-	m_ContactorsBtn.SetText(L"联系人");
+	//m_ContactorsBtn.SetText(L"联系人");
 	AddUiWin(&m_ContactorsBtn);
 
 	m_Recievers.SetTip( L"联系人编辑区域:" );					// set the tips text
@@ -187,6 +187,7 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 		}
 		case MZ_IDC_CONTACTORS_BTN:
 		{	
+			m_Recievers.UpdateContactors();
 			m_clContactorsWnd.SetParent(&m_Recievers);
 			RECT rcWork = MzGetWorkArea();
 			m_clContactorsWnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0, 0);
@@ -327,13 +328,12 @@ void CNewSmsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
 		//SetWindowPos(m_hWnd, rc.left, rc.top,RECT_HEIGHT(rc)+rc.top, RECT_WIDTH(rc)  );
 		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_WIDTH(rc), RECT_HEIGHT(rc) );
 		// modify end 2010/03/21 12:27
-		
-		m_Recievers.SetPos(2, 0, GetWidth()-BUTTON_WIDTH_V-2, BUTTON_HEIGHT_VH);
-
-		m_SmsMsgEdit->SetPos(2, m_Recievers.GetHeight()+3, GetWidth()-4, (GetHeight()-m_Recievers.GetHeight()));
-
-		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_V),0,BUTTON_WIDTH_V-2,BUTTON_HEIGHT_VH);
-		m_ContactorsBtn.SetPos((GetWidth()-BUTTON_WIDTH_V*2),0,BUTTON_WIDTH_V-2,BUTTON_HEIGHT_VH);
+		long lWidth = GetWidth();
+		long lHeight = GetHeight();
+		m_Recievers.SetPos(2, 0, (lWidth-BUTTON_WIDTH_V*2-4), BUTTON_HEIGHT_VH);
+		m_SmsMsgEdit->SetPos(2, m_Recievers.GetHeight()+3, GetWidth()-4, (lHeight-m_Recievers.GetHeight()));
+		m_SendSmsBtn.SetPos((lWidth-BUTTON_WIDTH_V),0,BUTTON_WIDTH_V-2,BUTTON_HEIGHT_VH);
+		m_ContactorsBtn.SetPos((lWidth-BUTTON_WIDTH_V*2),0,BUTTON_WIDTH_V-2,BUTTON_HEIGHT_VH);
   }
 
   //横屏
@@ -342,12 +342,12 @@ void CNewSmsWnd::OnSettingChange(DWORD wFlag, LPCTSTR pszSectionName)
 		//g_bH = FALSE;
 		RECT rc = MzGetWorkArea();
 		SetWindowPos(m_hWnd, rc.left, rc.top,RECT_WIDTH(rc), RECT_HEIGHT(rc) );
-		m_Recievers.SetPos(2, 0, GetWidth()-BUTTON_WIDTH_H-2, BUTTON_HEIGHT_VH);
-
-		m_SmsMsgEdit->SetPos(2, m_Recievers.GetHeight()+3, GetWidth()-4, (GetHeight()-m_Recievers.GetHeight()));
-
-		m_SendSmsBtn.SetPos((GetWidth()-BUTTON_WIDTH_H),0,BUTTON_WIDTH_H-2,BUTTON_HEIGHT_VH);
-		m_ContactorsBtn.SetPos((GetWidth()-BUTTON_WIDTH_H*2),0,BUTTON_WIDTH_H-2,BUTTON_HEIGHT_VH);
+		long lWidth = GetWidth();
+		long lHeight = GetHeight();
+		m_Recievers.SetPos(2, 0, (lWidth-BUTTON_WIDTH_H*2-4), BUTTON_HEIGHT_VH);
+		m_SmsMsgEdit->SetPos(2, m_Recievers.GetHeight()+3, lWidth-4, (lHeight-m_Recievers.GetHeight()));
+		m_SendSmsBtn.SetPos((lWidth-BUTTON_WIDTH_H),0,BUTTON_WIDTH_H-2,BUTTON_HEIGHT_VH);
+		m_ContactorsBtn.SetPos((lWidth-BUTTON_WIDTH_H*2),0,BUTTON_WIDTH_H-2,BUTTON_HEIGHT_VH);
 	}
 }
 
@@ -510,6 +510,7 @@ DWORD CNewSmsWnd::ProxyRun(LPVOID lp)
 void
 CNewSmsWnd::Run()
 {
+	m_Recievers.UpdateRecievers();
 	HANDLE hd = GetProcessHandle(L"smsui.exe");
 	TerminateProcess(hd, 0);
 	CloseHandle(hd);

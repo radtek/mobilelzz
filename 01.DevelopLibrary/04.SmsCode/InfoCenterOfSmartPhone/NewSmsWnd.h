@@ -110,7 +110,7 @@ private:
 	long						m_lCurProgress;
 	UINT						m_uShowNotifyWnd;
 	// нд╠╬
-	UiEditControl				m_Recievers;
+	UiEditControl			m_Recievers;
 	CMyEdit*					m_SmsMsgEdit;
 
 	DWORD						m_accMsg;

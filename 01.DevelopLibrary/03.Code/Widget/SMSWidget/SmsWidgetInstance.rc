@@ -51,10 +51,13 @@ END
 //
 // RCDATA
 //
-IDR_JPG_PIC1              RCDATA                  "12.PNG"
-IDR_JPG_EDIT              RCDATA                  "edit.PNG"
-IDR_JPG_SEND              RCDATA                  "send.PNG"
-IDR_JPG_SETUP             RCDATA                  "setup.PNG"
+IDR_WIDGET_ALL_BACK         RCDATA                  "插件_all.png"
+IDR_NEW_SMS_UP              RCDATA                  "新建短信_up.png"
+IDR_NEW_SMS_DOWN            RCDATA                  "新建短信_down.png"
+IDR_ENTER_EXE_UP            RCDATA                  "进入应用_up.png"
+IDR_ENTER_EXE_DOWN	    RCDATA			"进入应用_down.png"
+IDR_FAST_SEND_UP	    RCDATA			"快速回复_up.png"
+IDR_FAST_SEND_DOWN	    RCDATA			"快速回复_down.png"
 
 #endif    // 中文(中华人民共和国) resources
 /////////////////////////////////////////////////////////////////////////////

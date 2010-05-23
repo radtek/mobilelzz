@@ -2,10 +2,15 @@
 // Microsoft Visual C++ generated include file.
 // Used by 11_UiPicture.rc
 //
-#define IDR_JPG_PIC1                    105
-#define IDR_JPG_EDIT					106
-#define IDR_JPG_SEND					107
-#define IDR_JPG_SETUP					108
+#define IDR_WIDGET_ALL_BACK					105
+#define IDR_NEW_SMS_UP						106
+#define IDR_NEW_SMS_DOWN					107
+#define IDR_ENTER_EXE_UP					109
+#define IDR_ENTER_EXE_DOWN					110
+#define IDR_FAST_SEND_UP					111
+#define IDR_FAST_SEND_DOWN					112
+
+
 
 // Next default values for new objects
 // 

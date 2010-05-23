@@ -1,7 +1,9 @@
 #include "SmsWidgetInstance.h"
 #include "resource.h"
 
-#define MZ_IDC_TESTBTN_EDIT  101
+#define MZ_IDC_NEW_SMS  101
+#define MZ_IDC_SEND		102
+#define MZ_IDC_ENTER	103
 
 void UiWidget_Sms::PaintWin( HDC hdcDst, RECT* prcWin, RECT* prcUpdate )
 {
@@ -11,17 +13,17 @@ void UiWidget_Sms::PaintWin( HDC hdcDst, RECT* prcWin, RECT* prcUpdate )
 
 
 	/*描画插件背景*/	
-// 	RECT rcImg;
-// 	rcImg.left	= rcBg.left;
-// 	rcImg.top	= rcBg.top;
-// 	rcImg.right	= rcImg.left + 400;
-// 	rcImg.bottom= rcImg.top + 240;
-// 
-//     ImagingHelper* pImgBg = m_imgContainer.LoadImage(GetModuleHandle(L"SmsWidget.dll"), IDR_JPG_PIC1, true);
-//     pImgBg->Draw(hdcDst, &rcImg, true);
-// 
-// 	::SetTextColor(hdcDst, RGB(27,163,228));
-// 	::SetBkMode(hdcDst, TRANSPARENT);
+	RECT rcImg;
+	rcImg.left	= rcBg.left;
+	rcImg.top	= rcBg.top;
+	rcImg.right	= rcImg.left + /*400*/250;
+	rcImg.bottom= rcImg.top + /*240*/180;
+
+    ImagingHelper* pImgBg = m_imgContainer.LoadImage(GetModuleHandle(L"SmsWidget.dll"), IDR_WIDGET_ALL_BACK, true);
+    pImgBg->Draw(hdcDst, &rcImg, true);
+
+	::SetTextColor(hdcDst, RGB(27,163,228));
+	::SetBkMode(hdcDst, TRANSPARENT);
 
 
 	/*将消息的内容描画在插件上*/
@@ -106,24 +108,52 @@ int UiWidget_Sms::OnMouseMove( UINT fwKeys, int xPos, int yPos )
 
 UiWidget_Sms::UiWidget_Sms()
 {
-	m_CurIndex = 0;
-	m_TotalCount = 0;
+	m_CurIndex		= 0;
+	m_TotalCount	= 0;
 
-	ImagingHelper* imgNormal = m_imgContainer.LoadImage( GetModuleHandle(L"SmsWidget.dll"), IDR_JPG_EDIT, true);
+	ImagingHelper* NewSmsUp		= m_imgContainer.LoadImage( GetModuleHandle(L"SmsWidget.dll"), IDR_NEW_SMS_UP, true);
+	ImagingHelper* NewSmsDown	= m_imgContainer.LoadImage( GetModuleHandle(L"SmsWidget.dll"), IDR_NEW_SMS_DOWN, true);
 
-	ImagingHelper* imgPressed  = m_imgContainer.LoadImage( GetModuleHandle(L"SmsWidget.dll"), IDR_JPG_SEND, true);
+	ImagingHelper* EnterUp		= m_imgContainer.LoadImage( GetModuleHandle(L"SmsWidget.dll"), IDR_ENTER_EXE_UP, true);
+	ImagingHelper* EnterDown	= m_imgContainer.LoadImage( GetModuleHandle(L"SmsWidget.dll"), IDR_ENTER_EXE_DOWN, true);
+
+	ImagingHelper* FastUp		= m_imgContainer.LoadImage( GetModuleHandle(L"SmsWidget.dll"), IDR_FAST_SEND_UP, true);
+	ImagingHelper* FastDown		= m_imgContainer.LoadImage( GetModuleHandle(L"SmsWidget.dll"), IDR_FAST_SEND_DOWN, true);
 	// 初始化窗口中的UiButton_Image按钮控件
-	m_Edit_btn.SetID(MZ_IDC_TESTBTN_EDIT);
-	m_Edit_btn.SetButtonType(MZC_BUTTON_NONE);
-	m_Edit_btn.SetPos(140,165,100,100);
-	m_Edit_btn.SetImage_Normal(imgPressed);
-	m_Edit_btn.SetImage_Pressed(imgNormal);
+	m_NewSms_btn.SetID( MZ_IDC_NEW_SMS );
+	m_NewSms_btn.SetButtonType(MZC_BUTTON_NONE);
+	m_NewSms_btn.SetPos( 160,140,40,40 );
+	m_NewSms_btn.SetImage_Normal( NewSmsUp );
+	m_NewSms_btn.SetImage_Pressed( NewSmsDown );
 
-	m_Edit_btn.SetMode(/*UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL*/UI_BUTTON_IMAGE_MODE_NORMAL);
-	m_Edit_btn.SwapImageZOrder(true);
-	m_Edit_btn.SetTextColor(RGB(255,255,255));
+	m_NewSms_btn.SetMode(/*UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL*/UI_BUTTON_IMAGE_MODE_NORMAL);
+	m_NewSms_btn.SwapImageZOrder(true);
+	m_NewSms_btn.SetTextColor(RGB(255,255,255));
 
-	UiWin::AddChild(&m_Edit_btn);
+	m_Enter_btn.SetID( MZ_IDC_ENTER );
+	m_Enter_btn.SetButtonType(MZC_BUTTON_NONE);
+	m_Enter_btn.SetPos( 200,140,40,40 );
+	m_Enter_btn.SetImage_Normal( EnterUp );
+	m_Enter_btn.SetImage_Pressed( EnterDown );
+
+	m_Enter_btn.SetMode(/*UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL*/UI_BUTTON_IMAGE_MODE_NORMAL);
+	m_Enter_btn.SwapImageZOrder(true);
+	m_Enter_btn.SetTextColor(RGB(255,255,255));
+
+	m_Send_btn.SetID( MZ_IDC_SEND );
+	m_Send_btn.SetButtonType(MZC_BUTTON_NONE);
+	m_Send_btn.SetPos( 120,140,40,40 );
+	m_Send_btn.SetImage_Normal( EnterUp );
+	m_Send_btn.SetImage_Pressed( EnterDown );
+
+	m_Send_btn.SetMode(/*UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL*/UI_BUTTON_IMAGE_MODE_NORMAL);
+	m_Send_btn.SwapImageZOrder(true);
+	m_Send_btn.SetTextColor(RGB(255,255,255));
+
+
+	UiWin::AddChild(&m_Send_btn);
+	UiWin::AddChild(&m_Enter_btn);
+	UiWin::AddChild(&m_NewSms_btn);
 
 }
 

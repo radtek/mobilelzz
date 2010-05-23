@@ -48,8 +48,8 @@ protected:
 
 	unsigned int		m_TotalCount;
 
-	UiButton_Image			m_Edit_btn;
-	UiButton_Image			m_Setup_btn;
+	UiButton_Image			m_NewSms_btn;
+	UiButton_Image			m_Enter_btn;
 	UiButton_Image			m_Send_btn;
 
 private:

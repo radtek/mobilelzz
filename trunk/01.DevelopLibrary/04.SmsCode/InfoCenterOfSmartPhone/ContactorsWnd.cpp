@@ -14,10 +14,10 @@ bool MyCompareListItem(const ListItem & item1, const ListItem &item2)
 
 BOOL CContactorsWnd::OnInitDialog()
 {
-	if(m_bInit)
-	{
-		return TRUE;
-	}
+	//if(m_bInit)
+	//{
+	//	return TRUE;
+	//}
 	// 必须先调用基类的初始化
 	if (!CMzWndEx::OnInitDialog())
 	{

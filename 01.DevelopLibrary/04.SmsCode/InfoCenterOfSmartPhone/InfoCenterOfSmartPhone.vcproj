@@ -65,7 +65,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=" /subsystem:windowsce,6.00"
-				AdditionalDependencies="mzfc.lib mzpam.lib PlatformApi.lib MyStoreLib.lib Toolhelp.lib"
+				AdditionalDependencies="mzfcsd.lib mzpam.lib PlatformApi.lib MyStoreLib.lib Toolhelp.lib"
 				OutputFile="$(OutDir)/易短信.exe"
 				LinkIncremental="2"
 				DelayLoadDLLs="$(NOINHERIT)"
@@ -152,7 +152,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=" /subsystem:windowsce,6.00"
-				AdditionalDependencies="mzfc.lib mzpam.lib PlatformApi.lib MyStoreLib.lib Toolhelp.lib"
+				AdditionalDependencies="mzfcs.lib mzpam.lib PlatformApi.lib MyStoreLib.lib Toolhelp.lib"
 				OutputFile="$(OutDir)/易短信.exe"
 				LinkIncremental="1"
 				DelayLoadDLLs="$(NOINHERIT)"

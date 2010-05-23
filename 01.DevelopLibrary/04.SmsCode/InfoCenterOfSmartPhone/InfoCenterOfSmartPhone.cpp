@@ -36,11 +36,11 @@ public:
 		  }
 		  exit(1); 
 	  }
-	  /*if(!F_LicenseProtect())
+	  if(!F_LicenseProtect())
 	  {
 		  MzMessageBoxEx(NULL,L"授权文件校验失败，您目前使用的是该软件的试用版",MB_OK);
 		  g_bIsTrial	=	TRUE;
-	  }*/
+	  }
 
 	// 初始化 COM 组件
     CoInitializeEx(0, COINIT_MULTITHREADED);

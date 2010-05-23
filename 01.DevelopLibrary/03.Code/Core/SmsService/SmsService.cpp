@@ -391,7 +391,7 @@ APP_Result CSmsService::ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& 
 			pQHandle->Bind(4, pstNodeDataInfos[i].wcsNodeValue, lSize);//content
 		}else if ( 0 == wcscmp( L"address", pstNodeDataInfos[i].wcsNodeName )  ){
 			long lSize = wcslen(pstNodeDataInfos[i].wcsNodeValue);
-			pQHandle->Bind(5, pstNodeDataInfos[i].wcsNodeValue, lSize);//address
+			pQHandle->Bind(5, pstNodeDataInfos[i].wcsNodeValue, lSize*2);//address
 			long lPID = 0;
 			hr = GetPIDByAddress(pstNodeDataInfos[i].wcsNodeValue, lPID);
 			if ( FAILED_App(hr) ){
@@ -441,7 +441,7 @@ APP_Result CSmsService::GetPIDByAddress(wchar_t* pwcsAddress, long& lPID)
 	//hr = pQHandle->Prepare(Sms_SQL_GET_PID_ByAddress);
 	//if( FAILED(hr) ) 
 	//	return hr;
-	pQHandle->Bind(1, pwcsAddress, wcslen(pwcsAddress));
+	pQHandle->Bind(1, pwcsAddress, wcslen(pwcsAddress)*2);
 
 	hr = pQHandle->Step();
 	if ( FAILED_App(hr) ){

@@ -27,6 +27,17 @@ class MyList:
   public UiList
 {
 public:
+	MyList()
+	{
+		m_pimgV = NULL;
+		m_pimgH = NULL;
+	}
+	virtual ~MyList()
+	{
+		m_ImageContainer.RemoveAll();
+		m_pimgV = NULL;
+		m_pimgH = NULL;
+	}
   // 当某一项即将被删除之前，delete 其自定义项数据
   virtual void OnRemoveItem(int nIndex)
   {
@@ -122,12 +133,14 @@ public:
 	if(width>480)
 	{
 		// 绘制左边的小图像
-		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA_N_H, true);
+		if ( !m_pimgH ){
+			m_pimgH = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA_N_H, true);
+		}
 		RECT rcImg = *prcItem;
 		rcImg.right = rcImg.left + 80;
-		if (pimg)
+		if (m_pimgH)
 		{
-		  pimg->Draw(hdcDst, &rcImg, false, false);
+			m_pimgH->Draw(hdcDst, &rcImg, false, false);
 		}
 		 // 绘制主文本
 		RECT rcText = *prcItem;
@@ -147,12 +160,14 @@ public:
 	else
 	{
 		// 绘制左边的小图像
-		ImagingHelper* pimg = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA_N_V, true);
+		if ( !m_pimgV ){
+			m_pimgV = m_ImageContainer.LoadImage(MzGetInstanceHandle(), IDR_RCDATA_N_V, true);
+		}
 		RECT rcImg = *prcItem;
 		rcImg.right = rcImg.left + MZM_MARGIN_MAX*2;
-		if (pimg)
+		if (m_pimgV)
 		{
-		  pimg->Draw(hdcDst, &rcImg, false, false);
+			m_pimgV->Draw(hdcDst, &rcImg, false, false);
 		}
 		// 绘制主文本
 		RECT rcText = *prcItem;
@@ -177,7 +192,9 @@ public:
   }
 protected:
 private:
-    ImageContainer m_ImageContainer;
+    	ImageContainer m_ImageContainer;
+	ImagingHelper* m_pimgV;
+	ImagingHelper* m_pimgH;
 };
 // 从 CMzWndEx 派生的主窗口类
 class CContactorsWnd: public CMzWndEx

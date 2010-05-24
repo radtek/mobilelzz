@@ -64,7 +64,13 @@ public:
 		m_pMainWnd = new CNewSmsWnd;
 		m_pMainWnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0);
 		m_pMainWnd->Show();
-
+		HWND hw = FindWindow(NULL, L"易短信");
+		if( hw != NULL )
+		{
+			::ShowWindow(hw,SW_SHOWMAXIMIZED); 
+			// 将主窗激活 
+			::SetForegroundWindow(hw); 
+		}
 		// 成功则返回TRUE
 		return TRUE;
 	}

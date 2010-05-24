@@ -62,6 +62,8 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 				  )
 {
 	SetSipMode(IM_SIP_MODE_DIGIT,0);
+	long lRowCount = GetRowCount();
+	UpdateFontColor(RGB(0,0,0),0,0,lRowCount,0);
 	int r = UiEdit::OnLButtonUp(fwKeys, xPos, yPos);
 	long lCurRow = Invalid_4Byte;
 	long lCurCol = Invalid_4Byte;
@@ -90,7 +92,7 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 			long lColEnd = 0;
 			ConvertLinePos2RowCol(lBeginPos, lRowBegin, lColBegin);
 			ConvertLinePos2RowCol(lEndPos, lRowEnd, lColEnd);
-
+			
 			UpdateFontColor(RGB(167,137,63), lRowBegin, lColBegin, lRowEnd, lColEnd);
 			SetCaretPos(lRowEnd, (lColEnd+1));
 			Invalidate();
@@ -188,7 +190,7 @@ void UiEditControl::ConvertLinePos2RowCol(long lLinePos, long& lRow, long& lCol)
 	long lTotalCharCount = 0;
 	for ( int i  = 0; i < lRowCount; i++ )
 	{
-		if ( (i+1) < (lRowCount-1) ){
+		if ( (i+1) <= (lRowCount-1) ){
 			long lCurRowCharCount = GetCharCount(i,0,(i+1),0);
 			long lTemp = lTotalCharCount+lCurRowCharCount;
 			if ( lLinePos < (lTemp) ){

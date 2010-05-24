@@ -62,6 +62,8 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 				  )
 {
 	SetSipMode(IM_SIP_MODE_DIGIT,0);
+	long lRowCount = GetRowCount();
+	UpdateFontColor(RGB(0,0,0),0,0,lRowCount,0);
 	int r = UiEdit::OnLButtonUp(fwKeys, xPos, yPos);
 	long lCurRow = Invalid_4Byte;
 	long lCurCol = Invalid_4Byte;

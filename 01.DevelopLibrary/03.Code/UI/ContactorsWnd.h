@@ -103,7 +103,6 @@ public:
     }
     return Ret;
   }
-
   // 重载DrawItem，自定义每一项的绘制
   virtual void DrawItem(HDC hdcDst, int nIndex, RECT* prcItem, RECT *prcWin, RECT *prcUpdate)
   {
@@ -129,7 +128,6 @@ public:
 		height = rc.bottom - rc.top;
 		width = rc.right - rc.left;
 	}
-
 	if(width>480)
 	{
 		// 绘制左边的小图像

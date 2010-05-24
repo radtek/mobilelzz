@@ -61,7 +61,7 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 				  int  yPos   
 				  )
 {
-	MzOpenSip();
+	SetSipMode(IM_SIP_MODE_DIGIT,0);
 	int r = UiEdit::OnLButtonUp(fwKeys, xPos, yPos);
 	long lCurRow = Invalid_4Byte;
 	long lCurCol = Invalid_4Byte;

@@ -28,7 +28,7 @@ public:
 		RECT EditRc = GetClientRect();
 		if( (yPos <= EditRc.bottom && yPos >= EditRc.top) &&( xPos <= EditRc.right && xPos >=EditRc.left) )	
 		{
-			this->SetSipMode(IM_SIP_MODE_KEEP,0);
+			this->SetSipMode(IM_SIP_MODE_GEL_PY,0);
 
 		}
 	

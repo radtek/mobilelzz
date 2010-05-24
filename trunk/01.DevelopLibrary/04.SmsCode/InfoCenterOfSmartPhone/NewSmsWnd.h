@@ -55,27 +55,8 @@ class CNewSmsWnd: public CMzWndEx
 {
   MZ_DECLARE_DYNAMIC(CNewSmsWnd);
 public:
-   CNewSmsWnd()
-   {
-		m_lCurProgress = 0;
-		m_SmsMsgEdit = new CMyEdit;
-   }
-   virtual ~CNewSmsWnd(){
-
-		if( NULL != m_SmsMsgEdit )
-		{
-		   delete m_SmsMsgEdit;
-		   m_SmsMsgEdit = NULL;
-		}
-		if(NULL != m_pclContactorsWnd )
-		{
-		   delete m_pclContactorsWnd ;
-		   m_pclContactorsWnd  = NULL;	
-		}
-		MzAccClose();
-		MzCloseSip();
-		m_imgContainer.RemoveAll();
-   }
+   CNewSmsWnd();
+   virtual ~CNewSmsWnd();
    static DWORD WINAPI   ProxyRun(LPVOID lp);
    void Run();
   

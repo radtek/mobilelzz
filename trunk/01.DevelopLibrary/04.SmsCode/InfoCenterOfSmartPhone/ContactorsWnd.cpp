@@ -168,6 +168,8 @@ BOOL CContactorsWnd::OnInitDialog()
 	pQFirstLetter->Finalize();
 	pSession->Query_Delete(q_id);
 	pSession->Query_Delete(lQFirstLetterID);
+	BOOL b;
+	pm->Session_DisConnect(L"contact", &b);
 	pm->ReleaseInstance();
 	
 

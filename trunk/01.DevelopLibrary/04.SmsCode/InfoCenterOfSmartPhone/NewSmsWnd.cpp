@@ -20,6 +20,30 @@
 
 INT g_iUsbNotifyMsg = 0;
 
+CNewSmsWnd::CNewSmsWnd()
+{
+	m_lCurProgress = 0;
+	m_SmsMsgEdit = new CMyEdit;
+	m_pclContactorsWnd = NULL;
+}
+
+CNewSmsWnd::~CNewSmsWnd()
+{
+	if( NULL != m_SmsMsgEdit )
+	{
+		delete m_SmsMsgEdit;
+		m_SmsMsgEdit = NULL;		   
+	}
+	if(NULL != m_pclContactorsWnd )
+	{
+		delete m_pclContactorsWnd ;
+		m_pclContactorsWnd  = NULL;	
+	}
+	MzAccClose();
+	MzCloseSip();
+	m_imgContainer.RemoveAll();
+
+}
 
 BOOL CNewSmsWnd::OnInitDialog()
 {

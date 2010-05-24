@@ -133,7 +133,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 	AddUiWin( &m_Recievers ); 
 	// 初始化短信文本控件，并添加到窗口中
 	
-	m_SmsMsgEdit.SetSipMode( IM_SIP_MODE_GEL_PY, MZM_HEIGHT_TEXT_TOOLBAR );
+	m_SmsMsgEdit.SetSipMode( IM_SIP_MODE_GEL_PY, 0 );
 	m_SmsMsgEdit.SetTextColor( RGB( 94, 94, 94 ) );			// you could also set the color of text
 	m_SmsMsgEdit.SetEditBgType( UI_EDIT_BGTYPE_ROUND_RECT ); 
 	m_SmsMsgEdit.SetColorBg( RGB( 250, 250, 250 ) );

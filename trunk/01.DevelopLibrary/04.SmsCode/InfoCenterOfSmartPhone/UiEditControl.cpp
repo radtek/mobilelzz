@@ -170,7 +170,8 @@ int UiEditControl::OnKeyDown(int nVirtKey, DWORD lKeyData)
 	if ( (8 ==  nVirtKey) && ( lKeyData == 0 )){//delete button down
 		lWillPos = clParser.DeleteContentByPos(lPos);
 		ConvertLinePos2RowCol(lWillPos, lCurRow, lCurCol);
-	}else if ( (48 <= nVirtKey)&&(57>=nVirtKey)){//numbers button down
+	}else if ( ((48 <= nVirtKey)&&(57>=nVirtKey)) ||
+				( 3 == nVirtKey )){//numbers button down
 		clParser.AddSeparator(lPos);
 		
 	}else{

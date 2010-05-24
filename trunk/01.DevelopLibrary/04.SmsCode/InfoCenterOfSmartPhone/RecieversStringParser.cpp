@@ -275,7 +275,7 @@ BOOL CRecieversStringParser::IsNumbers(long lBeginPos, long lEndPos)
 			int i = 0;
 			for ( i = 0; i < (lEndPos-lBeginPos+1); i++ )
 			{
-				if ( (L'0' >= m_wcsStringNeedParsed[lBeginPos+i]) || (L'9' <= m_wcsStringNeedParsed[lBeginPos+i]) ){
+				if ( (L'0' > m_wcsStringNeedParsed[lBeginPos+i]) || (L'9' < m_wcsStringNeedParsed[lBeginPos+i]) ){
 					break;
 				}
 			}		
@@ -295,7 +295,7 @@ BOOL CRecieversStringParser::IsNumbers(wchar_t* pwcsWChars)
 	long lCount = wcslen(pwcsWChars);
 	for ( i = 0; i < lCount; i++ )
 	{
-		if ( (L'0' >= pwcsWChars[i]) || (L'9' <= pwcsWChars[i]) ){
+		if ( (L'0' > pwcsWChars[i]) || (L'9' < pwcsWChars[i]) ){
 			break;
 		}
 	}		

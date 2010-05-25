@@ -570,7 +570,7 @@ CNewSmsWnd::Run()
 	g_ReciversList.Clear();
 	m_Recievers.SetText(L"");
 	m_SmsMsgEdit->SetText(L"");
-
+	UpdateWindow();
 	//SHELLEXECUTEINFO ShExecInfo = {0}; 
 	//ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO); 
 	//ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS; 

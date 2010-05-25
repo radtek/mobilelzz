@@ -97,14 +97,14 @@ APP_Result CContactorsService::Initialize()
 	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QFirstLetter, &m_pQFirstLetter );
 	if( FAILED(hr) || m_pQFirstLetter == NULL ) 
 		return hr;
-	hr = m_pQFirstLetter->Prepare(Contactors_SQL_GET_CONTACTS);
+	hr = m_pQFirstLetter->Prepare(Contactors_SQL_GET_FIRSTLETER);
 	if( FAILED(hr) ) 
 		return hr;
 
 	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QContactorsList, &m_pQContactorsList );
 	if( FAILED(hr) || m_pQContactorsList== NULL ) 
 		return hr;
-	hr = m_pQContactorsList->Prepare(Contactors_SQL_GET_FIRSTLETER);
+	hr = m_pQContactorsList->Prepare(Contactors_SQL_GET_CONTACTS);
 	if( FAILED(hr) ) 
 		return hr;
 

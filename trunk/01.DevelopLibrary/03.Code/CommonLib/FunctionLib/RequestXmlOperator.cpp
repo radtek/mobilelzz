@@ -110,9 +110,11 @@ APP_Result CRequestXmlOperator::GetOperationKind( wchar_t* pwcsKindBuf, long lBu
 APP_Result CRequestXmlOperator::GetOperationConditions( OperationCondition** ppwcsConditionBuf, long* plBufCount )
 {
 	APP_Result appR = APP_Result_E_Fail;
+	*ppwcsConditionBuf = NULL;
+	*plBufCount = 0;
 	CXmlNode* pNode = NULL;
 	appR = m_clXmlStream.SelectNode(L"request/data/operation/condition/", &pNode);
-	if ( FAILED_App(appR) ){
+	if ( FAILED_App(appR) || (!pNode) ){
 		return APP_Result_S_OK;
 	}
 	auto_ptr<CXmlNode> sp(pNode);
@@ -123,7 +125,7 @@ APP_Result CRequestXmlOperator::GetOperationConditions( OperationCondition** ppw
 		NodeAttribute_t* pAttribute = NULL;
 		long lAttributeCount = 0;
 		appR = pNode->GetNodeContent( NULL, NULL, &pAttribute, &lAttributeCount );
-		if ( FAILED_App(appR) ){
+		if ( FAILED_App(appR) || (!pAttribute) ){
 			return appR;
 		}
 		CDynamicArray<NodeAttribute_t> spTempMem(pAttribute, lAttributeCount);
@@ -205,7 +207,7 @@ APP_Result CRequestXmlOperator::GetDeleteSIDs( NodeDataInfo** ppwcsDataBuf, long
 
 	CXmlNode* pNode = NULL;
 	appR = m_clXmlStream.SelectNode(L"request/data/operation/sid/", &pNode);
-	if ( FAILED_App(appR) ){
+	if ( FAILED_App(appR) || (!pNode) ){
 		return APP_Result_S_OK;
 	}
 	auto_ptr<CXmlNode> sp(pNode);
@@ -215,7 +217,7 @@ APP_Result CRequestXmlOperator::GetDeleteSIDs( NodeDataInfo** ppwcsDataBuf, long
 	{
 		wchar_t* pValue = NULL;
 		appR = pNode->GetNodeContent( NULL, &pValue, NULL, NULL );
-		if ( FAILED_App(appR) ){
+		if ( FAILED_App(appR) || (!pValue) ){
 			return appR;
 		}
 		auto_ptr<wchar_t> sp(pValue);
@@ -247,7 +249,7 @@ APP_Result CRequestXmlOperator::AppendNodeInfo(wchar_t* pPath, wchar_t* pNodeNam
 		wchar_t* pNodeContent = NULL;
 		
 		hr = pNode->GetNodeContent( NULL, &pNodeContent, NULL, NULL );
-		if ( FAILED_App(hr) ){
+		if ( FAILED_App(hr)||(pNodeContent) ){
 			return hr;
 		}
 		auto_ptr<wchar_t> spNodeContent(pNodeContent);

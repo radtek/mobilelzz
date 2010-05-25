@@ -47,16 +47,19 @@ protected:
 	virtual APP_Result MakeResult(wchar_t** ppwcsResultXML);	
 	
 private:
-	void				MakeFirstLetter(wchar_t* pwcsFirstLetter, long lPID );
+	void				MakeReading(wchar_t* pwcsReading, long lPID );
 	void				MakeSmsCount(wchar_t* pwcsSmsCount, long lPID );
 	APP_Result			ExcuteForList(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
+	APP_Result			MakeEncodeStatus(long lPID, long& lEncodeStatus);
 private:
-	CSQL_query*			m_pQFirstLetter;
-	long				m_lID_QFirstLetter;
+	CSQL_query*			m_pQReading;
+	long				m_lID_QReading;
 	CSQL_query*			m_pQContactorsList;
 	long				m_lID_QContactorsList;
 
 	CSQL_SmartQuery			m_pQSmsGroupInfo;
+
+	CSQL_SmartQuery			m_pQSmsCode;
 
 	Contactors_RequestData		m_stRequestData;
 

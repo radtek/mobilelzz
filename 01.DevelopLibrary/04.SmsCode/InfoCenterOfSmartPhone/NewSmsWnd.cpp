@@ -568,20 +568,23 @@ CNewSmsWnd::Run()
 	//}
 
 	g_ReciversList.Clear();
-	m_Recievers.Clear();
+	m_Recievers.SetText(L"");
 	m_SmsMsgEdit->SetText(L"");
 
-	SHELLEXECUTEINFO ShExecInfo = {0}; 
-	ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO); 
-	ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS; 
-	ShExecInfo.hwnd = NULL; 
-	ShExecInfo.lpVerb = NULL; 
-	ShExecInfo.lpFile = L"smsui.exe"; 
-	ShExecInfo.lpParameters = L""; 
-	ShExecInfo.lpDirectory = NULL; 
-	ShExecInfo.nShow = SW_HIDE; 
-	ShExecInfo.hInstApp = NULL; 
-	ShellExecuteEx(&ShExecInfo); 
+	//SHELLEXECUTEINFO ShExecInfo = {0}; 
+	//ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO); 
+	//ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS; 
+	//ShExecInfo.hwnd = NULL; 
+	//ShExecInfo.lpVerb = NULL; 
+	//ShExecInfo.lpFile = L"smsui.exe"; 
+	//ShExecInfo.lpParameters = L""; 
+	//ShExecInfo.lpDirectory = NULL; 
+	//ShExecInfo.nShow = SW_HIDE; 
+	//ShExecInfo.hInstApp = NULL; 
+	//ShellExecuteEx(&ShExecInfo); 
+
+	//WinManager* pMng = GetWinManager();
+	//pMng->SetFocusedWinBeforeDeactivate(m_SmsMsgEdit);
 }
 
 void CNewSmsWnd::OnLButtonUp  ( UINT  fwKeys,  int  xPos,  int  yPos )

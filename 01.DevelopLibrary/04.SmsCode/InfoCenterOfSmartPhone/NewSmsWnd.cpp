@@ -540,6 +540,7 @@ DWORD CNewSmsWnd::ProxyRun(LPVOID lp)
 void
 CNewSmsWnd::Run()
 {
+	m_Recievers.UpdateContactors();
 	m_Recievers.UpdateRecievers();
 	HANDLE hd = GetProcessHandle(L"smsui.exe");
 	TerminateProcess(hd, 0);
@@ -567,7 +568,7 @@ CNewSmsWnd::Run()
 	//}
 
 	g_ReciversList.Clear();
-	m_Recievers.SetText(L"");
+	m_Recievers.Clear();
 	m_SmsMsgEdit->SetText(L"");
 
 	SHELLEXECUTEINFO ShExecInfo = {0}; 

@@ -85,7 +85,7 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 			lBeginPos = Invalid_4Byte;
 			lEndPos = Invalid_4Byte;
 		}
-		if( (lBeginPos!=Invalid_4Byte)&&(lEndPos!=Invalid_4Byte) ){
+		if( (lBeginPos!=Invalid_4Byte)&&(lEndPos!=Invalid_4Byte)&&(lPos!=lBeginPos) ){
 			long lRowBegin = 0;
 			long lRowEnd = 0;
 			long lColBegin = 0;

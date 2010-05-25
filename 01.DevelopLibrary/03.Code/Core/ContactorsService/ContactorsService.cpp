@@ -3,23 +3,40 @@
 #include "XmlStream.h"
 #include "RequestXmlOperator.h"
 #include"ContactorsService.h"
+#include <algorithm>
 
+class CCompareContactorNode
+{
+public:
+	BOOL operator()( CXmlNode* p1, CXmlNode* p2 )
+	{
+		BOOL b = FALSE;
+		wchar_t* pName1 = NULL;
+		p1->GetNodeContent(L"name/", &pName1, NULL, NULL);
+		wchar_t* pName2 = NULL;
+		p2->GetNodeContent(L"name/", &pName2, NULL, NULL);
+		if ( 0 > wcscmp(pName1, pName2) ){
+			b = TRUE;
+		}
+		return b;
+	}
+};
 
 CContactorsService::CContactorsService()
 {
-	m_pQFirstLetter = NULL;
+	m_pQReading = NULL;
 	m_pQContactorsList = NULL;
 	m_pclSqlDBSession = NULL;
 }
 
 CContactorsService::~CContactorsService()
 {
-	m_pQFirstLetter->Finalize();
+	m_pQReading->Finalize();
 	m_pQContactorsList->Finalize();
 
 	m_pQSmsGroupInfo->Finalize();
 
-	m_pclSqlDBSession->Query_Delete(m_lID_QFirstLetter);
+	m_pclSqlDBSession->Query_Delete(m_lID_QReading);
 	m_pclSqlDBSession->Query_Delete(m_lID_QContactorsList);
 	m_pclSqlDBSession->Query_Delete(m_pQSmsGroupInfo->GetQh());
 
@@ -94,10 +111,10 @@ APP_Result CContactorsService::Initialize()
 	if(FAILED(hr) || m_pclSqlDBSession == NULL)	
 		return APP_Result_E_Fail;
 
-	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QFirstLetter, &m_pQFirstLetter );
-	if( FAILED(hr) || m_pQFirstLetter == NULL ) 
+	hr = m_pclSqlDBSession->Query_Create((int*)&m_lID_QReading, &m_pQReading );
+	if( FAILED(hr) || m_pQReading == NULL ) 
 		return hr;
-	hr = m_pQFirstLetter->Prepare(Contactors_SQL_GET_FIRSTLETER);
+	hr = m_pQReading->Prepare(Contactors_SQL_GET_FIRSTLETER);
 	if( FAILED(hr) ) 
 		return hr;
 
@@ -116,20 +133,24 @@ APP_Result CContactorsService::Initialize()
 	if ( FAILED_App(hr) ){
 		return hr;
 	}
+	hr = CreateQuery(m_pclSqlSmsDBSession, Sms_SQL_GET_SmsCode, m_pQSmsCode);
+	if ( FAILED_App(hr) ){
+		return hr;
+	}
 
 	return APP_Result_S_OK;
 }
 
-void CContactorsService::MakeFirstLetter(wchar_t* pwcsFirstLetter, long lPID )
+void CContactorsService::MakeReading(wchar_t* pwcsReading, long lPID )
 {
-	m_pQFirstLetter->Reset();
-	m_pQFirstLetter->Bind(1, lPID);
-	m_pQFirstLetter->Step();
-	m_pQFirstLetter->Step();
+	m_pQReading->Reset();
+	m_pQReading->Bind(1, lPID);
+	m_pQReading->Step();
+	m_pQReading->Step();
 
 	wchar_t* pTemp = NULL;
-	m_pQFirstLetter->GetField(0,&pTemp);
-	pwcsFirstLetter[0] = pTemp[0];
+	m_pQReading->GetField(0,&pTemp);
+	F_wcscpyn(pwcsReading, pTemp, 19);
 
 }
 
@@ -177,6 +198,7 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 	m_pQContactorsList->Reset();
 	hr = m_pQContactorsList->Step();
 	long lListCount = 0;
+	vector<CXmlNode*> vecTempNodeListForSort;
 	while ( hr != APP_Result_E_Fail && hr != APP_Result_S_OK )
 	{
 		lListCount++;
@@ -192,8 +214,13 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 		CXmlNode clNodeName(L"name");
 		clNodeName.SetNodeContent(NULL, PName, NULL, 0);
 
+		wchar_t awReading[20] = L"";
 		wchar_t awcsFirstLetter[2] = L"";
-		MakeFirstLetter(awcsFirstLetter, lPID);
+		MakeReading(awReading, lPID);
+		awcsFirstLetter[0] = awReading[0];
+		CXmlNode clNodeReading(L"Reading");
+		clNodeReading.SetNodeContent(NULL, awReading, NULL, 0);
+
 		CXmlNode clNodeFirstLetter(L"firstletter");
 		clNodeFirstLetter.SetNodeContent(NULL, awcsFirstLetter, NULL, 0);
 
@@ -207,16 +234,38 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 		CXmlNode clNodeSmsCount(L"smscount");
 		clNodeSmsCount.SetNodeContent(NULL, awcsSmsCount, NULL, 0);
 
-		CXmlNode clNodeRec(L"rec");
-		clNodeRec.AppendNode(&clNodeID);
-		clNodeRec.AppendNode(&clNodeName);
-		clNodeRec.AppendNode(&clNodeFirstLetter);
-		clNodeRec.AppendNode(&clNodeNumber);
-		clNodeRec.AppendNode(&clNodeSmsCount);
+		CXmlNode* pclNodeRec = new CXmlNode(L"rec");
+		if ( pclNodeRec ){
+			// Get is Encode
+			long lEncodeStatus = 0;
+			MakeEncodeStatus(lPID, lEncodeStatus);
+			NodeAttribute_t stAttr;
+			F_wcscpyn( stAttr.wcsName, L"encode", sizeof(stAttr.wcsName)/sizeof(stAttr.wcsName[0]) );
+			//wchar_t awcsEncodeStatus[5] = L"";
+			wsprintf(stAttr.wcsValue, L"%d", lEncodeStatus);
+			pclNodeRec->SetNodeContent( NULL, (wchar_t*)NULL, &stAttr, 1 );
 
-		pNode->AppendNode(&clNodeRec);
+			pclNodeRec->AppendNode(&clNodeID);
+			pclNodeRec->AppendNode(&clNodeName);
+			pclNodeRec->AppendNode(&clNodeFirstLetter);
+			pclNodeRec->AppendNode(&clNodeReading);
+			pclNodeRec->AppendNode(&clNodeNumber);
+			pclNodeRec->AppendNode(&clNodeSmsCount);
+		}else{
+			return APP_Result_Memory_Full;
+		}		
+		vecTempNodeListForSort.push_back(pclNodeRec);
+		//pNode->AppendNode(&pclNodeRec);
 
 		hr = m_pQContactorsList->Step();
+	}
+	CCompareContactorNode clCompare;
+	::sort(vecTempNodeListForSort.begin(),vecTempNodeListForSort.end(),clCompare);
+	long lCount = vecTempNodeListForSort.size();
+	for ( int i = 0; i < lCount; i++ )
+	{
+		pNode->AppendNode(vecTempNodeListForSort.at(i));
+		delete vecTempNodeListForSort.at(i);
 	}
 	F_wcscpyn(stTemp[0].wcsName, L"count", sizeof(stTemp[0].wcsName)/sizeof(stTemp[0].wcsName[0]));
 	wchar_t awcsCount[5] = L"";
@@ -227,5 +276,18 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 		return hr;
 	}
 
+	return APP_Result_S_OK;
+}
+
+APP_Result CContactorsService::MakeEncodeStatus(long lPID, long& lEncodeStatus)
+{
+	APP_Result hr = APP_Result_E_Fail;
+	m_pQSmsCode->Reset();
+	m_pQSmsCode->Bind(1, lPID);
+	hr = m_pQSmsCode->Step();
+	if ( S_ROW == hr ){
+		m_pQSmsCode->GetField(1,&lEncodeStatus);
+	}
+	
 	return APP_Result_S_OK;
 }

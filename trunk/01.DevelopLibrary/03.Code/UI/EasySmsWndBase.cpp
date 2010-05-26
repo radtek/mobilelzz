@@ -19,6 +19,12 @@ CEasySmsListBase::~CEasySmsListBase()
 		ListItemEx	*pListItemEx	=	GetItem ( i );
 		if ( NULL != pListItemEx )
 		{
+			if ( NULL != pListItemEx->m_pData )
+			{
+				delete	pListItemEx->m_pData;
+				pListItemEx->m_pData	=	NULL;
+			}
+
 			delete	pListItemEx;
 			pListItemEx	=	NULL;
 		}

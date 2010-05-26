@@ -37,14 +37,26 @@ void CSmsPassConfirmWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 		case MZ_IDC_PASS_TOOLBAR:
 		{
 			int nIndex	=	lParam;
-			if ( nIndex == 2 )
+			if ( nIndex == 2 )				//取消
 			{
 				this->EndModal( ID_CANCEL );
 			}
-			else if ( nIndex == 0 )
+			else if ( nIndex == 0 )			//确认
 			{
+				//取得密码并提交
 
+//				HRESULT	hr	=	CommitPassWord();
+// 				if ( FAILED ( hr ) )
+// 				{
+// 
+// 				}
+// 				else
+// 				{
+// 					this->EndModal( ID_OK  );
+// 				}
+				
 			}
+
 			break;
 		}
 
@@ -84,15 +96,6 @@ BOOL	CSmsPassConfirmWnd::SubInitialize()
 	m_PassInput.EnablePassWord(); 
 	m_PassInput.SetSipMode( IM_SIP_MODE_ADDRESSEE_123, MZM_HEIGHT_TEXT_TOOLBAR );
 	AddUiWin( &m_PassInput ); 
-
-	//ini	InfoEdit
-// 	m_PassInput_Again.SetID( MZ_IDC_FIND_INFO );
-// 	m_PassInput_Again.SetTextColor( RGB( 255, 0, 0 ) );
-// 	m_PassInput_Again.SetPos( 80, 120, GetWidth() - MZM_MARGIN_MAX * 4, 40 );
-// 	m_PassInput_Again.SetTip( L"请再次输入密码" );
-// 	m_PassInput_Again.EnablePassWord();
-// 	m_PassInput_Again.SetSipMode( IM_SIP_MODE_ADDRESSEE_123, MZM_HEIGHT_TEXT_TOOLBAR );
-// 	AddUiWin( &m_PassInput_Again ); 
 
 	return	TRUE;
 }

@@ -92,8 +92,9 @@ BOOL	CSmsUnReadWnd::SubInitialize()
 											L"<sid>1</sid>"
 											L"<pid>2</pid>"
 											L"<type>1</type>"
+											L"<name>妞妞</name>"
 											L"<content>我是第一条短信，来点我吧！！！！！！</content>"
-											L"<address>妞妞</address>"
+											L"<address>13609836338</address>"
 											L"<time></time>"
 											L"<lockstatus>0</lockstatus>"
 											L"<readstatus>0</readstatus>"
@@ -102,8 +103,9 @@ BOOL	CSmsUnReadWnd::SubInitialize()
 											L"<sid>2</sid>"
 											L"<pid>3</pid>"
 											L"<type>0</type>"
+											L"<name>妞妞</name>"
 											L"<content>我是第二条短信，来点我吧！！！！！！</content>"
-											L"<address>妮妮</address>"
+											L"<address>13804026490</address>"
 											L"<time></time>"
 											L"<lockstatus>0</lockstatus>"
 											L"<readstatus>0</readstatus>"
@@ -188,21 +190,25 @@ void	CSmsUnReadWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 	int iRlt	=	-1;
 	bool	bIsLock		=	( ( stItemData* )( pItem->m_pData ) )->bIsLock;
 
-	if ( bIsLock )
-	{
-		CSmsPassConfirmWnd	clCSmsPassConfirmWnd;
-		clCSmsPassConfirmWnd.CreateModalDialog( 50, 100, 350, 250, this->m_hWnd );
-		iRlt	=	DoModalBase( &clCSmsPassConfirmWnd );
-
-	}
-	else
-	{
+// 	if ( bIsLock )					//该联系人是被加锁的
+// 	{
+// 		CSmsPassConfirmWnd	clCSmsPassConfirmWnd;
+// 		clCSmsPassConfirmWnd.CreateModalDialog( 50, 100, 350, 250, this->m_hWnd );
+// 		iRlt	=	DoModalBase( &clCSmsPassConfirmWnd );
+// 		if ( ID_OK == iRlt )		//密码正确返回
+// 		{
+// 			//取得短信信息并进入DetailWnd
+// 		}
+// 
+// 	}
+// 	else
+// 	{
 		CSmsLookMsgDetailWnd	clCSmsLookMsgDetailWnd( pItem->m_textTitle );
 
 		clCSmsLookMsgDetailWnd.SetText( pItem->m_textDescription );
 		iRlt	=	DoModalBase( &clCSmsLookMsgDetailWnd );
 
-	}
+//	}
 
 	if ( ID_CASCADE_EXIT == iRlt )
 	{

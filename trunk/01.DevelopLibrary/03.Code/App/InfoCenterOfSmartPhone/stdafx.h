@@ -22,7 +22,8 @@ using namespace std;
 #include"CommonTypes.h"
 
 #include "Core.h"
-
+#include "windows.h"
+#include "atlbase.h"
 //显示图片的不同模式
 static DWORD modeId[4]=
 {

@@ -292,8 +292,8 @@ HRESULT		CEasySmsUiCtrl::AppendUnReadList( CXmlNode *pCXmlNode, CEasySmsListBase
 
 	/*end*/
 	
-	if ( !( pstItemData->bIsLock ) )
-	{
+// 	if ( !( pstItemData->bIsLock ) )
+//  	{
 		//Insert MessageInfo
 		pValue	=	NULL;
 		hr	=	pCXmlNode->GetNodeContent( L"content/", &pValue, NULL, NULL );
@@ -304,11 +304,11 @@ HRESULT		CEasySmsUiCtrl::AppendUnReadList( CXmlNode *pCXmlNode, CEasySmsListBase
 		item->m_textDescription	=	pValue;
 
 		if ( NULL != pValue )								delete	pValue, pValue	=	NULL;
-	}
-	else
-	{	
-		item->m_textDescription	=	L"该信息被加密***";
-	}
+// 	}
+// 	else
+// 	{	
+// 		item->m_textDescription	=	L"该信息被加密***";
+// 	}
 
 
 	//Time
@@ -323,6 +323,39 @@ HRESULT		CEasySmsUiCtrl::AppendUnReadList( CXmlNode *pCXmlNode, CEasySmsListBase
 		wchar_t*	stopstring	=	NULL;
 
 		double  vtime	=	wcstod( pValue, &stopstring );
+		SYSTEMTIME  stSystemTime;
+		if ( VariantTimeToSystemTime( vtime, &stSystemTime) )
+		{
+			CComBSTR bstrTime;
+			wchar_t buffer[20]	=	L"";
+			_ltow( stSystemTime.wYear, buffer, 10 );
+			bstrTime.Append( buffer );
+			bstrTime.Append(L"/");
+
+			memset( buffer, 0x0, sizeof( buffer ) );
+			_ltow( stSystemTime.wMonth, buffer, 10 );
+			bstrTime.Append( buffer );
+			bstrTime.Append(L"/");
+			
+			memset( buffer, 0x0, sizeof( buffer ) );
+			_ltow( stSystemTime.wDay, buffer, 10 );
+			bstrTime.Append( buffer );
+			bstrTime.Append(L" ");	
+
+			memset( buffer, 0x0, sizeof( buffer ) );
+			_ltow( stSystemTime.wHour, buffer, 10 );
+			bstrTime.Append( buffer );
+			bstrTime.Append(L":");
+
+			memset( buffer, 0x0, sizeof( buffer ) );
+			_ltow( stSystemTime.wMinute, buffer, 10 );
+			bstrTime.Append( buffer );
+
+			item->m_textPostscript1	=	bstrTime.m_str;
+
+		}
+		
+
 	}
 	
 	//Set message type
@@ -496,10 +529,28 @@ HRESULT		CEasySmsUiCtrl::AppendLookCtorList( CXmlNode *pCXmlNode, CEasySmsListBa
 	ListItemEx*		item		=	new		ListItemEx;
 	if ( NULL == item )									return	E_FAIL;
 	
+	/*OtherInfo*/
+	stItemData	*pstItemData	=	new	stItemData;
+	if ( NULL == pstItemData )
+	{
+		delete item;									return	E_FAIL;
+	}
+	memset( pstItemData, 0x0, sizeof( stItemData ) );
+
+	HRESULT	hr	=	GetOtherInfo( pCXmlNode, pstItemData );
+	if ( FAILED ( hr ) )
+	{
+		delete item, pstItemData;						return	E_FAIL;
+	}
+
+	item->m_pData	=	( void* )( pstItemData );
+
+	//end
+
 	wchar_t	*		pValue		=	NULL;
 	
 	//Insert MessageInfo
-	HRESULT	hr	=	pCXmlNode->GetNodeContent ( L"name/", &pValue, NULL, NULL );
+	hr	=	pCXmlNode->GetNodeContent ( L"name/", &pValue, NULL, NULL );
 	if ( FAILED ( hr ) )
 	{
 		delete item;									return	E_FAIL;
@@ -510,6 +561,31 @@ HRESULT		CEasySmsUiCtrl::AppendLookCtorList( CXmlNode *pCXmlNode, CEasySmsListBa
 	{
 		delete	pValue,	pValue	=	NULL;
 	}
+
+	//Insert MessageInfo
+	hr	=	pCXmlNode->GetNodeContent ( L"defaultno/", &pValue, NULL, NULL );
+	if ( FAILED ( hr ) )
+	{
+		delete item;									return	E_FAIL;
+	}
+
+	item->m_textDescription	=	pValue;
+	if ( NULL != pValue )
+	{
+		delete	pValue,	pValue	=	NULL;
+	}
+
+	hr	=	pCXmlNode->GetNodeContent ( L"smscount/", &pValue, NULL, NULL );
+	if ( FAILED ( hr ) )
+	{
+		delete item;									return	E_FAIL;
+	}
+
+	CComBSTR	bstrCount ( L"Count : " );
+	bstrCount.Append( pValue );
+
+	item->m_textPostscript1		=	bstrCount.m_str;
+	item->m_itemBgType	=	UILIST_ITEM_BGTYPE_YELLOW;
 
 	item->m_pImgFirst	=	m_imgContainer.LoadImage ( MzGetInstanceHandle(), IDR_PNG_CTR_LIST_READ, true );
 	clCEasySmsListBase.AddItem( item );

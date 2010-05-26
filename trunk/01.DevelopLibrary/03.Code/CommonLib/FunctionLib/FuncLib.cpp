@@ -83,8 +83,33 @@ long S_MultiByte2WideChar( const char *pMultiByteStr,
 								wchar_t *pusWideCharStr, 
 								long lWideCharSize )
 {
-	long	lRet	=	MultiByteToWideChar( 936, MB_PRECOMPOSED|MB_USEGLYPHCHARS, pMultiByteStr, 
+	long	lRet	=	MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED|MB_USEGLYPHCHARS, pMultiByteStr, 
 											 lMultiByteCharSize, pusWideCharStr, lWideCharSize );
+	return lRet;
+}
+
+long S_Count_MultiByte2WideChar( const char *pMultiByteStr )
+{
+	long	lRet	=	MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED|MB_USEGLYPHCHARS, pMultiByteStr, 
+		-1, 0, 0 );
+	return lRet;
+}
+
+long S_WideChar2MultiByte( const wchar_t *pusWideCharStr, 
+						  long lWideCharSize,
+						  char *pMultiByteStr, 
+						  long lMultiByteCharSize
+						   )
+{
+	long	lRet	=	WideCharToMultiByte( CP_ACP, MB_PRECOMPOSED|MB_USEGLYPHCHARS, pusWideCharStr, lWideCharSize,
+			pMultiByteStr, lMultiByteCharSize, 0, 0 );
+	return lRet;
+}
+
+long S_Count_WideChar2MultiByte( const wchar_t *pusWideCharStr )
+{
+	long	lRet	=	WideCharToMultiByte( CP_ACP, MB_PRECOMPOSED|MB_USEGLYPHCHARS, (LPCWSTR)pusWideCharStr, 
+		-1, 0, 0, 0, 0 );
 	return lRet;
 }
 

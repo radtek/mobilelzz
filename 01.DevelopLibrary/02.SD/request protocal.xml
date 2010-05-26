@@ -1,4 +1,4 @@
-<request>
+<request>   
 	<unique id></unique id>//client make it,server return the result file by name the file of this id
 	<data type = "sms">
 		<operation type = "list">

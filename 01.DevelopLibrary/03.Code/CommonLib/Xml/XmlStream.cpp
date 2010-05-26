@@ -727,7 +727,7 @@ APP_Result	CXmlStream::MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 	{
 		bIsFirst	=	FALSE;
 
-		TiXmlDeclaration *pDeclaration = new TiXmlDeclaration( "1.0", "UTF-8", "" );
+		TiXmlDeclaration *pDeclaration = new TiXmlDeclaration( "1.0", "GBK"/*"UTF-8"*/, "" );
 		if ( NULL == pDeclaration || NULL == m_pTiXmlDocument )
 		{
 			_ASSERT(0);

@@ -59,6 +59,12 @@ IDR_ENTER_EXE_DOWN	    RCDATA			"进入应用_down.png"
 IDR_FAST_SEND_UP	    RCDATA			"快速回复_up.png"
 IDR_FAST_SEND_DOWN	    RCDATA			"快速回复_down.png"
 
+IDR_ARROW_LEFT_UP	    RCDATA			"arrow_left.png"
+IDR_ARROW_LEFT_DOWN	    RCDATA			"arrow_left_down.png"
+
+IDR_ARROW_RIGHT_UP	    RCDATA			"arrow_right.png"
+IDR_ARROW_RIGHT_DOWN	    RCDATA			"arrow_right_down.png"
+
 #endif    // 中文(中华人民共和国) resources
 /////////////////////////////////////////////////////////////////////////////
 

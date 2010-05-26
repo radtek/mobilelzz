@@ -64,14 +64,15 @@
 			<rectype></rectype>
 			// for phone no list
 			<default>key-id</default>
-			<rec>
+			<rec encode = "false">
 				// for contactors list
 				<pid></pid>
 				<name></name>
 				<firstletter></firstletter>
+				<reading></reading>
 				<icon></icon>
 				<defaultno></defaultno>	
-				<smscount><smscount>			
+				<smscount><smscount>	
 				// for phone no list
 				<key id = "" value = ""></key>
 			</rec>

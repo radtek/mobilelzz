@@ -52,5 +52,8 @@ protected:
 	UiButton_Image			m_Enter_btn;
 	UiButton_Image			m_Send_btn;
 
+	UiButton_Image			m_ArrowLeft;
+	UiButton_Image			m_ArrowRight;
+
 private:
 };

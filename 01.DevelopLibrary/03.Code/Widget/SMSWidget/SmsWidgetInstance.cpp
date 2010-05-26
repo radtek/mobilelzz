@@ -5,6 +5,9 @@
 #define MZ_IDC_SEND		102
 #define MZ_IDC_ENTER	103
 
+#define	MZ_IDC_ARROW_LEFT	104
+#define	MZ_IDC_ARROW_RIGHT	105
+
 void UiWidget_Sms::PaintWin( HDC hdcDst, RECT* prcWin, RECT* prcUpdate )
 {
     COLORREF clr = RGB(255,0,0);
@@ -16,8 +19,8 @@ void UiWidget_Sms::PaintWin( HDC hdcDst, RECT* prcWin, RECT* prcUpdate )
 	RECT rcImg;
 	rcImg.left	= rcBg.left;
 	rcImg.top	= rcBg.top;
-	rcImg.right	= rcImg.left + /*400*/250;
-	rcImg.bottom= rcImg.top + /*240*/180;
+	rcImg.right	= rcImg.left + /*400*/400;
+	rcImg.bottom= rcImg.top + /*240*/300;
 
     ImagingHelper* pImgBg = m_imgContainer.LoadImage(GetModuleHandle(L"SmsWidget.dll"), IDR_WIDGET_ALL_BACK, true);
     pImgBg->Draw(hdcDst, &rcImg, true);
@@ -119,10 +122,30 @@ UiWidget_Sms::UiWidget_Sms()
 
 	ImagingHelper* FastUp		= m_imgContainer.LoadImage( GetModuleHandle(L"SmsWidget.dll"), IDR_FAST_SEND_UP, true);
 	ImagingHelper* FastDown		= m_imgContainer.LoadImage( GetModuleHandle(L"SmsWidget.dll"), IDR_FAST_SEND_DOWN, true);
+
+	ImagingHelper* ArrowLeftUp			= m_imgContainer.LoadImage( GetModuleHandle(L"SmsWidget.dll"), IDR_ARROW_LEFT_UP, true);
+	ImagingHelper* ArrowLeftDown		= m_imgContainer.LoadImage( GetModuleHandle(L"SmsWidget.dll"), IDR_ARROW_LEFT_DOWN, true);
+
+	ImagingHelper* ArrowRightUp			= m_imgContainer.LoadImage( GetModuleHandle(L"SmsWidget.dll"), IDR_ARROW_RIGHT_UP, true);
+	ImagingHelper* ArrowRightDown		= m_imgContainer.LoadImage( GetModuleHandle(L"SmsWidget.dll"), IDR_ARROW_RIGHT_DOWN, true);
+
+	//Arrow
+	m_ArrowLeft.SetID( MZ_IDC_ARROW_LEFT );
+	m_ArrowLeft.SetButtonType(MZC_BUTTON_NONE);
+	m_ArrowLeft.SetPos( 0, 116, 40, 95 );
+	m_ArrowLeft.SetImage_Normal( ArrowLeftUp );
+	m_ArrowLeft.SetImage_Pressed( ArrowLeftDown );
+
+	m_ArrowRight.SetID( MZ_IDC_ARROW_RIGHT );
+	m_ArrowRight.SetButtonType(MZC_BUTTON_NONE);
+	m_ArrowRight.SetPos( 360, 116, 40, 95 );
+	m_ArrowRight.SetImage_Normal( ArrowRightUp );
+	m_ArrowRight.SetImage_Pressed( ArrowRightDown );
+
 	// 初始化窗口中的UiButton_Image按钮控件
 	m_NewSms_btn.SetID( MZ_IDC_NEW_SMS );
 	m_NewSms_btn.SetButtonType(MZC_BUTTON_NONE);
-	m_NewSms_btn.SetPos( 160,140,40,40 );
+	m_NewSms_btn.SetPos( 202,230,61,58 );
 	m_NewSms_btn.SetImage_Normal( NewSmsUp );
 	m_NewSms_btn.SetImage_Pressed( NewSmsDown );
 
@@ -132,7 +155,7 @@ UiWidget_Sms::UiWidget_Sms()
 
 	m_Enter_btn.SetID( MZ_IDC_ENTER );
 	m_Enter_btn.SetButtonType(MZC_BUTTON_NONE);
-	m_Enter_btn.SetPos( 200,140,40,40 );
+	m_Enter_btn.SetPos( 262,230,61,58 );
 	m_Enter_btn.SetImage_Normal( EnterUp );
 	m_Enter_btn.SetImage_Pressed( EnterDown );
 
@@ -142,9 +165,9 @@ UiWidget_Sms::UiWidget_Sms()
 
 	m_Send_btn.SetID( MZ_IDC_SEND );
 	m_Send_btn.SetButtonType(MZC_BUTTON_NONE);
-	m_Send_btn.SetPos( 120,140,40,40 );
-	m_Send_btn.SetImage_Normal( EnterUp );
-	m_Send_btn.SetImage_Pressed( EnterDown );
+	m_Send_btn.SetPos( 322,230,61,58 );
+	m_Send_btn.SetImage_Normal( FastUp );
+	m_Send_btn.SetImage_Pressed( FastDown );
 
 	m_Send_btn.SetMode(/*UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL*/UI_BUTTON_IMAGE_MODE_NORMAL);
 	m_Send_btn.SwapImageZOrder(true);
@@ -154,6 +177,8 @@ UiWidget_Sms::UiWidget_Sms()
 	UiWin::AddChild(&m_Send_btn);
 	UiWin::AddChild(&m_Enter_btn);
 	UiWin::AddChild(&m_NewSms_btn);
+	UiWin::AddChild(&m_ArrowLeft);
+	UiWin::AddChild(&m_ArrowRight);
 
 }
 

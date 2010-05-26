@@ -10,6 +10,10 @@
 #define IDR_FAST_SEND_UP					111
 #define IDR_FAST_SEND_DOWN					112
 
+#define	IDR_ARROW_LEFT_UP					113
+#define	IDR_ARROW_LEFT_DOWN					114
+#define	IDR_ARROW_RIGHT_UP					115
+#define	IDR_ARROW_RIGHT_DOWN				116
 
 
 // Next default values for new objects

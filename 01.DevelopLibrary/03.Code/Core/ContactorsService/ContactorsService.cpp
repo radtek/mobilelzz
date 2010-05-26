@@ -12,11 +12,20 @@ public:
 	{
 		BOOL b = FALSE;
 		wchar_t* pName1 = NULL;
-		p1->GetNodeContent(L"name/", &pName1, NULL, NULL);
+		p1->GetNodeContent(L"reading/", &pName1, NULL, NULL);
 		wchar_t* pName2 = NULL;
-		p2->GetNodeContent(L"name/", &pName2, NULL, NULL);
-		if ( 0 > wcscmp(pName1, pName2) ){
-			b = TRUE;
+		p2->GetNodeContent(L"reading/", &pName2, NULL, NULL);
+		if ( pName2 && pName1 ){
+			if ( (L'\0'!=pName1[0]) && (L'\0'!=pName2[0]) ){
+				if ( 0 > wcscmp(pName1, pName2) ){
+					b = TRUE;
+				}
+			}else if ( L'\0'!=pName1[0] ){
+				b = TRUE;
+			}
+			
+			delete pName2;
+			delete pName1;
 		}
 		return b;
 	}
@@ -218,7 +227,8 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 		wchar_t awcsFirstLetter[2] = L"";
 		MakeReading(awReading, lPID);
 		awcsFirstLetter[0] = awReading[0];
-		CXmlNode clNodeReading(L"Reading");
+		//wprintf( L"No.%d Contactor Reading:%s\n", lListCount, awReading );
+		CXmlNode clNodeReading(L"reading");
 		clNodeReading.SetNodeContent(NULL, awReading, NULL, 0);
 
 		CXmlNode clNodeFirstLetter(L"firstletter");
@@ -241,8 +251,11 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 			MakeEncodeStatus(lPID, lEncodeStatus);
 			NodeAttribute_t stAttr;
 			F_wcscpyn( stAttr.wcsName, L"encode", sizeof(stAttr.wcsName)/sizeof(stAttr.wcsName[0]) );
-			//wchar_t awcsEncodeStatus[5] = L"";
-			wsprintf(stAttr.wcsValue, L"%d", lEncodeStatus);
+			if ( 0 == lEncodeStatus ){
+				wsprintf(stAttr.wcsValue, L"false");
+			}else{
+				wsprintf(stAttr.wcsValue, L"true");
+			}
 			pclNodeRec->SetNodeContent( NULL, (wchar_t*)NULL, &stAttr, 1 );
 
 			pclNodeRec->AppendNode(&clNodeID);
@@ -265,6 +278,10 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 	for ( int i = 0; i < lCount; i++ )
 	{
 		pNode->AppendNode(vecTempNodeListForSort.at(i));
+		//wchar_t* pName1 = NULL;
+		//vecTempNodeListForSort.at(i)->GetNodeContent(L"name/", &pName1, NULL, NULL);
+		//wprintf( L"No.%d Contactor Name:%s\n", i, pName1 );
+		//delete pName1;
 		delete vecTempNodeListForSort.at(i);
 	}
 	F_wcscpyn(stTemp[0].wcsName, L"count", sizeof(stTemp[0].wcsName)/sizeof(stTemp[0].wcsName[0]));

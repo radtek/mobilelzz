@@ -107,19 +107,26 @@ BOOL CNewSmsWnd::OnInitDialog()
 		
 	}
 	// 初始化窗口中的UiButton_Image按钮控件
-	ImagingHelper* imgNormal = m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_EMAILICON, true);
+//	ImagingHelper* imgNormal = m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_EMAILICON, true);
+	ImagingHelper* Send_Up		= m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_SEND_UP, true);
+	ImagingHelper* Send_Down	= m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_SEND_DOWN, true);
 	m_SendSmsBtn.SetID(MZ_IDC_SEND_SMS_BTN);
 	m_SendSmsBtn.SetButtonType(MZC_BUTTON_WHITE_ROUND_BOTH);
-	m_SendSmsBtn.SetImage_Normal(imgNormal);
+	m_SendSmsBtn.SetImage_Normal(Send_Up);
+	m_SendSmsBtn.SetImage_Pressed( Send_Down );
 	m_SendSmsBtn.SetMode(UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL);
 	m_SendSmsBtn.SwapImageZOrder(true);
 	m_SendSmsBtn.SetTextColor(RGB(255,255,255));
 	AddUiWin(&m_SendSmsBtn);
 
-	ImagingHelper* imgNormalC = m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_Contactors, true);
+//	ImagingHelper* imgNormalC = m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_Contactors, true);
+	ImagingHelper* Ctor_UP	 = m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_Contactors_UP, true);
+	ImagingHelper* Ctor_Down = m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_Contactors_DOWN, true);
+
 	m_ContactorsBtn.SetID(MZ_IDC_CONTACTORS_BTN);
 	m_ContactorsBtn.SetButtonType(MZC_BUTTON_WHITE_ROUND_BOTH);
-	m_ContactorsBtn.SetImage_Normal(imgNormalC);
+	m_ContactorsBtn.SetImage_Normal(Ctor_UP);
+	m_ContactorsBtn.SetImage_Pressed( Ctor_Down );
 	m_ContactorsBtn.SetMode(UI_BUTTON_IMAGE_MODE_ALWAYS_SHOW_NORMAL);
 	m_ContactorsBtn.SwapImageZOrder(true);
 	m_ContactorsBtn.SetTextColor(RGB(255,255,255));

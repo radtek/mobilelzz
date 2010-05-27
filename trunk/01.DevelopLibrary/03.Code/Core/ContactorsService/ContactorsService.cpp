@@ -272,6 +272,8 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 
 		hr = m_pQContactorsList->Step();
 	}
+	
+	AppendStranger(vecTempNodeListForSort);
 	CCompareContactorNode clCompare;
 	::sort(vecTempNodeListForSort.begin(),vecTempNodeListForSort.end(),clCompare);
 	long lCount = vecTempNodeListForSort.size();
@@ -294,6 +296,52 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 	}
 
 	return APP_Result_S_OK;
+}
+
+void CContactorsService::AppendStranger(vector<CXmlNode*>& vecList)
+{
+	CXmlNode* pclNodeRec = new CXmlNode(L"rec");
+	if ( pclNodeRec ){
+		CXmlNode clNodeID(L"pid");
+		clNodeID.SetNodeContent(NULL, L"0", NULL, 0);
+
+		CXmlNode clNodeName(L"name");
+		clNodeName.SetNodeContent(NULL, L"Ä°ÉúÈË", NULL, 0);
+
+		CXmlNode clNodeReading(L"reading");
+		clNodeReading.SetNodeContent(NULL, L"MSR", NULL, 0);
+
+		CXmlNode clNodeFirstLetter(L"firstletter");
+		clNodeFirstLetter.SetNodeContent(NULL, L"M", NULL, 0);
+
+		CXmlNode clNodeNumber(L"defaultno");
+		clNodeNumber.SetNodeContent(NULL, L"", NULL, 0);
+
+		wchar_t awcsSmsCount[20] = L"";
+		MakeSmsCount(awcsSmsCount, 0);
+		CXmlNode clNodeSmsCount(L"smscount");
+		clNodeSmsCount.SetNodeContent(NULL, awcsSmsCount, NULL, 0);
+
+		long lEncodeStatus = 0;
+		MakeEncodeStatus(0, lEncodeStatus);
+		NodeAttribute_t stAttr;
+		F_wcscpyn( stAttr.wcsName, L"encode", sizeof(stAttr.wcsName)/sizeof(stAttr.wcsName[0]) );
+		if ( 0 == lEncodeStatus ){
+			wsprintf(stAttr.wcsValue, L"false");
+		}else{
+			wsprintf(stAttr.wcsValue, L"true");
+		}
+		pclNodeRec->SetNodeContent( NULL, (wchar_t*)NULL, &stAttr, 1 );	
+
+		pclNodeRec->AppendNode(&clNodeID);
+		pclNodeRec->AppendNode(&clNodeName);
+		pclNodeRec->AppendNode(&clNodeFirstLetter);
+		pclNodeRec->AppendNode(&clNodeReading);
+		pclNodeRec->AppendNode(&clNodeNumber);
+		pclNodeRec->AppendNode(&clNodeSmsCount);
+
+		vecList.push_back(pclNodeRec);
+	}
 }
 
 APP_Result CContactorsService::MakeEncodeStatus(long lPID, long& lEncodeStatus)

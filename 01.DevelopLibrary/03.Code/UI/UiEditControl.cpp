@@ -61,7 +61,7 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 				  int  yPos   
 				  )
 {
-	SetSipMode(IM_SIP_MODE_DIGIT,0);
+	SetSipMode(IM_SIP_MODE_DIGIT,MZM_HEIGHT_TEXT_TOOLBAR);
 	long lRowCount = GetRowCount();
 	UpdateFontColor(RGB(0,0,0),0,0,lRowCount,0);
 	int r = UiEdit::OnLButtonUp(fwKeys, xPos, yPos);

@@ -10,6 +10,11 @@
 #define IDR_PNG_EMAILICON               114
 #define IDR_PNG_Contactors               115
 
+#define IDR_PNG_Contactors_UP			116
+#define IDR_PNG_Contactors_DOWN         117
+#define IDR_PNG_SEND_UP					118
+#define IDR_PNG_SEND_DOWN               119
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

@@ -454,6 +454,8 @@ APP_Result CSQL_session_base::Connect(const wchar_t* _pwcs_db_folder,  const wch
 			hr = APP_Result_E_Fail;
 			break;
 		}
+
+		sqlite3_busy_timeout(m_pdb, 2000 );
 				
 		hr = APP_Result_S_OK;
 	}	while (false);

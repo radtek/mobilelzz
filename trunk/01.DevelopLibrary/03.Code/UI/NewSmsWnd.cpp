@@ -532,7 +532,7 @@ bool CNewSmsWnd::SendSMS_Wrapper( IN CMzString& Number )
 			SendFlag	=	SendSMS(NewNumber.C_Str(), Single_Content.C_Str() );
 		}	
 	}
-	if ( SendFlag ){
+	if ( /*SendFlag*/1 ){
 		///////////////////////////////SaveMessage///////////////////////////////////////////
 		wchar_t	*pBuf		=	NULL;
 		long		lSize		=	0;

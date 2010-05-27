@@ -22,6 +22,8 @@ class CSmsLookMsgWnd	:	public	CEasySmsWndBase
 
 		virtual void OnMzCommand( WPARAM wParam, LPARAM lParam );
 
+		void	SetListInfo( ListItemEx* pListInfo );
+
 	private:
 
 		BOOL	SubInitialize();
@@ -31,6 +33,8 @@ class CSmsLookMsgWnd	:	public	CEasySmsWndBase
 		virtual void	DoSthForItemBtnUpSelect( ListItemEx* pItem );
 
 	private:
+
+		ListItemEx*		m_pListInfo;
 
 };
 

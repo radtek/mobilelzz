@@ -249,7 +249,7 @@ APP_Result CRequestXmlOperator::AppendNodeInfo(wchar_t* pPath, wchar_t* pNodeNam
 		wchar_t* pNodeContent = NULL;
 		
 		hr = pNode->GetNodeContent( NULL, &pNodeContent, NULL, NULL );
-		if ( FAILED_App(hr)||(pNodeContent) ){
+		if ( FAILED_App(hr)||(!pNodeContent) ){
 			return hr;
 		}
 		auto_ptr<wchar_t> spNodeContent(pNodeContent);

@@ -14,7 +14,7 @@ class ListItemData
 };
 
 ///////////////////CSmsLookCtorWnd///////////////////////////////////////////////////////
-CSmsLookMsgWnd::CSmsLookMsgWnd(void)
+CSmsLookMsgWnd::CSmsLookMsgWnd(void)	:	m_pListInfo( NULL )
 {
 
 }
@@ -70,6 +70,7 @@ BOOL	CSmsLookMsgWnd::SubInitialize()
 	AddUiWin( &m_toolBar_base );
 
 	//test
+#if 0
 	CMzString content = L"¶ÌÐÅÄÚÈÝ SmsContent%d:";
 	CMzString stime = L"12:20";
 
@@ -101,7 +102,7 @@ BOOL	CSmsLookMsgWnd::SubInitialize()
 		item->m_itemBgType	=	UILIST_ITEM_BGTYPE_YELLOW;
 		m_list_base.AddItem(item);
 	}
-
+#endif
 	//
 	return	TRUE;
 }
@@ -118,4 +119,9 @@ void	CSmsLookMsgWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 	{
 		ReturnToMainWnd();
 	}
+}
+
+void	CSmsLookMsgWnd::SetListInfo( ListItemEx* pListInfo )
+{
+	m_pListInfo		=	pListInfo;
 }

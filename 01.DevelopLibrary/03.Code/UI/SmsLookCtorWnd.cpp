@@ -166,6 +166,7 @@ BOOL	CSmsLookCtorWnd::SubInitialize()
 void	CSmsLookCtorWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 {
 	CSmsLookMsgWnd	clCSmsLookMsgWnd;
+	clCSmsLookMsgWnd.SetListInfo( pItem );
 	int iRlt	=	DoModalBase( &clCSmsLookMsgWnd );
 	if ( ID_CASCADE_EXIT == iRlt )
 	{

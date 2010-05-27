@@ -664,3 +664,17 @@ HRESULT		CEasySmsUiCtrl::MakeSendSmsInfo	( wchar_t **ppBuf, long *lSize, wchar_t
 
 	return	hr;
 }
+
+HRESULT		CEasySmsUiCtrl::MakeMsgRltListReq( wchar_t **ppBuf, long *lSize, long lPid )
+{
+	HRESULT	hr	=	S_OK;
+
+	return	hr;
+}
+
+HRESULT		CEasySmsUiCtrl::MakeMsgRltList   ( CEasySmsListBase &clCEasySmsListBase, wchar_t *pwcRltStream )
+{
+	HRESULT	hr	=	S_OK;
+
+	return	hr;
+}

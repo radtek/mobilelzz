@@ -49,6 +49,7 @@ protected:
 private:
 	void				MakeReading(wchar_t* pwcsReading, long lPID );
 	void				MakeSmsCount(wchar_t* pwcsSmsCount, long lPID );
+	void				AppendStranger(vector<CXmlNode*>& vecList);
 	APP_Result			ExcuteForList(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
 	APP_Result			MakeEncodeStatus(long lPID, long& lEncodeStatus);
 private:

@@ -103,7 +103,7 @@ APP_Result CSmsService::ExcuteParam(wchar_t* pwcsRequestXML, wchar_t** ppwcsResu
 	long lSize = 0;
 	hr = clResultXml.GetXmlStream(&pResult, &lSize);
 	if ( SUCCEEDED_App(hr) ){
-		if ( *ppwcsResultXML ){
+		if ( ppwcsResultXML ){
 			*ppwcsResultXML = pResult;
 		}		
 	}
@@ -382,14 +382,16 @@ APP_Result CSmsService::ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& 
 	if( FAILED(hr) ) 
 		return hr;
 	long lType = Invalid_4Byte;
+	long lLockStatus = Invalid_4Byte;
+	long lReadStatus = Invalid_4Byte;
 	for ( int i = 0; i < lNodeDataInfoCount; i++ )
 	{
 		if ( 0 == wcscmp( L"type", pstNodeDataInfos[i].wcsNodeName )  ){
-			long lType = _wtol(pstNodeDataInfos[i].wcsNodeValue);
+			lType = _wtol(pstNodeDataInfos[i].wcsNodeValue);
 			pQHandle->Bind(3, lType);
 		}else if ( 0 == wcscmp( L"content", pstNodeDataInfos[i].wcsNodeName )  ){
 			long lSize = wcslen(pstNodeDataInfos[i].wcsNodeValue);
-			pQHandle->Bind(4, pstNodeDataInfos[i].wcsNodeValue, lSize);//content
+			pQHandle->Bind(4, pstNodeDataInfos[i].wcsNodeValue, lSize*2);//content
 		}else if ( 0 == wcscmp( L"address", pstNodeDataInfos[i].wcsNodeName )  ){
 			long lSize = wcslen(pstNodeDataInfos[i].wcsNodeValue);
 			pQHandle->Bind(5, pstNodeDataInfos[i].wcsNodeValue, lSize*2);//address
@@ -403,16 +405,24 @@ APP_Result CSmsService::ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& 
 			double dTime = _wtoll(pstNodeDataInfos[i].wcsNodeValue);
 			pQHandle->Bind(6, dTime);
 		}else if ( 0 == wcscmp( L"lockstatus", pstNodeDataInfos[i].wcsNodeName )  ){
-			long lLockStatus = _wtol(pstNodeDataInfos[i].wcsNodeValue);
+			lLockStatus = _wtol(pstNodeDataInfos[i].wcsNodeValue);
 			pQHandle->Bind(7, lLockStatus);
 		}else if ( 0 == wcscmp( L"readstatus", pstNodeDataInfos[i].wcsNodeName )  ){
-			long lReadStatus = _wtol(pstNodeDataInfos[i].wcsNodeValue);
+			lReadStatus = _wtol(pstNodeDataInfos[i].wcsNodeValue);
 			pQHandle->Bind(8, lReadStatus);
 		}
 	}
 	if ( (lType != Invalid_4Byte)&&(lType == 1)){
-		long lReadStatus = 1;
+		lReadStatus = 1;
 		pQHandle->Bind(8, lReadStatus);
+	}
+	if ( lReadStatus == Invalid_4Byte ){
+		lReadStatus = 0;
+		pQHandle->Bind(8, lReadStatus);
+	}
+	if ( lLockStatus == Invalid_4Byte ){
+		lLockStatus = 0;
+		pQHandle->Bind(7, lReadStatus);
 	}
 	SYSTEMTIME stTime;
 	memset(&stTime,0x0,sizeof(stTime));
@@ -655,7 +665,7 @@ APP_Result CSmsService::MakeSmsList(CRequestXmlOperator& clXmlOpe, CSQL_query* p
 	APP_Result hr = APP_Result_E_Fail;
 	CXmlNode* pNode = NULL;
 	hr = clResultXml.SelectNode(L"result/data/data/", &pNode);
-	if ( FAILED_App(hr) ){
+	if ( FAILED_App(hr) || !pNode ){
 		return hr;
 	}
 	auto_ptr<CXmlNode> spNode(pNode);
@@ -713,6 +723,7 @@ APP_Result CSmsService::MakeSmsListRecs( CSQL_query* pQHandle, CXmlNode* pNodeLi
 
 	while ( hr != APP_Result_E_Fail && hr != APP_Result_S_OK )
 	{
+		CXmlNode clNodeRec(L"rec");
 		lListCount++;
 		long lSID = 0;
 		pQHandle->GetField(0, &lSID);
@@ -722,15 +733,7 @@ APP_Result CSmsService::MakeSmsListRecs( CSQL_query* pQHandle, CXmlNode* pNodeLi
 		long lPID = 0;
 		pQHandle->GetField(1, &lPID);
 		CXmlNode clNodePID(L"pid");
-		clNodePID.SetNodeContent(NULL, lPID, NULL, 0);
-			
-		wchar_t* pName = NULL;
-		m_pQGetNameByPID->Reset();
-		m_pQGetNameByPID->Bind(lPID);
-		m_pQGetNameByPID->Step();
-		m_pQGetNameByPID->GetField(0, &pName);
-		CXmlNode clNodeName(L"name");
-		clNodePID.SetNodeContent(NULL, pName, NULL, 0);
+		clNodePID.SetNodeContent(NULL, lPID, NULL, 0);	
 
 		long lType = 0;
 		pQHandle->GetField(2, &lType);
@@ -742,7 +745,7 @@ APP_Result CSmsService::MakeSmsListRecs( CSQL_query* pQHandle, CXmlNode* pNodeLi
 		NodeAttribute_t stAttribute;
 		F_wcscpyn(stAttribute.wcsName, L"encode", sizeof(stAttribute.wcsName)/sizeof(stAttribute.wcsName[0]));
 		F_wcscpyn(stAttribute.wcsValue, L"false", sizeof(stAttribute.wcsValue)/sizeof(stAttribute.wcsValue[0]));
-		clNodeContent.SetNodeContent(NULL, (wchar_t*)NULL, &stAttribute, 1);
+		clNodeRec.SetNodeContent(NULL, (wchar_t*)NULL, &stAttribute, 1);
 		CheckCode(lPID, bIsEnCode, NULL, 0);
 		if ( bIsEnCode ){
 			if ( bIsPermitDecode ){
@@ -770,6 +773,18 @@ APP_Result CSmsService::MakeSmsListRecs( CSQL_query* pQHandle, CXmlNode* pNodeLi
 		CXmlNode clNodeNumber(L"address");
 		clNodeNumber.SetNodeContent(NULL, pNumber, NULL, 0);
 
+		wchar_t* pName = NULL;
+		m_pQGetNameByPID->Reset();
+		m_pQGetNameByPID->Bind(1, lPID);
+		CXmlNode clNodeName(L"name");
+		APP_Result hT = m_pQGetNameByPID->Step();
+		if ( hT == S_ROW ){
+			m_pQGetNameByPID->GetField(0, &pName);			
+			clNodeName.SetNodeContent(NULL, pName, NULL, 0);
+		}else{
+			clNodeName.SetNodeContent(NULL, pNumber, NULL, 0);
+		}
+
 		double dTime = 0;
 		pQHandle->GetField(5, &dTime);
 		CXmlNode clNodeTime(L"time");
@@ -784,10 +799,10 @@ APP_Result CSmsService::MakeSmsListRecs( CSQL_query* pQHandle, CXmlNode* pNodeLi
 		pQHandle->GetField(7, &lReadStatus);
 		CXmlNode clNodeReadStatus(L"readstatus");
 		clNodeReadStatus.SetNodeContent(NULL, lReadStatus, NULL, 0);
-
-		CXmlNode clNodeRec(L"rec");
+		
 		clNodeRec.AppendNode(&clNodeSID);
 		clNodeRec.AppendNode(&clNodePID);
+		clNodeRec.AppendNode(&clNodeName);
 		clNodeRec.AppendNode(&clNodeType);
 		clNodeRec.AppendNode(&clNodeContent);
 		clNodeRec.AppendNode(&clNodeNumber);

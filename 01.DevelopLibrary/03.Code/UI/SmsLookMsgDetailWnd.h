@@ -25,6 +25,8 @@ class CSmsLookMsgDetailWnd	:	public	CEasySmsWndBase
 
 		void	SetText( LPCTSTR text );
 
+		void	SetListInfo( ListItemEx* pListInfo );
+
 	private:
 
 		BOOL	SubInitialize();
@@ -40,6 +42,8 @@ class CSmsLookMsgDetailWnd	:	public	CEasySmsWndBase
 		MzGridMenu					m_GridMenu;
 
 		CMzString					m_WndText;
+
+		ListItemEx*					m_pListInfo;
 
 
 };

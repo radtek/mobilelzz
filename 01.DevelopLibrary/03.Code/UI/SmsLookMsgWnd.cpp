@@ -3,6 +3,7 @@
 
 #include "SmsLookMsgWnd.h"
 #include "SmsLookMsgDetailWnd.h"
+#include "CoreService.h"
 
 class ListItemData
 {
@@ -70,6 +71,21 @@ BOOL	CSmsLookMsgWnd::SubInitialize()
 	AddUiWin( &m_toolBar_base );
 
 	//test
+	wchar_t	*pBuf		=	NULL;
+	long	lSize		=	0;
+	wchar_t	*pwcResult	=	NULL;
+
+
+	HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeMsgRltListReq( &pBuf, &lSize, ((stItemData*)(m_pListInfo->m_pData))->lPid );
+	if ( FAILED ( hr ) )										return	FALSE;
+
+	CCoreService	*pCCoreService	=	CCoreService::GetInstance();
+	if ( NULL == pCCoreService )							return	FALSE;
+
+	hr	=	pCCoreService->Request( pBuf, &pwcResult );
+	if ( FAILED ( hr ) )									return	FALSE;
+
+	hr	=	m_clCEasySmsUiCtrl.MakeMsgRltList( m_list_base, pwcResult );
 #if 0
 	CMzString content = L"短信内容 SmsContent%d:";
 	CMzString stime = L"12:20";
@@ -110,6 +126,20 @@ BOOL	CSmsLookMsgWnd::SubInitialize()
 void	CSmsLookMsgWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 {
 	CSmsLookMsgDetailWnd	clCSmsLookMsgDetailWnd;
+	clCSmsLookMsgDetailWnd.SetListInfo( pItem );
+	//
+	wchar_t	*pBuf		=	NULL;
+	long	lSize		=	0;
+	wchar_t	*pwcResult	=	NULL;
+
+
+	stItemData*	pstItemData	=	(stItemData*)(pItem->m_pData);
+	HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeDetailRltListReq( &pBuf, &lSize, pstItemData->lSid );
+
+	CCoreService	*pCCoreService	=	CCoreService::GetInstance();
+
+	hr	=	pCCoreService->Request( pBuf, &pwcResult );
+
 	//Test
 	wchar_t chTemp[ 256 ]	=	L"我对你的崇拜犹如滔滔江水连绵不绝！！！！";
 	//

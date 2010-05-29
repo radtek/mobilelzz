@@ -667,14 +667,309 @@ HRESULT		CEasySmsUiCtrl::MakeSendSmsInfo	( wchar_t **ppBuf, long *lSize, wchar_t
 
 HRESULT		CEasySmsUiCtrl::MakeMsgRltListReq( wchar_t **ppBuf, long *lSize, long lPid )
 {
-	HRESULT	hr	=	S_OK;
+	CXmlStream	*pCXmlStream	=	new	CXmlStream;
+
+	if ( NULL == pCXmlStream )
+	{
+		return	E_FAIL;
+	}
+
+	HRESULT	hr		=		S_OK;
+
+	do 
+	{
+		hr	=	pCXmlStream->Initialize();
+		if ( FAILED( hr ) )													break;
+
+		CXmlNode	*	pCXmlNode	=	NULL;
+
+		NodeAttribute_t  stNodeAttr;
+		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
+
+		wcscpy( stNodeAttr.wcsName, L"type" );
+		wcscpy( stNodeAttr.wcsValue, L"sms" );
+
+		hr	=	MakeNode( pCXmlStream, L"request/data/", &stNodeAttr, 1 );
+		if ( FAILED( hr ) )													break;
+
+		//////////////////////////////////////////////////////////////////////////
+		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
+		wcscpy( stNodeAttr.wcsName , L"type" );
+		wcscpy( stNodeAttr.wcsValue, L"list" );
+
+		hr	=	MakeNode( pCXmlStream, L"request/data/operation/", &stNodeAttr, 1 );
+		if ( FAILED( hr ) )													break;
+
+		//////////////////////////////////////////////////////////////////////////
+		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
+		wcscpy( stNodeAttr.wcsName , L"name" );
+		wcscpy( stNodeAttr.wcsValue, L"contactor" );
+		hr	=	MakeNode( pCXmlStream, L"request/data/operation/condition/", &stNodeAttr, 1 );
+		if ( FAILED( hr ) )													break;
+
+		//////////////////////////////////////////////////////////////////////////
+		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
+		wcscpy( stNodeAttr.wcsName , L"value" );
+		wchar_t	buf[20]	=	L"";
+		_ltow( lPid, buf, 10 );
+
+		wcscpy( stNodeAttr.wcsValue, buf );
+		hr	=	MakeNode( pCXmlStream, L"request/data/operation/condition/", &stNodeAttr, 1 );
+		if ( FAILED( hr ) )													break;
+
+		//////////////////////////////////////////////////////////////////////////
+		hr	=	pCXmlStream->GetXmlStream( ppBuf, lSize );
+		if ( FAILED( hr ) )													break;
+
+	} while ( false );
+
+
+	if ( NULL != pCXmlStream )
+	{
+		delete	pCXmlStream;
+	}
 
 	return	hr;
 }
 
 HRESULT		CEasySmsUiCtrl::MakeMsgRltList   ( CEasySmsListBase &clCEasySmsListBase, wchar_t *pwcRltStream )
 {
-	HRESULT	hr	=	S_OK;
+	if ( NULL == pwcRltStream )
+	{
+		return	E_FAIL;
+	}
+
+	CXmlStream	*pCXmlStream	=	new	CXmlStream;
+
+	if ( NULL == pCXmlStream )
+	{
+		return	E_FAIL;
+	}
+
+	HRESULT	hr		=		S_OK;
+
+	do 
+	{
+		hr	=	pCXmlStream->Initialize();
+		if ( FAILED( hr ) )													break;
+
+		hr	=	pCXmlStream->Load( pwcRltStream, wcslen( pwcRltStream ) );
+		if ( FAILED( hr ) )													break;
+
+		long	lCnt	=	0;
+		hr	=	GetListCnt( pCXmlStream, lCnt );
+		if ( FAILED( hr ) )													break;
+
+		CXmlNode	*	pCXmlNode	=	NULL;
+		hr	=	pCXmlStream->SelectNode( L"result/data/data/rec/", &pCXmlNode );
+		if ( FAILED( hr ) )													break;
+
+		if ( NULL == pCXmlNode || 0 == lCnt )
+		{
+			hr	=	E_ACCESSDENIED;
+			break;
+		}
+
+		auto_ptr<CXmlNode>	CXmlNodePtr( pCXmlNode );
+
+		for ( int i = 0; i < lCnt; ++i )
+		{
+
+			hr	=	AppendLookMsgList ( CXmlNodePtr.get(), clCEasySmsListBase );
+			if ( FAILED ( hr ) )
+			{
+				break;
+			}
+
+		}
+
+
+	} while ( FALSE );
+
+	if ( NULL != pCXmlStream )
+	{
+		delete	pCXmlStream;
+	}
+
+	return	hr;
+
+}
+
+HRESULT		CEasySmsUiCtrl::AppendLookMsgList( CXmlNode *pCXmlNode, CEasySmsListBase &clCEasySmsListBase )
+{
+	ListItemEx*		item		=	new		ListItemEx;
+	if ( NULL == item )									return	E_FAIL;	
+	wchar_t	*		pValue		=	NULL;
+	HRESULT			hr			=	S_OK;
+
+	/*OtherInfo*/
+	stItemData	*pstItemData	=	new	stItemData;
+	if ( NULL == pstItemData )
+	{
+		delete item;									return	E_FAIL;
+	}
+	memset( pstItemData, 0x0, sizeof( stItemData ) );
+
+	hr	=	GetOtherInfo( pCXmlNode, pstItemData );
+	if ( FAILED ( hr ) )
+	{
+		delete item, pstItemData;						return	E_FAIL;
+	}
+
+	item->m_pData	=	( void* )( pstItemData );
+
+	pValue	=	NULL;
+	hr	=	pCXmlNode->GetNodeContent( L"content/", &pValue, NULL, NULL );
+	if ( FAILED ( hr ) )
+	{
+		delete item;									return	E_FAIL;
+	}
+	item->m_textDescription	=	pValue;
+
+	if ( NULL != pValue )								delete	pValue, pValue	=	NULL;
+
+	//Time
+	pValue	=	NULL;
+	hr	=	pCXmlNode->GetNodeContent( L"time/", &pValue, NULL, NULL );
+	if ( FAILED ( hr ) )
+	{
+		delete item;									return	E_FAIL;
+	}
+	if ( NULL != pValue && *pValue != L'\0' )
+	{
+		wchar_t*	stopstring	=	NULL;
+
+		double  vtime	=	wcstod( pValue, &stopstring );
+		SYSTEMTIME  stSystemTime;
+		if ( VariantTimeToSystemTime( vtime, &stSystemTime) )
+		{
+			CComBSTR bstrTime;
+			wchar_t buffer[20]	=	L"";
+			_ltow( stSystemTime.wYear, buffer, 10 );
+			bstrTime.Append( buffer );
+			bstrTime.Append(L"/");
+
+			memset( buffer, 0x0, sizeof( buffer ) );
+			_ltow( stSystemTime.wMonth, buffer, 10 );
+			bstrTime.Append( buffer );
+			bstrTime.Append(L"/");
+
+			memset( buffer, 0x0, sizeof( buffer ) );
+			_ltow( stSystemTime.wDay, buffer, 10 );
+			bstrTime.Append( buffer );
+			bstrTime.Append(L" ");	
+
+			memset( buffer, 0x0, sizeof( buffer ) );
+			_ltow( stSystemTime.wHour, buffer, 10 );
+			bstrTime.Append( buffer );
+			bstrTime.Append(L":");
+
+			memset( buffer, 0x0, sizeof( buffer ) );
+			_ltow( stSystemTime.wMinute, buffer, 10 );
+			bstrTime.Append( buffer );
+
+			item->m_textPostscript1	=	bstrTime.m_str;
+
+		}
+	}
+	//type
+	pValue	=	NULL;
+	hr	=	pCXmlNode->GetNodeContent( L"type/", &pValue, NULL, NULL );
+	if ( FAILED ( hr ) )
+	{
+		delete item;									return	E_FAIL;
+	}
+
+	if ( L'1' == *pValue )
+	{
+		item->m_itemBgType	=	UILIST_ITEM_BGTYPE_YELLOW;
+	}
+	else if ( L'0' == *pValue )
+	{
+		item->m_itemBgType	=	UILIST_ITEM_BGTYPE_NONE ;
+	}
+	else
+	{
+		_ASSERT( 0 );
+	}
+
+	if ( 0 == pstItemData->lPid )
+	{
+		pValue	=	NULL;
+		hr	=	pCXmlNode->GetNodeContent( L"name/", &pValue, NULL, NULL );
+		if ( NULL == pValue )
+		{
+			//Insert Tel
+			hr	=	pCXmlNode->GetNodeContent( L"address/", &pValue, NULL, NULL );
+			if ( FAILED ( hr ) )
+			{
+				delete item;								return	E_FAIL;
+			}
+
+		}
+	}
+
+	item->m_textTitle		=	pValue;
+	if ( NULL != pValue )								delete	pValue, pValue	=	NULL;
+
+	item->m_pImgFirst = m_imgContainer.LoadImage(MzGetInstanceHandle(), IDR_PNG_CTR_LIST_READ, true);
+	clCEasySmsListBase.AddItem( item );
+
+	pCXmlNode->MoveNext();
+
+	return	S_OK;
+}
+
+HRESULT		CEasySmsUiCtrl::MakeDetailRltListReq( wchar_t **ppBuf, long *lSize, long lSid )
+{
+	CXmlStream	*pCXmlStream	=	new	CXmlStream;
+
+	if ( NULL == pCXmlStream )
+	{
+		return	E_FAIL;
+	}
+
+	HRESULT	hr		=		S_OK;
+
+	do 
+	{
+		hr	=	pCXmlStream->Initialize();
+		if ( FAILED( hr ) )													break;
+
+		CXmlNode	*	pCXmlNode	=	NULL;
+
+		NodeAttribute_t  stNodeAttr;
+		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
+
+		wcscpy( stNodeAttr.wcsName, L"type" );
+		wcscpy( stNodeAttr.wcsValue, L"sms" );
+
+		hr	=	MakeNode( pCXmlStream, L"request/data/", &stNodeAttr, 1 );
+		if ( FAILED( hr ) )													break;
+
+		//////////////////////////////////////////////////////////////////////////
+		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
+		wcscpy( stNodeAttr.wcsName , L"type" );
+		wcscpy( stNodeAttr.wcsValue, L"detail" );
+
+		hr	=	MakeNode( pCXmlStream, L"request/data/operation/", &stNodeAttr, 1 );
+		if ( FAILED( hr ) )													break;
+
+		//////////////////////////////////////////////////////////////////////////
+		hr	=	MakeNode( pCXmlStream, L"request/data/operation/sid/", NULL, 0, (void*)(&lSid), EN_LONG );
+		if ( FAILED( hr ) )													break;
+
+		//////////////////////////////////////////////////////////////////////////
+		hr	=	pCXmlStream->GetXmlStream( ppBuf, lSize );
+		if ( FAILED( hr ) )													break;
+
+	} while ( false );
+
+
+	if ( NULL != pCXmlStream )
+	{
+		delete	pCXmlStream;
+	}
 
 	return	hr;
 }

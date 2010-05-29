@@ -36,6 +36,8 @@ class CEasySmsUiCtrl
 		HRESULT		MakeMsgRltListReq( wchar_t **ppBuf, long *lSize, long lPid );
 		HRESULT		MakeMsgRltList   ( CEasySmsListBase &clCEasySmsListBase, wchar_t *pwcRltStream );
 
+		HRESULT		MakeDetailRltListReq( wchar_t **ppBuf, long *lSize, long lSid );
+
 		HRESULT		MakeSendSmsInfo		( wchar_t **ppBuf, long *lSize, wchar_t *pwcSmsInfo, wchar_t* pwcsNumber );
 
 
@@ -51,6 +53,8 @@ class CEasySmsUiCtrl
 		HRESULT		AppendUnReadList( CXmlNode *pCXmlNode, CEasySmsListBase &clCEasySmsListBase );
 
 		HRESULT		AppendLookCtorList( CXmlNode *pCXmlNode, CEasySmsListBase &clCEasySmsListBase );
+
+		HRESULT		AppendLookMsgList( CXmlNode *pCXmlNode, CEasySmsListBase &clCEasySmsListBase );
 
 		HRESULT		GetOtherInfo( IN CXmlNode *pCXmlNode, OUT stItemData	*pstItemData );
 

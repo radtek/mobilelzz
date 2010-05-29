@@ -141,3 +141,8 @@ CSmsLookMsgDetailWnd::CSmsLookMsgDetailWnd( LPCTSTR text )
 {
 	m_WndText	=	text;
 }
+
+void	CSmsLookMsgDetailWnd::SetListInfo( ListItemEx* pListInfo )
+{
+	m_pListInfo		=	pListInfo;
+}

@@ -4,6 +4,7 @@
 #include "ContactorsWnd.h"
 #include "NewSmsWnd.h"
 #include "EasySmsWndBase.h"
+#include "EasySmsUiCtrl.h"
 
 class CSmsLookMsgWnd	:	public	CEasySmsWndBase
 {
@@ -34,7 +35,9 @@ class CSmsLookMsgWnd	:	public	CEasySmsWndBase
 
 	private:
 
-		ListItemEx*		m_pListInfo;
+		ListItemEx*			m_pListInfo;
+
+		CEasySmsUiCtrl		m_clCEasySmsUiCtrl;
 
 };
 

@@ -7,7 +7,7 @@
 				<pid></pid>
 				<name></name>
 				<type></type>
-				<content></content>
+				<content></content>//提供短信内容的前10个字符
 				<address></address>
 				<time></time>
 				<lockstatus>0</lockstatus>
@@ -29,12 +29,16 @@
 			</rec>
 		</data>
 		<data type = "detail">
-			<rec decode = "false">
-				<id></id>
-				<from></from>
-				<to></to>
-				<date></date>
-				<detail></detail>
+			<rec encode = "false">
+				<sid></sid>
+				<pid></pid>
+				<name></name>
+				<type></type>
+				<content></content>//提供全部短信内容
+				<address></address>
+				<time></time>
+				<lockstatus>0</lockstatus>
+				<readstatus>0</readstatus>
 			</rec>
 		</data>
 	</data>

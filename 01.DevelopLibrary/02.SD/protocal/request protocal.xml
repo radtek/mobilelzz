@@ -11,10 +11,8 @@
 		</operation>
 		
 		<operation type = "detail">
-			<content>
-				<id></id>
-				<condition name = "decode" value = "code"></condition>
-			</content>
+			<id></id>
+			<decode></decode>
 		</operation>
 		
 		<operation type = "search">

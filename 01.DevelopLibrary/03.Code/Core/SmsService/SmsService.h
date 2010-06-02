@@ -60,6 +60,8 @@ private:
 	APP_Result InitSearchParam(Search_DateKind& enDateKind,CSQL_SmartQuery& pQHandle);
 	APP_Result SetSearchParamByConditions(CDynamicArray<OperationCondition>&spConditions, 
 					Search_DateKind& enDateKind,CSQL_SmartQuery& pQHandle);
+
+	APP_Result UpdateSmsGroupInfo(long lPID);
 private:
 	CSQL_SmartQuery			m_pQUnReadSms;
 	long				m_lID_QUnReadSms;
@@ -69,9 +71,6 @@ private:
 
 	CSQL_SmartQuery			m_pQSmsListByContactor;
 	long				m_lID_QSmsListByContactor;
-
-	CSQL_SmartQuery			m_pQSmsGroupInfo;
-	long				m_lID_QSmsGroupInfo;
 
 	CSQL_SmartQuery			m_pQUpdateReadStatus;
 	long				m_lID_QSmsReadStatus;

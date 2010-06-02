@@ -1,7 +1,9 @@
 #include"stdafx.h"
 #include"UiEditControl.h"
 #include"ContactorsWnd.h"
-
+#include "CSearch_SQL_base_handler.h"
+#define   SQL_GET_CONTACTS  L"select ABPerson.ROWID, ABPerson.Name , ABPhones.*  from ABPerson, ABPhones where ABPerson.ROWID = ABPhones.record_id "
+#define   SQL_GET_FIRSTLETER  L"select token  from ABLookupFirstLetter where source = ?"
 
 BOOL CContactorsWnd::OnInitDialog()
 {

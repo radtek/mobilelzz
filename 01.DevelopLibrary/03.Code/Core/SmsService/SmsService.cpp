@@ -9,7 +9,6 @@ CSmsService::CSmsService()
 	m_pclSqlDBSession = NULL;
 	m_pQUnReadSms = NULL;
 	m_pQSmsList = NULL;
-	m_pQSmsGroupInfo = NULL;
 	m_pQUpdateReadStatus = NULL;
 	m_pQUpdateLockStatus = NULL;
 	m_pQCheckCode = NULL;
@@ -23,7 +22,6 @@ CSmsService::~CSmsService()
 	m_pQUnReadSms.Release();
 	m_pQSmsList.Release();
 	m_pQSmsListByContactor.Release();
-	m_pQSmsGroupInfo.Release();
 	m_pQUpdateReadStatus.Release();
 	m_pQUpdateLockStatus.Release();
 	m_pQCheckCode.Release();
@@ -451,10 +449,10 @@ APP_Result CSmsService::UpdateSmsGroupInfo(long lPID)
 		//increment sms count
 	//else
 		//insert pid record,and sms count is 1
-
-	m_pQSmsGroupInfo->Reset();
-	m_pQSmsGroupInfo->Bind(1,lPID);
-	hr = m_pQSmsGroupInfo->Step();
+	CSQL_SmartQuery spQ1;
+	CreateQuery(m_pclSqlDBSession, Sms_SQL_GET_SmsGroupInfo, spQ1);
+	spQ1->Bind(1,lPID);
+	hr = spQ1->Step();
 	if(hr == APP_Result_S_OK)
 	{
 		CSQL_SmartQuery spQ;
@@ -465,7 +463,7 @@ APP_Result CSmsService::UpdateSmsGroupInfo(long lPID)
 	}
 	else if(hr==S_ROW){
 		long lCount = 0;
-		m_pQSmsGroupInfo->GetFiled(1,&lCount);
+		spQ1->GetField(1,&lCount);
 		lCount++;
 		CSQL_SmartQuery spQ;
 		CreateQuery(m_pclSqlDBSession, Sms_SQL_Update_MsgCount, spQ);

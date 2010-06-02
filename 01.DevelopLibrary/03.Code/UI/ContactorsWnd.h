@@ -2,14 +2,8 @@
 #ifndef __ContactorsWnd_h__
 #define __ContactorsWnd_h__
 
-
-#include "CSearch_SQL_base_handler.h"
-
 #define   RLH_FAIL   -1
 #define   RLH_OK	 0
-
-#define   SQL_GET_CONTACTS  L"select ABPerson.ROWID, ABPerson.Name , ABPhones.*  from ABPerson, ABPhones where ABPerson.ROWID = ABPhones.record_id "
-#define   SQL_GET_FIRSTLETER  L"select token  from ABLookupFirstLetter where source = ?"
 
 #define MZ_IDC_LIST      101
 #define MZ_IDC_TOOLBAR1    102
@@ -21,7 +15,7 @@
 #include "resource.h"
 
 #include"UiEditControl.h"
-
+class CSQL_query;
 // 从 UiList 派生的自定义列表类
 class MyList:
   public UiList

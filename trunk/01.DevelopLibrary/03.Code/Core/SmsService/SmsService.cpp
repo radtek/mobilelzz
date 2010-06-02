@@ -384,6 +384,7 @@ APP_Result CSmsService::ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& 
 	long lType = Invalid_4Byte;
 	long lLockStatus = Invalid_4Byte;
 	long lReadStatus = Invalid_4Byte;
+	long lPID = 0;
 	for ( int i = 0; i < lNodeDataInfoCount; i++ )
 	{
 		if ( 0 == wcscmp( L"type", pstNodeDataInfos[i].wcsNodeName )  ){
@@ -394,8 +395,7 @@ APP_Result CSmsService::ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& 
 			pQHandle->Bind(4, pstNodeDataInfos[i].wcsNodeValue, lSize*2);//content
 		}else if ( 0 == wcscmp( L"address", pstNodeDataInfos[i].wcsNodeName )  ){
 			long lSize = wcslen(pstNodeDataInfos[i].wcsNodeValue);
-			pQHandle->Bind(5, pstNodeDataInfos[i].wcsNodeValue, lSize*2);//address
-			long lPID = 0;
+			pQHandle->Bind(5, pstNodeDataInfos[i].wcsNodeValue, lSize*2);//address		
 			hr = GetPIDByAddress(pstNodeDataInfos[i].wcsNodeValue, lPID);
 			if ( FAILED_App(hr) ){
 				return hr;
@@ -435,7 +435,23 @@ APP_Result CSmsService::ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& 
 	if ( FAILED_App(hr) ){
 		return hr;
 	}
+
+	hr = UpdateSmsGroupInfo(lPID);
+	if ( FAILED_App(hr) ){
+		return hr;
+	}
 	
+	return APP_Result_S_OK;
+}
+
+APP_Result CSmsService::UpdateSmsGroupInfo(long lPID)
+{
+	APP_Result hr = APP_Result_E_Fail;
+	//if pid record exist
+		//increment sms count
+	//else
+		//insert pid record,and sms count is 1
+
 	return APP_Result_S_OK;
 }
 

@@ -43,6 +43,9 @@ using namespace std;
 														and type = ? and time < ?"
 #define		Sms_SQL_Search_SmsDetail_BetweenDate	L"select * from SmsDetail where pid = ? and content like ?\
 														and type = ? and time < ? and time > ?"
+														
+#define	Sms_SQL_Insert_SmsGroupInfo		L"insert to SmsGroup values(?,?)"
+#define	Sms_SQL_Update_MsgCount			L"update SmsGroup set msgcount = ? where pid = ?"
 
 #define		 S_ROW			((APP_Result)0x00000002L)
 

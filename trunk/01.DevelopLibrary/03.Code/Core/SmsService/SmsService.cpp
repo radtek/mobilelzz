@@ -452,6 +452,30 @@ APP_Result CSmsService::UpdateSmsGroupInfo(long lPID)
 	//else
 		//insert pid record,and sms count is 1
 
+	m_pQSmsGroupInfo->Reset();
+	m_pQSmsGroupInfo->Bind(1,lPID);
+	hr = m_pQSmsGroupInfo->Step();
+	if(hr == APP_Result_S_OK)
+	{
+		CSQL_SmartQuery spQ;
+		CreateQuery(m_pclSqlDBSession, Sms_SQL_Insert_SmsGroupInfo, spQ);
+		spQ->Bind(1,lPID);
+		spQ->Bind(2,(long)1);
+		spQ->Step();
+	}
+	else if(hr==S_ROW){
+		long lCount = 0;
+		m_pQSmsGroupInfo->GetFiled(1,&lCount);
+		lCount++;
+		CSQL_SmartQuery spQ;
+		CreateQuery(m_pclSqlDBSession, Sms_SQL_Update_MsgCount, spQ);
+		spQ->Bind(1,lCount);
+		spQ->Bind(2,lPID);
+		spQ->Step();
+	}else{
+
+	}
+	
 	return APP_Result_S_OK;
 }
 

@@ -8,9 +8,9 @@ using namespace std;
 #define   Sms_SQL_CREATETABLE_SmsDetail	L"create table IF NOT EXISTS SmsDetail(sid integer PRIMARY KEY ASC, \
 											pid integer, type integer, content text, address text not null, time integer,\
 											lockstatus integer, readstatus integer)"
-#define   Sms_SQL_CREATETABLE_SmsCode	L"create table IF NOT EXISTS SmsCode(pid integer PRIMARY KEY ASC, \
+#define   Sms_SQL_CREATETABLE_SmsCode	L"create table IF NOT EXISTS SmsCode(pid integer, \
 											code text)"
-#define   Sms_SQL_CREATETABLE_SmsGroup	L"create table IF NOT EXISTS SmsGroup(pid integer PRIMARY KEY ASC, \
+#define   Sms_SQL_CREATETABLE_SmsGroup	L"create table IF NOT EXISTS SmsGroup(pid integer, \
 											msgcount integer)"
 
 #define   Contactors_SQL_GET_CONTACTS  L"select ABPerson.ROWID, ABPerson.Name , ABPhones.*  from ABPerson, ABPhones where ABPerson.ROWID = ABPhones.record_id "
@@ -44,7 +44,7 @@ using namespace std;
 #define		Sms_SQL_Search_SmsDetail_BetweenDate	L"select * from SmsDetail where pid = ? and content like ?\
 														and type = ? and time < ? and time > ?"
 														
-#define	Sms_SQL_Insert_SmsGroupInfo		L"insert to SmsGroup values(?,?)"
+#define	Sms_SQL_Insert_SmsGroupInfo		L"insert into SmsGroup values(?,?)"
 #define	Sms_SQL_Update_MsgCount			L"update SmsGroup set msgcount = ? where pid = ?"
 
 #define		 S_ROW			((APP_Result)0x00000002L)

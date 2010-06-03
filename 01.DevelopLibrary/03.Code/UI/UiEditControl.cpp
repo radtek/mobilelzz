@@ -6,6 +6,12 @@
 #include"ContactorsWnd.h"
 #include "RecieversStringParser.h"
 
+int my_IMENUMPROC(IMENUMINFO * pImInfo)
+{
+	wprintf( L"name:%s\n", pImInfo->szName );
+	return 0;
+}
+
 UiEditControl::UiEditControl()
 {
 }
@@ -61,6 +67,11 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 				  int  yPos   
 				  )
 {
+	long lCount = SipEnumIM(NULL);
+	for ( int i = 0; i < lCount; i++ )
+	{
+		SipEnumIM( my_IMENUMPROC );
+	}
 	SetSipMode(IM_SIP_MODE_DIGIT,MZM_HEIGHT_TEXT_TOOLBAR);
 	long lRowCount = GetRowCount();
 	UpdateFontColor(RGB(0,0,0),0,0,lRowCount,0);

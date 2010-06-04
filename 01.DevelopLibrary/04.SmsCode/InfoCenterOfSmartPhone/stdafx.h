@@ -8,6 +8,7 @@
 #include <acc_api.h>
 #include <ShellNotifyMsg.h>
 #include <sms.h>
+#include <sipapi.h>
 #include <vector>
 using namespace std;
 //zhu.t add for License	at 2010-3-22
@@ -19,7 +20,8 @@ using namespace std;
 #define	LICENSE
 #define UI_Recievers_String_Length				(512)
 //extern BOOL g_bH;
-
+extern  CLSID g_clBackupSipID;
+extern  CLSID g_clMeizuSipID;
 extern  BOOL  g_bContactShow;
 extern  BOOL  g_bIsTrial;
 #include "RecieversDynamicArray.h"

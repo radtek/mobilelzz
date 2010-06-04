@@ -1,8 +1,5 @@
 #include"stdafx.h"
-#include <mzfc_inc.h>
-
 #include"UiEditControl.h"
-//#include"NewSmsWnd.h"
 #include"ContactorsWnd.h"
 #include "RecieversStringParser.h"
 
@@ -61,7 +58,16 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 				  int  yPos   
 				  )
 {
-	SetSipMode(IM_SIP_MODE_DIGIT,0);
+	if ( 0 == g_clBackupSipID.Data1 ){
+		SipGetCurrentIM(&g_clBackupSipID);
+	}
+	BOOL b = SipSetCurrentIM(&g_clMeizuSipID);
+	if(!b)
+	{
+		//SipSetCurrentIM(&g_clBackupSipID);
+	}
+	MzOpenSip(IM_SIP_MODE_DIGIT, 0);
+	//SetSipMode(IM_SIP_MODE_DIGIT,0);
 	long lRowCount = GetRowCount();
 	UpdateFontColor(RGB(0,0,0),0,0,lRowCount,0);
 	int r = UiEdit::OnLButtonUp(fwKeys, xPos, yPos);

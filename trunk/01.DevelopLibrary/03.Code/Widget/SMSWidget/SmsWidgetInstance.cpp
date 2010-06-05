@@ -1,5 +1,10 @@
 #include "SmsWidgetInstance.h"
 #include "resource.h"
+#include "../../App/CommonLib/CommonLib.h"
+#include "../../CommonLib/FunctionLib/Errors.h"
+#include "../../Core/ServiceControl/CoreService.h"
+#include "../../CommonLib/Xml/XmlStream.h"
+#include "../../CommonLib/FunctionLib/ResultXmlOperator.h"
 
 #define MZ_IDC_NEW_SMS  101
 #define MZ_IDC_SEND		102
@@ -7,6 +12,10 @@
 
 #define	MZ_IDC_ARROW_LEFT	104
 #define	MZ_IDC_ARROW_RIGHT	105
+
+
+typedef CCoreService* (*pCoreFun)();
+typedef HRESULT (*Request)( wchar_t* , wchar_t**  );
 
 void UiWidget_Sms::PaintWin( HDC hdcDst, RECT* prcWin, RECT* prcUpdate )
 {
@@ -83,10 +92,22 @@ void UiWidget_Sms::PaintWin( HDC hdcDst, RECT* prcWin, RECT* prcUpdate )
 }
 
 
+
 int UiWidget_Sms::OnLButtonDown( UINT fwKeys, int xPos, int yPos )
 {
     int iRet = UiWidget::OnLButtonDown(fwKeys, xPos, yPos);
 
+
+	////test//////////////////////////////////////////////////////////////////////////
+
+	wchar_t	*pBuf		=	NULL;
+	long	lSize		=	0;
+	wchar_t	*pwcResult	=	NULL;
+
+	CCoreSmsUiCtrl		m_clCCoreSmsUiCtrl;
+	m_clCCoreSmsUiCtrl.MakeUnReadRltListReq( &pBuf, &lSize );
+
+	//////////////////////////////////////////////////////////////////////////
     return iRet;
 }
 
@@ -252,9 +273,6 @@ void UiWidget_Sms::AddMessage( wchar_t* _phone, wchar_t* _content )
 	m_Message.push_back( CMzString(_content));
 
 	m_TotalCount++;
-
-
-
 
 }
 

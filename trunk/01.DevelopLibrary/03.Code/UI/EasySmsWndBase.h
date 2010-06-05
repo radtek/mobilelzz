@@ -9,15 +9,17 @@ class CEasySmsWndBase;
 
 typedef struct ItemData_t
 {
-	long	lPid;
-	long	lSid;
-//	double	lTime;
-	long	lCnt;
-	bool	bIsLock;
-	bool	bIsRead;
-	wchar_t	cFirst;
+	long		lPid;
+	long		lSid;
+	long		lCnt;
+	bool		bIsLock;
+	bool		bIsRead;
+	wchar_t		cFirst;
+	CComBSTR	bstrTelNo;
+	CComBSTR	bstrName;
+	CComBSTR	bstrTime;
+	CComBSTR	bstrDetail;
 //	char	cIcon;
-
 }stItemData;
 
 /////////////////CEasySmsListBase/////////////////////////////////////////////////////////

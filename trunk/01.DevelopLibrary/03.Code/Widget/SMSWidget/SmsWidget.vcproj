@@ -65,9 +65,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions=" /subsystem:windowsce,6.00"
-				AdditionalDependencies="mzfc.lib platformapi.lib shellwidget.lib"
+				AdditionalDependencies="mzfc.lib platformapi.lib shellwidget.lib SqliteOpenSource.lib MyStoreLib.lib CommonLib.lib Core.lib"
 				OutputFile="$(OutDir)/SmsWidget.dll"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="../../App/Debug"
 				ModuleDefinitionFile="SmsWidget.def"
 				DelayLoadDLLs="$(NOINHERIT)"
 				GenerateDebugInformation="true"

@@ -34,24 +34,25 @@ void UiWidget_Sms::PaintWin( HDC hdcDst, RECT* prcWin, RECT* prcUpdate )
     ImagingHelper* pImgBg = m_imgContainer.LoadImage(GetModuleHandle(L"SmsWidget.dll"), IDR_WIDGET_ALL_BACK, true);
     pImgBg->Draw(hdcDst, &rcImg, true);
 
-	::SetTextColor(hdcDst, RGB(27,163,228));
+	::SetTextColor(hdcDst, RGB(255,255,255));
 	::SetBkMode(hdcDst, TRANSPARENT);
 
 
 	/*将消息的内容描画在插件上*/
 
-// 	HFONT font = FontHelper::GetFont(20, FW_NORMAL,0,0,0,FONT_QUALITY_CLEARTYPE);
-// 	HGDIOBJ oldfont = SelectObject(hdcDst, font);
-// 
-// 	RECT rcText;
-// 	rcText.left		= rcBg.left +30 ;
-// 	rcText.top		= rcBg.top  +70;
-// 	rcText.right	= rcBg.left + 350;
-// 	rcText.bottom	= rcBg.top +  150;
-// 
-// 	int Height = MzDrawText(hdcDst, m_Message[m_CurIndex].C_Str(), &rcText, DT_WORDBREAK |DT_CALCRECT|DT_LEFT);
-// 	MzDrawText(hdcDst, m_Message[m_CurIndex].C_Str(), &rcText, DT_WORDBREAK|DT_LEFT);
-// 	SelectObject(hdcDst, oldfont);
+//	HFONT font = FontHelper::GetFont(20, FW_NORMAL,0,0,0,FONT_QUALITY_CLEARTYPE);
+	HFONT font = FontHelper::GetFont(20, FW_EXTRABOLD/*FW_NORMAL*/, false, false);
+	HGDIOBJ oldfont = SelectObject(hdcDst, font);
+
+	RECT rcText;
+	rcText.left		= rcBg.left +30 ;
+	rcText.top		= rcBg.top  +100;
+	rcText.right	= rcBg.left + 350;
+	rcText.bottom	= rcBg.top +  180;
+
+	int Height = MzDrawText(hdcDst, m_Message[m_CurIndex].C_Str(), &rcText, DT_WORDBREAK |DT_CALCRECT|DT_LEFT);
+	MzDrawText(hdcDst, m_Message[m_CurIndex].C_Str(), &rcText, DT_WORDBREAK|DT_LEFT);
+	SelectObject(hdcDst, oldfont);
 
 
 	/*将手机号码描画在插件上*/
@@ -214,8 +215,8 @@ bool UiWidget_Sms::StartWidget()
     if(id==0)
         return false;
 
-// 	AddMessage(L"10086", L"尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。");
-// 	AddMessage(L"13587458741", L"猪的四大理想：四周栏杆都烂掉，天上纷纷下饲料，世上屠夫都死掉，全国人民信回教。");
+ 	AddMessage(L"10086", L"尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。");
+ 	AddMessage(L"13587458741", L"猪的四大理想：四周栏杆都烂掉，天上纷纷下饲料，世上屠夫都死掉，全国人民信回教。");
 // 
 // 	m_CurIndex = 0;
 

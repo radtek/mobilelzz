@@ -9,6 +9,7 @@
 // Windows Header Files:
 #pragma warning( disable : 4996 )
 #pragma warning( disable : 4251 )
+#include "atlbase.h"
 #include <windows.h>
 
 #include<mzfc/MzString.h>

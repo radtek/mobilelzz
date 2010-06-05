@@ -1,6 +1,12 @@
 #ifndef __CoreService_h__
 #define __CoreService_h__
 
+#ifdef CORE_EXPORTS
+#define CORE_API __declspec(dllexport)
+#else
+#define CORE_API __declspec(dllimport)
+#endif
+
 class CSmsService;
 class CContactorsService;
 

@@ -1,4 +1,5 @@
 #include "stdafx.h"
+//#include "./TinySrc/tinyxml.h"
 #include "XmlStream.h"
 
 //class

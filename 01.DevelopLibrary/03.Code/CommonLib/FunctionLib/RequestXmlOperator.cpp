@@ -1,6 +1,8 @@
 #include "stdafx.h"
+
 #include "Errors.h"
 #include "FuncLib.h"
+#include "../Xml/TinySrc/tinyxml.h"
 #include "XmlStream.h"
 #include "DynamicArray.h"
 #include "RequestXmlOperator.h"

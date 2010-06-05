@@ -3,6 +3,7 @@
 #include <ShellWidget/ShellWidget.h>
 #include <vector>
 using namespace std;
+#include "atlbase.h"
 
 // Widget必须从UiWidget派生
 // 根据需要，可重载StartWidget()以自定义Widget的启动行为

@@ -128,6 +128,32 @@ protected:
       }
   } 
 
+
+  LRESULT MzDefWndProc( UINT message, WPARAM wParam, LPARAM lParam )
+  {
+	  switch (message)
+	  {
+	  case MZ_WM_COMMAND:
+	  case MZ_WM_MOUSE_NOTIFY:
+		  {
+			  int nID = LOWORD(wParam);
+			  int nNotify = HIWORD(wParam);
+			  int x = LOWORD(lParam);
+			  int y = HIWORD(lParam);
+
+			  if (m_pSmsWidget)
+			  {
+				  m_pSmsWidget->OnWmNotify(m_hWnd, message, wParam, lParam);
+			  }
+		  }
+		  break;
+	  }
+
+	  return CMzWndEx::MzDefWndProc(message, wParam, lParam);
+
+  }
+
+
 };
 
 MZ_IMPLEMENT_DYNAMIC(CSample1MainWnd)

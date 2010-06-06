@@ -5,6 +5,8 @@
 using namespace std;
 #include "atlbase.h"
 
+#include "WidgetUiEdit.h"
+
 // Widget必须从UiWidget派生
 // 根据需要，可重载StartWidget()以自定义Widget的启动行为
 
@@ -32,6 +34,8 @@ protected:
     unsigned int Rand();
 	void AddMessage( wchar_t* _phone, wchar_t* _content );
 
+	virtual void OnWmNotify( HWND hWnd, UINT nMessage, WPARAM wParam, LPARAM lParam );
+
     unsigned int m_rand;
 
     ImageContainer m_imgContainer;
@@ -49,12 +53,16 @@ protected:
 
 	unsigned int		m_TotalCount;
 
-	UiButton_Image			m_NewSms_btn;
-	UiButton_Image			m_Enter_btn;
-	UiButton_Image			m_Send_btn;
+	UiButton_Image/*CSmsBtnImage*/			m_NewSms_btn;
+	UiButton_Image/*CSmsBtnImage*/			m_Enter_btn;
+	UiButton_Image/*CSmsBtnImage*/			m_Send_btn;
 
-	UiButton_Image			m_ArrowLeft;
-	UiButton_Image			m_ArrowRight;
+	UiButton_Image/*CSmsBtnImage*/			m_ArrowLeft;
+	UiButton_Image/*CSmsBtnImage*/			m_ArrowRight;
+
+	/*CWidgetUiEdit*/UiEdit			m_clCWidgetUiEdit;
+	UiEdit 							m_TimeEdit;
+	UiEdit							m_TelEdit;
 
 private:
 };

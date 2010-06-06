@@ -39,7 +39,7 @@ class CMainApp: public CMzApp
 {
 public:
   // 应用程序的主窗口
-//  CNewSmsWnd m_MainWnd;
+	CNewSmsWnd			m_SmsWnd;
 	CEasySmsMainWnd		m_MainWnd;
   // 应用程序的初始化
   virtual BOOL Init()
@@ -78,9 +78,18 @@ public:
 
 		m_MainWnd.Show();
 	}
-// 	else if ( )
-// 	{
-// 	}
+ 	else if ( 0 == wcscmp( pCmdLine, L"NewSms" ) )
+ 	{
+		RECT rcWork = MzGetWorkArea();
+		m_SmsWnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0);
+
+		if ( MzGetParam ( MZGP_APP_START_ANIMATION ) ==TRUE )   
+		{
+			m_SmsWnd.AnimateWindow( getScreenRandom() , true);
+		}
+
+		m_SmsWnd.Show();
+ 	}
 
 #if 0
 	// 创建主窗口

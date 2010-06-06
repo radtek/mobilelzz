@@ -93,6 +93,11 @@ APP_Result CSmsService::ExcuteParam(wchar_t* pwcsRequestXML, wchar_t** ppwcsResu
 		if ( FAILED_App(hr) ){
 			return hr;
 		}
+	}else if ( 0 == wcscmp(L"detail", awcsOpeType) ){
+		hr = ExcuteForDetail(clReqXmlOpe, clResultXml);
+		if ( FAILED_App(hr) ){
+			return hr;
+		}
 	}else{
 
 	}
@@ -184,6 +189,11 @@ APP_Result CSmsService::Initialize()
 		return hr;
 	}
 	hr = CreateQuery(m_pclSqlDBSession, Sms_SQL_SET_SmsContent, m_pQUpdateSmsContent);
+	if ( FAILED_App(hr) ){
+		return hr;
+	}
+
+	hr = CreateQuery(m_pclSqlDBSession, Sms_SQL_GET_SmsDetail, m_pQGetDetailBySID);
 	if ( FAILED_App(hr) ){
 		return hr;
 	}
@@ -549,6 +559,86 @@ APP_Result CSmsService::ExcuteForEdit(CRequestXmlOperator& clXmlOpe, CXmlStream&
 	return APP_Result_S_OK;
 }
 
+APP_Result CSmsService::ExcuteForDetail(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml)
+{	
+	APP_Result hr = APP_Result_E_Fail;	
+	NodeDataInfo* pstNodeDataInfos = NULL;
+	long lNodeDataInfoCount = 0;
+	hr = clXmlOpe.GetDetailSmsInfos(&pstNodeDataInfos, &lNodeDataInfoCount);
+	if ( FAILED_App(hr) ){
+		return APP_Result_Param_Invalid;
+	}
+	CDynamicArray<NodeDataInfo> spNodes(pstNodeDataInfos, lNodeDataInfoCount);
+	BOOL bIsPermitDecode = FALSE;
+	//select by sid
+	m_pQGetDetailBySID->Reset();
+	hr = m_pQGetDetailBySID->Step();
+	if ( hr == S_ROW ){
+		long lPID = 0;
+		m_pQGetDetailBySID->GetField(1, &lPID);
+		if ( lNodeDataInfoCount == 2 ){
+			if ( 0 == wcscmp(L"decode", pstNodeDataInfos[1].wcsNodeName) ){
+				CheckIsPermitDecodeContent(lPID, pstNodeDataInfos[1].wcsNodeValue, bIsPermitDecode);
+			}			
+		}else{
+			CheckIsPermitDecodeContent(lPID, NULL, bIsPermitDecode);
+		}		
+	}
+
+	CXmlNode* pNode = NULL;
+	hr = clResultXml.SelectNode(L"result/data/data/", &pNode);
+	if ( FAILED_App(hr) || !pNode ){
+		return hr;
+	}
+	auto_ptr<CXmlNode> spNode(pNode);
+	NodeAttribute_t stTemp;
+	memset(&stTemp, 0x0, sizeof(stTemp));
+	F_wcscpyn(stTemp.wcsName, L"type", sizeof(stTemp.wcsName)/sizeof(stTemp.wcsName[0]));
+	F_wcscpyn(stTemp.wcsValue, L"detail", sizeof(stTemp.wcsValue)/sizeof(stTemp.wcsValue[0]));
+	hr = pNode->SetNodeContent( NULL, (wchar_t*)NULL, &stTemp, 1 );
+	if ( FAILED_App(hr) ){
+		return hr;
+	}
+
+	long lListCount = 0;
+	long lEncodeCount = 0;
+	m_pQGetDetailBySID->Reset();
+	MakeSmsListRecs( m_pQGetDetailBySID.Get(), pNode, bIsPermitDecode, 0, lListCount, lEncodeCount );
+
+	return APP_Result_S_OK;
+}
+
+APP_Result CSmsService::CheckIsPermitDecodeContent(long lPID, wchar_t* pDisplayCode, BOOL &bIsPermitDecode)
+{
+	APP_Result hr = APP_Result_E_Fail;
+	BOOL bNeedDecode = FALSE;
+	wchar_t wcsDBCode[20] = L"";
+	// check is need decode
+	hr = CheckCode(lPID, bNeedDecode, wcsDBCode, sizeof(wcsDBCode)/sizeof(wcsDBCode[0]));
+	if ( FAILED_App(hr) ){
+		return APP_Result_E_Fail;
+	}
+	if ( bNeedDecode ){
+		if ( pDisplayCode && ( L'\0' != pDisplayCode[0] ) ){		
+			wchar_t wcsDBCodeCompared[20] = L"";
+			hr = ConvertDisplayCode2DBCode(pDisplayCode, wcsDBCodeCompared, 
+				sizeof(wcsDBCodeCompared)/sizeof(wcsDBCodeCompared[0]));
+			if ( FAILED_App(hr) ){
+				return APP_Result_E_Fail;
+			}
+			if ( 0 == wcscmp( wcsDBCode, wcsDBCodeCompared ) ){
+				bIsPermitDecode = TRUE;
+			}	
+		}else{
+			bIsPermitDecode = FALSE;
+		}		
+	}else{
+		bIsPermitDecode = TRUE;
+	}
+
+	return APP_Result_S_OK;
+}
+
 APP_Result CSmsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml)
 {	
 	APP_Result hr = APP_Result_E_Fail;	
@@ -654,7 +744,7 @@ APP_Result CSmsService::CheckCode(long lPID, BOOL& bNeedDecode,
 	}else{
 		wchar_t* pCode = NULL;
 		m_pQCheckCode->GetField(1, &pCode);
-		if ( NULL != pCode && L'\0' == pCode[0] ){
+		if ( pCode && (L'\0' != pCode[0]) ){
 			F_wcscpyn(pwcsDBCode, pCode, lCodeSize);
 			bNeedDecode = TRUE;
 		}
@@ -668,8 +758,8 @@ APP_Result CSmsService::ConvertDisplayCode2DBCode(wchar_t* pwcsCode, wchar_t* pw
 {
 	unsigned short usMask = 0x0007;
 	long lCount = wcslen(pwcsCode);
-	if ( lCount > lDBCodeCount ){
-		return APP_Result_E_Fail;
+	if ( lCount >= lDBCodeCount ){
+		lCount = lDBCodeCount-1;
 	}
 	for ( int i = 0; i < lCount; i++ )
 	{
@@ -685,8 +775,8 @@ APP_Result CSmsService::ConvertDBCode2DisplayCode(wchar_t* pDBCode, wchar_t* pwc
 {
 	unsigned short usMask = 0xE000;
 	long lCount = wcslen(pwcsCode);
-	if ( lCount > lCodeCount ){
-		return APP_Result_E_Fail;
+	if ( lCount >= lCodeCount ){
+		lCount = lCodeCount-1;
 	}
 	for ( int i = 0; i < lCount; i++ )
 	{
@@ -721,7 +811,7 @@ APP_Result CSmsService::MakeSmsList(CRequestXmlOperator& clXmlOpe, CSQL_query* p
 	}
 	long lListCount = 0;
 	long lEncodeCount = 0;
-	hr = MakeSmsListRecs( pQHandle, pNode, bIsPermitDecode, lListCount, lEncodeCount );
+	hr = MakeSmsListRecs( pQHandle, pNode, bIsPermitDecode, 1, lListCount, lEncodeCount );
 	if ( FAILED_App(hr) ){
 		return hr;
 	}
@@ -753,7 +843,7 @@ APP_Result CSmsService::MakeSmsList(CRequestXmlOperator& clXmlOpe, CSQL_query* p
 }
 
 APP_Result CSmsService::MakeSmsListRecs( CSQL_query* pQHandle, CXmlNode* pNodeList, BOOL bIsPermitDecode,
-										long& lListCount, long& lEncodeCount )
+										BOOL bIsList, long& lListCount, long& lEncodeCount )
 {
 	APP_Result hr = APP_Result_E_Fail;
 	//pQHandle->Reset();
@@ -789,9 +879,15 @@ APP_Result CSmsService::MakeSmsListRecs( CSQL_query* pQHandle, CXmlNode* pNodeLi
 			if ( bIsPermitDecode ){
 				wchar_t* pDBContent = NULL;
 				pQHandle->GetField(3, &pDBContent);	
-				wchar_t wcsContent[256] = L"";
-				ConvertDBCode2DisplayCode(pDBContent, wcsContent, sizeof(wcsContent)/sizeof(wcsContent[0]));
-				clNodeContent.SetNodeContent(NULL, wcsContent, NULL, 0);
+				if ( bIsList ){
+					wchar_t wcsContent[11] = L"";
+					ConvertDBCode2DisplayCode(pDBContent, wcsContent, sizeof(wcsContent)/sizeof(wcsContent[0]));
+					clNodeContent.SetNodeContent(NULL, wcsContent, NULL, 0);
+				}else{
+					wchar_t wcsContent[256] = L"";
+					ConvertDBCode2DisplayCode(pDBContent, wcsContent, sizeof(wcsContent)/sizeof(wcsContent[0]));
+					clNodeContent.SetNodeContent(NULL, wcsContent, NULL, 0);
+				}			
 			}else{
 				lEncodeCount++;
 				NodeAttribute_t stAttribute;

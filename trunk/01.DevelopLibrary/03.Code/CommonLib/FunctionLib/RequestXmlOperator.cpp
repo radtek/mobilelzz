@@ -202,6 +202,19 @@ APP_Result CRequestXmlOperator::GetAddSmsInfos( NodeDataInfo** ppwcsProtectDataB
 	return APP_Result_S_OK;
 }
 
+APP_Result CRequestXmlOperator::GetDetailSmsInfos( NodeDataInfo** ppwcsProtectDataBuf, long* plBufCount )
+{
+	APP_Result appR = APP_Result_E_Fail;	
+	CDynamicArray<NodeDataInfo>	spNodeDataInfos;
+	AppendNodeInfo(L"request/data/operation/sid/", L"sid", spNodeDataInfos);
+	AppendNodeInfo(L"request/data/operation/decode/", L"decode", spNodeDataInfos);
+
+	*ppwcsProtectDataBuf = spNodeDataInfos.Detatch();
+	*plBufCount = spNodeDataInfos.GetItemCount();
+
+	return APP_Result_S_OK;
+}
+
 APP_Result CRequestXmlOperator::GetDeleteSIDs( NodeDataInfo** ppwcsDataBuf, long* plBufCount )
 {
 	APP_Result appR = APP_Result_E_Fail;	

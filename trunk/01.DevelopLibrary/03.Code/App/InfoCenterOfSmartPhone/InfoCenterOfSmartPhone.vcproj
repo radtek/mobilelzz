@@ -208,14 +208,6 @@
 				RelativePath=".\InfoCenterOfSmartPhone.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\stdafx.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\stdafx.h"
-				>
-			</File>
 			<Filter
 				Name="UI"
 				>
@@ -356,6 +348,14 @@
 			>
 			<File
 				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\stdafx.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\stdafx.h"
 				>
 			</File>
 		</Filter>

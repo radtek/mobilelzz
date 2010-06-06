@@ -22,7 +22,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 	case DLL_THREAD_ATTACH:
 	case DLL_THREAD_DETACH:
 	case DLL_PROCESS_DETACH:
-		CCoreService::DeleteInstance();
+//		CCoreService::DeleteInstance();
 		break;
 	}
     return TRUE;

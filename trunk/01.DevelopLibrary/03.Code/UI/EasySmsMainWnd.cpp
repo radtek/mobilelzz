@@ -42,7 +42,7 @@ void CEasySmsMainWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 		{
 			CSmsUnReadWnd	clCSmsUnReadWnd;
 			iRlt	=	DoModalBase( &clCSmsUnReadWnd );
-			
+			::SetForegroundWindow(m_hWnd); 
 			break;
 		}
 
@@ -50,7 +50,7 @@ void CEasySmsMainWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 		{
 			CSmsLookCtorWnd		clCSmsLookCtorWnd;
 			iRlt	=	DoModalBase( &clCSmsLookCtorWnd );
-
+			::SetForegroundWindow(m_hWnd); 
 			break;
 		}
 			
@@ -58,7 +58,7 @@ void CEasySmsMainWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 		{
 			CNewSmsWnd		clSendSms;
 			iRlt	=	DoModalBase( &clSendSms );
-
+			::SetForegroundWindow(m_hWnd); 
 			break;
 		}
 
@@ -66,7 +66,7 @@ void CEasySmsMainWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 		{
 			CSmsFindWnd		clCSmsFindWnd;
 			iRlt	=	DoModalBase( &clCSmsFindWnd );
-
+			::SetForegroundWindow(m_hWnd); 
 			break;
 		}
 
@@ -74,7 +74,7 @@ void CEasySmsMainWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 		{
 			CSmsEncrytpCtorWnd	clCSmsEncrytpCtorWnd;
 			iRlt	=	DoModalBase( &clCSmsEncrytpCtorWnd );
-
+			::SetForegroundWindow(m_hWnd); 
 			break;
 		}
 			

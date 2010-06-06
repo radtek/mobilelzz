@@ -20,7 +20,7 @@ class CMyEdit: public UiEdit
 public:
 	virtual ~CMyEdit()
 	{
-		ReleaseCapture();
+		//ReleaseCapture();
 	}
 	int OnLButtonUp123  ( UINT  fwKeys,  int  xPos,  int  yPos )
 	{
@@ -45,12 +45,7 @@ class CNewSmsWnd : public /*CMzWndEx*/ CEasySmsWndBase
 	MZ_DECLARE_DYNAMIC( CNewSmsWnd );
 
 	public:
-	   CNewSmsWnd()
-	   {
-			m_lCurProgress = 0;
-			//m_SmsMsgEdit = new CMyEdit;
-			m_pclContactorsWnd  = NULL;	
-	   }
+	   CNewSmsWnd();
 	   virtual ~CNewSmsWnd();
 
 	   static DWORD WINAPI   ProxyRun(LPVOID lp);
@@ -67,7 +62,7 @@ class CNewSmsWnd : public /*CMzWndEx*/ CEasySmsWndBase
 		UINT						m_uShowNotifyWnd;
 		// ÎÄ±¾
 		UiEditControl				m_Recievers;
-		CMyEdit						m_SmsMsgEdit;
+		CMyEdit*					m_SmsMsgEdit;
 
 		DWORD						m_accMsg;
 		DWORD						m_smsMsg;

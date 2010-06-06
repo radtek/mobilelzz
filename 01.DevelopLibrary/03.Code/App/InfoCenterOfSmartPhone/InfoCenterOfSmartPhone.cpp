@@ -39,8 +39,24 @@ class CMainApp: public CMzApp
 {
 public:
   // 应用程序的主窗口
-	CNewSmsWnd			m_SmsWnd;
-	CEasySmsMainWnd		m_MainWnd;
+	CMainApp()
+	{
+		m_pSmsWnd = NULL;
+		m_pMainWnd = NULL;
+	}
+	~CMainApp()
+	{
+		if ( m_pMainWnd ){
+			delete m_pMainWnd;
+		}
+		if ( m_pSmsWnd ){
+			delete m_pSmsWnd;
+		}
+		m_pSmsWnd = NULL;
+		m_pMainWnd = NULL;
+	}
+	CNewSmsWnd*				m_pSmsWnd;
+	CEasySmsMainWnd*		m_pMainWnd;
   // 应用程序的初始化
   virtual BOOL Init()
   {
@@ -63,32 +79,39 @@ public:
 
 
     CoInitializeEx(0, COINIT_MULTITHREADED);
-
+	
 	// 根据命令行，创建指定的窗口
 	wchar_t	*pCmdLine	=	GetCommandLine();
 	if ( L'\0' == pCmdLine[0] )			//创建主窗口
 	{
+		if ( !m_pMainWnd ){
+			m_pMainWnd = new CEasySmsMainWnd;
+		}
 		RECT rcWork = MzGetWorkArea();
-		m_MainWnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0);
+		m_pMainWnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0);
 
 		if ( MzGetParam ( MZGP_APP_START_ANIMATION ) ==TRUE )   
 		{
-			m_MainWnd.AnimateWindow( getScreenRandom() , true);
+			m_pMainWnd->AnimateWindow( getScreenRandom() , true);
 		}
 
-		m_MainWnd.Show();
+		m_pMainWnd->Show();
 	}
  	else if ( 0 == wcscmp( pCmdLine, L"NewSms" ) )
  	{
+		if ( !m_pSmsWnd ){
+			m_pSmsWnd = new CNewSmsWnd;
+		}
 		RECT rcWork = MzGetWorkArea();
-		m_SmsWnd.Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0);
+		m_pSmsWnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0);
 
 		if ( MzGetParam ( MZGP_APP_START_ANIMATION ) ==TRUE )   
 		{
-			m_SmsWnd.AnimateWindow( getScreenRandom() , true);
+			m_pSmsWnd->AnimateWindow( getScreenRandom() , true);
 		}
 
-		m_SmsWnd.DoModal();
+		m_pSmsWnd->DoModal();
+		exit(1);
 //		m_SmsWnd.Show();
  	}
 

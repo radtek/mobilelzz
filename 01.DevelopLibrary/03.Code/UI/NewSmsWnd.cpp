@@ -1,8 +1,5 @@
 #include "stdafx.h"
 #include "resource.h"
-
-
-
 #include "UiEditControl.h"
 #include "ContactorsWnd.h"
 #include "NewSmsWnd.h"
@@ -281,8 +278,15 @@ LRESULT CNewSmsWnd::MzDefWndProc( UINT message, WPARAM wParam, LPARAM lParam )
 
 			}
 		}
+		//case WM_IM_INFO:
+		//{
+		//	if ( wParam == IM_WIDEIMAGE ){
 
-		break;
+		//	}
+		//	BOOL b = SipRegisterNotification(m_hWnd);
+		//	break;
+		//}
+		
 		default:
 		{
 			if ( message == m_accMsg )

@@ -27,7 +27,8 @@ public:
 	APP_Result GetProtectDatas( NodeDataInfo** ppwcsProtectDataBuf, long* plBufCount );
 	APP_Result GetEditSmsInfos( NodeDataInfo** ppwcsProtectDataBuf, long* plBufCount );
 	APP_Result GetAddSmsInfos( NodeDataInfo** ppwcsProtectDataBuf, long* plBufCount );
-
+	APP_Result GetDetailSmsInfos( NodeDataInfo** ppwcsProtectDataBuf, long* plBufCount );
+	
 	APP_Result GetDeleteSIDs( NodeDataInfo** ppwcsDataBuf, long* plBufCount );
 protected:
 	virtual APP_Result MakeParam(wchar_t* pwcsRequestXML);

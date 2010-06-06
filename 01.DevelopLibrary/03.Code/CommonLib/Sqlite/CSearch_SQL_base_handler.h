@@ -6,7 +6,7 @@
 #include <vector>
 using namespace std;
 #define   Sms_SQL_CREATETABLE_SmsDetail	L"create table IF NOT EXISTS SmsDetail(sid integer PRIMARY KEY ASC, \
-											pid integer, type integer, content text, address text not null, time integer,\
+											pid integer, type integer, content text, address text not null, time real,\
 											lockstatus integer, readstatus integer)"
 #define   Sms_SQL_CREATETABLE_SmsCode	L"create table IF NOT EXISTS SmsCode(pid integer, \
 											code text)"
@@ -20,6 +20,7 @@ using namespace std;
 
 #define   Sms_SQL_GET_UnReadSms					L"select *  from SmsDetail where readstatus = 0"
 #define   Sms_SQL_GET_SmsList					L"select *  from SmsDetail"
+#define   Sms_SQL_GET_SmsDetail					L"select *  from SmsDetail where sid = ?"
 #define   Sms_SQL_GET_SmsListByContactor		L"select *  from SmsDetail where pid = ?"
 
 #define   Sms_SQL_GET_SmsGroupInfo			L"select *  from SmsGroup where pid = ?"

@@ -22,6 +22,7 @@ private:
 	APP_Result ExcuteForDelete(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
 	APP_Result ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
 	APP_Result ExcuteForEdit(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
+	APP_Result ExcuteForDetail(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
 	APP_Result ExcuteForList(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
 
 	APP_Result AddProtectDatta(CRequestXmlOperator& clReqXmlOpe, CXmlStream& clResultXml);
@@ -34,7 +35,7 @@ private:
 	APP_Result MakeSmsList(CRequestXmlOperator& clXmlOpe, CSQL_query* pQHandle, 
 					CXmlStream& clResultXml, BOOL bIsPermitDecode);
 	APP_Result MakeSmsListRecs( CSQL_query* pQHandle, CXmlNode* pNodeList, BOOL bIsPermitDecode,
-					long& lListCount, long& lEncodeCount );
+					BOOL bIsList, long& lListCount, long& lEncodeCount );
 	APP_Result CheckCode(long lPID, BOOL& bNeedDecode, 
 					wchar_t* pwcsDBCode, long lCodeSize);
 	APP_Result ConvertDisplayCode2DBCode(wchar_t* pwcsCode, wchar_t* pwcsDBCode, 
@@ -62,6 +63,8 @@ private:
 					Search_DateKind& enDateKind,CSQL_SmartQuery& pQHandle);
 
 	APP_Result UpdateSmsGroupInfo(long lPID);
+
+	APP_Result CheckIsPermitDecodeContent(long lPID, wchar_t* pDisplayCode, BOOL &bIsPermitDecode);
 private:
 	CSQL_SmartQuery			m_pQUnReadSms;
 	long				m_lID_QUnReadSms;
@@ -88,6 +91,8 @@ private:
 	long				m_lID_QUpdateSmsContent;
 
 	CSQL_SmartQuery			m_pQGetNameByPID;
+
+	CSQL_SmartQuery			m_pQGetDetailBySID;
 
 	CSQL_session*		m_pclSqlDBSession;
 	CSQL_session*		m_pclSqlContactsDBSession;

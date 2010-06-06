@@ -1,15 +1,33 @@
 #include"stdafx.h"
 #include <mzfc_inc.h>
-
+#include <atltypes.h>
 #include"UiEditControl.h"
 //#include"NewSmsWnd.h"
 #include"ContactorsWnd.h"
 #include "RecieversStringParser.h"
-
+CLSID g_classID;
 int my_IMENUMPROC(IMENUMINFO * pImInfo)
 {
 	wprintf( L"name:%s\n", pImInfo->szName );
-	return 0;
+	if ( 0 == wcscmp(L"LargeKB", pImInfo->szName) ){
+		SIPINFO SipInfo;
+		memset(&SipInfo,0,sizeof(SipInfo));
+		SipInfo.cbSize=sizeof(SIPINFO);
+		BOOL bRes = SipGetInfo(&SipInfo);
+		if ( bRes )
+		{
+			CRect rc(SipInfo.rcSipRect);
+			rc.OffsetRect(0,-20);
+			SipSetDefaultRect(&rc);
+		}
+		SipSetCurrentIM(&pImInfo->clsid);
+		SipShowIM(SIPF_ON);
+		SipSetCurrentIM(&g_classID);
+	}
+	else{
+		g_classID = pImInfo->clsid;
+	}
+	return 1;
 }
 
 UiEditControl::UiEditControl()
@@ -68,10 +86,11 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 				  )
 {
 	long lCount = SipEnumIM(NULL);
-	for ( int i = 0; i < lCount; i++ )
+	SipEnumIM( my_IMENUMPROC );
+	/*for ( int i = 0; i < lCount; i++ )
 	{
-		SipEnumIM( my_IMENUMPROC );
-	}
+		
+	}*/
 	SetSipMode(IM_SIP_MODE_DIGIT,MZM_HEIGHT_TEXT_TOOLBAR);
 	long lRowCount = GetRowCount();
 	UpdateFontColor(RGB(0,0,0),0,0,lRowCount,0);

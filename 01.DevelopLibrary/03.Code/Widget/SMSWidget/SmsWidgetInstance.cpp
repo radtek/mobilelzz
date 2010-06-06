@@ -196,34 +196,9 @@ UiWidget_Sms::UiWidget_Sms()
 			 if( m_NewSms_btn.GetID() == iID )
 			 {
 				 ////暂时这个Btn为取得未读短信////////////////////////////////////////////////
-
-				 wchar_t	*pBuf		=	NULL;
-				 long	lSize		=	0;
-				 wchar_t	*pwcResult	=	NULL;
-
-				 CCoreSmsUiCtrl		m_clCCoreSmsUiCtrl;
-				 HRESULT	hr	=	m_clCCoreSmsUiCtrl.MakeUnReadRltListReq( &pBuf, &lSize );
-				 if ( FAILED( hr ) )										return;
-
-				 CCoreService	*pCCoreService	=	CCoreService::GetInstance();
-				 if ( NULL == pCCoreService )								return;
-
-				 hr	=	pCCoreService->Request( pBuf, &pwcResult );
-				 if ( FAILED ( hr ) )										return;
-
-				 stCoreItemData	*pstCoreItemData	=	NULL;
-				 long			lCnt				=	0;
-
-				 hr	=	m_clCCoreSmsUiCtrl.MakeListRlt( pwcResult, &pstCoreItemData, &lCnt );
-				 if ( FAILED( hr ) )							return;
-
-				 for ( int i = 0; i < lCnt; ++i )
-				 {
-					 m_vecstCoreItemData.push_back( &( pstCoreItemData[i] ) );
-				 }
-
-				 if ( m_iCurPos <= m_vecstCoreItemData.size() )
-				 {
+				HRESULT	hr	=	GetUnReadMsg();
+				if ( m_iCurPos <= m_vecstCoreItemData.size() )
+				{
 					m_clCWidgetUiEdit.SetText( (m_vecstCoreItemData[m_iCurPos])->bstrContent.m_str );
 					m_TimeEdit.SetText( (m_vecstCoreItemData[m_iCurPos])->bstrTime.m_str );
 					if ( NULL != (m_vecstCoreItemData[m_iCurPos])->bstrName.m_str )
@@ -238,10 +213,10 @@ UiWidget_Sms::UiWidget_Sms()
 					{
 
 					}		
-				 }
+				}
 
-				 Invalidate();
-				 Update();
+				Invalidate();
+				Update();
 				 //////////////////////////////////////////////////////////////////////////
 			 }
 			 else if( m_Enter_btn.GetID() == iID )
@@ -285,6 +260,36 @@ UiWidget_Sms::UiWidget_Sms()
 		 }	 
 	 }
 
+ }
+
+ HRESULT	UiWidget_Sms::GetUnReadMsg()
+ {
+	 wchar_t	*pBuf		=	NULL;
+	 long	lSize		=	0;
+	 wchar_t	*pwcResult	=	NULL;
+
+	 CCoreSmsUiCtrl		m_clCCoreSmsUiCtrl;
+	 HRESULT	hr	=	m_clCCoreSmsUiCtrl.MakeUnReadRltListReq( &pBuf, &lSize );
+	 if ( FAILED( hr ) )										return	E_FAIL;
+
+	 CCoreService	*pCCoreService	=	CCoreService::GetInstance();
+	 if ( NULL == pCCoreService )								return	E_FAIL;
+
+	 hr	=	pCCoreService->Request( pBuf, &pwcResult );
+	 if ( FAILED ( hr ) )										return	E_FAIL;
+
+	 stCoreItemData	*pstCoreItemData	=	NULL;
+	 long			lCnt				=	0;
+
+	 hr	=	m_clCCoreSmsUiCtrl.MakeListRlt( pwcResult, &pstCoreItemData, &lCnt );
+	 if ( FAILED( hr ) )							return	E_FAIL;
+
+	 for ( int i = 0; i < lCnt; ++i )
+	 {
+		 m_vecstCoreItemData.push_back( &( pstCoreItemData[i] ) );
+	 }
+
+	 return	S_OK;
  }
 
 UiWidget_Sms::~UiWidget_Sms()

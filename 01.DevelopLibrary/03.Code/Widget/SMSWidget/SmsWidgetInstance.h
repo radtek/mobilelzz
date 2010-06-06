@@ -40,6 +40,8 @@ protected:
 
 	virtual void OnWmNotify( HWND hWnd, UINT nMessage, WPARAM wParam, LPARAM lParam );
 
+	HRESULT	GetUnReadMsg();
+
     unsigned int m_rand;
 
     ImageContainer m_imgContainer;

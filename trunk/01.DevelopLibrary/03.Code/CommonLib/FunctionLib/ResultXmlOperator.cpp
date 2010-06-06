@@ -503,7 +503,8 @@ APP_Result		CCoreSmsUiCtrl::GetInfo( IN CXmlNode *pCXmlNode, OUT stCoreItemData	
 			bstrTime.Append(L":");
 
 			memset( buffer, 0x0, sizeof( buffer ) );
-			_ltow( stSystemTime.wMinute, buffer, 10 );
+			//_ltow( stSystemTime.wMinute, buffer, 10 );
+			wsprintf(buffer, L"%02d", stSystemTime.wMinute);
 			bstrTime.Append( buffer );
 
 			pstItemData->bstrTime	=	bstrTime.m_str;

@@ -88,7 +88,8 @@ public:
 			m_SmsWnd.AnimateWindow( getScreenRandom() , true);
 		}
 
-		m_SmsWnd.Show();
+		m_SmsWnd.DoModal();
+//		m_SmsWnd.Show();
  	}
 
 #if 0

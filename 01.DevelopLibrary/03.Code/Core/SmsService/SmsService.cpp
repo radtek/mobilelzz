@@ -434,7 +434,7 @@ APP_Result CSmsService::ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& 
 	}
 	SYSTEMTIME stTime;
 	memset(&stTime,0x0,sizeof(stTime));
-	GetSystemTime(&stTime);
+	GetLocalTime(&stTime);
 	double dTime = 0;
 	SystemTimeToVariantTime(&stTime, &dTime);
 	pQHandle->Bind(6, dTime);

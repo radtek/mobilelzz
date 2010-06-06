@@ -1,7 +1,7 @@
 #include "stdafx.h"
 //#include "./TinySrc/tinyxml.h"
 #include "XmlStream.h"
-
+#include "FuncLib.h"
 //class
 
 class CFindChar
@@ -273,8 +273,24 @@ APP_Result CXmlNode::SetNodeContent( wchar_t* pwcsNodePath, long lNodeValue, Nod
 APP_Result CXmlNode::SetNodeContent( wchar_t* pwcsNodePath, double dNodeValue, NodeAttribute_t* ppAttributes, long lAttributesCount )
 {
 	APP_Result	hr	=	APP_Result_S_OK;
-	wchar_t pwcsNodeValue[128] = L"";
-	_ltow(dNodeValue, pwcsNodeValue, 10);
+	int dec, sign; 
+	char* pDoubleStr = _fcvt(dNodeValue, 20, &dec, &sign);
+	char astrDouble[128] = "";
+	strcpy(astrDouble, pDoubleStr);
+	long lByteCount = strlen(pDoubleStr);
+	BOOL bIsLastZero = TRUE;
+	for ( int i = 0; i < (lByteCount-dec); i++ )
+	{
+		astrDouble[lByteCount-i] = astrDouble[lByteCount-i-1];
+		if ( ('0' ==  astrDouble[lByteCount-i]) && bIsLastZero ){
+			astrDouble[lByteCount-i] = 0;
+		}else{
+			bIsLastZero = FALSE;
+		}
+	}
+	astrDouble[dec] = '.';
+	wchar_t pwcsNodeValue[128] = L"";	
+	S_MultiByte2WideChar(astrDouble, lByteCount+1, pwcsNodeValue, 128);
 	hr = SetNodeContent(pwcsNodePath, pwcsNodeValue, ppAttributes, lAttributesCount);
 
 	return	hr;

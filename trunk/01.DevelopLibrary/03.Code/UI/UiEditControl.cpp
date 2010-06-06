@@ -86,7 +86,7 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 				  )
 {
 	long lCount = SipEnumIM(NULL);
-	SipEnumIM( my_IMENUMPROC );
+	//SipEnumIM( my_IMENUMPROC );
 	/*for ( int i = 0; i < lCount; i++ )
 	{
 		

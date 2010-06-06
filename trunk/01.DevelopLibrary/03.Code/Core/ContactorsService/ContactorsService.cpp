@@ -235,8 +235,9 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 		clNodeFirstLetter.SetNodeContent(NULL, awcsFirstLetter, NULL, 0);
 
 		wchar_t* pNumber = NULL;
-		m_pQContactorsList->GetField(4, &pNumber);		
-		CXmlNode clNodeNumber(L"defaultno");
+		m_pQContactorsList->GetField(4, &pNumber);
+		//Modify by zhu.t : defaultno ====> address
+		CXmlNode clNodeNumber(L"address");
 		clNodeNumber.SetNodeContent(NULL, pNumber, NULL, 0);			
 		
 		wchar_t awcsSmsCount[20] = L"";
@@ -313,8 +314,8 @@ void CContactorsService::AppendStranger(vector<CXmlNode*>& vecList)
 
 		CXmlNode clNodeFirstLetter(L"firstletter");
 		clNodeFirstLetter.SetNodeContent(NULL, L"M", NULL, 0);
-
-		CXmlNode clNodeNumber(L"defaultno");
+		//Modify by zhu.t : defaultno ====> address
+		CXmlNode clNodeNumber(L"address");
 		clNodeNumber.SetNodeContent(NULL, L"", NULL, 0);
 
 		wchar_t awcsSmsCount[20] = L"";

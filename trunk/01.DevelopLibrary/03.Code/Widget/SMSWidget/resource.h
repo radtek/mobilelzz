@@ -15,6 +15,8 @@
 #define	IDR_ARROW_RIGHT_UP					115
 #define	IDR_ARROW_RIGHT_DOWN				116
 
+#define IDR_UIEDIT_BACKGROUND				117
+
 
 // Next default values for new objects
 // 

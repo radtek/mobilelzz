@@ -65,6 +65,8 @@ IDR_ARROW_LEFT_DOWN	    RCDATA			"arrow_left_down.png"
 IDR_ARROW_RIGHT_UP	    RCDATA			"arrow_right.png"
 IDR_ARROW_RIGHT_DOWN	    RCDATA			"arrow_right_down.png"
 
+IDR_UIEDIT_BACKGROUND	    RCDATA			"UiEdit_BackGround.png"
+
 #endif    // 中文(中华人民共和国) resources
 /////////////////////////////////////////////////////////////////////////////
 

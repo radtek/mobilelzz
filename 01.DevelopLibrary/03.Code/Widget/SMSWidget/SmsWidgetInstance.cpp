@@ -240,20 +240,35 @@ UiWidget_Sms::UiWidget_Sms()
 					}		
 				 }
 
-//				 m_clCWidgetUiEdit.SetText( L"尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。" );
-//				 m_TimeEdit.SetText(L"时间: 15:30  2010年6月6日");
-//				 m_TelEdit.SetText(L"13609836338");
 				 Invalidate();
 				 Update();
 				 //////////////////////////////////////////////////////////////////////////
 			 }
 			 else if( m_Enter_btn.GetID() == iID )
 			 {
-				int i=0;
+				 SHELLEXECUTEINFO ShellInfo;
+				 memset(&ShellInfo, 0, sizeof(ShellInfo));
+				 ShellInfo.cbSize = sizeof(ShellInfo);
+				 ShellInfo.hwnd = NULL;
+				 ShellInfo.lpVerb = _T("open");
+				 ShellInfo.lpFile = _T("\\Program Files\\InfoCenterOfSmartPhone\\InfoCenterOfSmartPhone.exe");//文件全名（包含了整个路径）
+				 ShellInfo.nShow = SW_SHOWNORMAL;
+				 ShellInfo.fMask = SEE_MASK_NOCLOSEPROCESS; 
+				 ShellExecuteEx(&ShellInfo);
+
 			 }
 			 else if( m_Send_btn.GetID() == iID )
 			 {
-				int i=0;
+				 SHELLEXECUTEINFO ShellInfo;
+				 memset(&ShellInfo, 0, sizeof(ShellInfo));
+				 ShellInfo.cbSize = sizeof(ShellInfo);
+				 ShellInfo.hwnd = NULL;
+				 ShellInfo.lpVerb = _T("open");
+				 ShellInfo.lpFile = _T("\\Program Files\\InfoCenterOfSmartPhone\\InfoCenterOfSmartPhone.exe");
+				 ShellInfo.lpParameters = _T( "NewSms" );
+				 ShellInfo.nShow = SW_SHOWNORMAL;
+				 ShellInfo.fMask = SEE_MASK_NOCLOSEPROCESS; 
+				 ShellExecuteEx(&ShellInfo);
 			 }
 			 else if( m_ArrowLeft.GetID() == iID )
 			 {

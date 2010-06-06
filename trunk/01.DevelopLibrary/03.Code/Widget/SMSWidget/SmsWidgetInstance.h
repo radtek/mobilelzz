@@ -6,7 +6,11 @@ using namespace std;
 #include "atlbase.h"
 
 #include "WidgetUiEdit.h"
-
+#include "../../App/CommonLib/CommonLib.h"
+#include "../../CommonLib/FunctionLib/Errors.h"
+#include "../../Core/ServiceControl/CoreService.h"
+#include "../../CommonLib/Xml/XmlStream.h"
+#include "../../CommonLib/FunctionLib/ResultXmlOperator.h"
 // Widget必须从UiWidget派生
 // 根据需要，可重载StartWidget()以自定义Widget的启动行为
 
@@ -65,4 +69,8 @@ protected:
 	UiEdit							m_TelEdit;
 
 private:
+
+	vector<  stCoreItemData	* >		m_vecstCoreItemData;
+
+	int								m_iCurPos;
 };

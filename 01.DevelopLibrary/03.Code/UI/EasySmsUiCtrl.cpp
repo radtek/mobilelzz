@@ -38,6 +38,11 @@ HRESULT		CEasySmsUiCtrl::MakeUnReadRltListReq( wchar_t **ppBuf, long *lSize )
 	return	m_clCCoreSmsUiCtrl.MakeUnReadRltListReq( ppBuf, lSize );
 }
 
+HRESULT		CEasySmsUiCtrl::MakeDeleteSmsInfo( OUT wchar_t **ppBuf, OUT long *lSize, IN long *plSid, IN long lCnt )
+{
+	return	m_clCCoreSmsUiCtrl.MakeDeleteSmsInfo( ppBuf, lSize, plSid, lCnt );
+}
+
 HRESULT		CEasySmsUiCtrl::MakeUnReadListRlt ( CEasySmsListBase &clCEasySmsListBase, wchar_t *pwcRltStream )
 {
 	if ( NULL == pwcRltStream )

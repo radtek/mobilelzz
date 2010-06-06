@@ -195,29 +195,11 @@ UiWidget_Sms::UiWidget_Sms()
 		 {
 			 if( m_NewSms_btn.GetID() == iID )
 			 {
-				 ////暂时这个Btn为取得未读短信////////////////////////////////////////////////
+				////暂时这个Btn为取得未读短信////////////////////////////////////////////////
 				HRESULT	hr	=	GetUnReadMsg();
-				if ( m_iCurPos <= m_vecstCoreItemData.size() )
-				{
-					m_clCWidgetUiEdit.SetText( (m_vecstCoreItemData[m_iCurPos])->bstrContent.m_str );
-					m_TimeEdit.SetText( (m_vecstCoreItemData[m_iCurPos])->bstrTime.m_str );
-					if ( NULL != (m_vecstCoreItemData[m_iCurPos])->bstrName.m_str )
-					{
-						m_TelEdit.SetText( (m_vecstCoreItemData[m_iCurPos])->bstrName.m_str );
-					}
-					else if ( NULL != (m_vecstCoreItemData[m_iCurPos])->bstrTelNo.m_str )
-					{
-						m_TelEdit.SetText( (m_vecstCoreItemData[m_iCurPos])->bstrTelNo.m_str );
-					}
-					else
-					{
-
-					}		
-				}
-
-				Invalidate();
-				Update();
-				 //////////////////////////////////////////////////////////////////////////
+				if ( FAILED ( hr ) )				return;
+				hr	=	ShowMsg();
+				//////////////////////////////////////////////////////////////////////////
 			 }
 			 else if( m_Enter_btn.GetID() == iID )
 			 {
@@ -247,19 +229,57 @@ UiWidget_Sms::UiWidget_Sms()
 			 }
 			 else if( m_ArrowLeft.GetID() == iID )
 			 {
-				int i=0;
+				-- m_iCurPos;
+				if ( 0 > m_iCurPos )
+				{
+					m_iCurPos	=	m_vecstCoreItemData.size() - 1;
+				}
+
+				ShowMsg();
 			 }
 			 else if( m_ArrowRight.GetID() == iID )
 			 {
-				int i=0;
+				++ m_iCurPos;
+				if ( m_iCurPos >= m_vecstCoreItemData.size() )
+				{
+					m_iCurPos	=	0;
+				}
+
+				ShowMsg();
 			 }
 			 else
 			 {
-				int i=0;
+				_ASSERT( 0 );
 			 }
 		 }	 
 	 }
 
+ }
+
+ HRESULT	UiWidget_Sms::ShowMsg()
+ {
+	 if ( m_iCurPos <= m_vecstCoreItemData.size() )
+	 {
+		 m_clCWidgetUiEdit.SetText( (m_vecstCoreItemData[m_iCurPos])->bstrContent.m_str );
+		 m_TimeEdit.SetText( (m_vecstCoreItemData[m_iCurPos])->bstrTime.m_str );
+		 if ( NULL != (m_vecstCoreItemData[m_iCurPos])->bstrName.m_str )
+		 {
+			 m_TelEdit.SetText( (m_vecstCoreItemData[m_iCurPos])->bstrName.m_str );
+		 }
+		 else if ( NULL != (m_vecstCoreItemData[m_iCurPos])->bstrTelNo.m_str )
+		 {
+			 m_TelEdit.SetText( (m_vecstCoreItemData[m_iCurPos])->bstrTelNo.m_str );
+		 }
+		 else
+		 {
+
+		 }		
+	 }
+
+	 Invalidate();
+	 Update();
+
+	return	S_OK;
  }
 
  HRESULT	UiWidget_Sms::GetUnReadMsg()

@@ -5,22 +5,8 @@
 
 #include "../CommonLib/FunctionLib/CommonTypes.h"
 
-class CEasySmsWndBase;
 
-typedef struct ItemData_t
-{
-	long		lPid;
-	long		lSid;
-	long		lCnt;
-	bool		bIsLock;
-	bool		bIsRead;
-	wchar_t		cFirst;
-	CComBSTR	bstrTelNo;
-	CComBSTR	bstrName;
-	CComBSTR	bstrTime;
-	CComBSTR	bstrDetail;
-//	char	cIcon;
-}stItemData;
+class CEasySmsWndBase;
 
 /////////////////CEasySmsListBase/////////////////////////////////////////////////////////
 class CEasySmsListBase	:	public	UiListEx
@@ -83,6 +69,8 @@ class CEasySmsWndBase : public CMzWndEx
 		virtual void	DoSthForTooBarHoldPress( int	nIndex );
 
 		virtual void	ReturnToMainWnd();
+
+		virtual HRESULT	RemoveSmsInDb( ListItemEx* pItem );
 
 	private:
 		

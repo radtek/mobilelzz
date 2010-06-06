@@ -1,7 +1,7 @@
 #include"stdafx.h"
 #include "resource.h"
-
 #include "EasySmsWndBase.h"
+#include "EasySmsUiCtrl.h"
 
 
 /////////////////////CSmsLookCtorList/////////////////////////////////////////////////////
@@ -208,4 +208,24 @@ void	CEasySmsWndBase::DoSthForTooBarHoldPress( int	nIndex )
 void	CEasySmsWndBase::ReturnToMainWnd()
 {
 	this->EndModal( ID_CASCADE_EXIT );
+}
+
+HRESULT	CEasySmsWndBase::RemoveSmsInDb( ListItemEx* pItem )
+{
+	//get sid
+
+	stCoreItemData *pstCoreItemData	=	(stCoreItemData *)(pItem->m_pData);
+	long	lSid	=	pstCoreItemData->lSid;
+
+	//delete
+	wchar_t	*pBuf		=	NULL;
+	long	lSize		=	0;
+	wchar_t	*pwcResult	=	NULL;
+
+	CEasySmsUiCtrl	clCEasySmsUiCtrl;
+	clCEasySmsUiCtrl.MakeDeleteSmsInfo( &pBuf, &lSize, &lSid, 1 );
+
+
+	
+	return	S_OK;
 }

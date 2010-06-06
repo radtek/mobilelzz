@@ -1,11 +1,5 @@
 #include "SmsWidgetInstance.h"
 #include "resource.h"
-#include "../../App/CommonLib/CommonLib.h"
-#include "../../CommonLib/FunctionLib/Errors.h"
-#include "../../Core/ServiceControl/CoreService.h"
-#include "../../CommonLib/Xml/XmlStream.h"
-#include "../../CommonLib/FunctionLib/ResultXmlOperator.h"
-
 
 //#define MZ_IDC_NEW_SMS  101
 //#define MZ_IDC_SEND		102
@@ -47,23 +41,6 @@ void UiWidget_Sms::PaintWin( HDC hdcDst, RECT* prcWin, RECT* prcUpdate )
 int UiWidget_Sms::OnLButtonDown( UINT fwKeys, int xPos, int yPos )
 {
     int iRet = UiWidget::OnLButtonDown(fwKeys, xPos, yPos);
-
-
-	////test//////////////////////////////////////////////////////////////////////////
-
-	wchar_t	*pBuf		=	NULL;
-	long	lSize		=	0;
-	wchar_t	*pwcResult	=	NULL;
-
-	CCoreSmsUiCtrl		m_clCCoreSmsUiCtrl;
-	m_clCCoreSmsUiCtrl.MakeUnReadRltListReq( &pBuf, &lSize );
-
-	m_clCWidgetUiEdit.SetText( L"尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。" );
-	m_TimeEdit.SetText(L"时间: 15:30  2010年6月6日");
-	m_TelEdit.SetText(L"13609836338");
-	Invalidate();
-	Update();
-	//////////////////////////////////////////////////////////////////////////
     return iRet;
 }
 
@@ -87,10 +64,11 @@ int UiWidget_Sms::OnMouseMove( UINT fwKeys, int xPos, int yPos )
     return iRet;
 }
 
-UiWidget_Sms::UiWidget_Sms()
+UiWidget_Sms::UiWidget_Sms()	
 {
 	m_CurIndex		= 0;
 	m_TotalCount	= 0;
+	m_iCurPos		=	0;
 
 	ImagingHelper* NewSmsUp		= m_imgContainer.LoadImage( GetModuleHandle(L"SmsWidget.dll"), IDR_NEW_SMS_UP, true);
 	ImagingHelper* NewSmsDown	= m_imgContainer.LoadImage( GetModuleHandle(L"SmsWidget.dll"), IDR_NEW_SMS_DOWN, true);
@@ -217,8 +195,57 @@ UiWidget_Sms::UiWidget_Sms()
 		 {
 			 if( m_NewSms_btn.GetID() == iID )
 			 {
-				 // processs
-				 int i=0;
+				 ////暂时这个Btn为取得未读短信////////////////////////////////////////////////
+
+				 wchar_t	*pBuf		=	NULL;
+				 long	lSize		=	0;
+				 wchar_t	*pwcResult	=	NULL;
+
+				 CCoreSmsUiCtrl		m_clCCoreSmsUiCtrl;
+				 HRESULT	hr	=	m_clCCoreSmsUiCtrl.MakeUnReadRltListReq( &pBuf, &lSize );
+				 if ( FAILED( hr ) )										return;
+
+				 CCoreService	*pCCoreService	=	CCoreService::GetInstance();
+				 if ( NULL == pCCoreService )								return;
+
+				 hr	=	pCCoreService->Request( pBuf, &pwcResult );
+				 if ( FAILED ( hr ) )										return;
+
+				 stCoreItemData	*pstCoreItemData	=	NULL;
+				 long			lCnt				=	0;
+
+				 hr	=	m_clCCoreSmsUiCtrl.MakeListRlt( pwcResult, &pstCoreItemData, &lCnt );
+				 if ( FAILED( hr ) )							return;
+
+				 for ( int i = 0; i < lCnt; ++i )
+				 {
+					 m_vecstCoreItemData.push_back( &( pstCoreItemData[i] ) );
+				 }
+
+				 if ( m_iCurPos <= m_vecstCoreItemData.size() )
+				 {
+					m_clCWidgetUiEdit.SetText( (m_vecstCoreItemData[m_iCurPos])->bstrContent.m_str );
+					m_TimeEdit.SetText( (m_vecstCoreItemData[m_iCurPos])->bstrTime.m_str );
+					if ( NULL != (m_vecstCoreItemData[m_iCurPos])->bstrName.m_str )
+					{
+						m_TelEdit.SetText( (m_vecstCoreItemData[m_iCurPos])->bstrName.m_str );
+					}
+					else if ( NULL != (m_vecstCoreItemData[m_iCurPos])->bstrTelNo.m_str )
+					{
+						m_TelEdit.SetText( (m_vecstCoreItemData[m_iCurPos])->bstrTelNo.m_str );
+					}
+					else
+					{
+
+					}		
+				 }
+
+//				 m_clCWidgetUiEdit.SetText( L"尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。尊敬的用户：因您的手机外形难看，严重影响市容，本中心将在十分钟发射强信息摧毁该手机，望见谅。" );
+//				 m_TimeEdit.SetText(L"时间: 15:30  2010年6月6日");
+//				 m_TelEdit.SetText(L"13609836338");
+				 Invalidate();
+				 Update();
+				 //////////////////////////////////////////////////////////////////////////
 			 }
 			 else if( m_Enter_btn.GetID() == iID )
 			 {
@@ -255,6 +282,18 @@ UiWidget_Sms::~UiWidget_Sms()
 	SW_ReleaseID( m_clCWidgetUiEdit.GetID() );
 	SW_ReleaseID( m_TimeEdit.GetID() );
 	SW_ReleaseID( m_TelEdit.GetID() );
+
+	int iSize	=	m_vecstCoreItemData.size();
+	for ( int i = 0; i < iSize; ++i )
+	{
+		if ( NULL != m_vecstCoreItemData[i] )
+		{
+			delete	m_vecstCoreItemData[i];
+			m_vecstCoreItemData[i]	=	NULL;
+		}
+	}
+
+	m_vecstCoreItemData.clear();
 }
 
 bool UiWidget_Sms::StartWidget()

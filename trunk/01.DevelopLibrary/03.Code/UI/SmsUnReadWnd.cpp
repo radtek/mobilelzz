@@ -141,42 +141,6 @@ BOOL	CSmsUnReadWnd::SubInitialize()
 		AddUiWin( &m_list_base );
 	}
 
-#if 0
-	CMzString content = L"短信内容 SmsContent%d:";
-	CMzString stime = L"12:20";
-
-	CMzString content1(30);
-	for (int i = 0; i < 100; i++)
-	{
-		swprintf(content1.C_Str(),content.C_Str(),i);
-
-		ListItemEx* item = new ListItemEx;
-		item->m_pData = (void*)i;
-
-		item->m_textPostscript1 = stime.C_Str();
-
-		if (i == 2)
-		{
-			item->m_textDescription = L"content: I&apos;m dying to see u! what? I couldn&apos;t get it";
-		}
-		else if(i == 6)
-		{
-			item->m_textDescription = L"我这里天快要黑了，那里呢？我这里天气凉凉的那里呢？ 我这里一切都变了，而那你呢？";
-		}
-		else
-		{
-			item->m_textDescription = content1.C_Str();
-		}
-
-		item->m_pImgFirst = m_imgContainer_base.LoadImage(MzGetInstanceHandle(), IDR_PNG_CTR_LIST_READ, true);
-
-		item->m_itemBgType	=	UILIST_ITEM_BGTYPE_YELLOW;
-		m_list_base.AddItem(item);
-	}
-
-#endif
-	/////////////test/////////////////////////////////////////////////////////////
-
 	if ( NULL != pBuf )
 	{
 		delete	pBuf, pBuf	=	NULL;
@@ -188,7 +152,7 @@ BOOL	CSmsUnReadWnd::SubInitialize()
 void	CSmsUnReadWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 {
 	int iRlt	=	-1;
-	bool	bIsLock		=	( ( stItemData* )( pItem->m_pData ) )->bIsLock;
+	bool	bIsLock		=	( ( stCoreItemData* )( pItem->m_pData ) )->bIsLock;
 
 // 	if ( bIsLock )					//该联系人是被加锁的
 // 	{
@@ -222,6 +186,9 @@ void	CSmsUnReadWnd::DoSthForItemRemove( ListItemEx* pItem )
 {
 	if ( NULL != pItem )
 	{
+		HRESULT	hr	=	RemoveSmsInDb( pItem );
+		if ( FAILED ( hr ) )						return;
+		
 		if ( NULL != pItem->m_pData )
 		{
 			delete	pItem->m_pData;

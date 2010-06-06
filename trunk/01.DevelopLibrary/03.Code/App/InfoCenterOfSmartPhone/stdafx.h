@@ -20,10 +20,15 @@ using namespace std;
 #include "Errors.h"
 #include"FuncLib.h"
 #include"CommonTypes.h"
-
 #include "Core.h"
 #include "windows.h"
 #include "atlbase.h"
+
+#include "../CommonLib/Xml/XmlStream.h"
+#include "../Core/ServiceControl/BasicService.h"
+#include "../CommonLib/FunctionLib/RequestXmlOperator.h"
+#include "../CommonLib/FunctionLib/ResultXmlOperator.h"
+#include "../Core/SmsService/SmsService.h"
 //显示图片的不同模式
 static DWORD modeId[4]=
 {

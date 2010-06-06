@@ -162,7 +162,7 @@ BOOL	CSmsEncrytpCtorWnd::SubInitialize()
 
 void	CSmsEncrytpCtorWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 {
-	stItemData	*pstItemData	=	( stItemData* )( pItem->m_pData );
+	stCoreItemData	*pstItemData	=	( stCoreItemData* )( pItem->m_pData );
 	if ( NULL != pstItemData )
 	{
 		CSmsPassInputWnd	clCSmsPassInputWnd;

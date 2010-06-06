@@ -76,7 +76,7 @@ BOOL	CSmsLookMsgWnd::SubInitialize()
 	wchar_t	*pwcResult	=	NULL;
 
 
-	HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeMsgRltListReq( &pBuf, &lSize, ((stItemData*)(m_pListInfo->m_pData))->lPid );
+	HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeMsgRltListReq( &pBuf, &lSize, ((stCoreItemData*)(m_pListInfo->m_pData))->lPid );
 	if ( FAILED ( hr ) )										return	FALSE;
 
 	CCoreService	*pCCoreService	=	CCoreService::GetInstance();
@@ -133,7 +133,7 @@ void	CSmsLookMsgWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 	wchar_t	*pwcResult	=	NULL;
 
 
-	stItemData*	pstItemData	=	(stItemData*)(pItem->m_pData);
+	stCoreItemData*	pstItemData	=	(stCoreItemData*)(pItem->m_pData);
 	HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeDetailRltListReq( &pBuf, &lSize, pstItemData->lSid );
 
 	CCoreService	*pCCoreService	=	CCoreService::GetInstance();

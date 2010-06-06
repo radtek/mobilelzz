@@ -132,7 +132,71 @@ APP_Result		CCoreSmsUiCtrl::MakeMsgRltListReq    ( UiCodeChar **ppBuf, long *lSi
 	return	hr;
 }
 
-APP_Result		CCoreSmsUiCtrl::MakeSendSmsInfo		 ( wchar_t **ppBuf, long *lSize, wchar_t *pwcSmsInfo, wchar_t* pwcsNumber )
+APP_Result		CCoreSmsUiCtrl::MakeDeleteSmsInfo	 ( OUT UiCodeChar **ppBuf, OUT long *lSize, IN long *plSid, IN long lCnt  )
+{
+	CXmlStream	*pCXmlStream	=	new	CXmlStream;
+
+	if ( NULL == pCXmlStream )
+	{
+		return	APP_Result_E_Fail;
+	}
+
+	APP_Result	hr		=		APP_Result_S_OK;
+
+	do 
+	{
+		hr	=	pCXmlStream->Initialize();
+		if ( FAILED_App( hr ) )													break;
+
+		CXmlNode	*	pCXmlNode	=	NULL;
+
+		NodeAttribute_t  stNodeAttr;
+		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
+
+		F_wcscpyn( stNodeAttr.wcsName, L"type", CHAR_MAX_LENGTH );
+		F_wcscpyn( stNodeAttr.wcsValue, L"sms", CHAR_MAX_LENGTH );
+
+		hr	=	MakeNode( pCXmlStream, L"request/data/", &stNodeAttr, 1 );
+		if ( FAILED_App( hr ) )													break;
+
+		//////////////////////////////////////////////////////////////////////////
+		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
+		F_wcscpyn( stNodeAttr.wcsName , L"type", CHAR_MAX_LENGTH );
+		F_wcscpyn( stNodeAttr.wcsValue, L"delete", CHAR_MAX_LENGTH );
+
+		hr	=	MakeNode( pCXmlStream, L"request/data/operation/", &stNodeAttr, 1 );
+		if ( FAILED_App( hr ) )													break;
+
+		//////////////////////////////////////////////////////////////////////////
+		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
+		F_wcscpyn( stNodeAttr.wcsName , L"kind", CHAR_MAX_LENGTH );
+		F_wcscpyn( stNodeAttr.wcsValue, L"sids", CHAR_MAX_LENGTH );
+
+		hr	=	MakeNode( pCXmlStream, L"request/data/operation/", &stNodeAttr, 1 );
+		if ( FAILED_App( hr ) )													break;
+		//////////////////////////////////////////////////////////////////////////
+		for ( int i = 0; i < lCnt; ++i )
+		{
+			hr	=	MakeNode( pCXmlStream, L"request/data/operation/sid/", NULL, NULL, (void*)&(plSid[i]), EN_CORE_LONG );
+			if ( FAILED_App( hr ) )												break;
+		}
+
+		//////////////////////////////////////////////////////////////////////////
+		hr	=	pCXmlStream->GetXmlStream( ppBuf, lSize );
+		if ( FAILED_App( hr ) )													break;
+
+	} while ( false );
+
+
+	if ( NULL != pCXmlStream )
+	{
+		delete	pCXmlStream;
+	}
+
+	return	hr;
+}
+
+APP_Result		CCoreSmsUiCtrl::MakeSendSmsInfo		 ( UiCodeChar **ppBuf, long *lSize, UiCodeChar *pwcSmsInfo, UiCodeChar* pwcsNumber )
 {
 	CXmlStream	*pCXmlStream	=	new	CXmlStream;
 

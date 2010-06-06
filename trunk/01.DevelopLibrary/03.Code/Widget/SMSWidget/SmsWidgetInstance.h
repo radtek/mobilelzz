@@ -41,6 +41,7 @@ protected:
 	virtual void OnWmNotify( HWND hWnd, UINT nMessage, WPARAM wParam, LPARAM lParam );
 
 	HRESULT	GetUnReadMsg();
+	HRESULT	ShowMsg();
 
     unsigned int m_rand;
 

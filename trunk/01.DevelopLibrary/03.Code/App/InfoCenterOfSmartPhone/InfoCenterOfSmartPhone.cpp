@@ -55,7 +55,7 @@ public:
 		m_pSmsWnd = NULL;
 		m_pMainWnd = NULL;
 	}
-	/*CNewSmsWnd*/CSmsUnReadWnd*				m_pSmsWnd;
+	CNewSmsWnd/*CSmsUnReadWnd*/*				m_pSmsWnd;
 	CEasySmsMainWnd*		m_pMainWnd;
   // 应用程序的初始化
   virtual BOOL Init()
@@ -100,7 +100,7 @@ public:
  	else if ( 0 == wcscmp( pCmdLine, L"NewSms" ) )
  	{
 		if ( !m_pSmsWnd ){
-			m_pSmsWnd = new /*CNewSmsWnd*/CSmsUnReadWnd;
+			m_pSmsWnd = new CNewSmsWnd/*CSmsUnReadWnd*/;
 		}
 		RECT rcWork = MzGetWorkArea();
 		m_pSmsWnd->Create(rcWork.left,rcWork.top,RECT_WIDTH(rcWork),RECT_HEIGHT(rcWork), 0, 0, 0);

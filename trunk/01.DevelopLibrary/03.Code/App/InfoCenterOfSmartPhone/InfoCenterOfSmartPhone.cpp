@@ -110,9 +110,9 @@ public:
 			m_pSmsWnd->AnimateWindow( getScreenRandom() , true);
 		}
 
-		m_pSmsWnd->DoModal();
-		exit(1);
-//		m_SmsWnd.Show();
+		//m_pSmsWnd->DoModal();	
+		//exit(1);
+		m_pSmsWnd->Show();		
  	}
 
 #if 0

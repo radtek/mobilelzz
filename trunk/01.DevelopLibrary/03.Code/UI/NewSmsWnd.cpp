@@ -22,9 +22,6 @@ CNewSmsWnd::CNewSmsWnd()
 }
 CNewSmsWnd::~CNewSmsWnd()
 {
-
-	MzAccClose();  
-	m_imgContainer.RemoveAll();
 	if ( NULL != m_SmsMsgEdit )
 	{
 		delete m_SmsMsgEdit;
@@ -36,6 +33,8 @@ CNewSmsWnd::~CNewSmsWnd()
 		m_pclContactorsWnd  = NULL;	
 	}
 	MzCloseSip();
+	MzAccClose(); 
+	m_imgContainer.RemoveAll();
 }
 
 BOOL CNewSmsWnd::OnInitDialog()
@@ -227,7 +226,9 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 			if ( 2 == nIndex )
 			{
 				g_ReciversList.Clear();
-				this->EndModal( ID_CANCEL );	//退出
+				//this->EndModal( ID_CANCEL );	//退出
+				this->DestroyWindow();
+				exit(1);
 			}else if ( 1 == nIndex )
 			{	//联系人
 				if(NULL != m_pclContactorsWnd )
@@ -615,6 +616,7 @@ void	CNewSmsWnd::Run()
 	g_ReciversList.Clear();
 	m_Recievers.SetText(L"");
 	m_SmsMsgEdit->SetText(L"");
+	UpdateWindow();
 }
 
 //void CNewSmsWnd::OnLButtonUp ( UINT fwKeys, int  xPos, int yPos )

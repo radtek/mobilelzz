@@ -111,7 +111,7 @@ public:
 		}
 
 		m_pSmsWnd->DoModal();	
-		PostQuitMessage(0xffffffff);
+		PostQuitMessage(WM_QUIT);
 		//m_pSmsWnd->Show();		
  	}
 

@@ -29,6 +29,7 @@ using namespace std;
 #include "../CommonLib/FunctionLib/RequestXmlOperator.h"
 #include "../CommonLib/FunctionLib/ResultXmlOperator.h"
 #include "../Core/SmsService/SmsService.h"
+#include "CoreService.h"
 //显示图片的不同模式
 static DWORD modeId[4]=
 {

@@ -23,13 +23,10 @@ class CSmsLookMsgDetailWnd	:	public	CEasySmsWndBase
 
 		virtual void OnMzCommand( WPARAM wParam, LPARAM lParam );
 
-		void	SetText( LPCTSTR text );
-
-		void	SetListInfo( ListItemEx* pListInfo );
-
 	private:
 
 		BOOL	SubInitialize();
+		void	SetText( LPCTSTR text );
 		
 	protected:
 
@@ -40,11 +37,6 @@ class CSmsLookMsgDetailWnd	:	public	CEasySmsWndBase
 		UiEdit						m_UiEdit;
 
 		MzGridMenu					m_GridMenu;
-
-		CMzString					m_WndText;
-
-		ListItemEx*					m_pListInfo;
-
 
 };
 

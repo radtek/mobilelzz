@@ -59,7 +59,7 @@ void	CEasySmsListBase::setEasySmsWndBase( CEasySmsWndBase *pCEasySmsWndBase )
 }
 
 ///////////////CEasySmsWndBase///////////////////////////////////////////////////////////
-CEasySmsWndBase::CEasySmsWndBase(void)
+CEasySmsWndBase::CEasySmsWndBase(void)	:	m_pItem( NULL )
 {
 	m_list_base.setEasySmsWndBase( this );
 }
@@ -225,7 +225,72 @@ HRESULT	CEasySmsWndBase::RemoveSmsInDb( ListItemEx* pItem )
 	CEasySmsUiCtrl	clCEasySmsUiCtrl;
 	clCEasySmsUiCtrl.MakeDeleteSmsInfo( &pBuf, &lSize, &lSid, 1 );
 
+	CCoreService	*pCCoreService	=	CCoreService::GetInstance();
+	if ( NULL == pCCoreService )					return	E_FAIL;
 
+	HRESULT	hr	=	pCCoreService->Request( pBuf, &pwcResult );
+	if ( FAILED ( hr ) )							return	E_FAIL;
 	
 	return	S_OK;
+}
+
+void	CEasySmsWndBase::SetListItem( ListItemEx* pItem )
+{
+	if ( NULL != m_pItem )
+	{
+		delete	m_pItem;
+		m_pItem	=	NULL;
+	}
+
+	m_pItem	=	pItem;
+}
+
+wchar_t	* CEasySmsWndBase::GetNameOrTel( ListItemEx* pItem )
+{
+	if ( NULL == pItem )
+	{
+		return	NULL;
+	}
+
+	stCoreItemData *pstCoreItemData	=	(stCoreItemData *)(pItem->m_pData);
+	if ( NULL == pstCoreItemData )
+	{
+		return	NULL;
+	}
+
+	if ( NULL != pstCoreItemData->bstrName.m_str )
+	{
+		return	pstCoreItemData->bstrName.m_str;
+	}
+	else if ( NULL != pstCoreItemData->bstrTelNo.m_str )
+	{
+		return	pstCoreItemData->bstrTelNo.m_str;
+	}
+	else
+	{
+		return	NULL;
+	}
+}
+
+wchar_t	* CEasySmsWndBase::GetMsgInfoFromIterm( ListItemEx* pItem )
+{
+	if ( NULL == pItem )
+	{
+		return	NULL;
+	}
+
+	stCoreItemData *pstCoreItemData	=	(stCoreItemData *)(pItem->m_pData);
+	if ( NULL == pstCoreItemData )
+	{
+		return	NULL;
+	}
+	
+	if ( NULL != pstCoreItemData->bstrContent.m_str )
+	{
+		return	pstCoreItemData->bstrContent.m_str;
+	}
+	else
+	{
+		return	NULL;
+	}
 }

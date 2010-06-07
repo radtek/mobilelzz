@@ -22,7 +22,11 @@ BOOL CSmsLookMsgDetailWnd::OnInitDialog()
 		return FALSE;
 	}
 
-	SetWindowText( m_WndText );
+	wchar_t	*pName	=	GetNameOrTel( m_pItem );
+	if ( NULL != pName )
+	{
+		SetWindowText( pName );
+	}
 
 	return	SubInitialize();
 }
@@ -88,7 +92,7 @@ BOOL	CSmsLookMsgDetailWnd::SubInitialize()
 {
 	//Ini UiEdit
 	m_UiEdit.SetID( MZ_IDC_SMSLOOKMSG_DETAIL_EDIT );
-	m_UiEdit.EnableZoomIn( true );				/*设置编辑器是否支持放大镜*/
+	m_UiEdit.EnableZoomIn( false );				/*设置编辑器是否支持放大镜*/
 	m_UiEdit.OpenFace(true);					/*设置编辑器是否支持表情识别*/ 
 	m_UiEdit.SetReadOnly( true );				/*控件文本可以读写*/
 //	m_UiEdit.SetLineSpace( 10 );				/*设置行距为10*/
@@ -99,15 +103,8 @@ BOOL	CSmsLookMsgDetailWnd::SubInitialize()
 	long lH = GetHeight();
 	m_UiEdit.SetPos( 0, 0, lW, lH - MZM_HEIGHT_TEXT_TOOLBAR );
 	m_UiEdit.SetRightInvalid(0);
+	m_UiEdit.EnableInsideScroll( true );
 	AddUiWin( &m_UiEdit );
-	long lR = m_UiEdit.GetRightInvalid();
-	long lL = m_UiEdit.GetLeftInvalid();
-	long lT = m_UiEdit.GetTopInvalid();
-	long lB = m_UiEdit.GetBottomInvalid();
-	lR = m_UiEdit.GetEllipsis_Right();
-	lL = m_UiEdit.GetEllipsis_Left();
-	lT = m_UiEdit.GetEllipsis_Top();
-	lB = m_UiEdit.GetEllipsis_Bottom();
 	
 	//ini toolbar
 	m_toolBar_base.SetID( MZ_IDC_SMSLOOKMSG_DETAIL_TOOLBAR );
@@ -127,7 +124,12 @@ BOOL	CSmsLookMsgDetailWnd::SubInitialize()
 	m_GridMenu.AppendMenuItem(MZ_IDC_SMSLOOKMSG_DETAIL_GRIDMENU_LOCK, L"加锁" );
 	m_GridMenu.AppendMenuItem(MZ_IDC_SMSLOOKMSG_DETAIL_GRIDMENU_BACK, L"返回" );
 
-
+	//add Text
+	wchar_t	*pInfor	=	GetMsgInfoFromIterm( m_pItem );
+	if ( NULL != pInfor )
+	{
+		SetText( pInfor );
+	}
 
 	return	TRUE;
 }
@@ -135,14 +137,4 @@ BOOL	CSmsLookMsgDetailWnd::SubInitialize()
 void	CSmsLookMsgDetailWnd::SetText( LPCTSTR text )
 {
 	m_UiEdit.SetText( text );
-}
-
-CSmsLookMsgDetailWnd::CSmsLookMsgDetailWnd( LPCTSTR text )
-{
-	m_WndText	=	text;
-}
-
-void	CSmsLookMsgDetailWnd::SetListInfo( ListItemEx* pListInfo )
-{
-	m_pListInfo		=	pListInfo;
 }

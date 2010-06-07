@@ -144,9 +144,9 @@ void	CSmsFindResultWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 {
 	CSmsLookMsgDetailWnd	clCSmsLookMsgDetailWnd;
 	//Test
-	wchar_t chTemp[ 256 ]	=	L"从查找结果画页进入这个页面";
+//	wchar_t chTemp[ 256 ]	=	L"从查找结果画页进入这个页面";
 	//
-	clCSmsLookMsgDetailWnd.SetText( chTemp );
+	clCSmsLookMsgDetailWnd.SetListItem( pItem );
 	int iRlt	=	DoModalBase( &clCSmsLookMsgDetailWnd );
 	if ( ID_CASCADE_EXIT == iRlt )
 	{

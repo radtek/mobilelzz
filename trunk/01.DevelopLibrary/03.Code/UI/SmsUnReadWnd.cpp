@@ -5,7 +5,7 @@
 #include "SmsUnReadWnd.h"
 #include "SmsLookMsgDetailWnd.h"
 #include "SmsPassConfirmWnd.h"
-#include "CoreService.h"
+
 
 class ListItemData
 {
@@ -167,9 +167,9 @@ void	CSmsUnReadWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 // 	}
 // 	else
 // 	{
-		CSmsLookMsgDetailWnd	clCSmsLookMsgDetailWnd( pItem->m_textTitle );
+		CSmsLookMsgDetailWnd	clCSmsLookMsgDetailWnd;
 
-		clCSmsLookMsgDetailWnd.SetText( pItem->m_textDescription );
+		clCSmsLookMsgDetailWnd.SetListItem( pItem );
 		iRlt	=	DoModalBase( &clCSmsLookMsgDetailWnd );
 
 //	}

@@ -126,7 +126,7 @@ BOOL	CSmsLookMsgWnd::SubInitialize()
 void	CSmsLookMsgWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 {
 	CSmsLookMsgDetailWnd	clCSmsLookMsgDetailWnd;
-	clCSmsLookMsgDetailWnd.SetListInfo( pItem );
+	clCSmsLookMsgDetailWnd.SetListItem( pItem );
 	//
 	wchar_t	*pBuf		=	NULL;
 	long	lSize		=	0;
@@ -143,8 +143,6 @@ void	CSmsLookMsgWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 	//Test
 	wchar_t chTemp[ 256 ]	=	L"我对你的崇拜犹如滔滔江水连绵不绝！！！！";
 	//
-	clCSmsLookMsgDetailWnd.SetText( chTemp );
-	clCSmsLookMsgDetailWnd.SetListInfo( pItem );
 	int iRlt	=	DoModalBase( &clCSmsLookMsgDetailWnd );
 	if ( ID_CASCADE_EXIT == iRlt )
 	{

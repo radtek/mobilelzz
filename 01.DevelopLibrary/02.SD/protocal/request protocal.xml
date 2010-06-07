@@ -11,7 +11,7 @@
 		</operation>
 		
 		<operation type = "detail">
-			<id></id>
+			<sid></sid>
 			<decode></decode>
 		</operation>
 		

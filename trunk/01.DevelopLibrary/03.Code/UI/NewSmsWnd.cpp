@@ -226,9 +226,9 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 			if ( 2 == nIndex )
 			{
 				g_ReciversList.Clear();
-				//this->EndModal( ID_CANCEL );	//退出
-				this->DestroyWindow();
-				exit(1);
+				this->EndModal( ID_CANCEL );	//退出
+				/*this->DestroyWindow();
+				exit(1);*/
 			}else if ( 1 == nIndex )
 			{	//联系人
 				if(NULL != m_pclContactorsWnd )

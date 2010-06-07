@@ -572,6 +572,8 @@ APP_Result CSmsService::ExcuteForDetail(CRequestXmlOperator& clXmlOpe, CXmlStrea
 	BOOL bIsPermitDecode = FALSE;
 	//select by sid
 	m_pQGetDetailBySID->Reset();
+	long lSID = _wtol(pstNodeDataInfos->wcsNodeValue);
+	m_pQGetDetailBySID->Bind(1, lSID);
 	hr = m_pQGetDetailBySID->Step();
 	if ( hr == S_ROW ){
 		long lPID = 0;
@@ -603,6 +605,7 @@ APP_Result CSmsService::ExcuteForDetail(CRequestXmlOperator& clXmlOpe, CXmlStrea
 	long lListCount = 0;
 	long lEncodeCount = 0;
 	m_pQGetDetailBySID->Reset();
+	m_pQGetDetailBySID->Bind(1, lSID);
 	MakeSmsListRecs( m_pQGetDetailBySID.Get(), pNode, bIsPermitDecode, 0, lListCount, lEncodeCount );
 
 	return APP_Result_S_OK;
@@ -898,8 +901,14 @@ APP_Result CSmsService::MakeSmsListRecs( CSQL_query* pQHandle, CXmlNode* pNodeLi
 			}
 		}else{
 			wchar_t* pContent = NULL;
-			pQHandle->GetField(3, &pContent);			
-			clNodeContent.SetNodeContent(NULL, pContent, NULL, 0);
+			pQHandle->GetField(3, &pContent);	
+			if ( bIsList ){
+				wchar_t wcsContent[11] = L"";
+				F_wcscpyn( wcsContent, pContent, sizeof(wcsContent)/sizeof(wcsContent[0]) );
+				clNodeContent.SetNodeContent(NULL, wcsContent, NULL, 0);
+			}else{
+				clNodeContent.SetNodeContent(NULL, pContent, NULL, 0);
+			}			
 		}
 
 		wchar_t* pNumber = NULL;

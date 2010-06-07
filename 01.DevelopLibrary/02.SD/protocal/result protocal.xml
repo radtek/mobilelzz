@@ -75,7 +75,7 @@
 				<firstletter></firstletter>
 				<reading></reading>
 				<icon></icon>
-				<defaultno></defaultno>	
+				<address></address>	
 				<smscount><smscount>	
 				// for phone no list
 				<key id = "" value = ""></key>

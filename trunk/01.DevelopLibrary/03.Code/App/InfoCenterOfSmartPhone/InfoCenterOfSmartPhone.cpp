@@ -110,9 +110,9 @@ public:
 			m_pSmsWnd->AnimateWindow( getScreenRandom() , true);
 		}
 
-		//m_pSmsWnd->DoModal();	
-		//exit(1);
-		m_pSmsWnd->Show();		
+		m_pSmsWnd->DoModal();	
+		PostQuitMessage(0xffffffff);
+		//m_pSmsWnd->Show();		
  	}
 
 #if 0
@@ -123,6 +123,18 @@ public:
 #endif
 	// 成功则返回TRUE
     return TRUE;
+  }
+  virtual int Done()
+  {
+	  if ( m_pMainWnd ){
+		  delete m_pMainWnd;
+	  }
+	  if ( m_pSmsWnd ){
+		  delete m_pSmsWnd;
+	  }
+	  m_pSmsWnd = NULL;
+	  m_pMainWnd = NULL;
+	  return CMzApp::Done();
   }
 };
 

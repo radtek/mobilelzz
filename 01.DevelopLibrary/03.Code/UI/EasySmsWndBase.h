@@ -56,6 +56,8 @@ class CEasySmsWndBase : public CMzWndEx
 
 		virtual LRESULT MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam);
 
+		void	SetListItem( ListItemEx* pItem );
+
 	protected:
 
 		virtual	int		DoModalBase( CMzWndEx *pCMzWndEx );
@@ -72,6 +74,10 @@ class CEasySmsWndBase : public CMzWndEx
 
 		virtual HRESULT	RemoveSmsInDb( ListItemEx* pItem );
 
+		wchar_t	* GetNameOrTel( ListItemEx* pItem );
+
+		wchar_t	* GetMsgInfoFromIterm( ListItemEx* pItem );
+
 	private:
 		
 
@@ -82,6 +88,8 @@ class CEasySmsWndBase : public CMzWndEx
 		UiToolbar_Text		m_toolBar_base;
 
 		ImageContainer		m_imgContainer_base;
+
+		ListItemEx*			m_pItem;
 
 	private:
 

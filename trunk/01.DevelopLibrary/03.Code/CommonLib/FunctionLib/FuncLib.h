@@ -23,4 +23,6 @@ long COMMONLIB_API S_Count_WideChar2MultiByte( const wchar_t *pusWideCharStr );
 
 BOOL	COMMONLIB_API F_LicenseProtect();
 
+long COMMONLIB_API F_GetStdPhoneNo( wchar_t* pusInputPhoneNo, wchar_t* pwcsStdPhoneNo, long lCount );
+
 #endif // FuncLib__H

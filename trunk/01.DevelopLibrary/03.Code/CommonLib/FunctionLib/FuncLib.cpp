@@ -179,4 +179,30 @@ BOOL F_LicenseProtect()
 	return	bRlt;
 }
 
+long COMMONLIB_API F_GetStdPhoneNo( wchar_t* pusInputPhoneNo, wchar_t* pwcsStdPhoneNo, long lCount )
+{
+	long lInputNoCount = wcslen(pusInputPhoneNo);
+	long lPos = 0;
+	BOOL bNoBegin = FALSE;
+	for(int i = 0; i < lInputNoCount; i++)
+	{
+		if ( !bNoBegin ){
+			if ( L'1' == pusInputPhoneNo[i] ){
+				bNoBegin = TRUE;
+			}
+		}
+		if ( bNoBegin ){
+			pwcsStdPhoneNo[lPos] = pusInputPhoneNo[i];
+			lPos++;
+			if ( lPos >= lCount ){
+				lPos--;
+				break;
+			}
+		}
+	}
+	pusInputPhoneNo[lCount-1] = 0;
+
+	return lPos;
+}
+
 

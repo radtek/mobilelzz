@@ -15,7 +15,7 @@ using namespace std;
 
 #define   Contactors_SQL_GET_CONTACTS  L"select ABPerson.ROWID, ABPerson.Name , ABPhones.*  from ABPerson, ABPhones where ABPerson.ROWID = ABPhones.record_id "
 #define   Contactors_SQL_GET_FIRSTLETER  L"select token  from ABLookupFirstLetter where source = ?"
-#define   Sms_SQL_GET_PID_ByAddress				L"select record_id  from ABPhones where number = ? collate binary"
+#define   Sms_SQL_GET_PID_ByAddress				L"select record_id  from ABPhones where ProcessPhoneNo(number) = ? collate binary"
 #define		Sms_SQL_GET_Name_ByPID			L"select Name from ABPerson where ROWID = ?"
 
 #define   Sms_SQL_GET_UnReadSms					L"select *  from SmsDetail where readstatus = 0"
@@ -225,7 +225,7 @@ class COMMONLIB_API	CSQL_session : public CSQL_session_base
 		APP_Result					Connect		(const wchar_t* _pn,  const wchar_t* _pfolder,  const wchar_t* _pfile,  int _buffSize);
 		void					DisConnect	(bool* _pb);
 		
-		
+		void					RegisterProcessPhoneNoFunc();
 		APP_Result					Query_Create	(int* _pqh,		CSQL_query** _ppq);
 		APP_Result					Query_Delete	(int _qh);
 		APP_Result					Query_Get		(int _qh,		CSQL_query** _ppq);

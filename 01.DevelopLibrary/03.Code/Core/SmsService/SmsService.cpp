@@ -205,6 +205,7 @@ APP_Result CSmsService::Initialize()
 	if ( FAILED_App(hr) ){
 		return hr;
 	}
+	m_pclSqlContactsDBSession->RegisterProcessPhoneNoFunc();
 
 	return APP_Result_S_OK;
 }

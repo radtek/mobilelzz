@@ -1,5 +1,5 @@
 #include	"stdafx.h"
-//#include	"MarkCommon.h"
+#include	"Funclib.h"
 #include	"CSearch_SQL_base_handler.h"
 /*
 #define SQLITE_OK           0    Successful result 
@@ -42,10 +42,11 @@ void ProcessPhoneNo(sqlite3_context *context,
 					sqlite3_value **argv)
 {
 	wchar_t* pwcsPhoneNo = (wchar_t*)sqlite3_value_text16(argv[0]);
-	wchar_t awcsPhoneNoProcessed[30] = L"";
-	
+	//wchar_t* pwcsMemory = (wchar_t*)sqlite3_aggregate_context(context, 30);
+	wchar_t awcsStdAdd[30] = L"";
+	long lCount = F_GetStdPhoneNo(pwcsPhoneNo, awcsStdAdd, 30);
 
-	sqlite3_result_text16(context, pwcsPhoneNo, -1, SQLITE_STATIC );
+	sqlite3_result_text16(context, awcsStdAdd, -1, SQLITE_TRANSIENT );
 
 }
 

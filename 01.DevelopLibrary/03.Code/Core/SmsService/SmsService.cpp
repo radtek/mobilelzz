@@ -505,7 +505,9 @@ APP_Result CSmsService::GetPIDByAddress(wchar_t* pwcsAddress, long& lPID)
 	//hr = pQHandle->Prepare(Sms_SQL_GET_PID_ByAddress);
 	//if( FAILED(hr) ) 
 	//	return hr;
-	pQHandle->Bind(1, pwcsAddress, wcslen(pwcsAddress)*2);
+	wchar_t awcsStdAdd[30] = L"";
+	long lCount = F_GetStdPhoneNo(pwcsAddress, awcsStdAdd, sizeof(awcsStdAdd)/sizeof(awcsStdAdd[0]));
+	pQHandle->Bind(1, awcsStdAdd, lCount*2);
 
 	hr = pQHandle->Step();
 	if ( FAILED_App(hr) ){

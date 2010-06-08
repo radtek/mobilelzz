@@ -37,7 +37,17 @@
 
 CSQL_sessionManager*	CSQL_sessionManager::m_this	= 0;
 
+void ProcessPhoneNo(sqlite3_context *context,
+					int argc,
+					sqlite3_value **argv)
+{
+	wchar_t* pwcsPhoneNo = (wchar_t*)sqlite3_value_text16(argv[0]);
+	wchar_t awcsPhoneNoProcessed[30] = L"";
+	
 
+	sqlite3_result_text16(context, pwcsPhoneNo, -1, SQLITE_STATIC );
+
+}
 
 
 //====================================================================================
@@ -587,7 +597,14 @@ void		CSQL_session::DisConnect(bool* _pb)
 	else					*_pb	= false;
 }
 
-
+void CSQL_session::RegisterProcessPhoneNoFunc()
+{
+	APP_Result				hr		= APP_Result_E_Fail;
+	hr = (APP_Result)sqlite3_create_function16(m_pdb, L"ProcessPhoneNo", 1, SQLITE_ANY, 0, ProcessPhoneNo, 0, 0);
+	if ( SQLITE_OK != hr ){
+		assert(0);
+	}
+}
 
 
 APP_Result		CSQL_session::Query_Create	(int* _pqh,  CSQL_query** _ppq)

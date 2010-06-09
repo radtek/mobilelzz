@@ -15,6 +15,13 @@
 #include "EasySmsWndBase.h"
 #include "EasySmsUiCtrl.h"
 
+enum	EN_SENDTYPE
+{
+	en_none		=	0,
+	en_replay,
+	en_transmit
+};
+
 class CMyEdit: public UiEdit
 {
 public:
@@ -101,5 +108,7 @@ private:
 		CContactorsWnd*		m_pclContactorsWnd;
 
 		CEasySmsUiCtrl		m_clCEasySmsUiCtrl;
+
+		EN_SENDTYPE			m_enSendType;
 };
 #endif //__NewSmsWnd_h__

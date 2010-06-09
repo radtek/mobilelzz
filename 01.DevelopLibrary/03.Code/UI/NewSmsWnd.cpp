@@ -19,6 +19,7 @@ CNewSmsWnd::CNewSmsWnd()
 	m_lCurProgress = 0;
 	m_SmsMsgEdit = new CMyEdit;
 	m_pclContactorsWnd  = NULL;	
+	m_enSendType		=	en_none;
 }
 CNewSmsWnd::~CNewSmsWnd()
 {

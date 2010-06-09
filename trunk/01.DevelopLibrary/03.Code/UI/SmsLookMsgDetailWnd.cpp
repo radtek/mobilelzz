@@ -62,6 +62,7 @@ void CSmsLookMsgDetailWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 			{
 				//»Ø¸´
 				CNewSmsWnd		clSendSms;
+				clSendSms.SetListItem( m_pItem );
 				int	iRlt	=	DoModalBase( &clSendSms );
 				if ( ID_CASCADE_EXIT == iRlt )
 				{

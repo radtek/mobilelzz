@@ -15,6 +15,7 @@ typedef struct CoreItemData_t
 	/*CDynamicArray<UiCodeChar>*/CComBSTR	bstrName;
 	/*CDynamicArray<UiCodeChar>*/CComBSTR	bstrTime;
 	/*CDynamicArray<UiCodeChar>*/CComBSTR	bstrContent;
+	/*CDynamicArray<UiCodeChar>*/CComBSTR	bstrDetail;
 //	unsigned	short			usIcon;
 	UiCodeChar					wcFromTo;
 	bool						bIsEncode;

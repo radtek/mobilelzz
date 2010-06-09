@@ -152,7 +152,7 @@ BOOL	CSmsUnReadWnd::SubInitialize()
 void	CSmsUnReadWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 {
 	int iRlt	=	-1;
-	bool	bIsLock		=	( ( stCoreItemData* )( pItem->m_pData ) )->bIsLock;
+//	bool	bIsLock		=	( ( stCoreItemData* )( pItem->m_pData ) )->bIsLock;
 
 // 	if ( bIsLock )					//该联系人是被加锁的
 // 	{
@@ -167,6 +167,22 @@ void	CSmsUnReadWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 // 	}
 // 	else
 // 	{
+		//Update ReadStatus
+		stCoreItemData* pstCoreItemData	=	( stCoreItemData* )( pItem->m_pData );
+		if ( 0 == pstCoreItemData->bIsRead && false	== pstCoreItemData->bIsEncode )	//未读为0
+		{
+			wchar_t	*pBuf		=	NULL;
+			long	lSize		=	0;
+			wchar_t	*pwcResult	=	NULL;
+
+			m_clCEasySmsUiCtrl.MakeUpdateSmsStatusReq( &pBuf, &lSize, pstCoreItemData->lSid, (long)(-1), (long)(1) );
+
+			CCoreService	*pCCoreService	=	CCoreService::GetInstance();
+			if ( NULL == pCCoreService )					return;
+
+			HRESULT	hr	=	pCCoreService->Request( pBuf, &pwcResult );
+		}
+		
 		CSmsLookMsgDetailWnd	clCSmsLookMsgDetailWnd;
 
 		clCSmsLookMsgDetailWnd.SetListItem( pItem );

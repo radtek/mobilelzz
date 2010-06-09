@@ -43,6 +43,18 @@ HRESULT		CEasySmsUiCtrl::MakeDeleteSmsInfo( OUT wchar_t **ppBuf, OUT long *lSize
 	return	m_clCCoreSmsUiCtrl.MakeDeleteSmsInfo( ppBuf, lSize, plSid, lCnt );
 }
 
+HRESULT		CEasySmsUiCtrl::MakeUpdateSmsStatusReq( wchar_t **ppBuf, long *lSize, long lSid, long lLock, long lRead )
+{
+	return	m_clCCoreSmsUiCtrl.MakeUpdateSmsStatusReq( ppBuf, lSize, lSid, lLock, lRead );
+}
+
+HRESULT		CEasySmsUiCtrl::MakePassWordStatusReq ( wchar_t **ppBuf, long *lSize, 
+												   long lPid, wchar_t* pwcDataKind, 
+												   wchar_t* pwcCode, wchar_t* pwcNewCode )
+{
+	return	m_clCCoreSmsUiCtrl.MakePassWordStatusReq( ppBuf, lSize, lPid, pwcDataKind, pwcCode, pwcNewCode );
+}
+
 HRESULT		CEasySmsUiCtrl::MakeUnReadListRlt ( CEasySmsListBase &clCEasySmsListBase, wchar_t *pwcRltStream )
 {
 	if ( NULL == pwcRltStream )

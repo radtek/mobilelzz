@@ -37,6 +37,12 @@ class CEasySmsUiCtrl
 
 		HRESULT		MakeDeleteSmsInfo	 ( OUT wchar_t **ppBuf, OUT long *lSize, IN long *plSid, IN long lCnt );
 
+		HRESULT		MakeUpdateSmsStatusReq( wchar_t **ppBuf, long *lSize, long lSid, long lLock, long lRead );
+
+		HRESULT		MakePassWordStatusReq ( wchar_t **ppBuf, long *lSize, 
+											long lPid, wchar_t* pwcDataKind, 
+											wchar_t* pwcCode, wchar_t* pwcNewCode );
+
 	private:
 
 		ImageContainer		m_imgContainer;

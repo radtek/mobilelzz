@@ -15,8 +15,9 @@ typedef struct CoreItemData_t
 	/*CDynamicArray<UiCodeChar>*/CComBSTR	bstrName;
 	/*CDynamicArray<UiCodeChar>*/CComBSTR	bstrTime;
 	/*CDynamicArray<UiCodeChar>*/CComBSTR	bstrContent;
-	unsigned	short			usIcon;
+//	unsigned	short			usIcon;
 	UiCodeChar					wcFromTo;
+	bool						bIsEncode;
 
 }stCoreItemData;
 
@@ -44,6 +45,12 @@ class  COMMONLIB_API CCoreSmsUiCtrl
 		APP_Result		MakeDetailRltListReq ( UiCodeChar **ppBuf, long *lSize, long lSid );
 		APP_Result		MakeSendSmsInfo		 ( UiCodeChar **ppBuf, long *lSize, UiCodeChar *pwcSmsInfo, UiCodeChar* pwcsNumber );
 		APP_Result		MakeDeleteSmsInfo	 ( OUT UiCodeChar **ppBuf, OUT long *lSize, IN long *plSid, IN long lCnt );
+		APP_Result		MakeUpdateSmsStatusReq( UiCodeChar **ppBuf, long *lSize, long lSid, long lLock, long lRead );
+
+		APP_Result		MakePassWordStatusReq ( UiCodeChar **ppBuf, long *lSize, 
+												long lPid, UiCodeChar* pwcDataKind, 
+												UiCodeChar* pwcCode, UiCodeChar* pwcNewCode );
+
 
 		APP_Result		MakeListRlt    ( UiCodeChar *pwcRltStream, stCoreItemData **ppclstItemData, long *plCnt );
 

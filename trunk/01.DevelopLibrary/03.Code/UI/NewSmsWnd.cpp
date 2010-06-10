@@ -181,7 +181,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 
 	AddUiWin( &m_toolBar_base );
 
-	BOOL b = SipRegisterNotification(m_hWnd);
+	//BOOL b = SipRegisterNotification(m_hWnd);
 	return TRUE;
 }
 
@@ -258,7 +258,7 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 
 				m_pclContactorsWnd->Show();
 			}
-
+			break;
 		}
 
 	  break;
@@ -297,7 +297,7 @@ LRESULT CNewSmsWnd::MzDefWndProc( UINT message, WPARAM wParam, LPARAM lParam )
 			}
 			break;
 		}
-		case WM_IM_INFO:
+/*		case WM_IM_INFO:
 		{
 			if ( wParam == IM_WIDEIMAGE ){
 
@@ -305,7 +305,7 @@ LRESULT CNewSmsWnd::MzDefWndProc( UINT message, WPARAM wParam, LPARAM lParam )
 			
 			break;
 		}
-		
+*/	
 		default:
 		{
 			if ( message == m_accMsg )

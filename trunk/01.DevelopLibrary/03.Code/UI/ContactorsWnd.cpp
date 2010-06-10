@@ -194,7 +194,7 @@ LRESULT CContactorsWnd::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam)
 				  }
 				  return 0;
 				}
-
+				break;
 			}
 		default:
 		  {
@@ -228,7 +228,8 @@ LRESULT CContactorsWnd::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam)
 					}
 				break;
 			  }
-			}	    
+			}	
+			break;
 		  }
 		break;
 	}

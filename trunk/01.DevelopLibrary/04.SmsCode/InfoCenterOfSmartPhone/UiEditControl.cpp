@@ -58,14 +58,14 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 				  int  yPos   
 				  )
 {
-	if ( 0 == g_clBackupSipID.Data1 ){
-		SipGetCurrentIM(&g_clBackupSipID);
-	}
-	BOOL b = SipSetCurrentIM(&g_clMeizuSipID);
-	if(!b)
-	{
-		//SipSetCurrentIM(&g_clBackupSipID);
-	}
+	//if ( 0 == g_clBackupSipID.Data1 ){
+	//	SipGetCurrentIM(&g_clBackupSipID);
+	//}
+	//BOOL b = SipSetCurrentIM(&g_clMeizuSipID);
+	//if(!b)
+	//{
+	//	//SipSetCurrentIM(&g_clBackupSipID);
+	//}
 	MzOpenSip(IM_SIP_MODE_DIGIT, 0);
 	//SetSipMode(IM_SIP_MODE_DIGIT,0);
 	long lRowCount = GetRowCount();

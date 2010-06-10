@@ -29,7 +29,7 @@ CNewSmsWnd::CNewSmsWnd()
 
 CNewSmsWnd::~CNewSmsWnd()
 {
-	SipSetCurrentIM(&g_clBackupSipID);
+	//SipSetCurrentIM(&g_clBackupSipID);
 	if( NULL != m_SmsMsgEdit )
 	{
 		delete m_SmsMsgEdit;
@@ -183,7 +183,7 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 // 				MzMessageBoxEx(NULL,L"试用达到最大限制,谢谢您的试用!",MB_OK);
 // 				return ;
 // 			}
-			SipSetCurrentIM(&g_clBackupSipID);
+			//SipSetCurrentIM(&g_clBackupSipID);
 			RECT rect = MzGetVisibleDesktopRect();
 			RECT rc = {0};
 			int height = 0;
@@ -220,7 +220,7 @@ void CNewSmsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 		}
 		case MZ_IDC_CONTACTORS_BTN:
 		{	
-			SipSetCurrentIM(&g_clBackupSipID);
+			//SipSetCurrentIM(&g_clBackupSipID);
 			if(NULL != m_pclContactorsWnd )
 			{
 				delete m_pclContactorsWnd ;

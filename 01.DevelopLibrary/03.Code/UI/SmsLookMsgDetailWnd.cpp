@@ -63,6 +63,7 @@ void CSmsLookMsgDetailWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 				//»Ø¸´
 				CNewSmsWnd		clSendSms;
 				clSendSms.SetListItem( m_pItem );
+				clSendSms.SetSendType( en_replay );
 				int	iRlt	=	DoModalBase( &clSendSms );
 				if ( ID_CASCADE_EXIT == iRlt )
 				{
@@ -82,6 +83,21 @@ void CSmsLookMsgDetailWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 		}
 
 		break;
+
+		case	MZ_IDC_SMSLOOKMSG_DETAIL_GRIDMENU_FW:
+		{
+			//×ª·¢
+			CNewSmsWnd		clSendSms;
+			clSendSms.SetListItem( m_pItem );
+			clSendSms.SetSendType( en_transmit );
+			int	iRlt	=	DoModalBase( &clSendSms );
+			if ( ID_CASCADE_EXIT == iRlt )
+			{
+				ReturnToMainWnd();
+			}	
+			
+			break;
+		}
 
 		default:
 			break;

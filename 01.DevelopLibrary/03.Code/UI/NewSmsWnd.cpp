@@ -800,3 +800,8 @@ BOOL CNewSmsWnd::Normal()
 
 	return FALSE;
 }
+
+void	CNewSmsWnd::SetSendType( EN_SENDTYPE enType )
+{
+	m_enSendType	=	enType;
+}

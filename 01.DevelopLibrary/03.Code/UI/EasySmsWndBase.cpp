@@ -285,9 +285,9 @@ wchar_t	* CEasySmsWndBase::GetMsgInfoFromIterm( ListItemEx* pItem )
 		return	NULL;
 	}
 	
-	if ( NULL != pstCoreItemData->bstrContent.m_str )
+	if ( NULL != pstCoreItemData->bstrDetail.m_str )
 	{
-		return	pstCoreItemData->bstrContent.m_str;
+		return	pstCoreItemData->bstrDetail.m_str;
 	}
 	else
 	{

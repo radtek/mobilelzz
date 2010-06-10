@@ -316,6 +316,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\UI\SmsPassDeleteWnd.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\UI\SmsPassDeleteWnd.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\UI\SmsPassInputWnd.cpp"
 					>
 				</File>

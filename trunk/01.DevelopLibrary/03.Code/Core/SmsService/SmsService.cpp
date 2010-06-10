@@ -381,7 +381,6 @@ APP_Result CSmsService::ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& 
 		return APP_Result_Param_Invalid;
 	}
 	CDynamicArray<NodeDataInfo> spNodes(pstNodeDataInfos, lNodeDataInfoCount);
-	
 	CSQL_SmartQuery pQHandle(m_pclSqlDBSession);
 	long lQID = 0;
 	hr = m_pclSqlDBSession->Query_Create((int*)&lQID, &pQHandle );
@@ -394,14 +393,14 @@ APP_Result CSmsService::ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& 
 	long lLockStatus = Invalid_4Byte;
 	long lReadStatus = Invalid_4Byte;
 	long lPID = 0;
+	long lContentIndex = Invalid_4Byte;
 	for ( int i = 0; i < lNodeDataInfoCount; i++ )
 	{
 		if ( 0 == wcscmp( L"type", pstNodeDataInfos[i].wcsNodeName )  ){
 			lType = _wtol(pstNodeDataInfos[i].wcsNodeValue);
 			pQHandle->Bind(3, lType);
 		}else if ( 0 == wcscmp( L"content", pstNodeDataInfos[i].wcsNodeName )  ){
-			long lSize = wcslen(pstNodeDataInfos[i].wcsNodeValue);
-			pQHandle->Bind(4, pstNodeDataInfos[i].wcsNodeValue, lSize*2);//content
+			lContentIndex = i;
 		}else if ( 0 == wcscmp( L"address", pstNodeDataInfos[i].wcsNodeName )  ){
 			long lSize = wcslen(pstNodeDataInfos[i].wcsNodeValue);
 			pQHandle->Bind(5, pstNodeDataInfos[i].wcsNodeValue, lSize*2);//address		
@@ -433,6 +432,21 @@ APP_Result CSmsService::ExcuteForAdd(CRequestXmlOperator& clXmlOpe, CXmlStream& 
 		lLockStatus = 0;
 		pQHandle->Bind(7, lReadStatus);
 	}
+	if ( Invalid_4Byte != lContentIndex ){
+		BOOL bIsNeedDecode = FALSE;
+		CheckCode(lPID, bIsNeedDecode, NULL, 0);
+		if ( bIsNeedDecode ){
+			wchar_t awcsContentDBCode[256] = L"";
+			ConvertDisplayCode2DBCode(pstNodeDataInfos[lContentIndex].wcsNodeValue, 
+				awcsContentDBCode, sizeof(awcsContentDBCode)/sizeof(awcsContentDBCode[0]));
+			long lSize = wcslen(awcsContentDBCode);
+			pQHandle->Bind(4, awcsContentDBCode, lSize*2);//content
+		}else{
+			long lSize = wcslen(pstNodeDataInfos[lContentIndex].wcsNodeValue);
+			pQHandle->Bind(4, pstNodeDataInfos[lContentIndex].wcsNodeValue, lSize*2);//content
+		}	
+	}
+	
 	SYSTEMTIME stTime;
 	memset(&stTime,0x0,sizeof(stTime));
 	GetLocalTime(&stTime);
@@ -738,7 +752,7 @@ APP_Result CSmsService::CheckCode(long lPID, BOOL& bNeedDecode,
 								  wchar_t* pwcsDBCode, long lCodeSize)
 {
 	APP_Result hr = APP_Result_E_Fail;
-	
+	bNeedDecode = FALSE;
 	m_pQCheckCode->Reset();
 	m_pQCheckCode->Bind(1, lPID);
 	hr = m_pQCheckCode->Step();
@@ -750,7 +764,7 @@ APP_Result CSmsService::CheckCode(long lPID, BOOL& bNeedDecode,
 	}else{
 		wchar_t* pCode = NULL;
 		m_pQCheckCode->GetField(1, &pCode);
-		if ( pCode && (L'\0' != pCode[0]) ){
+		if ( pCode && (L'\0' != pCode[0]) && pwcsDBCode ){
 			F_wcscpyn(pwcsDBCode, pCode, lCodeSize);
 			bNeedDecode = TRUE;
 		}

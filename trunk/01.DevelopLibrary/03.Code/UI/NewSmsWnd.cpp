@@ -132,6 +132,15 @@ BOOL CNewSmsWnd::OnInitDialog()
 	m_Recievers.SetFontSize(20);
 	m_Recievers.SetTopInvalid(5);
 	m_Recievers.SetBottomInvalid(5);
+	if ( en_transmit == m_enSendType ){
+		m_Recievers.SetText(m_pItem->m_textTitle);
+		//add reciever
+		MyListItemData stTempRe;
+		stTempRe.lPID = 0;
+		stTempRe.StringTitle = m_pItem->m_textTitle;
+		stTempRe.StringDescription = m_pItem->m_textDescription;
+		g_ReciversList.AppendItem(&stTempRe);
+	}
 	AddUiWin( &m_Recievers ); 
 	// 初始化短信文本控件，并添加到窗口中
 	
@@ -142,7 +151,9 @@ BOOL CNewSmsWnd::OnInitDialog()
 	m_SmsMsgEdit->EnableInsideScroll( true );
 	//m_SmsMsgEdit->EnableZoomIn( true );   
 	m_SmsMsgEdit->SetTip( L"在这里输入短信内容" );
-
+	if ( en_replay == m_enSendType ){
+		m_SmsMsgEdit->SetText(m_pItem->m_textPostscript1);
+	}
 	AddUiWin( m_SmsMsgEdit );
 
 	m_smsMsg			=	GetSmsRegisterMessage();
@@ -168,7 +179,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 
 	AddUiWin( &m_toolBar_base );
 
-
+	BOOL b = SipRegisterNotification(m_hWnd);
 	return TRUE;
 }
 
@@ -278,21 +289,20 @@ LRESULT CNewSmsWnd::MzDefWndProc( UINT message, WPARAM wParam, LPARAM lParam )
 
 					}
 					break;
-
 				default:
 					break;
 				}
+			}
+			break;
+		}
+		case WM_IM_INFO:
+		{
+			if ( wParam == IM_WIDEIMAGE ){
 
 			}
+			
+			break;
 		}
-		//case WM_IM_INFO:
-		//{
-		//	if ( wParam == IM_WIDEIMAGE ){
-
-		//	}
-		//	BOOL b = SipRegisterNotification(m_hWnd);
-		//	break;
-		//}
 		
 		default:
 		{

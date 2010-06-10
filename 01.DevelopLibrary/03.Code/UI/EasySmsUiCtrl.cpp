@@ -48,6 +48,11 @@ HRESULT		CEasySmsUiCtrl::MakeUpdateSmsStatusReq( wchar_t **ppBuf, long *lSize, l
 	return	m_clCCoreSmsUiCtrl.MakeUpdateSmsStatusReq( ppBuf, lSize, lSid, lLock, lRead );
 }
 
+HRESULT		CEasySmsUiCtrl::MakeDetailReq ( wchar_t **ppBuf, long *lSize, long lSid, wchar_t* pwcCode )
+{
+	return	m_clCCoreSmsUiCtrl.MakeDetailReq( ppBuf, lSize, lSid, pwcCode );
+}
+
 HRESULT		CEasySmsUiCtrl::MakePassWordStatusReq ( wchar_t **ppBuf, long *lSize, 
 												   long lPid, wchar_t* pwcDataKind, 
 												   wchar_t* pwcCode, wchar_t* pwcNewCode )

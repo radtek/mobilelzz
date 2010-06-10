@@ -167,8 +167,26 @@ void	CSmsUnReadWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 // 	}
 // 	else
 // 	{
-		//Update ReadStatus
 		stCoreItemData* pstCoreItemData	=	( stCoreItemData* )( pItem->m_pData );
+
+		CCoreService	*pCCoreService	=	CCoreService::GetInstance();
+		if ( NULL == pCCoreService )						return;
+
+		//GetDtail
+		wchar_t	*pBuf		=	NULL;
+		long	lSize		=	0;
+		wchar_t	*pwcResult	=	NULL;
+		m_clCEasySmsUiCtrl.MakeDetailReq( &pBuf, &lSize, pstCoreItemData->lSid, NULL );
+		pCCoreService->Request( pBuf, &pwcResult );
+
+		wchar_t	*pDetail	=	NULL;
+
+		CCoreSmsUiCtrl	clCCoreSmsUiCtrl;
+
+		clCCoreSmsUiCtrl.MakeDetailRlt( pwcResult, &pDetail );
+
+		//Update ReadStatus
+		
 		if ( 0 == pstCoreItemData->bIsRead && false	== pstCoreItemData->bIsEncode )	//Î´¶ÁÎª0
 		{
 			wchar_t	*pBuf		=	NULL;
@@ -177,10 +195,7 @@ void	CSmsUnReadWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 
 			m_clCEasySmsUiCtrl.MakeUpdateSmsStatusReq( &pBuf, &lSize, pstCoreItemData->lSid, (long)(-1), (long)(1) );
 
-			CCoreService	*pCCoreService	=	CCoreService::GetInstance();
-			if ( NULL == pCCoreService )					return;
-
-			HRESULT	hr	=	pCCoreService->Request( pBuf, &pwcResult );
+			pCCoreService->Request( pBuf, &pwcResult );
 		}
 		
 		CSmsLookMsgDetailWnd	clCSmsLookMsgDetailWnd;

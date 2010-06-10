@@ -51,9 +51,13 @@ class  COMMONLIB_API CCoreSmsUiCtrl
 		APP_Result		MakePassWordStatusReq ( UiCodeChar **ppBuf, long *lSize, 
 												long lPid, UiCodeChar* pwcDataKind, 
 												UiCodeChar* pwcCode, UiCodeChar* pwcNewCode );
+	
+		APP_Result		MakeDetailReq ( UiCodeChar **ppBuf, long *lSize, long lSid, UiCodeChar* pwcCode );
 
 
 		APP_Result		MakeListRlt    ( UiCodeChar *pwcRltStream, stCoreItemData **ppclstItemData, long *plCnt );
+		APP_Result		MakeDetailRlt  ( UiCodeChar *pwcRltStream, wchar_t **ppwcDetail );
+
 
 
 	private:

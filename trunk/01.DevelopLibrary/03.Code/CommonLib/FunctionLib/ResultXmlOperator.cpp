@@ -523,6 +523,105 @@ APP_Result		CCoreSmsUiCtrl::MakeUnReadRltListReq( wchar_t **ppBuf, long *lSize )
 	return	hr;
 }
 
+APP_Result		CCoreSmsUiCtrl::MakeDetailReq ( UiCodeChar **ppBuf, long *lSize, long lSid, UiCodeChar* pwcCode )
+{
+	CXmlStream	*pCXmlStream	=	new	CXmlStream;
+
+	if ( NULL == pCXmlStream )
+	{
+		return	APP_Result_E_Fail;
+	}
+
+	APP_Result	hr		=		APP_Result_S_OK;
+
+	do 
+	{
+		hr	=	pCXmlStream->Initialize();
+		if ( FAILED_App( hr ) )													break;
+
+		CXmlNode	*	pCXmlNode	=	NULL;
+
+		NodeAttribute_t  stNodeAttr;
+		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
+		F_wcscpyn( stNodeAttr.wcsName, L"type", CHAR_MAX_LENGTH );
+		F_wcscpyn( stNodeAttr.wcsValue, L"sms", CHAR_MAX_LENGTH );
+
+		hr	=	MakeNode( pCXmlStream, L"request/data/", &stNodeAttr, 1 );
+		if ( FAILED_App( hr ) )													break;
+
+		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
+		F_wcscpyn( stNodeAttr.wcsName , L"type", CHAR_MAX_LENGTH );
+		F_wcscpyn( stNodeAttr.wcsValue, L"detail", CHAR_MAX_LENGTH );
+
+		hr	=	MakeNode( pCXmlStream, L"request/data/operation/", &stNodeAttr, 1 );
+		if ( FAILED_App( hr ) )														break;
+
+		hr	=	MakeNode( pCXmlStream, L"request/data/operation/id/", NULL, NULL, (void*)(&lSid), EN_CORE_LONG );
+		if ( FAILED_App( hr ) )														break;
+
+		if ( NULL != pwcCode )
+		{
+			hr	=	MakeNode( pCXmlStream, L"request/data/operation/decode/", NULL, NULL, (void*)(&pwcCode), EN_CORE_WCHAR );
+			if ( FAILED_App( hr ) )													break;
+		}
+
+		hr	=	pCXmlStream->GetXmlStream( ppBuf, lSize );
+		if ( FAILED_App( hr ) )														break;
+
+	} while ( FALSE );
+
+	if ( NULL != pCXmlStream )
+	{
+		delete	pCXmlStream;
+	}
+
+	return	hr;
+	
+}
+
+APP_Result		CCoreSmsUiCtrl::MakeDetailRlt  ( UiCodeChar *pwcRltStream, wchar_t **ppwcDetail )
+{
+	if ( NULL == pwcRltStream || NULL == ppwcDetail )
+	{
+		return	APP_Result_E_Fail;
+	}
+
+	*ppwcDetail	=	NULL;
+
+	CXmlStream	*pCXmlStream	=	new	CXmlStream;
+
+	if ( NULL == pCXmlStream )
+	{
+		return	APP_Result_E_Fail;
+	}
+
+	APP_Result	hr		=		APP_Result_S_OK;
+
+	do 
+	{
+		hr	=	pCXmlStream->Initialize();
+		if ( FAILED_App( hr ) )													break;
+
+		hr	=	pCXmlStream->Load( pwcRltStream, wcslen( pwcRltStream ) );
+		if ( FAILED_App( hr ) )													break;
+
+		CXmlNode	*	pCXmlNode	=	NULL;
+		hr	=	pCXmlStream->SelectNode( L"result/data/data/rec/content/", &pCXmlNode );
+		if ( FAILED_App( hr ) )													break;
+
+		auto_ptr<CXmlNode>	CXmlNodePtr( pCXmlNode );
+		hr	=	CXmlNodePtr->GetNodeContent ( NULL, ppwcDetail, NULL, NULL );
+
+	} while ( FALSE );
+
+	if ( NULL != pCXmlStream )
+	{
+		delete	pCXmlStream;
+	}
+
+	return	hr;
+}
+
 APP_Result		CCoreSmsUiCtrl::MakeListRlt    ( UiCodeChar *pwcRltStream, stCoreItemData **ppclstItemData, long *plCnt )
 {
 	if ( NULL == pwcRltStream || NULL == ppclstItemData )

@@ -43,6 +43,8 @@ class CEasySmsUiCtrl
 											long lPid, wchar_t* pwcDataKind, 
 											wchar_t* pwcCode, wchar_t* pwcNewCode );
 
+		HRESULT		MakeDetailReq ( wchar_t **ppBuf, long *lSize, long lSid, wchar_t* pwcCode );
+
 	private:
 
 		ImageContainer		m_imgContainer;

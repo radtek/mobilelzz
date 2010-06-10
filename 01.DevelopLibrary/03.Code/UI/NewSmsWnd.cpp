@@ -133,6 +133,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 	m_Recievers.SetTopInvalid(5);
 	m_Recievers.SetBottomInvalid(5);
 	if ( en_transmit == m_enSendType ){
+		//set reciever name
 		m_Recievers.SetText(m_pItem->m_textTitle);
 		//add reciever
 		MyListItemData stTempRe;
@@ -152,6 +153,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 	//m_SmsMsgEdit->EnableZoomIn( true );   
 	m_SmsMsgEdit->SetTip( L"在这里输入短信内容" );
 	if ( en_replay == m_enSendType ){
+		//set sms content
 		m_SmsMsgEdit->SetText(m_pItem->m_textPostscript1);
 	}
 	AddUiWin( m_SmsMsgEdit );

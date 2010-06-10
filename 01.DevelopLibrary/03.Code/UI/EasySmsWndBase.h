@@ -90,7 +90,7 @@ class CEasySmsWndBase : public CMzWndEx
 		ImageContainer		m_imgContainer_base;
 
 		ListItemEx*			m_pItem;
-
+		CoreItemData_t*		m_pCoreItemData;
 	private:
 
 };

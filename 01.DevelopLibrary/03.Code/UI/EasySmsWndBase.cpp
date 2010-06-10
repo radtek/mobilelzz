@@ -61,6 +61,7 @@ void	CEasySmsListBase::setEasySmsWndBase( CEasySmsWndBase *pCEasySmsWndBase )
 ///////////////CEasySmsWndBase///////////////////////////////////////////////////////////
 CEasySmsWndBase::CEasySmsWndBase(void)	:	m_pItem( NULL )
 {
+	m_pCoreItemData = NULL;
 	m_list_base.setEasySmsWndBase( this );
 }
 
@@ -243,6 +244,7 @@ void	CEasySmsWndBase::SetListItem( ListItemEx* pItem )
 	}
 
 	m_pItem	=	pItem;
+	m_pCoreItemData = (CoreItemData_t*)pItem->m_pData;
 }
 
 wchar_t	* CEasySmsWndBase::GetNameOrTel( ListItemEx* pItem )

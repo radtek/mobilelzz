@@ -134,12 +134,12 @@ BOOL CNewSmsWnd::OnInitDialog()
 	m_Recievers.SetBottomInvalid(5);
 	if ( en_transmit == m_enSendType ){
 		//set reciever name
-		m_Recievers.SetText(m_pItem->m_textTitle);
+		m_Recievers.SetText(m_pCoreItemData->bstrName);
 		//add reciever
 		MyListItemData stTempRe;
-		stTempRe.lPID = 0;
-		stTempRe.StringTitle = m_pItem->m_textTitle;
-		stTempRe.StringDescription = m_pItem->m_textDescription;
+		stTempRe.lPID = m_pCoreItemData->lPid;
+		stTempRe.StringTitle = m_pCoreItemData->bstrName;
+		stTempRe.StringDescription = m_pCoreItemData->bstrTelNo;
 		g_ReciversList.AppendItem(&stTempRe);
 	}
 	AddUiWin( &m_Recievers ); 
@@ -154,7 +154,7 @@ BOOL CNewSmsWnd::OnInitDialog()
 	m_SmsMsgEdit->SetTip( L"在这里输入短信内容" );
 	if ( en_replay == m_enSendType ){
 		//set sms content
-		m_SmsMsgEdit->SetText(m_pItem->m_textPostscript1);
+		m_SmsMsgEdit->SetText(m_pCoreItemData->bstrDetail);
 	}
 	AddUiWin( m_SmsMsgEdit );
 

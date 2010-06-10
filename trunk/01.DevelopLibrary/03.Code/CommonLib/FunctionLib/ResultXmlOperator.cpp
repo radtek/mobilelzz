@@ -556,7 +556,7 @@ APP_Result		CCoreSmsUiCtrl::MakeDetailReq ( UiCodeChar **ppBuf, long *lSize, lon
 		hr	=	MakeNode( pCXmlStream, L"request/data/operation/", &stNodeAttr, 1 );
 		if ( FAILED_App( hr ) )														break;
 
-		hr	=	MakeNode( pCXmlStream, L"request/data/operation/id/", NULL, NULL, (void*)(&lSid), EN_CORE_LONG );
+		hr	=	MakeNode( pCXmlStream, L"request/data/operation/sid/", NULL, NULL, (void*)(&lSid), EN_CORE_LONG );
 		if ( FAILED_App( hr ) )														break;
 
 		if ( NULL != pwcCode )

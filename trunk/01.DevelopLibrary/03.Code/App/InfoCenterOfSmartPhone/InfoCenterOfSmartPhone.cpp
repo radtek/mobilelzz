@@ -18,6 +18,7 @@
 #include "SmsEncrytpCtorWnd.h"
 #include "SmsPassInputWnd.h"
 #include "SmsPassConfirmWnd.h"
+#include "SmsPassDeleteWnd.h"
 
 MZ_IMPLEMENT_DYNAMIC( CEasySmsWndBase )
 MZ_IMPLEMENT_DYNAMIC( CContactorsWnd )
@@ -32,7 +33,7 @@ MZ_IMPLEMENT_DYNAMIC( CSmsFindWnd )
 MZ_IMPLEMENT_DYNAMIC( CSmsEncrytpCtorWnd )
 MZ_IMPLEMENT_DYNAMIC( CSmsPassInputWnd )
 MZ_IMPLEMENT_DYNAMIC( CSmsPassConfirmWnd )
-
+MZ_IMPLEMENT_DYNAMIC( CSmsPassDeleteWnd )
 
 
 class CMainApp: public CMzApp

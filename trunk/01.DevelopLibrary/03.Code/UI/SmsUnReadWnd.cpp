@@ -184,6 +184,12 @@ void	CSmsUnReadWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 		CCoreSmsUiCtrl	clCCoreSmsUiCtrl;
 
 		clCCoreSmsUiCtrl.MakeDetailRlt( pwcResult, &pDetail );
+		if ( NULL != pDetail )
+		{
+			pstCoreItemData->bstrDetail	=	pDetail;
+			delete	pDetail;
+			pDetail	=	NULL;
+		}
 
 		//Update ReadStatus
 		
@@ -202,6 +208,8 @@ void	CSmsUnReadWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 
 		clCSmsLookMsgDetailWnd.SetListItem( pItem );
 		iRlt	=	DoModalBase( &clCSmsLookMsgDetailWnd );
+
+		pstCoreItemData->bstrDetail.Empty();
 
 //	}
 

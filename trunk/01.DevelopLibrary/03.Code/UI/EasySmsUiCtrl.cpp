@@ -148,7 +148,16 @@ HRESULT		CEasySmsUiCtrl::MakeCtorRltList    ( CEasySmsListBase &clCEasySmsListBa
 
 		item->m_itemBgType	=	UILIST_ITEM_BGTYPE_YELLOW;
 
-		item->m_pImgFirst	=	m_imgContainer.LoadImage ( MzGetInstanceHandle(), IDR_PNG_CTR_LIST_READ, true );
+		if ( pstCoreItemData[i].bIsEncode )
+		{
+			item->m_pImgFirst	=	m_imgContainer.LoadImage ( MzGetInstanceHandle(), IDR_ENCODE_STATUS, true );
+		}
+		else
+		{
+			item->m_pImgFirst	=	m_imgContainer.LoadImage ( MzGetInstanceHandle(), IDR_PNG_CTR_LIST_READ, true );
+		}
+
+		
 		clCEasySmsListBase.AddItem( item );
 
 	}

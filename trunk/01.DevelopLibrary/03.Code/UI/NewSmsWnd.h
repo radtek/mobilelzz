@@ -61,6 +61,8 @@ class CNewSmsWnd : public /*CMzWndEx*/ CEasySmsWndBase
 	 
 	   void UpdateData( MyListItemData* pRecivers,long lReciversCount );
 
+	   void	SetSendType( EN_SENDTYPE enType );
+
 		// °´Å¥
 	//  UiButton m_SendSmsBtn;
 	//	UiButton					m_ContactorsBtn;

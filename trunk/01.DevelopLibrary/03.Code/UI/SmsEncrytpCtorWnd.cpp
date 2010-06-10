@@ -3,6 +3,7 @@
 
 #include "SmsEncrytpCtorWnd.h"
 #include "SmsPassInputWnd.h"
+#include "SmsPassDeleteWnd.h"
 #include "CoreService.h"
 
 
@@ -165,15 +166,29 @@ void	CSmsEncrytpCtorWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 	stCoreItemData	*pstItemData	=	( stCoreItemData* )( pItem->m_pData );
 	if ( NULL != pstItemData )
 	{
-		CSmsPassInputWnd	clCSmsPassInputWnd;
-		clCSmsPassInputWnd.SetID( pstItemData->lSid );
-		clCSmsPassInputWnd.CreateModalDialog( 50, 100, 350, 250, this->m_hWnd );
-		//	clCSmsPassInputWnd.SetBgColor ( RGB( 228, 240, 0 ) );
-		int iRlt	=	DoModalBase( &clCSmsPassInputWnd );
+		int iRlt	=	-1;
+
+		if ( pstItemData->bIsEncode )
+		{
+			CSmsPassDeleteWnd	clCSmsPassDeleteWnd;
+			clCSmsPassDeleteWnd.SetListItem( pItem );
+			clCSmsPassDeleteWnd.CreateModalDialog( 50, 100, 350, 250, this->m_hWnd );
+			iRlt	=	DoModalBase( &clCSmsPassDeleteWnd );
+
+		}
+		else
+		{
+			CSmsPassInputWnd	clCSmsPassInputWnd;
+			clCSmsPassInputWnd.SetListItem( pItem );
+			clCSmsPassInputWnd.CreateModalDialog( 50, 100, 350, 250, this->m_hWnd );
+			iRlt	=	DoModalBase( &clCSmsPassInputWnd );
+		}
+
 		if ( ID_CASCADE_EXIT == iRlt )
 		{
 			ReturnToMainWnd();
 		}
+
 	}
 
 }

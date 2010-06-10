@@ -87,6 +87,10 @@ IDR_PNG_SETUP_DOWN					RCDATA                  "…Ë÷√_down.png"
 
 IDR_ENCRYPT_INPUT					RCDATA                  "PasswordGreen.png"
 
+IDR_ENCODE_STATUS					RCDATA                  "º”√‹.png"
+
+IDR_LOCK_STATUS						RCDATA                  "º”À¯.png"
+
 IDR_PNG_EditWndBack					   				RCDATA                  "EditWndBack.PNG"
 IDR_PNG_CTR_LIST_READ					   				RCDATA                  "sms_list_read.png"
 

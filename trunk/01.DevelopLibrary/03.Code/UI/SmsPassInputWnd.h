@@ -3,6 +3,7 @@
 
 #include "UiEditControl.h"
 #include "NewSmsWnd.h"
+#include "EasySmsUiCtrl.h"
 #include "EasySmsWndBase.h"
 
 
@@ -26,8 +27,6 @@ class CSmsPassInputWnd	:	public	CEasySmsWndBase
 
 		BOOL	SubInitialize();
 
-		void	SetID ( long id );
-
 	private:
 		
 	protected:
@@ -41,6 +40,8 @@ class CSmsPassInputWnd	:	public	CEasySmsWndBase
 		UiPicture							m_Picture;
 
 		int									m_modeIndex;
+
+		CEasySmsUiCtrl						m_clCEasySmsUiCtrl;
 
 };
 

@@ -39,6 +39,8 @@ class CSmsEncrytpCtorWnd	:	public	CEasySmsWndBase
 
 		CEasySmsUiCtrl				m_clCEasySmsUiCtrl;
 
+		ImageContainer				m_imgContainer;
+
 };
 
 #endif

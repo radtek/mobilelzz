@@ -43,8 +43,32 @@ void CSmsPassDeleteWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 			}
 			else if ( nIndex == 0 )
 			{
+				LPCWSTR pwcInput		=	m_PassInput.GetPassWord();
+				//保存密码
+				wchar_t	*pBuf		=	NULL;
+				long	lSize		=	0;
+				wchar_t	*pwcResult	=	NULL;
 
+				stCoreItemData* pstCoreItemData	=	( stCoreItemData* )( m_pItem->m_pData );
+
+				m_clCEasySmsUiCtrl.MakePassWordStatusReq ( &pBuf, &lSize, pstCoreItemData->lPid, L"delete", (wchar_t *)pwcInput, NULL );
+
+				CCoreService	*pCCoreService	=	CCoreService::GetInstance();
+				if ( NULL == pCCoreService )						return;
+
+				HRESULT	hr	=	pCCoreService->Request( pBuf, &pwcResult );
+				if ( SUCCEEDED(hr) )
+				{
+					this->EndModal( ID_OK );
+				}
+				else
+				{
+					MzMessageBoxEx( NULL,L"输入的密码错误，请重新输入!",MB_OK);
+				}
 			}
+
+			m_PassInput.SetText( L"" );
+
 			break;
 		}
 

@@ -174,6 +174,12 @@ void	CSmsEncrytpCtorWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 			clCSmsPassDeleteWnd.SetListItem( pItem );
 			clCSmsPassDeleteWnd.CreateModalDialog( 50, 100, 350, 250, this->m_hWnd );
 			iRlt	=	DoModalBase( &clCSmsPassDeleteWnd );
+			if ( ID_OK == iRlt )
+			{
+				pstItemData->bIsEncode	=	FALSE;
+				pItem->m_pImgFirst	=	m_imgContainer.LoadImage ( MzGetInstanceHandle(), IDR_PNG_CTR_LIST_READ, true );
+				UpdateWindow();
+			}
 
 		}
 		else
@@ -182,6 +188,12 @@ void	CSmsEncrytpCtorWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 			clCSmsPassInputWnd.SetListItem( pItem );
 			clCSmsPassInputWnd.CreateModalDialog( 50, 100, 350, 250, this->m_hWnd );
 			iRlt	=	DoModalBase( &clCSmsPassInputWnd );
+			if ( ID_OK == iRlt )
+			{
+				pstItemData->bIsEncode	=	TRUE;
+				pItem->m_pImgFirst	=	m_imgContainer.LoadImage ( MzGetInstanceHandle(), IDR_ENCODE_STATUS, true );
+				UpdateWindow();
+			}
 		}
 
 		if ( ID_CASCADE_EXIT == iRlt )

@@ -387,19 +387,25 @@ APP_Result		CCoreSmsUiCtrl::MakePassWordStatusReq ( UiCodeChar **ppBuf, long *lS
 
 		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
 		F_wcscpyn( stNodeAttr.wcsName , L"kind", CHAR_MAX_LENGTH );
-		F_wcscpyn( stNodeAttr.wcsValue, L"pwcDataKind", CHAR_MAX_LENGTH );
+		F_wcscpyn( stNodeAttr.wcsValue, pwcDataKind, CHAR_MAX_LENGTH );
 
 		hr	=	MakeNode( pCXmlStream, L"request/data/operation/protectdata/", &stNodeAttr, 1 );
 		if ( FAILED_App( hr ) )													break;
 
 		hr	=	MakeNode( pCXmlStream, L"request/data/operation/protectdata/pid/", NULL, NULL, (void*)(&lPid), EN_CORE_LONG );
 		if ( FAILED_App( hr ) )													break;
+		
+		if ( NULL != pwcCode )
+		{
+			hr	=	MakeNode( pCXmlStream, L"request/data/operation/protectdata/code/", NULL, NULL, (void*)(pwcCode), EN_CORE_WCHAR );
+			if ( FAILED_App( hr ) )													break;
+		}
 
-		hr	=	MakeNode( pCXmlStream, L"request/data/operation/protectdata/code/", NULL, NULL, (void*)(pwcCode), EN_CORE_WCHAR );
-		if ( FAILED_App( hr ) )													break;
-
-		hr	=	MakeNode( pCXmlStream, L"request/data/operation/protectdata/newcode/", NULL, NULL, (void*)(pwcNewCode), EN_CORE_WCHAR );
-		if ( FAILED_App( hr ) )													break;
+		if ( NULL != pwcNewCode )
+		{
+			hr	=	MakeNode( pCXmlStream, L"request/data/operation/protectdata/newcode/", NULL, NULL, (void*)(pwcNewCode), EN_CORE_WCHAR );
+			if ( FAILED_App( hr ) )													break;
+		}
 
 		//////////////////////////////////////////////////////////////////////////
 		hr	=	pCXmlStream->GetXmlStream( ppBuf, lSize );

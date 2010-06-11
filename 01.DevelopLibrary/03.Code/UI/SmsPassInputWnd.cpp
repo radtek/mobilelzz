@@ -43,8 +43,42 @@ void CSmsPassInputWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 			}
 			else if ( nIndex == 0 )
 			{
+				LPCWSTR pwcInput		=	m_PassInput.GetPassWord();
+				LPCWSTR	pwcInputAgain	=	m_PassInput_Again.GetPassWord();
+				if ( NULL == pwcInput || NULL == pwcInputAgain || *pwcInput == L'\0' || *pwcInputAgain == L'\0' )
+				{
+					MzMessageBoxEx( NULL,L"输入密码无效，请重新输入!",MB_OK);
+				}
+				else if ( 0 != wcscmp( pwcInput,pwcInputAgain ) )
+				{
+					MzMessageBoxEx( NULL,L"两次输入的密码不一致，请重新输入!",MB_OK);
+				}
+				else
+				{
+					//保存密码
+					wchar_t	*pBuf		=	NULL;
+					long	lSize		=	0;
+					wchar_t	*pwcResult	=	NULL;
+
+					stCoreItemData* pstCoreItemData	=	( stCoreItemData* )( m_pItem->m_pData );
+
+					m_clCEasySmsUiCtrl.MakePassWordStatusReq ( &pBuf, &lSize, pstCoreItemData->lPid, L"add", (wchar_t *)pwcInput, NULL );
+				
+					CCoreService	*pCCoreService	=	CCoreService::GetInstance();
+					if ( NULL == pCCoreService )						return;
+
+					HRESULT	hr	=	pCCoreService->Request( pBuf, &pwcResult );
+					if ( SUCCEEDED(hr) )
+					{
+						this->EndModal( ID_OK );
+					}
+				}
 
 			}
+
+			m_PassInput.SetText( L"" );
+			m_PassInput_Again.SetText( L"" );
+
 			break;
 		}
 

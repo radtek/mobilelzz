@@ -42,6 +42,8 @@ class CSmsPassDeleteWnd	:	public	CEasySmsWndBase
 
 		int									m_modeIndex;
 
+		CEasySmsUiCtrl						m_clCEasySmsUiCtrl;
+
 };
 
 #endif

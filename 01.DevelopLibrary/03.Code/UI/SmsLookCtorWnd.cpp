@@ -4,6 +4,7 @@
 #include "SmsLookCtorWnd.h"
 #include "SmsLookMsgWnd.h"
 #include "CoreService.h"
+#include "SmsPassConfirmWnd.h"
 
 class ListItemData
 {
@@ -165,9 +166,31 @@ BOOL	CSmsLookCtorWnd::SubInitialize()
 
 void	CSmsLookCtorWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 {
-	CSmsLookMsgWnd	clCSmsLookMsgWnd;
-	clCSmsLookMsgWnd.SetListInfo( pItem );
-	int iRlt	=	DoModalBase( &clCSmsLookMsgWnd );
+	bool	bIsEncode		=	( ( stCoreItemData* )( pItem->m_pData ) )->bIsEncode;
+	int		iRlt		=	-100;
+	if ( bIsEncode )					//该联系人是被加锁的
+	{
+		CSmsPassConfirmWnd	clCSmsPassConfirmWnd;
+		clCSmsPassConfirmWnd.SetListItem( pItem );
+		clCSmsPassConfirmWnd.CreateModalDialog( 50, 100, 350, 250, this->m_hWnd );
+		int iRlt	=	DoModalBase( &clCSmsPassConfirmWnd );
+		if ( ID_OK == iRlt )		//密码正确返回
+		{
+			//取得短信信息并进入DetailWnd
+			CSmsLookMsgWnd	clCSmsLookMsgWnd;
+			clCSmsLookMsgWnd.SetPassWord( clCSmsPassConfirmWnd.GetPassWord() );
+			clCSmsLookMsgWnd.SetListItem( pItem );
+			int iRlt	=	DoModalBase( &clCSmsLookMsgWnd );
+		}
+	}
+	else
+	{
+		CSmsLookMsgWnd	clCSmsLookMsgWnd;
+		clCSmsLookMsgWnd.SetListItem( pItem );
+		int iRlt	=	DoModalBase( &clCSmsLookMsgWnd );
+	}
+	
+
 	if ( ID_CASCADE_EXIT == iRlt )
 	{
 		ReturnToMainWnd();

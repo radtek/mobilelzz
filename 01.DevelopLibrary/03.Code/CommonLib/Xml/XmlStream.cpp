@@ -251,10 +251,10 @@ APP_Result CXmlNode::SetNodeContent( wchar_t* pwcsNodePath, wchar_t* pwcsNodeVal
 	}
 
 #ifdef _DEBUG
-	if ( NULL != m_pCXmlStream )
-	{
-		m_pCXmlStream->GetDocument()->SaveFile( "./FileName.xml" );
-	}	
+// 	if ( NULL != m_pCXmlStream )
+// 	{
+// 		m_pCXmlStream->GetDocument()->SaveFile( "./FileName.xml" );
+// 	}	
 #endif
 
 	return	hr;
@@ -337,10 +337,10 @@ APP_Result	CXmlNode::AppendNode( CXmlNode* pCXmlNode )
 	m_CurElement->InsertEndChild( *( pCXmlNode->GetElement() ) );
 
 #ifdef _DEBUG
-	if ( NULL != m_pCXmlStream )
-	{
-		m_pCXmlStream->GetDocument()->SaveFile( "./FileName.xml" );
-	}	
+// 	if ( NULL != m_pCXmlStream )
+// 	{
+// 		m_pCXmlStream->GetDocument()->SaveFile( "./FileName.xml" );
+// 	}	
 #endif
 
 	return	APP_Result_S_OK;
@@ -460,10 +460,10 @@ APP_Result	CXmlStream::GetXmlStream( wchar_t** ppwcStream, long *plSize )
 	*plSize	=	lSize;
 
 #ifdef _DEBUG
-	if ( NULL != m_pTiXmlDocument )
-	{
-		m_pTiXmlDocument->SaveFile( "./FileName.xml" );
-	}
+// 	if ( NULL != m_pTiXmlDocument )
+// 	{
+// 		m_pTiXmlDocument->SaveFile( "./FileName.xml" );
+// 	}
 #endif
 
 	return	APP_Result_S_OK;
@@ -635,10 +635,10 @@ APP_Result	CXmlStream::MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode )
 			pNode->LinkEndChild( pTempNode );
 			pNode	=	pTempNode;
 #ifdef _DEBUG
-			if ( NULL != m_pTiXmlDocument )
-			{
-				m_pTiXmlDocument->SaveFile( "./FileName.xml" );
-			}
+// 			if ( NULL != m_pTiXmlDocument )
+// 			{
+// 				m_pTiXmlDocument->SaveFile( "./FileName.xml" );
+// 			}
 #endif
 
 		} while ( TRUE );
@@ -700,10 +700,10 @@ APP_Result	CXmlStream::MakeXmlFirst( char *pcsNodePath, CXmlNode** pclXmlNode )
 	if ( SUCCEEDED(hr) )
 	{
 #ifdef _DEBUG		
-	if ( NULL != m_pCXmlStream )
-	{
-		m_pCXmlStream->GetDocument()->SaveFile( "./FileName.xml" );
-	}
+// 	if ( NULL != m_pCXmlStream )
+// 	{
+// 		m_pCXmlStream->GetDocument()->SaveFile( "./FileName.xml" );
+// 	}
 #endif
 	}
 
@@ -773,10 +773,10 @@ APP_Result	CXmlStream::MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 			pNode	=	new TiXmlElement( pTemp );
 			m_pTiXmlDocument->LinkEndChild( pNode );
 #ifdef _DEBUG
-			if ( NULL != m_pTiXmlDocument )
-			{
-				m_pTiXmlDocument->SaveFile( "./FileName.xml" );
-			}
+// 			if ( NULL != m_pTiXmlDocument )
+// 			{
+// 				m_pTiXmlDocument->SaveFile( "./FileName.xml" );
+// 			}
 #endif
 		}
 		
@@ -795,10 +795,10 @@ APP_Result	CXmlStream::MakeXml( char *pcsNodePath, CXmlNode** pclXmlNode )
 				pNode->LinkEndChild( pTempNode );
 				pNode	=	pTempNode;
 #ifdef _DEBUG
-				if ( NULL != m_pTiXmlDocument )
-				{
-					m_pTiXmlDocument->SaveFile( "./FileName.xml" );
-				}
+// 				if ( NULL != m_pTiXmlDocument )
+// 				{
+// 					m_pTiXmlDocument->SaveFile( "./FileName.xml" );
+// 				}
 #endif
 			}
 			else

@@ -138,7 +138,18 @@ BOOL	CSmsLookMsgDetailWnd::SubInitialize()
 	//Ini	GridMenu
 	m_GridMenu.AppendMenuItem(MZ_IDC_SMSLOOKMSG_DETAIL_GRIDMENU_DETAIL, L"提取详情" );
 	m_GridMenu.AppendMenuItem(MZ_IDC_SMSLOOKMSG_DETAIL_GRIDMENU_FW, L"转发" );
-	m_GridMenu.AppendMenuItem(MZ_IDC_SMSLOOKMSG_DETAIL_GRIDMENU_LOCK, L"加锁" );
+
+	stCoreItemData* pstCoreItemData	=	( stCoreItemData* )( m_pItem->m_pData );
+
+	if ( pstCoreItemData->bIsLock )
+	{
+		m_GridMenu.AppendMenuItem(MZ_IDC_SMSLOOKMSG_DETAIL_GRIDMENU_LOCK, L"解锁" );
+	}
+	else
+	{
+		m_GridMenu.AppendMenuItem(MZ_IDC_SMSLOOKMSG_DETAIL_GRIDMENU_LOCK, L"加锁" );
+	}
+	
 	m_GridMenu.AppendMenuItem(MZ_IDC_SMSLOOKMSG_DETAIL_GRIDMENU_BACK, L"返回" );
 
 	//add Text

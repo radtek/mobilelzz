@@ -171,9 +171,9 @@ HRESULT		CEasySmsUiCtrl::MakeSendSmsInfo	( wchar_t **ppBuf, long *lSize, wchar_t
 	return	m_clCCoreSmsUiCtrl.MakeSendSmsInfo( ppBuf, lSize, pwcSmsInfo, pwcsNumber );
 }
 
-HRESULT		CEasySmsUiCtrl::MakeMsgRltListReq( wchar_t **ppBuf, long *lSize, long lPid )
+HRESULT		CEasySmsUiCtrl::MakeMsgRltListReq( wchar_t **ppBuf, long *lSize, long lPid, wchar_t *pDecode )
 {
-	return	m_clCCoreSmsUiCtrl.MakeMsgRltListReq( ppBuf, lSize, lPid );
+	return	m_clCCoreSmsUiCtrl.MakeMsgRltListReq( ppBuf, lSize, lPid, pDecode );
 }
 
 HRESULT		CEasySmsUiCtrl::MakeMsgRltList   ( CEasySmsListBase &clCEasySmsListBase, wchar_t *pwcRltStream )
@@ -234,7 +234,7 @@ HRESULT		CEasySmsUiCtrl::MakeMsgRltList   ( CEasySmsListBase &clCEasySmsListBase
 	return	hr;
 }
 
-HRESULT		CEasySmsUiCtrl::MakeDetailRltListReq( wchar_t **ppBuf, long *lSize, long lSid )
+HRESULT		CEasySmsUiCtrl::MakeDetailRltListReq( wchar_t **ppBuf, long *lSize, long lSid, wchar_t *pDecode )
 {
-	return	m_clCCoreSmsUiCtrl.MakeDetailRltListReq( ppBuf, lSize, lSid );
+	return	m_clCCoreSmsUiCtrl.MakeDetailRltListReq( ppBuf, lSize, lSid, pDecode );
 }

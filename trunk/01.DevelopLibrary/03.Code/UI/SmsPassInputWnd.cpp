@@ -72,6 +72,10 @@ void CSmsPassInputWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 					{
 						this->EndModal( ID_OK );
 					}
+					else
+					{	
+						MzMessageBoxEx( NULL,L"…Ë÷√√‹¬Î ß∞‹!",MB_OK);
+					}
 				}
 
 			}

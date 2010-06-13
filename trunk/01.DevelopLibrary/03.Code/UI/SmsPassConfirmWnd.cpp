@@ -5,14 +5,18 @@
 #include "SmsPassConfirmWnd.h"
 
 ///////////////////CSmsLookCtorWnd///////////////////////////////////////////////////////
-CSmsPassConfirmWnd::CSmsPassConfirmWnd(void)
+CSmsPassConfirmWnd::CSmsPassConfirmWnd(void)	:	m_pwPassWord ( NULL ) 
 {
 
 }
 
 CSmsPassConfirmWnd::~CSmsPassConfirmWnd(void)
 {
-
+// 	if ( NULL != m_pwPassWord )
+// 	{
+// 		delete	m_pwPassWord;
+// 		m_pwPassWord	=	NULL;
+// 	}
 }
 
 BOOL CSmsPassConfirmWnd::OnInitDialog()
@@ -44,18 +48,42 @@ void CSmsPassConfirmWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 			else if ( nIndex == 0 )			//确认
 			{
 				//取得密码并提交
+				wchar_t	*pBuf		=	NULL;
+				long	lSize		=	0;
+				wchar_t	*pwcResult	=	NULL;
+// 				if ( NULL != m_pwPassWord )
+// 				{
+// 					delete	m_pwPassWord;
+// 					m_pwPassWord	=	NULL;
+// 				}
 
-//				HRESULT	hr	=	CommitPassWord();
-// 				if ( FAILED ( hr ) )
-// 				{
-// 
-// 				}
-// 				else
-// 				{
-// 					this->EndModal( ID_OK  );
-// 				}
-				
+				m_pwPassWord	=	(wchar_t *)( m_PassInput.GetPassWord() );
+				if ( NULL == m_pwPassWord )
+				{
+					MzMessageBoxEx( NULL,L"输入密码无效，请重新输入!",MB_OK);
+				}
+				else
+				{
+					stCoreItemData* pstCoreItemData	=	( stCoreItemData* )( m_pItem->m_pData );
+					
+					HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeMsgRltListReq( &pBuf, &lSize, pstCoreItemData->lPid, m_pwPassWord );
+					if ( FAILED ( hr ) )										return;
+
+					CCoreService	*pCCoreService	=	CCoreService::GetInstance();
+					if ( NULL == pCCoreService )						return;
+					hr	=	pCCoreService->Request( pBuf, &pwcResult );
+					if ( SUCCEEDED(hr) )
+					{
+						this->EndModal( ID_OK );
+					}
+					else
+					{
+						MzMessageBoxEx( NULL,L"输入密码错误!",MB_OK);
+					}
+				}	
 			}
+
+			m_PassInput.SetText( L"" );
 
 			break;
 		}
@@ -100,8 +128,7 @@ BOOL	CSmsPassConfirmWnd::SubInitialize()
 	return	TRUE;
 }
 
-
-void	CSmsPassConfirmWnd::SetID ( long id )
+wchar_t*	CSmsPassConfirmWnd::GetPassWord()
 {
-	m_id	=	id;
+	return	m_pwPassWord;
 }

@@ -3,6 +3,7 @@
 
 #include "UiEditControl.h"
 #include "NewSmsWnd.h"
+#include "EasySmsUiCtrl.h"
 #include "EasySmsWndBase.h"
 
 
@@ -26,7 +27,7 @@ class CSmsPassConfirmWnd	:	public	CEasySmsWndBase
 
 		BOOL	SubInitialize();
 
-		void	SetID ( long id );
+		wchar_t*	GetPassWord();
 
 	private:
 		
@@ -36,12 +37,10 @@ class CSmsPassConfirmWnd	:	public	CEasySmsWndBase
 
 		UiSingleLineEdit					m_PassInput;
 
-		UiSingleLineEdit					m_PassInput_Again;
-
 		UiPicture							m_Picture;
-
+		CEasySmsUiCtrl						m_clCEasySmsUiCtrl;
 		int									m_modeIndex;
-		int									m_id;
+		wchar_t								*m_pwPassWord;
 
 };
 

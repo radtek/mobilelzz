@@ -23,7 +23,10 @@ class CSmsLookMsgWnd	:	public	CEasySmsWndBase
 
 		virtual void OnMzCommand( WPARAM wParam, LPARAM lParam );
 
-		void	SetListInfo( ListItemEx* pListInfo );
+		void	SetPassWord( wchar_t *pwcPassWord )
+		{
+			m_pwcPassWord	=	pwcPassWord;
+		}
 
 	private:
 
@@ -35,9 +38,9 @@ class CSmsLookMsgWnd	:	public	CEasySmsWndBase
 
 	private:
 
-		ListItemEx*			m_pListInfo;
-
 		CEasySmsUiCtrl		m_clCEasySmsUiCtrl;
+
+		wchar_t	*			m_pwcPassWord;
 
 };
 

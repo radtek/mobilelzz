@@ -42,8 +42,8 @@ class  COMMONLIB_API CCoreSmsUiCtrl
 
 		APP_Result		MakeUnReadRltListReq ( UiCodeChar **ppBuf, long *lSize );
 		APP_Result		MakeCtorRltListReq   ( UiCodeChar **ppBuf, long *lSize );
-		APP_Result		MakeMsgRltListReq    ( UiCodeChar **ppBuf, long *lSize, long lPid );
-		APP_Result		MakeDetailRltListReq ( UiCodeChar **ppBuf, long *lSize, long lSid );
+		APP_Result		MakeMsgRltListReq    ( UiCodeChar **ppBuf, long *lSize, long lPid, UiCodeChar *pDecode = NULL );
+		APP_Result		MakeDetailRltListReq ( UiCodeChar **ppBuf, long *lSize, long lSid, UiCodeChar *pDecode = NULL );
 		APP_Result		MakeSendSmsInfo		 ( UiCodeChar **ppBuf, long *lSize, UiCodeChar *pwcSmsInfo, UiCodeChar* pwcsNumber );
 		APP_Result		MakeDeleteSmsInfo	 ( OUT UiCodeChar **ppBuf, OUT long *lSize, IN long *plSid, IN long lCnt );
 		APP_Result		MakeUpdateSmsStatusReq( UiCodeChar **ppBuf, long *lSize, long lSid, long lLock, long lRead );

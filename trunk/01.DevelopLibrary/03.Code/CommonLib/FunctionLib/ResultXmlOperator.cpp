@@ -65,7 +65,7 @@ APP_Result		CCoreSmsUiCtrl::MakeCtorRltListReq   ( UiCodeChar **ppBuf, long *lSi
 	return	hr;
 }
 
-APP_Result		CCoreSmsUiCtrl::MakeMsgRltListReq    ( UiCodeChar **ppBuf, long *lSize, long lPid )
+APP_Result		CCoreSmsUiCtrl::MakeMsgRltListReq    ( UiCodeChar **ppBuf, long *lSize, long lPid,  UiCodeChar *pDecode )
 {
 	CXmlStream	*pCXmlStream	=	new	CXmlStream;
 
@@ -96,26 +96,74 @@ APP_Result		CCoreSmsUiCtrl::MakeMsgRltListReq    ( UiCodeChar **ppBuf, long *lSi
 		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
 		F_wcscpyn( stNodeAttr.wcsName , L"type", CHAR_MAX_LENGTH );
 		F_wcscpyn( stNodeAttr.wcsValue, L"list", CHAR_MAX_LENGTH );
-
+	
 		hr	=	MakeNode( pCXmlStream, L"request/data/operation/", &stNodeAttr, 1 );
 		if ( FAILED_App( hr ) )													break;
 
 		//////////////////////////////////////////////////////////////////////////
-		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
-		F_wcscpyn( stNodeAttr.wcsName , L"name", CHAR_MAX_LENGTH );
-		F_wcscpyn( stNodeAttr.wcsValue, L"contactor", CHAR_MAX_LENGTH );
-		hr	=	MakeNode( pCXmlStream, L"request/data/operation/condition/", &stNodeAttr, 1 );
-		if ( FAILED_App( hr ) )													break;
+		APP_Result	hr	=	pCXmlStream->SelectNode( L"request/data/operation/", &pCXmlNode );
+		if ( FAILED_App( hr ) )												break;
+		auto_ptr<CXmlNode>	CXmlNodePtr( pCXmlNode );
 
-		//////////////////////////////////////////////////////////////////////////
-		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
-		F_wcscpyn( stNodeAttr.wcsName , L"value", CHAR_MAX_LENGTH );
+		NodeAttribute_t *pstNodeAttr	=	new	NodeAttribute_t[ 2 ];
+		if ( NULL == pstNodeAttr )
+		{
+			hr	=	APP_Result_E_Fail;
+			break;
+		}
+		memset( pstNodeAttr, 0x0, sizeof( NodeAttribute_t ) * 2 );
+		F_wcscpyn( pstNodeAttr[0].wcsName , L"name", CHAR_MAX_LENGTH );
+		F_wcscpyn( pstNodeAttr[0].wcsValue, L"contactor", CHAR_MAX_LENGTH );
+
 		wchar_t	buf[20]	=	L"";
 		_ltow( lPid, buf, 10 );
 
-		F_wcscpyn( stNodeAttr.wcsValue, buf, CHAR_MAX_LENGTH );
-		hr	=	MakeNode( pCXmlStream, L"request/data/operation/condition/", &stNodeAttr, 1 );
-		if ( FAILED_App( hr ) )													break;
+		F_wcscpyn( pstNodeAttr[1].wcsName , L"value", CHAR_MAX_LENGTH );
+		F_wcscpyn( pstNodeAttr[1].wcsValue, buf, CHAR_MAX_LENGTH );
+
+		CXmlNode	rec( L"condition" );
+		rec.SetNodeContent( NULL, (long)NULL, pstNodeAttr, (long)(2) );
+		CXmlNodePtr->AppendNode( &rec );
+
+		delete [] pstNodeAttr;
+// 		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
+// 		F_wcscpyn( stNodeAttr.wcsName , L"name", CHAR_MAX_LENGTH );
+// 		F_wcscpyn( stNodeAttr.wcsValue, L"contactor", CHAR_MAX_LENGTH );
+// 		hr	=	MakeNode( pCXmlStream, L"request/data/operation/condition/", &stNodeAttr, 1 );
+// 		if ( FAILED_App( hr ) )													break;
+
+		//////////////////////////////////////////////////////////////////////////
+// 		memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
+// 		F_wcscpyn( stNodeAttr.wcsName , L"value", CHAR_MAX_LENGTH );
+// 		wchar_t	buf[20]	=	L"";
+// 		_ltow( lPid, buf, 10 );
+// 
+// 		F_wcscpyn( stNodeAttr.wcsValue, buf, CHAR_MAX_LENGTH );
+// 		hr	=	MakeNode( pCXmlStream, L"request/data/operation/condition/", &stNodeAttr, 1 );
+// 		if ( FAILED_App( hr ) )													break;
+
+		//////////////////////////////////////////////////////////////////////////
+		if ( NULL != pDecode )
+		{
+			NodeAttribute_t *pstNodeAttr	=	new	NodeAttribute_t[ 2 ];
+			memset( pstNodeAttr, 0x0, sizeof( NodeAttribute_t ) * 2 );
+			F_wcscpyn( pstNodeAttr[0].wcsName , L"name", CHAR_MAX_LENGTH );
+			F_wcscpyn( pstNodeAttr[0].wcsValue, L"decode", CHAR_MAX_LENGTH );
+
+			F_wcscpyn( pstNodeAttr[1].wcsName , L"value", CHAR_MAX_LENGTH );
+			F_wcscpyn( pstNodeAttr[1].wcsValue, pDecode, CHAR_MAX_LENGTH );
+
+			CXmlNode	rec( L"condition" );
+			rec.SetNodeContent( NULL, (long)NULL, pstNodeAttr, (long)2 );
+			CXmlNodePtr->AppendNode( &rec );
+			delete [] pstNodeAttr;
+// 			memset( &stNodeAttr, 0x0, sizeof( NodeAttribute_t ) );
+// 			F_wcscpyn( stNodeAttr.wcsName , L"name", CHAR_MAX_LENGTH );
+// 			F_wcscpyn( stNodeAttr.wcsValue, L"decode", CHAR_MAX_LENGTH );
+// 			hr	=	MakeNode( pCXmlStream, L"request/data/operation/condition/", &stNodeAttr, 1 );
+// 			if ( FAILED_App( hr ) )													break;
+		}
+		
 
 		//////////////////////////////////////////////////////////////////////////
 		hr	=	pCXmlStream->GetXmlStream( ppBuf, lSize );
@@ -421,7 +469,7 @@ APP_Result		CCoreSmsUiCtrl::MakePassWordStatusReq ( UiCodeChar **ppBuf, long *lS
 	return	hr;
 }
 
-APP_Result		CCoreSmsUiCtrl::MakeDetailRltListReq ( UiCodeChar **ppBuf, long *lSize, long lSid )
+APP_Result		CCoreSmsUiCtrl::MakeDetailRltListReq ( UiCodeChar **ppBuf, long *lSize, long lSid, UiCodeChar *pDecode )
 {
 	CXmlStream	*pCXmlStream	=	new	CXmlStream;
 
@@ -459,6 +507,12 @@ APP_Result		CCoreSmsUiCtrl::MakeDetailRltListReq ( UiCodeChar **ppBuf, long *lSi
 		//////////////////////////////////////////////////////////////////////////
 		hr	=	MakeNode( pCXmlStream, L"request/data/operation/sid/", NULL, 0, (void*)(&lSid), EN_CORE_LONG );
 		if ( FAILED_App( hr ) )													break;
+		//////////////////////////////////////////////////////////////////////////
+		if ( NULL != pDecode )
+		{
+			hr	=	MakeNode( pCXmlStream, L"request/data/operation/decode/", NULL, 0, (void*)(&pDecode), EN_CORE_WCHAR );
+			if ( FAILED_App( hr ) )													break;
+		}
 
 		//////////////////////////////////////////////////////////////////////////
 		hr	=	pCXmlStream->GetXmlStream( ppBuf, lSize );

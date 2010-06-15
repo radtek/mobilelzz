@@ -764,8 +764,10 @@ APP_Result CSmsService::CheckCode(long lPID, BOOL& bNeedDecode,
 	}else{
 		wchar_t* pCode = NULL;
 		m_pQCheckCode->GetField(1, &pCode);
-		if ( pCode && (L'\0' != pCode[0]) && pwcsDBCode ){
-			F_wcscpyn(pwcsDBCode, pCode, lCodeSize);
+		if ( pCode && (L'\0' != pCode[0]) ){
+			if ( pwcsDBCode ){
+				F_wcscpyn(pwcsDBCode, pCode, lCodeSize);
+			}
 			bNeedDecode = TRUE;
 		}
 	}
@@ -776,6 +778,9 @@ APP_Result CSmsService::CheckCode(long lPID, BOOL& bNeedDecode,
 APP_Result CSmsService::ConvertDisplayCode2DBCode(wchar_t* pwcsCode, wchar_t* pwcsDBCode, 
 						long lDBCodeCount )
 {
+	if ( !pwcsDBCode || !pwcsCode ){
+		return APP_Result_S_OK;
+	}
 	unsigned short usMask = 0x0007;
 	long lCount = wcslen(pwcsCode);
 	if ( lCount >= lDBCodeCount ){
@@ -793,8 +798,11 @@ APP_Result CSmsService::ConvertDisplayCode2DBCode(wchar_t* pwcsCode, wchar_t* pw
 APP_Result CSmsService::ConvertDBCode2DisplayCode(wchar_t* pDBCode, wchar_t* pwcsCode, 
 												  long lCodeCount)
 {
+	if ( !pDBCode || !pwcsCode ){
+		return APP_Result_S_OK;
+	}
 	unsigned short usMask = 0xE000;
-	long lCount = wcslen(pwcsCode);
+	long lCount = wcslen(pDBCode);
 	if ( lCount >= lCodeCount ){
 		lCount = lCodeCount-1;
 	}
@@ -998,8 +1006,11 @@ APP_Result CSmsService::AddProtectDatta(CRequestXmlOperator& clReqXmlOpe, CXmlSt
 		if ( 0 == wcscmp(L"code", pProtectDatas[1].wcsNodeName) ){
 			m_pQInsertCode->Reset();
 			m_pQInsertCode->Bind( 1, lPID );
-			m_pQInsertCode->Bind( 2, pProtectDatas[1].wcsNodeValue, 
-								sizeof(pProtectDatas[1].wcsNodeValue)/sizeof(pProtectDatas[1].wcsNodeValue[0]) );
+			wchar_t awcsTempDBCode[20] = L"";
+			ConvertDisplayCode2DBCode(pProtectDatas[1].wcsNodeValue, awcsTempDBCode, 
+								sizeof(awcsTempDBCode)/sizeof(awcsTempDBCode[0]));
+			m_pQInsertCode->Bind( 2, awcsTempDBCode, 
+								wcslen(awcsTempDBCode)*2 );
 			hr = m_pQInsertCode->Step();
 			if ( FAILED_App(hr) ){
 				return hr;
@@ -1072,7 +1083,7 @@ APP_Result CSmsService::CheckInputCode(long lPID, wchar_t* pwcsInputCode)
 	ConvertDisplayCode2DBCode( pwcsInputCode, wcsDBCode, sizeof(wcsDBCode)/sizeof(wcsDBCode[0]) );
 	wchar_t* pComparedDBCode = NULL;
 	m_pQCheckCode->GetField(1, &pComparedDBCode);
-	if ( NULL != pComparedDBCode && L'\0' == pComparedDBCode[0] ){
+	if ( NULL != pComparedDBCode && L'\0' != pComparedDBCode[0] ){
 		if ( 0 != wcscmp(wcsDBCode, pComparedDBCode) ){
 			return APP_Result_ProtectData_CodeWrong;
 		}

@@ -60,11 +60,17 @@ APP_Result CCoreService::Request(wchar_t* pwcsRequestXML, wchar_t** ppwcsResultX
 	
 	if ( 0 == wcscmp(awcsDataType, DataTypeSms) )
 	{
-		m_pclSmsService->Excute(pwcsRequestXML, ppwcsResultXML);
+		appR = m_pclSmsService->Excute(pwcsRequestXML, ppwcsResultXML);
+		if (FAILED_App(appR)){
+			return appR;
+		}
 	} 
 	else if( 0 == wcscmp(awcsDataType, DataTypeContactors) )
 	{
-		m_pclContactorsService->Excute(pwcsRequestXML, ppwcsResultXML);
+		appR = m_pclContactorsService->Excute(pwcsRequestXML, ppwcsResultXML);
+		if (FAILED_App(appR)){
+			return appR;
+		}
 	}
 	else{
 		

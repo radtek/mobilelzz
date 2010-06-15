@@ -10,7 +10,7 @@ public:
 
 	virtual ~UiEditControl();
 
-	void UpdateData(  long lFlag  );
+	void UpdateData();
 
 	void UpdateTextByRecievers(BOOL bIsAddChar = FALSE, long lWillPos = Invalid_4Byte);
 

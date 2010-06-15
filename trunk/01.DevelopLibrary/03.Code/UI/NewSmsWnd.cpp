@@ -133,14 +133,13 @@ BOOL CNewSmsWnd::OnInitDialog()
 	m_Recievers.SetTopInvalid(5);
 	m_Recievers.SetBottomInvalid(5);
 	if ( en_replay == m_enSendType ){
-		//set reciever name
-		m_Recievers.SetText(m_pCoreItemData->bstrName);
 		//add reciever
 		MyListItemData stTempRe;
 		stTempRe.lPID = m_pCoreItemData->lPid;
 		stTempRe.StringTitle = m_pCoreItemData->bstrName;
 		stTempRe.StringDescription = m_pCoreItemData->bstrTelNo;
 		g_ReciversList.AppendItem(&stTempRe);
+		m_Recievers.UpdateData();
 	}
 	AddUiWin( &m_Recievers ); 
 	// 初始化短信文本控件，并添加到窗口中

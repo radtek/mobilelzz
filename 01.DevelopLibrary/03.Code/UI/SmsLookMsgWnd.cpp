@@ -17,7 +17,7 @@ class ListItemData
 ///////////////////CSmsLookCtorWnd///////////////////////////////////////////////////////
 CSmsLookMsgWnd::CSmsLookMsgWnd(void)
 {
-
+	memset ( m_pwcPassWord, 0x0, sizeof( m_pwcPassWord ) );
 }
 
 CSmsLookMsgWnd::~CSmsLookMsgWnd(void)
@@ -76,8 +76,13 @@ BOOL	CSmsLookMsgWnd::SubInitialize()
 	long	lSize		=	0;
 	wchar_t	*pwcResult	=	NULL;
 
+	wchar_t	*pTemp	=	NULL;
+	if ( L'\0' != *m_pwcPassWord )
+	{
+		pTemp	=	m_pwcPassWord;
+	}
 
-	HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeMsgRltListReq( &pBuf, &lSize, ((stCoreItemData*)(m_pItem->m_pData))->lPid );
+	HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeMsgRltListReq( &pBuf, &lSize, ((stCoreItemData*)(m_pItem->m_pData))->lPid, pTemp );
 	if ( FAILED ( hr ) )										return	FALSE;
 
 	CCoreService	*pCCoreService	=	CCoreService::GetInstance();
@@ -100,11 +105,17 @@ void	CSmsLookMsgWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 
 
 	stCoreItemData*	pstItemData	=	(stCoreItemData*)(pItem->m_pData);
-	HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeDetailReq( &pBuf, &lSize, pstItemData->lSid, m_pwcPassWord );
+	wchar_t	*pTemp	=	NULL;
+	if ( L'\0' != *m_pwcPassWord )
+	{
+		pTemp	=	m_pwcPassWord;
+	}
+
+	m_clCEasySmsUiCtrl.MakeDetailReq( &pBuf, &lSize, pstItemData->lSid, pTemp );
 
 	CCoreService	*pCCoreService	=	CCoreService::GetInstance();
 
-	hr	=	pCCoreService->Request( pBuf, &pwcResult );
+	HRESULT	hr	=	pCCoreService->Request( pBuf, &pwcResult );
 	wchar_t	*pDetail	=	NULL;
 
 	CCoreSmsUiCtrl	clCCoreSmsUiCtrl;
@@ -126,5 +137,23 @@ void	CSmsLookMsgWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 	if ( ID_CASCADE_EXIT == iRlt )
 	{
 		ReturnToMainWnd();
+	}
+}
+
+void	CSmsLookMsgWnd::DoSthForItemRemove( ListItemEx* pItem )
+{
+	if ( NULL != pItem )
+	{
+		HRESULT	hr	=	RemoveSmsInDb( pItem );
+		if ( FAILED ( hr ) )						return;
+
+		if ( NULL != pItem->m_pData )
+		{
+			delete	pItem->m_pData;
+			pItem->m_pData	=	NULL;
+		}
+
+		delete	pItem;
+		pItem	=	NULL;
 	}
 }

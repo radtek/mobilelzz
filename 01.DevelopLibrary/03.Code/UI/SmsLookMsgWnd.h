@@ -25,7 +25,8 @@ class CSmsLookMsgWnd	:	public	CEasySmsWndBase
 
 		void	SetPassWord( wchar_t *pwcPassWord )
 		{
-			m_pwcPassWord	=	pwcPassWord;
+			wcscpy( m_pwcPassWord, pwcPassWord );
+//			m_pwcPassWord	=	pwcPassWord;
 		}
 
 	private:
@@ -35,12 +36,14 @@ class CSmsLookMsgWnd	:	public	CEasySmsWndBase
 	protected:
 
 		virtual void	DoSthForItemBtnUpSelect( ListItemEx* pItem );
+		virtual	void	DoSthForItemRemove( ListItemEx* pItem );
 
 	private:
 
 		CEasySmsUiCtrl		m_clCEasySmsUiCtrl;
 
-		wchar_t	*			m_pwcPassWord;
+		wchar_t				m_pwcPassWord [ 256 ];
+//		wchar_t				*m_pwcPassWord;
 
 };
 

@@ -233,8 +233,3 @@ HRESULT		CEasySmsUiCtrl::MakeMsgRltList   ( CEasySmsListBase &clCEasySmsListBase
 
 	return	hr;
 }
-
-HRESULT		CEasySmsUiCtrl::MakeDetailRltListReq( wchar_t **ppBuf, long *lSize, long lSid, wchar_t *pDecode )
-{
-	return	m_clCCoreSmsUiCtrl.MakeDetailRltListReq( ppBuf, lSize, lSid, pDecode );
-}

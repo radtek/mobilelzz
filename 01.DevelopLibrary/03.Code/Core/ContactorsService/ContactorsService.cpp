@@ -24,8 +24,8 @@ public:
 				b = TRUE;
 			}
 			
-			delete pName2;
-			delete pName1;
+			delete[] pName2;
+			delete[] pName1;
 		}
 		return b;
 	}
@@ -248,11 +248,11 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 		CXmlNode* pclNodeRec = new CXmlNode(L"rec");
 		if ( pclNodeRec ){
 			// Get is Encode
-			long lEncodeStatus = 0;
-			MakeEncodeStatus(lPID, lEncodeStatus);
+			BOOL bIsEncode = FALSE;
+			MakeEncodeStatus(lPID, bIsEncode);
 			NodeAttribute_t stAttr;
 			F_wcscpyn( stAttr.wcsName, L"encode", sizeof(stAttr.wcsName)/sizeof(stAttr.wcsName[0]) );
-			if ( 0 == lEncodeStatus ){
+			if ( !bIsEncode ){
 				wsprintf(stAttr.wcsValue, L"false");
 			}else{
 				wsprintf(stAttr.wcsValue, L"true");
@@ -289,7 +289,7 @@ APP_Result CContactorsService::ExcuteForList(CRequestXmlOperator& clXmlOpe, CXml
 	}
 	F_wcscpyn(stTemp[0].wcsName, L"count", sizeof(stTemp[0].wcsName)/sizeof(stTemp[0].wcsName[0]));
 	wchar_t awcsCount[5] = L"";
-	wsprintf(awcsCount, L"%d", lListCount);
+	wsprintf(awcsCount, L"%d", lCount);
 	F_wcscpyn(stTemp[0].wcsValue, awcsCount, sizeof(stTemp[0].wcsValue)/sizeof(stTemp[0].wcsValue[0]));
 	hr = pNode->SetNodeContent( NULL, (wchar_t*)NULL, stTemp, 1 );
 	if ( FAILED_App(hr) ){
@@ -310,10 +310,10 @@ void CContactorsService::AppendStranger(vector<CXmlNode*>& vecList)
 		clNodeName.SetNodeContent(NULL, L"Ä°ÉúÈË", NULL, 0);
 
 		CXmlNode clNodeReading(L"reading");
-		clNodeReading.SetNodeContent(NULL, L"MSR", NULL, 0);
+		clNodeReading.SetNodeContent(NULL, L"ZZZ", NULL, 0);
 
 		CXmlNode clNodeFirstLetter(L"firstletter");
-		clNodeFirstLetter.SetNodeContent(NULL, L"M", NULL, 0);
+		clNodeFirstLetter.SetNodeContent(NULL, L"Z", NULL, 0);
 		//Modify by zhu.t : defaultno ====> address
 		CXmlNode clNodeNumber(L"address");
 		clNodeNumber.SetNodeContent(NULL, L"", NULL, 0);
@@ -323,11 +323,11 @@ void CContactorsService::AppendStranger(vector<CXmlNode*>& vecList)
 		CXmlNode clNodeSmsCount(L"smscount");
 		clNodeSmsCount.SetNodeContent(NULL, awcsSmsCount, NULL, 0);
 
-		long lEncodeStatus = 0;
-		MakeEncodeStatus(0, lEncodeStatus);
+		BOOL bIsEncode = FALSE;
+		MakeEncodeStatus(0, bIsEncode);
 		NodeAttribute_t stAttr;
 		F_wcscpyn( stAttr.wcsName, L"encode", sizeof(stAttr.wcsName)/sizeof(stAttr.wcsName[0]) );
-		if ( 0 == lEncodeStatus ){
+		if ( !bIsEncode ){
 			wsprintf(stAttr.wcsValue, L"false");
 		}else{
 			wsprintf(stAttr.wcsValue, L"true");
@@ -345,14 +345,19 @@ void CContactorsService::AppendStranger(vector<CXmlNode*>& vecList)
 	}
 }
 
-APP_Result CContactorsService::MakeEncodeStatus(long lPID, long& lEncodeStatus)
+APP_Result CContactorsService::MakeEncodeStatus(long lPID, BOOL& bIsEncode)
 {
 	APP_Result hr = APP_Result_E_Fail;
+	bIsEncode = FALSE;
 	m_pQSmsCode->Reset();
 	m_pQSmsCode->Bind(1, lPID);
 	hr = m_pQSmsCode->Step();
 	if ( S_ROW == hr ){
-		m_pQSmsCode->GetField(1,&lEncodeStatus);
+		wchar_t* pTemp = NULL;
+		m_pQSmsCode->GetField(1,&pTemp);
+		if ( pTemp && (L'\0' != pTemp[0]) ){
+			bIsEncode = TRUE;
+		}
 	}
 	
 	return APP_Result_S_OK;

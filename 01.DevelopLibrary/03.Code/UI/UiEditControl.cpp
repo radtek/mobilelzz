@@ -133,7 +133,7 @@ int UiEditControl::OnLButtonUp  ( UINT  fwKeys,
 	return r;
 }
 
-void UiEditControl::UpdateData( long lFlag )
+void UiEditControl::UpdateData()
 {
 	CRecieversStringParser clParser;
 	CMzString& clText = GetText();

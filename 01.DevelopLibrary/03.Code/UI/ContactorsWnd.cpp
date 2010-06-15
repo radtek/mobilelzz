@@ -248,7 +248,7 @@ void CContactorsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 			int nIndex = lParam;
 			if (nIndex==0)
 			{
-				m_pParent->UpdateData(0);
+				m_pParent->UpdateData();
 				DestroyWindow();
 				g_bContactShow = FALSE;
 			  return;
@@ -281,7 +281,7 @@ void CContactorsWnd::OnMzCommand(WPARAM wParam, LPARAM lParam)
 					}			
 				}
 				
-				m_pParent->UpdateData(1);
+				m_pParent->UpdateData();
 				DestroyWindow();
 				g_bContactShow = FALSE;
 			  return;

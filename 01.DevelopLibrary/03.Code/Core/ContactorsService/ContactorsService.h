@@ -51,7 +51,7 @@ private:
 	void				MakeSmsCount(wchar_t* pwcsSmsCount, long lPID );
 	void				AppendStranger(vector<CXmlNode*>& vecList);
 	APP_Result			ExcuteForList(CRequestXmlOperator& clXmlOpe, CXmlStream& clResultXml);
-	APP_Result			MakeEncodeStatus(long lPID, long& lEncodeStatus);
+	APP_Result			MakeEncodeStatus(long lPID, BOOL& bIsEncode);
 private:
 	CSQL_query*			m_pQReading;
 	long				m_lID_QReading;

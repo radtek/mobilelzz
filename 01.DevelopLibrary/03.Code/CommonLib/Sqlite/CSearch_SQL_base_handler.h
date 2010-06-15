@@ -8,9 +8,9 @@ using namespace std;
 #define   Sms_SQL_CREATETABLE_SmsDetail	L"create table IF NOT EXISTS SmsDetail(sid integer PRIMARY KEY ASC, \
 											pid integer, type integer, content text, address text not null, time real,\
 											lockstatus integer, readstatus integer)"
-#define   Sms_SQL_CREATETABLE_SmsCode	L"create table IF NOT EXISTS SmsCode(pid integer, \
+#define   Sms_SQL_CREATETABLE_SmsCode	L"create table IF NOT EXISTS SmsCode(pid integer UNIQUE, \
 											code text)"
-#define   Sms_SQL_CREATETABLE_SmsGroup	L"create table IF NOT EXISTS SmsGroup(pid integer, \
+#define   Sms_SQL_CREATETABLE_SmsGroup	L"create table IF NOT EXISTS SmsGroup(pid integer UNIQUE, \
 											msgcount integer)"
 
 #define   Contactors_SQL_GET_CONTACTS  L"select ABPerson.ROWID, ABPerson.Name , ABPhones.*  from ABPerson, ABPhones where ABPerson.ROWID = ABPhones.record_id "

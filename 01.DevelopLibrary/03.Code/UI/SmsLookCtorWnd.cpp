@@ -55,6 +55,28 @@ void CSmsLookCtorWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 			break;
 		}
 
+		case	MZ_IDC_SMSLOOKCTOR_ALPBAR:
+		{
+			if ( m_AlpBar.GetCurLetter() )
+			{
+				for ( int i=0; i< m_list_base.GetItemCount(); i++ )
+				{
+					stCoreItemData* pstCoreItemData	=	( stCoreItemData* )(( m_list_base.GetItem(i))->m_pData );
+					//将找到的列表项显示在屏幕顶端。
+					if ( *(m_AlpBar.GetCurLetter()) == pstCoreItemData->wcFirst )
+					{
+						int topPos = m_list_base.CalcItemTopPos(i);
+						m_list_base.SetTopPos(m_list_base.GetTopPos() - topPos );
+						m_list_base.Invalidate();
+						m_list_base.Update();
+						break;
+					}
+				}
+
+			}
+		}
+		break;
+
 		default:
 			break;
 	}

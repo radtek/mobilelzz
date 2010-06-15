@@ -31,8 +31,6 @@ class CEasySmsUiCtrl
 		HRESULT		MakeMsgRltListReq( wchar_t **ppBuf, long *lSize, long lPid , wchar_t *pDecode = NULL );
 		HRESULT		MakeMsgRltList   ( CEasySmsListBase &clCEasySmsListBase, wchar_t *pwcRltStream );
 
-		HRESULT		MakeDetailRltListReq( wchar_t **ppBuf, long *lSize, long lSid, wchar_t *pDecode = NULL );
-
 		HRESULT		MakeSendSmsInfo		( wchar_t **ppBuf, long *lSize, wchar_t *pwcSmsInfo, wchar_t* pwcsNumber );
 
 		HRESULT		MakeDeleteSmsInfo	 ( OUT wchar_t **ppBuf, OUT long *lSize, IN long *plSid, IN long lCnt );

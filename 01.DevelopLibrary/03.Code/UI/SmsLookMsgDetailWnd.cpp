@@ -99,6 +99,11 @@ void CSmsLookMsgDetailWnd::OnMzCommand( WPARAM wParam, LPARAM lParam )
 			break;
 		}
 
+		case MZ_IDC_SMSLOOKMSG_DETAIL_GRIDMENU_LOCK:
+		{
+
+		}
+
 		default:
 			break;
 	}

@@ -64,6 +64,7 @@ BOOL	CSmsLookMsgWnd::SubInitialize()
 	//ini list
 	m_list_base.EnableDragModeH(true);
 	m_list_base.SetID( MZ_IDC_FIND_RESULT_LIST );
+//	m_list_base.SetSelectMode( UILISTEX_SPLITLINE_LEFT );
 	AddUiWin( &m_list_base );
 
 	//ini toolbar
@@ -86,47 +87,12 @@ BOOL	CSmsLookMsgWnd::SubInitialize()
 	if ( FAILED ( hr ) )									return	FALSE;
 
 	hr	=	m_clCEasySmsUiCtrl.MakeMsgRltList( m_list_base, pwcResult );
-#if 0
-	CMzString content = L"短信内容 SmsContent%d:";
-	CMzString stime = L"12:20";
 
-	CMzString content1(30);
-	for (int i = 0; i < 100; i++)
-	{
-		swprintf(content1.C_Str(),content.C_Str(),i);
-
-		ListItemEx* item = new ListItemEx;
-		item->m_pData = (void*)i;
-
-		item->m_textPostscript1 = stime.C_Str();
-
-		if (i == 2)
-		{
-			item->m_textDescription = L"content: I&apos;m dying to see u! what? I couldn&apos;t get it";
-		}
-		else if(i == 6)
-		{
-			item->m_textDescription = L"我这里天快要黑了，那里呢？我这里天气凉凉的那里呢？ 我这里一切都变了，而那你呢？";
-		}
-		else
-		{
-			item->m_textDescription = content1.C_Str();
-		}
-
-		item->m_pImgFirst = m_imgContainer_base.LoadImage(MzGetInstanceHandle(), IDR_PNG_CTR_LIST_READ, true);
-
-		item->m_itemBgType	=	UILIST_ITEM_BGTYPE_YELLOW;
-		m_list_base.AddItem(item);
-	}
-#endif
-	//
 	return	TRUE;
 }
 
 void	CSmsLookMsgWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 {
-	CSmsLookMsgDetailWnd	clCSmsLookMsgDetailWnd;
-	clCSmsLookMsgDetailWnd.SetListItem( pItem );
 	//
 	wchar_t	*pBuf		=	NULL;
 	long	lSize		=	0;
@@ -134,13 +100,29 @@ void	CSmsLookMsgWnd::DoSthForItemBtnUpSelect( ListItemEx* pItem )
 
 
 	stCoreItemData*	pstItemData	=	(stCoreItemData*)(pItem->m_pData);
-	HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeDetailRltListReq( &pBuf, &lSize, pstItemData->lSid, m_pwcPassWord );
+	HRESULT	hr	=	m_clCEasySmsUiCtrl.MakeDetailReq( &pBuf, &lSize, pstItemData->lSid, m_pwcPassWord );
 
 	CCoreService	*pCCoreService	=	CCoreService::GetInstance();
 
 	hr	=	pCCoreService->Request( pBuf, &pwcResult );
+	wchar_t	*pDetail	=	NULL;
+
+	CCoreSmsUiCtrl	clCCoreSmsUiCtrl;
+
+	clCCoreSmsUiCtrl.MakeDetailRlt( pwcResult, &pDetail );
+	if ( NULL != pDetail )
+	{
+		pstItemData->bstrDetail	=	pDetail;
+		delete	pDetail;
+		pDetail	=	NULL;
+	}
+
+	CSmsLookMsgDetailWnd	clCSmsLookMsgDetailWnd;
+	clCSmsLookMsgDetailWnd.SetListItem( pItem );
+
 
 	int iRlt	=	DoModalBase( &clCSmsLookMsgDetailWnd );
+	pstItemData->bstrDetail.Empty();
 	if ( ID_CASCADE_EXIT == iRlt )
 	{
 		ReturnToMainWnd();

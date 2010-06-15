@@ -175,6 +175,8 @@ LRESULT CEasySmsWndBase::MzDefWndProc(UINT message, WPARAM wParam, LPARAM lParam
 		}
 			
 		break;
+
+
 		default:
 		break;
 	}

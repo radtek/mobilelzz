@@ -73,6 +73,8 @@ android:layout_below="@id/CB_main_IsEncode"
 android:layout_above="@id/B_main_Exit"
 android:layout_marginRight="10dip"
 android:layout_marginLeft="10dip"
+android:layout_marginTop="10dip"
+android:layout_marginBottom="10dip"
 >
 </EditText>
 </RelativeLayout>

@@ -17,6 +17,13 @@ public final class R {
         public static final int B_main_Exit=0x7f050006;
         public static final int B_main_Save=0x7f050007;
         public static final int B_main_View=0x7f050008;
+        public static final int B_view_memo_delete=0x7f05000d;
+        public static final int B_view_memo_movein=0x7f05000f;
+        public static final int B_view_memo_new=0x7f05000e;
+        public static final int B_view_memo_return=0x7f05000c;
+        public static final int B_view_warning_delete=0x7f050012;
+        public static final int B_view_warning_new=0x7f050013;
+        public static final int B_view_warning_return=0x7f050011;
         public static final int CB_main_IsEncode=0x7f050004;
         public static final int CB_main_IsWarning=0x7f050005;
         public static final int DateAndTime=0x7f050000;
@@ -24,10 +31,14 @@ public final class R {
         public static final int ET_main_Memo=0x7f050009;
         public static final int TimePicker01=0x7f050002;
         public static final int main=0x7f050003;
+        public static final int memolist=0x7f05000a;
+        public static final int textview1=0x7f05000b;
+        public static final int warninglist=0x7f050010;
     }
     public static final class layout {
         public static final int dateandtime=0x7f030000;
         public static final int main=0x7f030001;
+        public static final int view=0x7f030002;
     }
     public static final class string {
         public static final int app_name=0x7f040001;

@@ -2,12 +2,15 @@ package com.main;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.CompoundButton;
 import android.widget.CheckBox;
 import android.widget.TimePicker;
+import android.widget.Toast;
 import android.view.View;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.widget.Button;
 
 public class NoteWithYourMind extends Activity {
@@ -25,6 +28,29 @@ public class NoteWithYourMind extends Activity {
         	public void onClick(View v)
         	{
         		NoteWithYourMind.this.finish();
+        	}
+        });
+        
+        Button clBTSave = (Button) findViewById(R.id.B_main_Save);
+        clBTSave.setOnClickListener(new Button.OnClickListener(){
+        	public void onClick(View v)
+        	{
+        		Toast toast = Toast.makeText(NoteWithYourMind.this,"±£´æ³É¹¦", Toast.LENGTH_SHORT);
+        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+        		toast.show();
+        		
+
+        	}
+        });
+        
+        Button clBTView = (Button) findViewById(R.id.B_main_View);
+        clBTView.setOnClickListener(new Button.OnClickListener(){
+        	public void onClick(View v)
+        	{
+        		Intent intent = new Intent();
+        		intent.setClass(NoteWithYourMind.this, ViewList.class);
+        		startActivity(intent);
+        		
         	}
         });
         

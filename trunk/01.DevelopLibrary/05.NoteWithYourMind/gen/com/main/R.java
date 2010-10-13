@@ -36,9 +36,9 @@ public final class R {
         public static final int listviewmemo=0x7f050017;
         public static final int listviewremind=0x7f05001c;
         public static final int main=0x7f050003;
-        public static final int memoitem_memodate=0x7f05000b;
+        public static final int memoitem_memodate=0x7f05000a;
         public static final int memoitem_memoselect=0x7f05000c;
-        public static final int memoitem_memotext=0x7f05000a;
+        public static final int memoitem_memotext=0x7f05000b;
         public static final int memolist=0x7f05000d;
         public static final int remindlist=0x7f050018;
         public static final int textview1=0x7f05000e;

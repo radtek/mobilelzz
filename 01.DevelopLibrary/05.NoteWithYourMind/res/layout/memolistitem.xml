@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <Button
-      android:id="@+id/memoitem_memotext"
+    android:layout_height="50px">
+    <TextView
+      android:id="@+id/memoitem_memodate"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:gravity="left"
-    >
-    </Button>
-    <Button
-      android:id="@+id/memoitem_memodate"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
+      android:layout_alignParentRight = "true"
+      android:layout_centerVertical="true"
       android:gravity="right"
     >
-    </Button>
-</LinearLayout>
+    </TextView>
+    <TextView
+      android:id="@+id/memoitem_memotext"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerVertical="true"
+      android:layout_toLeftOf="@id/memoitem_memodate"
+      android:maxLines = "1"
+      android:gravity="left"
+    >
+    </TextView>
+</RelativeLayout>

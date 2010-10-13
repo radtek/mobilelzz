@@ -17,7 +17,8 @@
       android:layout_height="wrap_content"
       android:layout_centerVertical="true"
       android:layout_toLeftOf="@id/memoitem_memodate"
-      android:maxLines = "1"
+      android:singleLine = "true"
+      android:ellipsize = "end"
       android:gravity="left"
     >
     </TextView>

@@ -50,7 +50,7 @@ public class ViewList extends TabActivity
 		Button clBTMemoR = (Button) findViewById(R.id.B_view_memo_return);
 		clBTMemoR.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
-        	{
+        	{      		
         		ViewList.this.finish();
         	}
         });

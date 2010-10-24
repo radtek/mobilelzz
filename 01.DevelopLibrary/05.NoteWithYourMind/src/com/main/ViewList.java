@@ -28,6 +28,7 @@ public class ViewList extends TabActivity
 	//ÉùÃ÷TabHost¶ÔÏó
 	TabHost mTabHost;
 	CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
+	NoteDBAdapter	m_clNoteDBAdapter = NoteWithYourMind.m_clNoteDBAdapter;
 	public static boolean m_bIsDelete = false;
 	public Resources m_r = NoteWithYourMind.m_r;
 	
@@ -39,18 +40,35 @@ public class ViewList extends TabActivity
 		setContentView(R.layout.view);
 		String Detail = m_r.getString(R.string.db_field_Detail);
 		String LastModifyTime = m_r.getString(R.string.db_field_LastModifyTime);
-		Cursor clCursor	=	m_clCNoteDBCtrl.getMemoRootInfo();
-		startManagingCursor(clCursor);
-		ListAdapter listadapter = new SimpleCursorAdapter(
-				ViewList.this,
+		Cursor cur = m_clNoteDBAdapter.getMemoRootInfo();
+		startManagingCursor(cur);
+		ListAdapter listadapter1 = new SimpleCursorAdapter(
+				this,
 				R.layout.memolistitem,
-				clCursor,
-				null,//new String[]{Detail},
-				null//new int[]{R.id.memoitem_memotext}
+				cur,
+				new String[]{NoteDBAdapter.KEY_detail},
+				new int[]{R.id.memoitem_memotext}
 				);
 		
-		ListView memoList = (ListView) findViewById(R.id.listviewmemo);
-		memoList.setAdapter(listadapter);
+		Cursor clCursor	=	m_clCNoteDBCtrl.getMemoRootInfo();
+		if(clCursor!=null)
+		{
+			startManagingCursor(clCursor);
+			int count = clCursor.getCount();
+			if(count>=0)
+			{
+				ListAdapter listadapter = new SimpleCursorAdapter(
+						this,
+						R.layout.memolistitem,
+						clCursor,
+						new String[]{NoteDBAdapter.KEY_detail},
+						new int[]{R.id.memoitem_memotext}
+						);
+				
+				ListView memoList = (ListView) findViewById(R.id.listviewmemo);
+				memoList.setAdapter(listadapter);
+			}
+		}
 		Button clBTMemoR = (Button) findViewById(R.id.B_view_memo_return);
 		clBTMemoR.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)

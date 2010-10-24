@@ -28,7 +28,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	private static final String	DB_TABLE		= "Notes";
 	
 	// Êý¾Ý¿â°æ±¾
-	private static final int	DB_VERSION		= 3;
+	private static final int	DB_VERSION		= 4;
 	
 	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" + KEY_id + " INTEGER PRIMARY KEY AUTOINCREMENT," + 
 		KEY_preid + " INTERGER,"+ KEY_type + " INTERGER," + KEY_isremind + " INTERGER," + KEY_remindtime + " double," + KEY_createtime + " double,"+
@@ -42,20 +42,18 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// TODO Auto-generated method stub
 		db.execSQL( DB_CREATE );	
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
 		db.execSQL("DROP TABLE IF EXISTS "+DB_TABLE);
 		onCreate(db);
 	} 
 	
 	public	Cursor	getMemoRootInfo()
 	{
-		return	m_db.rawQuery("select * from Memo where Preid=?", new String[]{String.valueOf(0)});
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where Preid=?", new String[]{String.valueOf(0)});
 	}
 	
 	public	Cursor	getMemoInFolder( int id )
@@ -70,12 +68,23 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	
 	public	void Create( CMemoInfo clCMemoInfo )
 	{
-		m_db.execSQL("insert into DB_TABLE(KEY_id,KEY_type,KEY_isremind,KEY_remindtime,KEY_createtime,KEY_lastmodifytime," +
-						" KEY_iseditenable,KEY_remindmask,KEY_detail) values(?,?,?,?,?,?,?,?,?)"
-					, new Object[]{clCMemoInfo.iPreId,clCMemoInfo.iType,clCMemoInfo.iIsRemind
-					,clCMemoInfo.dRemindTime,clCMemoInfo.dCreateTime,clCMemoInfo.dLastModifyTime,clCMemoInfo.iIsEditEnable,
-					clCMemoInfo.iRemindMask,clCMemoInfo.strDetail} );
+		//m_db.execSQL("insert into DB_TABLE("+KEY_preid+","+KEY_type+","+KEY_isremind+","+KEY_remindtime+","+KEY_createtime+","+KEY_lastmodifytime+","+
+		//		KEY_iseditenable+","+KEY_remindmask+","+KEY_detail+") values(?,?,?,?,?,?,?,?,?)"
+		//			, new Object[]{clCMemoInfo.iPreId,clCMemoInfo.iType,clCMemoInfo.iIsRemind
+		//			,clCMemoInfo.dRemindTime,clCMemoInfo.dCreateTime,clCMemoInfo.dLastModifyTime,clCMemoInfo.iIsEditEnable,
+		//			clCMemoInfo.iRemindMask,clCMemoInfo.strDetail} );
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(KEY_preid, clCMemoInfo.iPreId);
+		initialValues.put(KEY_type, clCMemoInfo.iType);
+		initialValues.put(KEY_isremind, clCMemoInfo.iIsRemind);
+		initialValues.put(KEY_remindtime, clCMemoInfo.dRemindTime);
+		initialValues.put(KEY_createtime, clCMemoInfo.dCreateTime);
+		initialValues.put(KEY_lastmodifytime, clCMemoInfo.dLastModifyTime);
+		initialValues.put(KEY_iseditenable, clCMemoInfo.iIsEditEnable);
+		initialValues.put(KEY_remindmask, clCMemoInfo.iRemindMask);
+		initialValues.put(KEY_detail, clCMemoInfo.strDetail);
 
+		m_db.insert(DB_TABLE, KEY_id, initialValues);
 	}
 
 	public	void Delete( int[] id )

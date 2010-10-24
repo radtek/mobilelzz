@@ -21,58 +21,51 @@
 							android:layout_height="fill_parent"
 							xmlns:android="http://schemas.android.com/apk/res/android"
 						>
-	            <Button
-							android:id="@+id/B_view_memo_return"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:text="返回"
-							android:textSize="20sp"
-							android:layout_marginLeft="10dip"
-							android:layout_alignParentBottom="true"
-							android:layout_marginBottom="2dip"
-							>
-							</Button>
-							<Button
-							android:id="@+id/B_view_memo_delete"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:text="删除"
-							android:textSize="20sp"
-							android:layout_alignParentRight="true"
-							android:layout_marginRight="2dip"
-							android:layout_alignTop="@id/B_view_memo_return"
-							>
-							</Button>
-							<Button
-							android:id="@+id/B_view_memo_new"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:text="新建"
-							android:textSize="20sp"
-							android:layout_toRightOf="@id/B_view_memo_return"
-							android:layout_alignTop="@id/B_view_memo_return"
-							android:layout_marginLeft="3dip"
-							>
-							</Button> 
-							<Button
-							android:id="@+id/B_view_memo_movein"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:text="移入文件夹"
-							android:textSize="20sp"
-							android:layout_toRightOf="@id/B_view_memo_new"
-							android:layout_toLeftOf="@id/B_view_memo_delete"
-							android:layout_alignTop="@id/B_view_memo_return"
-							android:layout_centerHorizontal="true"
-							android:layout_marginRight="3dip"
-							android:layout_marginLeft="3dip"
-							>
-							</Button> 
+							<TableLayout 
+								android:id="@+id/memolistmenu"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_alignParentBottom="true"
+		            android:collapseColumns="4"
+		            android:stretchColumns="0,1,2,3">   
+		            <TableRow>
+		            	<Button
+			            	android:id="@+id/B_view_memo_return"
+										android:text="返回"
+										android:textSize="20sp"
+										android:padding="3dip">
+									</Button>
+									<Button
+			            	android:id="@+id/B_view_memo_new"
+										android:text="新建"
+										android:textSize="20sp"
+										android:padding="3dip">
+									</Button>
+									<Button
+			            	android:id="@+id/B_view_memo_move"
+										android:text="移入文件夹"
+										android:textSize="20sp"
+										android:padding="3dip">
+									</Button>
+									<Button
+			            	android:id="@+id/B_view_memo_delete"
+										android:text="删除"
+										android:textSize="20sp"
+										android:padding="3dip">
+									</Button>
+									<Button
+			            	android:id="@+id/B_view_memo_cancel"
+										android:text="取消"
+										android:textSize="20sp"
+										android:padding="3dip">
+									</Button>
+		            </TableRow>
+		          </TableLayout>
 							<ListView 
 	                android:id="@+id/listviewmemo"
 	                android:layout_width="fill_parent"
 	                android:layout_height="fill_parent" 
-	                android:layout_above="@id/B_view_memo_return"  />
+	                android:layout_above="@id/memolistmenu"  />
 						</RelativeLayout>
 						<RelativeLayout
 							android:id="@+id/remindlist"

@@ -8,44 +8,48 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TabActivity;
 import android.content.DialogInterface;
+import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TabHost;
+import android.widget.TableLayout;
 import android.widget.TabHost.OnTabChangeListener;
 
 public class ViewList extends TabActivity
 {
 	//声明TabHost对象
 	TabHost mTabHost;
+	CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
+	public static boolean m_bIsDelete = false;
+	public Resources m_r = NoteWithYourMind.m_r;
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.view);
+		String Detail = m_r.getString(R.string.db_field_Detail);
+		String LastModifyTime = m_r.getString(R.string.db_field_LastModifyTime);
+		Cursor clCursor	=	m_clCNoteDBCtrl.getMemoRootInfo();
+		startManagingCursor(clCursor);
+		ListAdapter listadapter = new SimpleCursorAdapter(
+				ViewList.this,
+				R.layout.memolistitem,
+				clCursor,
+				null,//new String[]{Detail},
+				null//new int[]{R.id.memoitem_memotext}
+				);
 		
 		ListView memoList = (ListView) findViewById(R.id.listviewmemo);
-		List<HashMap<String,String>> list = new ArrayList<HashMap<String,String>>();
-		HashMap<String,String> item1 = new HashMap<String,String>();
-		item1.put("memotext", "我爱你我爱你我爱你我爱你我爱你我爱你我爱你我爱你我爱你");
-		item1.put("date", "10/10/10");
-		list.add(item1);
-		HashMap<String,String> item2 = new HashMap<String,String>();
-		item2.put("memotext", "你爱我吗");
-		item2.put("date", "11/11/11");
-		list.add(item2);
-		SimpleAdapter listadapter = new SimpleAdapter(
-				ViewList.this,
-				list,
-				R.layout.memolistitem,
-				new String[]{"memotext","date"},
-				new int[]{R.id.memoitem_memotext, R.id.memoitem_memodate}
-				);
 		memoList.setAdapter(listadapter);
 		Button clBTMemoR = (Button) findViewById(R.id.B_view_memo_return);
 		clBTMemoR.setOnClickListener(new Button.OnClickListener(){
@@ -58,22 +62,25 @@ public class ViewList extends TabActivity
 		clBTMemoDelete.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
-        		ListView memoList = (ListView) findViewById(R.id.listviewmemo);
-        		List<HashMap<String,String>> list = new ArrayList<HashMap<String,String>>();
-        		HashMap<String,String> item1 = new HashMap<String,String>();
-        		item1.put("memotext", "我爱你我爱你我爱你我爱你我爱你我爱你我爱你我爱你我爱你");
-        		list.add(item1);
-        		HashMap<String,String> item2 = new HashMap<String,String>();
-        		item2.put("memotext", "你爱我吗");
-        		list.add(item2);
-        		SimpleAdapter listadapter = new SimpleAdapter(
-        				ViewList.this,
-        				list,
-        				R.layout.memolistitemselect,
-        				new String[]{"memotext"},
-        				new int[]{R.id.memoitem_memotext}
-        				);
-        		memoList.setAdapter(listadapter);
+        		m_bIsDelete = true;
+        		TableLayout TL = (TableLayout) findViewById(R.id.memolistmenu);  
+        		
+        		TL.setColumnCollapsed(0, true);
+        		TL.setColumnCollapsed(1, true);
+        		TL.setColumnCollapsed(2, true);	
+        		
+        		
+        		TL.setColumnCollapsed(4, false);
+
+        		TL.setColumnStretchable(0, false);
+        		TL.setColumnStretchable(1, false);
+        		TL.setColumnStretchable(2, false);
+        		//TL.setColumnStretchable(3, false);
+        		TL.setColumnStretchable(4, true);
+        		
+        		//TL.setColumnStretchable(3, true);
+        		
+        		TL.requestLayout();
         	}
         });
 		Button clBTWarningR = (Button) findViewById(R.id.B_view_remind_return);

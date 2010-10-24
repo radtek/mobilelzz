@@ -1,33 +1,40 @@
 package com.main;
 
 
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.CompoundButton;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.view.View;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.widget.Button;
 
 public class NoteWithYourMind extends Activity {
 	
 	CheckBox m_clCheckBoxWarning;
-	private	CNoteDBCtrl		m_clCNoteDBCtrl;
+	public static	CNoteDBCtrl		m_clCNoteDBCtrl;
+	public static Resources m_r;
+	Calendar c;
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        m_r = this.getBaseContext().getResources();
  /////zhu.t test start
         m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this, null, null, 0 );
-        m_clCNoteDBCtrl.getWritableDatabase();
+        //m_clCNoteDBCtrl.getWritableDatabase();
 //test end  
         //EditText clET = (EditText) findViewById(R.id.ET_main_Memo);
         Button clBT = (Button) findViewById(R.id.B_main_Exit);
@@ -37,33 +44,21 @@ public class NoteWithYourMind extends Activity {
         		NoteWithYourMind.this.finish();
         	}
         });
-        
+        c = Calendar.getInstance();
         Button clBTSave = (Button) findViewById(R.id.B_main_Save);
         clBTSave.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
- /////zhu.t test start   
+        		EditText memotext = (EditText) findViewById(R.id.ET_main_Memo);
         		CMemoInfo clCMemoInfo	=	new	CMemoInfo();
         		clCMemoInfo.iPreId	=	0;
-        		clCMemoInfo.strDetail	=	"我是天才!!!!!";
+        		clCMemoInfo.strDetail	=	memotext.getText().toString();
+        		clCMemoInfo.dLastModifyTime = c.getTimeInMillis();
         		m_clCNoteDBCtrl.Create(clCMemoInfo);
-        		
-        		Cursor clCursor	=	m_clCNoteDBCtrl.getMemoRootInfo();
-        		
-       
-        		
-        		int icolumnDetail	=	clCursor.getColumnIndex("Detail");
-        		int icolumnID	=	clCursor.getColumnIndex("ID");
-        		
-        		if(clCursor.moveToFirst())
-        		{ 
-        			String name	=	clCursor.getString(icolumnDetail);
-        			int  id		=	clCursor.getInt(icolumnID);
-        			Toast toast = Toast.makeText(NoteWithYourMind.this,name/*"保存成功"*/, Toast.LENGTH_SHORT);
-	        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-	        		toast.show();
-        		}
- //test end 
+        		memotext.setText("");
+        		Toast toast = Toast.makeText(NoteWithYourMind.this, "保存成功", Toast.LENGTH_SHORT);
+        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+        		toast.show();
         	}
         });
         

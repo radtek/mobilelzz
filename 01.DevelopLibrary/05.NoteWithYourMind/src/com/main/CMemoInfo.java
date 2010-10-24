@@ -5,9 +5,9 @@ public class CMemoInfo {
 	Integer		iPreId;
 	Integer		iType;
 	Integer		iIsRemind;
-	Double		dRemindTime;
-	Double		dCreateTime;
-	Double		dLastModifyTime;
+	long		dRemindTime;
+	long		dCreateTime;
+	long		dLastModifyTime;
 	Integer		iIsEditEnable;
 	Integer		iRemindMask;
 	String		strDetail;
@@ -18,9 +18,9 @@ public class CMemoInfo {
 		iPreId			=	-1;
 		iType			=	-1;
 		iIsRemind		=	-1;
-		dRemindTime		=	-1.0;
-		dCreateTime		=	-1.0;
-		dLastModifyTime	=	-1.0;
+		dRemindTime		=	-1;
+		dCreateTime		=	-1;
+		dLastModifyTime	=	-1;
 		iIsEditEnable	=	-1;
 		iRemindMask		=	-1;
 		strDetail		=	null;

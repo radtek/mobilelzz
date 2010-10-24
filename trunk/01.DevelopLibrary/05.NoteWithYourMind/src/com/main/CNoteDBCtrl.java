@@ -14,7 +14,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	public CNoteDBCtrl(Context context, String name, CursorFactory factory,
 			int version) {
 		
-		super( context, "Note.db", null, 1);
+		super( context, "Note.db", null, 2);
 		// TODO Auto-generated constructor stub
 		
 		m_db	=	this.getWritableDatabase();
@@ -23,22 +23,22 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
-		db.execSQL( "create table if not exists Memo( ID integer PRIMARY KEY AUTOINCREMENT, Preid integer, Type integer, " +
-				"IsRemind integer, RemindTime double, CreateTime double, LastModifyTime double," +
-				"IsEditEnable integer, RemindMask integer, Detail string ) " );
+		db.execSQL( "create table if not exists Memo( _id integer PRIMARY KEY AUTOINCREMENT, preid integer, type integer, " +
+				"isremind integer, remindtime double, createtime double, lastmodifytime double," +
+				"iseditenable integer, remindmask integer, detail string ) " );
 		
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
-
-		
+		db.execSQL("DROP TABLE IF EXISTS Memo");
+		onCreate(db);
 	} 
 	
 	public	Cursor	getMemoRootInfo()
 	{
-		return	m_db.rawQuery("select ID as _id from Memo where Preid=?", new String[]{String.valueOf(0)});
+		return	m_db.rawQuery("select * from Memo where Preid=?", new String[]{String.valueOf(0)});
 	}
 	
 	public	Cursor	getMemoInFolder( int id )

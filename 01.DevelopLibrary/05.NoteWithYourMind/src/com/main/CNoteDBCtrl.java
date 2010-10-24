@@ -53,7 +53,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	
 	public	Cursor	getMemoRootInfo()
 	{
-		return	m_db.rawQuery("select * from "+DB_TABLE+" where Preid=?", new String[]{String.valueOf(0)});
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=?", new String[]{String.valueOf(0)});
 	}
 	
 	public	Cursor	getMemoInFolder( int id )

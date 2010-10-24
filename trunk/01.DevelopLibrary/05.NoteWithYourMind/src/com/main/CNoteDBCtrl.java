@@ -10,29 +10,46 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
 public class CNoteDBCtrl extends SQLiteOpenHelper {
 
+	public static final String	KEY_id					= "_id";												
+	public static final String	KEY_preid				= "preid";											
+	public static final String	KEY_type				= "type";
+	public static final String	KEY_isremind			= "isremind";
+	public static final String	KEY_remindtime			= "remindtime";
+	public static final String	KEY_createtime			= "createtime";
+	public static final String	KEY_lastmodifytime		= "lastmodifytime";
+	public static final String	KEY_iseditenable		= "iseditenable";
+	public static final String	KEY_remindmask			= "remindmask";
+	public static final String	KEY_detail				= "detail";
+
+	// 数据库名称为data
+	private static final String	DB_NAME			= "NoteWithYourMind.db";
+	
+	// 数据库表名
+	private static final String	DB_TABLE		= "Notes";
+	
+	// 数据库版本
+	private static final int	DB_VERSION		= 3;
+	
+	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" + KEY_id + " INTEGER PRIMARY KEY AUTOINCREMENT," + 
+		KEY_preid + " INTERGER,"+ KEY_type + " INTERGER," + KEY_isremind + " INTERGER," + KEY_remindtime + " double," + KEY_createtime + " double,"+
+		KEY_lastmodifytime + " double,"+ KEY_iseditenable + " INTERGER,"+ KEY_remindmask + " INTERGER,"+ KEY_detail + " TEXT )";
+
 	private	SQLiteDatabase m_db;
-	public CNoteDBCtrl(Context context, String name, CursorFactory factory,
-			int version) {
-		
-		super( context, "Note.db", null, 2);
-		// TODO Auto-generated constructor stub
-		
+	public CNoteDBCtrl(Context context) {		
+		super( context, DB_NAME, null, DB_VERSION);
 		m_db	=	this.getWritableDatabase();
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
-		db.execSQL( "create table if not exists Memo( _id integer PRIMARY KEY AUTOINCREMENT, preid integer, type integer, " +
-				"isremind integer, remindtime double, createtime double, lastmodifytime double," +
-				"iseditenable integer, remindmask integer, detail string ) " );
-		
+		db.execSQL( DB_CREATE );	
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
-		db.execSQL("DROP TABLE IF EXISTS Memo");
+		db.execSQL("DROP TABLE IF EXISTS "+DB_TABLE);
 		onCreate(db);
 	} 
 	
@@ -43,38 +60,18 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	
 	public	Cursor	getMemoInFolder( int id )
 	{
-		return	m_db.rawQuery("select * from Memo where Preid=?", new String[]{String.valueOf(id)});
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=?", new String[]{String.valueOf(0)});
 	}
 	
 	public	Cursor	getRemindInfo()
 	{
-		return	m_db.rawQuery("select * from Memo where IsRemind=?", new String[]{String.valueOf(1)});
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_isremind+"=?", new String[]{String.valueOf(1)});
 	}
 	
 	public	void Create( CMemoInfo clCMemoInfo )
 	{
-//		Cursor clCursor	=	m_db.rawQuery( "select max(ID) from Memo", null );
-//		int icolumn	=	clCursor.getColumnIndex("ID");
-//		if(clCursor.moveToFirst())
-//		{
-//			int iCount	=	0;	
-//			if ( -1 == icolumn )
-//			{
-//				iCount	=	1;
-//			}
-//			else
-//			{
-//				iCount	=	clCursor.getInt(icolumn);
-//				++ iCount;			
-//			}
-//
-//		
-//			clCMemoInfo.iId	=	iCount;
-//			
-//
-//		} 
-		m_db.execSQL("insert into Memo(Preid,Type,IsRemind,RemindTime,CreateTime,LastModifyTime," +
-				" IsEditEnable,RemindMask,Detail) values(?,?,?,?,?,?,?,?,?)"
+		m_db.execSQL("insert into DB_TABLE(KEY_id,KEY_type,KEY_isremind,KEY_remindtime,KEY_createtime,KEY_lastmodifytime," +
+						" KEY_iseditenable,KEY_remindmask,KEY_detail) values(?,?,?,?,?,?,?,?,?)"
 					, new Object[]{clCMemoInfo.iPreId,clCMemoInfo.iType,clCMemoInfo.iIsRemind
 					,clCMemoInfo.dRemindTime,clCMemoInfo.dCreateTime,clCMemoInfo.dLastModifyTime,clCMemoInfo.iIsEditEnable,
 					clCMemoInfo.iRemindMask,clCMemoInfo.strDetail} );
@@ -92,51 +89,51 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		ContentValues cv=new ContentValues();
 		if ( -1 != clCMemoInfo.iPreId )
 		{
-			cv.put("Preid", clCMemoInfo.iPreId.toString());
+			cv.put(KEY_preid, clCMemoInfo.iPreId.toString());
 		}
 		
 		if ( -1 != clCMemoInfo.iType )
 		{
-			cv.put("Type", clCMemoInfo.iType.toString());
+			cv.put(KEY_type, clCMemoInfo.iType.toString());
 		}
 		
 		if ( -1 != clCMemoInfo.iIsRemind )
 		{
-			cv.put("IsRemind", clCMemoInfo.iIsRemind.toString());
+			cv.put(KEY_isremind, clCMemoInfo.iIsRemind.toString());
 		}
 		
 		if ( -1.0 != clCMemoInfo.dRemindTime )
 		{
-			cv.put("RemindTime", Long.toString(clCMemoInfo.dRemindTime));
+			cv.put(KEY_remindtime, Long.toString(clCMemoInfo.dRemindTime));
 		}
 		
 		if ( -1.0 != clCMemoInfo.dCreateTime )
 		{
-			cv.put("CreateTime", Long.toString(clCMemoInfo.dCreateTime));
+			cv.put(KEY_createtime, Long.toString(clCMemoInfo.dCreateTime));
 		}
 		
 		if ( -1.0 != clCMemoInfo.dLastModifyTime )
 		{
-			cv.put("LastModifyTime", Long.toString(clCMemoInfo.dLastModifyTime));
+			cv.put(KEY_lastmodifytime, Long.toString(clCMemoInfo.dLastModifyTime));
 		}
 		
 		if ( -1 != clCMemoInfo.iIsEditEnable )
 		{
-			cv.put("IsEditEnable", clCMemoInfo.iIsEditEnable.toString());
+			cv.put(KEY_iseditenable, clCMemoInfo.iIsEditEnable.toString());
 		}
 		
 		if ( -1 != clCMemoInfo.iRemindMask )
 		{
-			cv.put("RemindMask", clCMemoInfo.iRemindMask.toString());
+			cv.put(KEY_remindmask, clCMemoInfo.iRemindMask.toString());
 		}
 		
 		if ( null != clCMemoInfo.strDetail )
 		{
-			cv.put("Detail", clCMemoInfo.strDetail);
+			cv.put(KEY_detail, clCMemoInfo.strDetail);
 		}
 		
 		String[] whereValue={ Integer.toString(id)};
 		
-		m_db.update("Memo", cv, "ID=?", whereValue);
+		m_db.update(DB_TABLE, cv, KEY_id+"=?", whereValue);
 	}
 }

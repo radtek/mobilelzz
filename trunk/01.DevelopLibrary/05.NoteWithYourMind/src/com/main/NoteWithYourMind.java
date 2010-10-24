@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.widget.CompoundButton;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.view.View;
@@ -18,11 +20,13 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.widget.Button;
+import android.widget.SimpleCursorAdapter;
 
 public class NoteWithYourMind extends Activity {
 	
 	CheckBox m_clCheckBoxWarning;
 	public static	CNoteDBCtrl		m_clCNoteDBCtrl;
+	public static	NoteDBAdapter	m_clNoteDBAdapter;
 	public static Resources m_r;
 	Calendar c;
 	
@@ -33,7 +37,9 @@ public class NoteWithYourMind extends Activity {
         setContentView(R.layout.main);
         m_r = this.getBaseContext().getResources();
  /////zhu.t test start
-        m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this, null, null, 0 );
+        m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
+        m_clNoteDBAdapter = new NoteDBAdapter(this);
+        m_clNoteDBAdapter.open();
         //m_clCNoteDBCtrl.getWritableDatabase();
 //test end  
         //EditText clET = (EditText) findViewById(R.id.ET_main_Memo);
@@ -44,6 +50,16 @@ public class NoteWithYourMind extends Activity {
         		NoteWithYourMind.this.finish();
         	}
         });
+        Cursor cur = m_clNoteDBAdapter.getMemoRootInfo();
+		startManagingCursor(cur);
+		int count1 = cur.getCount();
+		ListAdapter listadapter1 = new SimpleCursorAdapter(
+				this,
+				R.layout.memolistitem,
+				cur,
+				new String[]{NoteDBAdapter.KEY_detail},
+				new int[]{R.id.memoitem_memotext}
+				);
         c = Calendar.getInstance();
         Button clBTSave = (Button) findViewById(R.id.B_main_Save);
         clBTSave.setOnClickListener(new Button.OnClickListener(){
@@ -55,6 +71,7 @@ public class NoteWithYourMind extends Activity {
         		clCMemoInfo.strDetail	=	memotext.getText().toString();
         		clCMemoInfo.dLastModifyTime = c.getTimeInMillis();
         		m_clCNoteDBCtrl.Create(clCMemoInfo);
+        		long i = m_clNoteDBAdapter.insertData(clCMemoInfo);       		
         		memotext.setText("");
         		Toast toast = Toast.makeText(NoteWithYourMind.this, "±£´æ³É¹¦", Toast.LENGTH_SHORT);
         		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );

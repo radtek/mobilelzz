@@ -2,13 +2,13 @@
 <resources>
     <string name="hello">Hello World, ApiDemos!</string>
     <string name="app_name">NoteWithYourMind</string>
-    <string name="db_field_Detail">Detail</string>
-    <string name="db_field_Preid">Preid</string>
-    <string name="db_field_Type">Type</string>
-    <string name="db_field_IsRemind">IsRemind</string>
-    <string name="db_field_RemindTime">RemindTime</string>
-    <string name="db_field_CreateTime">CreateTime</string>
-    <string name="db_field_LastModifyTime">LastModifyTime</string>
-    <string name="db_field_IsEditEnable">IsEditEnable</string>
-    <string name="db_field_RemindMask">RemindMask</string>
+    <string name="db_field_Detail">detail</string>
+    <string name="db_field_Preid">preid</string>
+    <string name="db_field_Type">type</string>
+    <string name="db_field_IsRemind">isremind</string>
+    <string name="db_field_RemindTime">remindtime</string>
+    <string name="db_field_CreateTime">createtime</string>
+    <string name="db_field_LastModifyTime">lastmodifytime</string>
+    <string name="db_field_IsEditEnable">iseditenable</string>
+    <string name="db_field_RemindMask">remindmask</string>
 </resources>

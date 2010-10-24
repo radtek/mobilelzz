@@ -28,28 +28,15 @@ public class ViewList extends TabActivity
 	//声明TabHost对象
 	TabHost mTabHost;
 	CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
-	NoteDBAdapter	m_clNoteDBAdapter = NoteWithYourMind.m_clNoteDBAdapter;
 	public static boolean m_bIsDelete = false;
-	public Resources m_r = NoteWithYourMind.m_r;
+	public static boolean m_bIsMoveIn = false;
 	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.view);
-		String Detail = m_r.getString(R.string.db_field_Detail);
-		String LastModifyTime = m_r.getString(R.string.db_field_LastModifyTime);
-		Cursor cur = m_clNoteDBAdapter.getMemoRootInfo();
-		startManagingCursor(cur);
-		ListAdapter listadapter1 = new SimpleCursorAdapter(
-				this,
-				R.layout.memolistitem,
-				cur,
-				new String[]{NoteDBAdapter.KEY_detail},
-				new int[]{R.id.memoitem_memotext}
-				);
-		
+		setContentView(R.layout.view);	
 		Cursor clCursor	=	m_clCNoteDBCtrl.getMemoRootInfo();
 		if(clCursor!=null)
 		{
@@ -61,7 +48,7 @@ public class ViewList extends TabActivity
 						this,
 						R.layout.memolistitem,
 						clCursor,
-						new String[]{NoteDBAdapter.KEY_detail},
+						new String[]{CNoteDBCtrl.KEY_detail},
 						new int[]{R.id.memoitem_memotext}
 						);
 				
@@ -80,25 +67,36 @@ public class ViewList extends TabActivity
 		clBTMemoDelete.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
-        		m_bIsDelete = true;
-        		TableLayout TL = (TableLayout) findViewById(R.id.memolistmenu);  
-        		
-        		TL.setColumnCollapsed(0, true);
-        		TL.setColumnCollapsed(1, true);
-        		TL.setColumnCollapsed(2, true);	
-        		
-        		
-        		TL.setColumnCollapsed(4, false);
+        		if(!m_bIsDelete)
+        		{
+        			m_bIsDelete = true;
+            		TableLayout TL = (TableLayout) findViewById(R.id.memolistmenu);  
+            		
+            		TL.setColumnCollapsed(0, true);
+            		TL.setColumnCollapsed(1, true);
+            		TL.setColumnCollapsed(2, true);	
 
-        		TL.setColumnStretchable(0, false);
-        		TL.setColumnStretchable(1, false);
-        		TL.setColumnStretchable(2, false);
-        		//TL.setColumnStretchable(3, false);
-        		TL.setColumnStretchable(4, true);
-        		
-        		//TL.setColumnStretchable(3, true);
-        		
-        		TL.requestLayout();
+            		TL.setColumnCollapsed(4, false);
+
+            		TL.setColumnStretchable(0, false);
+            		TL.setColumnStretchable(1, false);
+            		TL.setColumnStretchable(2, false);
+            		//TL.setColumnStretchable(3, false);
+            		TL.setColumnStretchable(4, true);            		
+            		//TL.setColumnStretchable(3, true);            		
+        		}	
+        		else
+        		{
+        			//delete rec--->
+        			Return2MemoList();
+        		}
+        	}
+        });
+		Button clBTMemoCancel = (Button) findViewById(R.id.B_view_memo_cancel);
+		clBTMemoCancel.setOnClickListener(new Button.OnClickListener(){
+        	public void onClick(View v)
+        	{
+        		Return2MemoList();		
         	}
         });
 		Button clBTWarningR = (Button) findViewById(R.id.B_view_remind_return);
@@ -123,11 +121,31 @@ public class ViewList extends TabActivity
 	    		.setContent(R.id.remindlist));
 	    
 	    //设置TabHost的背景颜色
-	    //mTabHost.setBackgroundColor(Color.argb(150, 22, 70, 150));
+	    mTabHost.setBackgroundColor(Color.argb(150, 22, 70, 150));
 	    //设置TabHost的背景图片资源
 	    //mTabHost.setBackgroundResource(R.drawable.bg0);
 	    
 	    //设置当前显示哪一个标签
 	    mTabHost.setCurrentTab(0);
+	}
+	
+	void Return2MemoList()
+	{
+		m_bIsMoveIn = false;
+		m_bIsDelete = false;
+		TableLayout TL = (TableLayout) findViewById(R.id.memolistmenu);  
+		
+		TL.setColumnCollapsed(0, false);
+		TL.setColumnCollapsed(1, false);
+		TL.setColumnCollapsed(2, false);	
+
+		TL.setColumnCollapsed(4, true);
+
+		TL.setColumnStretchable(0, true);
+		TL.setColumnStretchable(1, true);
+		TL.setColumnStretchable(2, true);
+		//TL.setColumnStretchable(3, false);
+		TL.setColumnStretchable(4, false);
+		//TL.setColumnStretchable(3, true); 
 	}
 }

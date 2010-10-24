@@ -1,6 +1,7 @@
 package com.main;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -10,15 +11,13 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 public class CNoteDBCtrl extends SQLiteOpenHelper {
 
 	private	SQLiteDatabase m_db;
-	
 	public CNoteDBCtrl(Context context, String name, CursorFactory factory,
 			int version) {
 		
-		super( context, "MemoTest1.db", null, 1);
+		super( context, "Note.db", null, 1);
 		// TODO Auto-generated constructor stub
 		
 		m_db	=	this.getWritableDatabase();
-		
 	}
 
 	@Override
@@ -39,7 +38,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	
 	public	Cursor	getMemoRootInfo()
 	{
-		return	m_db.rawQuery("select * from Memo where Preid=?", new String[]{String.valueOf(0)});
+		return	m_db.rawQuery("select ID as _id from Memo where Preid=?", new String[]{String.valueOf(0)});
 	}
 	
 	public	Cursor	getMemoInFolder( int id )
@@ -108,17 +107,17 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		
 		if ( -1.0 != clCMemoInfo.dRemindTime )
 		{
-			cv.put("RemindTime", clCMemoInfo.dRemindTime.toString());
+			cv.put("RemindTime", Long.toString(clCMemoInfo.dRemindTime));
 		}
 		
 		if ( -1.0 != clCMemoInfo.dCreateTime )
 		{
-			cv.put("CreateTime", clCMemoInfo.dCreateTime.toString());
+			cv.put("CreateTime", Long.toString(clCMemoInfo.dCreateTime));
 		}
 		
 		if ( -1.0 != clCMemoInfo.dLastModifyTime )
 		{
-			cv.put("LastModifyTime", clCMemoInfo.dLastModifyTime.toString());
+			cv.put("LastModifyTime", Long.toString(clCMemoInfo.dLastModifyTime));
 		}
 		
 		if ( -1 != clCMemoInfo.iIsEditEnable )

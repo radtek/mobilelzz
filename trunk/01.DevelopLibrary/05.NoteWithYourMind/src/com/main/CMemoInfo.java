@@ -27,6 +27,7 @@ public class CMemoInfo {
 	Integer		iIsEditEnable;
 	Integer		iRemindMask;
 	String		strDetail;
+	String		strPassword;
 	
 	CMemoInfo()
 	{
@@ -40,6 +41,7 @@ public class CMemoInfo {
 		iIsEditEnable	=	-1;
 		iRemindMask		=	-1;
 		strDetail		=	null;
+		strPassword		=	null;
 	}
 	
 }

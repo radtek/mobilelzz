@@ -20,6 +20,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	public static final String	KEY_iseditenable		= "iseditenable";
 	public static final String	KEY_remindmask			= "remindmask";
 	public static final String	KEY_detail				= "detail";
+	public static final String	KEY_password			= "password";
 
 	// 数据库名称为data
 	private static final String	DB_NAME			= "NoteWithYourMind.db";
@@ -28,12 +29,17 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	private static final String	DB_TABLE		= "Notes";
 	
 	// 数据库版本
-	private static final int	DB_VERSION		= 1;
+	private static final int	DB_VERSION		= 2;
 	
 	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" + KEY_id + " INTEGER PRIMARY KEY AUTOINCREMENT," + 
 		KEY_preid + " INTERGER,"+ KEY_type + " INTERGER," + KEY_isremind + " INTERGER," + KEY_remindtime + " double," + KEY_createtime + " double,"+
-		KEY_lastmodifytime + " double,"+ KEY_iseditenable + " INTERGER,"+ KEY_remindmask + " INTERGER,"+ KEY_detail + " TEXT )";
+		KEY_lastmodifytime + " double,"+ KEY_iseditenable + " INTERGER,"+ KEY_remindmask + " INTERGER,"+ KEY_detail + " TEXT," + KEY_password + " TEXT )";
 
+	private static final String	Trigger_CREATE	=	"create trigger delete_sub_rec before delete on " + DB_TABLE +" for each row " +
+			"begin " +
+			"delete from Memo where Preid=old._id;" +
+			"end;";
+	
 	private	SQLiteDatabase m_db;
 	public CNoteDBCtrl(Context context) {		
 		super( context, DB_NAME, null, DB_VERSION);
@@ -43,6 +49,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL( DB_CREATE );	
+		db.execSQL( Trigger_CREATE );
 	}
 
 	@Override
@@ -95,13 +102,19 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		initialValues.put(KEY_iseditenable, clCMemoInfo.iIsEditEnable);
 		initialValues.put(KEY_remindmask, clCMemoInfo.iRemindMask);
 		initialValues.put(KEY_detail, clCMemoInfo.strDetail);
+		initialValues.put(KEY_password, clCMemoInfo.strPassword);
 
 		m_db.insert(DB_TABLE, KEY_id, initialValues);
 	}
 
 	public	void Delete( int[] id )
 	{
+		int iCnt	=	id.length;
 		
+		for ( int i = 0; i < iCnt; ++i )
+		{
+			m_db.execSQL( "delete from " + DB_TABLE + "where " + KEY_id + "=?", new String[]{String.valueOf(id[i])});
+		}	
 	}
 	
 	public	void Update( int id, CMemoInfo clCMemoInfo )
@@ -151,6 +164,11 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		if ( null != clCMemoInfo.strDetail )
 		{
 			cv.put(KEY_detail, clCMemoInfo.strDetail);
+		}
+		
+		if ( null != clCMemoInfo.strPassword )
+		{
+			cv.put(KEY_password, clCMemoInfo.strPassword);
 		}
 		
 		String[] whereValue={ Integer.toString(id)};

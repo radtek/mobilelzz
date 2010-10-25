@@ -28,7 +28,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	private static final String	DB_TABLE		= "Notes";
 	
 	// Êý¾Ý¿â°æ±¾
-	private static final int	DB_VERSION		= 5;
+	private static final int	DB_VERSION		= 1;
 	
 	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" + KEY_id + " INTEGER PRIMARY KEY AUTOINCREMENT," + 
 		KEY_preid + " INTERGER,"+ KEY_type + " INTERGER," + KEY_isremind + " INTERGER," + KEY_remindtime + " double," + KEY_createtime + " double,"+
@@ -43,12 +43,6 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL( DB_CREATE );	
-		CMemoInfo clCMemoInfo = new CMemoInfo();
-		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
-		clCMemoInfo.iPreId = CMemoInfo.PreId_Root;
-		clCMemoInfo.iType = CMemoInfo.Type_Folder;
-		clCMemoInfo.strDetail = CMemoInfo.Encode_Folder;
-		Create(clCMemoInfo);
 	}
 
 	@Override
@@ -56,6 +50,18 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS "+DB_TABLE);
 		onCreate(db);
 	} 
+	
+	public boolean findEncodeFolder()
+	{
+		boolean bR = false;
+		Cursor cur = m_db.rawQuery("select _id from "+DB_TABLE+" where "+KEY_detail+"=?", new String[]{CMemoInfo.Encode_Folder});
+		int count = cur.getCount();
+		if(count>0)
+		{
+			bR = true;
+		}
+		return bR;
+	}
 	
 	public	Cursor	getMemoRootInfo()
 	{

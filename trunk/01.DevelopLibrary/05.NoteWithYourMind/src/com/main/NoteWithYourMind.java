@@ -35,7 +35,16 @@ public class NoteWithYourMind extends Activity {
         setContentView(R.layout.main);
 
         m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
-
+        boolean bExistEncodeFolder = m_clCNoteDBCtrl.findEncodeFolder();
+        if(!bExistEncodeFolder)
+        {
+    		CMemoInfo clCMemoInfo = new CMemoInfo();
+    		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
+    		clCMemoInfo.iPreId = CMemoInfo.PreId_Root;
+    		clCMemoInfo.iType = CMemoInfo.Type_Folder;
+    		clCMemoInfo.strDetail = CMemoInfo.Encode_Folder;
+    		m_clCNoteDBCtrl.Create(clCMemoInfo);
+        }
         Button clBT = (Button) findViewById(R.id.B_main_Exit);
         clBT.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)

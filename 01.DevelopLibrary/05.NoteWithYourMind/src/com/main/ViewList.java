@@ -44,16 +44,16 @@ public class ViewList extends TabActivity
 			int count = clCursor.getCount();
 			if(count>=0)
 			{
-				ListAdapter listadapter = new SimpleCursorAdapter(
-						this,
-						R.layout.memolistitem,
-						clCursor,
-						new String[]{CNoteDBCtrl.KEY_detail},
-						new int[]{R.id.memoitem_memotext}
-						);
-				
+//				ListAdapter listadapter = new SimpleCursorAdapter(
+//						this,
+//						R.layout.memolistitem,
+//						clCursor,
+//						new String[]{CNoteDBCtrl.KEY_detail},
+//						new int[]{R.id.memoitem_memotext}
+//						);
+				NoteListCursorAdapter myAdapter = new NoteListCursorAdapter(this,clCursor);
 				ListView memoList = (ListView) findViewById(R.id.listviewmemo);
-				memoList.setAdapter(listadapter);
+				memoList.setAdapter(myAdapter);
 			}
 		}
 		Button clBTMemoR = (Button) findViewById(R.id.B_view_memo_return);

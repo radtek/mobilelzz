@@ -31,17 +31,19 @@ public class ViewList extends TabActivity
 	public static boolean m_bIsDelete = false;
 	public static boolean m_bIsMoveIn = false;
 	
+	public static NoteListCursorAdapter m_myAdapter;
+	public static Cursor m_clCursor;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.view);	
-		Cursor clCursor	=	m_clCNoteDBCtrl.getMemoRootInfo();
-		if(clCursor!=null)
+		m_clCursor	=	m_clCNoteDBCtrl.getMemoRootInfo();
+		if(m_clCursor!=null)
 		{
-			startManagingCursor(clCursor);
-			int count = clCursor.getCount();
+			startManagingCursor(m_clCursor);
+			int count = m_clCursor.getCount();
 			if(count>=0)
 			{
 //				ListAdapter listadapter = new SimpleCursorAdapter(
@@ -51,9 +53,9 @@ public class ViewList extends TabActivity
 //						new String[]{CNoteDBCtrl.KEY_detail},
 //						new int[]{R.id.memoitem_memotext}
 //						);
-				NoteListCursorAdapter myAdapter = new NoteListCursorAdapter(this,clCursor);
+				m_myAdapter = new NoteListCursorAdapter(this,m_clCursor);
 				ListView memoList = (ListView) findViewById(R.id.listviewmemo);
-				memoList.setAdapter(myAdapter);
+				memoList.setAdapter(m_myAdapter);
 			}
 		}
 		Button clBTMemoR = (Button) findViewById(R.id.B_view_memo_return);
@@ -70,7 +72,7 @@ public class ViewList extends TabActivity
         		if(!m_bIsDelete)
         		{
         			m_bIsDelete = true;
-            		TableLayout TL = (TableLayout) findViewById(R.id.memolistmenu);  
+            		TableLayout TL = (TableLayout) ViewList.this.findViewById(R.id.memolistmenu);  
             		
             		TL.setColumnCollapsed(0, true);
             		TL.setColumnCollapsed(1, true);
@@ -83,20 +85,27 @@ public class ViewList extends TabActivity
             		TL.setColumnStretchable(2, false);
             		//TL.setColumnStretchable(3, false);
             		TL.setColumnStretchable(4, true);            		
-            		//TL.setColumnStretchable(3, true);            		
+            		//TL.setColumnStretchable(3, true);   
+            		TL.invalidate();
         		}	
         		else
         		{
         			//delete rec--->
         			Return2MemoList();
         		}
+        		ViewList.m_myAdapter = new NoteListCursorAdapter(ViewList.this,ViewList.m_clCursor);
+				ListView memoList = (ListView) ViewList.this.findViewById(R.id.listviewmemo);
+				memoList.setAdapter(m_myAdapter);
         	}
         });
 		Button clBTMemoCancel = (Button) findViewById(R.id.B_view_memo_cancel);
 		clBTMemoCancel.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
-        		Return2MemoList();		
+        		Return2MemoList();
+        		ViewList.m_myAdapter = new NoteListCursorAdapter(ViewList.this,ViewList.m_clCursor);
+				ListView memoList = (ListView) ViewList.this.findViewById(R.id.listviewmemo);
+				memoList.setAdapter(m_myAdapter);
         	}
         });
 		Button clBTWarningR = (Button) findViewById(R.id.B_view_remind_return);
@@ -133,7 +142,7 @@ public class ViewList extends TabActivity
 	{
 		m_bIsMoveIn = false;
 		m_bIsDelete = false;
-		TableLayout TL = (TableLayout) findViewById(R.id.memolistmenu);  
+		TableLayout TL = (TableLayout) ViewList.this.findViewById(R.id.memolistmenu);  
 		
 		TL.setColumnCollapsed(0, false);
 		TL.setColumnCollapsed(1, false);
@@ -147,5 +156,6 @@ public class ViewList extends TabActivity
 		//TL.setColumnStretchable(3, false);
 		TL.setColumnStretchable(4, false);
 		//TL.setColumnStretchable(3, true); 
+		TL.invalidate();
 	}
 }

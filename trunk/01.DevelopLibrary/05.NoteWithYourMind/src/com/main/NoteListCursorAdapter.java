@@ -26,7 +26,13 @@ public class NoteListCursorAdapter extends CursorAdapter {
  
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
-		View v = m_inflater.inflate(R.layout.memolistitem, parent, false);
+		View v;
+		if(ViewList.m_bIsDelete || ViewList.m_bIsMoveIn)
+		{
+			v = m_inflater.inflate(R.layout.memolistitemselect, parent, false);
+		}else{
+			v = m_inflater.inflate(R.layout.memolistitem, parent, false);
+		}	
 		int iTypeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_type);
 		int iTypeValue = cursor.getInt(iTypeIndex);
 		if(iTypeValue == CMemoInfo.Type_Folder){

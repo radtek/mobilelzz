@@ -29,7 +29,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	private static final String	DB_TABLE		= "Notes";
 	
 	// Êý¾Ý¿â°æ±¾
-	private static final int	DB_VERSION		= 2;
+	private static final int	DB_VERSION		= 3;
 	
 	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" + KEY_id + " INTEGER PRIMARY KEY AUTOINCREMENT," + 
 		KEY_preid + " INTERGER,"+ KEY_type + " INTERGER," + KEY_isremind + " INTERGER," + KEY_remindtime + " double," + KEY_createtime + " double,"+
@@ -37,7 +37,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 
 	private static final String	Trigger_CREATE	=	"create trigger delete_sub_rec before delete on " + DB_TABLE +" for each row " +
 			"begin " +
-			"delete from Memo where Preid=old._id;" +
+			"delete from " + DB_TABLE + " where Preid=old._id;" +
 			"end;";
 	
 	private	SQLiteDatabase m_db;

@@ -39,7 +39,7 @@ public class NoteWithYourMind extends Activity {
         if(!bExistEncodeFolder)
         {
     		CMemoInfo clCMemoInfo = new CMemoInfo();
-    		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
+    		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Disable;
     		clCMemoInfo.iPreId = CMemoInfo.PreId_Root;
     		clCMemoInfo.iType = CMemoInfo.Type_Folder;
     		clCMemoInfo.strDetail = CMemoInfo.Encode_Folder;
@@ -62,6 +62,7 @@ public class NoteWithYourMind extends Activity {
         		clCMemoInfo.iPreId	=	0;
         		clCMemoInfo.strDetail	=	memotext.getText().toString();
         		clCMemoInfo.dLastModifyTime = c.getTimeInMillis();
+        		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
         		m_clCNoteDBCtrl.Create(clCMemoInfo);     		
         		memotext.setText("");
         		Toast toast = Toast.makeText(NoteWithYourMind.this, "±£´æ³É¹¦", Toast.LENGTH_SHORT);

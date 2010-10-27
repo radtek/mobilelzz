@@ -126,7 +126,7 @@ public class ViewList extends TabActivity
         			ArrayList<Integer> alIDs = new ArrayList<Integer>();
         			findSelectItemDBID(alIDs);
         			if(alIDs.size()>0){
-        				Integer[] needDeleteIDs = (Integer[])alIDs.toArray();
+        				Integer[] needDeleteIDs = (Integer[])alIDs.toArray(new Integer[0]);
             			m_clCNoteDBCtrl.Delete(needDeleteIDs);
         			}        			
         			Return2MemoList();
@@ -201,8 +201,9 @@ public class ViewList extends TabActivity
 		int count = m_myAdapter.getCount();
 		for(int i = 0; i < count; i++)
 		{
-			View item = m_myAdapter.getView(i, null, null);
-			final CheckBox cb = (CheckBox)item.findViewById(R.id.memoitem_memoselect);
+			//View item = m_myAdapter.getView(i, null, null);
+			ListView memoList = (ListView) ViewList.this.findViewById(R.id.listviewmemo);
+			final CheckBox cb = (CheckBox)memoList.getChildAt(i).findViewById(R.id.memoitem_memoselect);
 			if(cb!=null){
 				boolean b = cb.isChecked();
 				if(b==true){

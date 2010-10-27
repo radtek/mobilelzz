@@ -113,7 +113,8 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		
 		for ( int i = 0; i < iCnt; ++i )
 		{
-			m_db.execSQL( "delete from " + DB_TABLE + "where " + KEY_id + "=?", new String[]{String.valueOf(id[i])});
+			String[] temp = new String[]{id[i].toString()};
+			m_db.execSQL( "delete from " + DB_TABLE + " where " + KEY_id + "=?", temp );
 		}	
 	}
 	

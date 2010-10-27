@@ -133,6 +133,9 @@ public class ViewList extends TabActivity
             		TL.setColumnStretchable(4, true);            		
             		//TL.setColumnStretchable(3, true);   
             		TL.invalidate();
+            		ViewList.m_myAdapter = new NoteListCursorAdapter(ViewList.this,ViewList.m_clCursor);
+            		ListView memoList = (ListView) ViewList.this.findViewById(R.id.listviewmemo);
+            		memoList.setAdapter(m_myAdapter);
         		}	
         		else
         		{
@@ -144,10 +147,7 @@ public class ViewList extends TabActivity
             			m_clCNoteDBCtrl.Delete(needDeleteIDs);
         			}        			
         			Return2MemoList();
-        		}
-        		ViewList.m_myAdapter = new NoteListCursorAdapter(ViewList.this,ViewList.m_clCursor);
-				ListView memoList = (ListView) ViewList.this.findViewById(R.id.listviewmemo);
-				memoList.setAdapter(m_myAdapter);
+        		}	
         	}
         });
 		Button clBTMemoCancel = (Button) findViewById(R.id.B_view_memo_cancel);
@@ -155,10 +155,7 @@ public class ViewList extends TabActivity
         	public void onClick(View v)
         	{
         		Return2MemoList();
-        		ViewList.m_myAdapter = new NoteListCursorAdapter(ViewList.this,ViewList.m_clCursor);
-				ListView memoList = (ListView) ViewList.this.findViewById(R.id.listviewmemo);
-				memoList.setAdapter(m_myAdapter);
-        	}
+         	}
         });
 		Button clBTWarningR = (Button) findViewById(R.id.B_view_remind_return);
 		clBTWarningR.setOnClickListener(new Button.OnClickListener(){
@@ -209,6 +206,10 @@ public class ViewList extends TabActivity
 		TL.setColumnStretchable(4, false);
 		//TL.setColumnStretchable(3, true); 
 		TL.invalidate();
+		m_clCursor	=	m_clCNoteDBCtrl.getMemoRootInfo();
+		ViewList.m_myAdapter = new NoteListCursorAdapter(ViewList.this,ViewList.m_clCursor);
+		ListView memoList = (ListView) ViewList.this.findViewById(R.id.listviewmemo);
+		memoList.setAdapter(m_myAdapter);
 	}
 	void findSelectItemDBID(ArrayList<Integer> alIDs)
 	{

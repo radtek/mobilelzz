@@ -107,7 +107,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		m_db.insert(DB_TABLE, KEY_id, initialValues);
 	}
 
-	public	void Delete( int[] id )
+	public	void Delete( Integer[] id )
 	{
 		int iCnt	=	id.length;
 		

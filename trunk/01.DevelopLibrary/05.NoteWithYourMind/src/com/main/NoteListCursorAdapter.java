@@ -29,7 +29,14 @@ public class NoteListCursorAdapter extends CursorAdapter {
 		View v;
 		if(ViewList.m_bIsDelete || ViewList.m_bIsMoveIn)
 		{
-			v = m_inflater.inflate(R.layout.memolistitemselect, parent, false);
+			int iIsEditableIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_iseditenable);
+			int iIsEditableValue = cursor.getInt(iIsEditableIndex);
+			if(iIsEditableValue == CMemoInfo.IsEditEnable_Enable)
+			{
+				v = m_inflater.inflate(R.layout.memolistitemselect, parent, false);
+			}else{
+				v = m_inflater.inflate(R.layout.memolistitem, parent, false);
+			}		
 		}else{
 			v = m_inflater.inflate(R.layout.memolistitem, parent, false);
 		}	

@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -122,6 +123,12 @@ public class ViewList extends TabActivity
         		else
         		{
         			//delete rec--->
+        			ArrayList<Integer> alIDs = new ArrayList<Integer>();
+        			findSelectItemDBID(alIDs);
+        			if(alIDs.size()>0){
+        				Integer[] needDeleteIDs = (Integer[])alIDs.toArray();
+            			m_clCNoteDBCtrl.Delete(needDeleteIDs);
+        			}        			
         			Return2MemoList();
         		}
         		ViewList.m_myAdapter = new NoteListCursorAdapter(ViewList.this,ViewList.m_clCursor);
@@ -188,5 +195,21 @@ public class ViewList extends TabActivity
 		TL.setColumnStretchable(4, false);
 		//TL.setColumnStretchable(3, true); 
 		TL.invalidate();
+	}
+	void findSelectItemDBID(ArrayList<Integer> alIDs)
+	{
+		int count = m_myAdapter.getCount();
+		for(int i = 0; i < count; i++)
+		{
+			View item = m_myAdapter.getView(i, null, null);
+			final CheckBox cb = (CheckBox)item.findViewById(R.id.memoitem_memoselect);
+			if(cb!=null){
+				boolean b = cb.isChecked();
+				if(b==true){
+					int iID = (int)m_myAdapter.getItemId(i);
+					alIDs.add(new Integer(iID));
+				}
+			}
+		}
 	}
 }

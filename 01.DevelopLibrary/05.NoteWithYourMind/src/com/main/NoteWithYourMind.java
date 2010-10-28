@@ -58,16 +58,23 @@ public class NoteWithYourMind extends Activity {
         	public void onClick(View v)
         	{
         		EditText memotext = (EditText) findViewById(R.id.ET_main_Memo);
-        		CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-        		clCMemoInfo.iPreId	=	0;
-        		clCMemoInfo.strDetail	=	memotext.getText().toString();
-        		clCMemoInfo.dLastModifyTime = c.getTimeInMillis();
-        		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
-        		m_clCNoteDBCtrl.Create(clCMemoInfo);     		
-        		memotext.setText("");
-        		Toast toast = Toast.makeText(NoteWithYourMind.this, "保存成功", Toast.LENGTH_SHORT);
-        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-        		toast.show();
+        		String strMemoText = memotext.getText().toString();
+        		if(strMemoText.length()>0){
+        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+            		clCMemoInfo.iPreId	=	0;
+            		clCMemoInfo.strDetail	=	strMemoText;
+            		clCMemoInfo.dLastModifyTime = c.getTimeInMillis();
+            		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
+            		m_clCNoteDBCtrl.Create(clCMemoInfo);     		
+            		memotext.setText("");
+            		Toast toast = Toast.makeText(NoteWithYourMind.this, "保存成功", Toast.LENGTH_SHORT);
+            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+            		toast.show();
+        		}else{
+        			Toast toast = Toast.makeText(NoteWithYourMind.this, "请输入内容", Toast.LENGTH_SHORT);
+            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+            		toast.show();
+        		}
         	}
         });
         

@@ -27,11 +27,11 @@ public class NoteListCursorAdapter extends CursorAdapter {
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		View v;
-		if(ViewList.m_bIsDelete || ViewList.m_bIsMoveIn)
+		if((ViewList.m_MoveIn_State == ViewList.MoveIn_State.MoveIn_SelectMoveItem) || ViewList.m_bIsDelete)
 		{
-			int iIsEditableIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_iseditenable);
-			int iIsEditableValue = cursor.getInt(iIsEditableIndex);
-			if(iIsEditableValue == CMemoInfo.IsEditEnable_Enable)
+			int iTypeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_type);
+			int iTypeValue = cursor.getInt(iTypeIndex);
+			if(iTypeValue != CMemoInfo.Type_Folder)
 			{
 				v = m_inflater.inflate(R.layout.memolistitemselect, parent, false);
 			}else{

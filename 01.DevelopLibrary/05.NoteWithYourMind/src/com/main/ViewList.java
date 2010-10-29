@@ -13,6 +13,8 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -26,23 +28,33 @@ import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TabHost;
 import android.widget.TableLayout;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TabHost.OnTabChangeListener;
 
 public class ViewList extends TabActivity
 {
+	public enum MoveIn_State{
+		MoveIn_Invalid,
+		MoveIn_SelectMoveItem,
+		MoveIn_SelectFolder
+	}
 	//声明TabHost对象
 	TabHost mTabHost;
 	CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
 	public static boolean m_bIsDelete = false;
-	public static boolean m_bIsMoveIn = false;
+	public static MoveIn_State m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
 	
 	public static NoteListCursorAdapter m_myAdapter;
 	public static Cursor m_clCursor;
+	public static AlertDialog m_dlgFolderList;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
+		m_bIsDelete = false;
+		m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.view);	
 		m_clCursor	=	m_clCNoteDBCtrl.getMemoRootInfo();
@@ -118,20 +130,17 @@ public class ViewList extends TabActivity
         		if(!m_bIsDelete)
         		{
         			m_bIsDelete = true;
-            		TableLayout TL = (TableLayout) ViewList.this.findViewById(R.id.memolistmenu);  
-            		
+            		TableLayout TL = (TableLayout) ViewList.this.findViewById(R.id.memolistmenu);            		
             		TL.setColumnCollapsed(0, true);
             		TL.setColumnCollapsed(1, true);
             		TL.setColumnCollapsed(2, true);	
-
+            		TL.setColumnCollapsed(3, false);
             		TL.setColumnCollapsed(4, false);
-
             		TL.setColumnStretchable(0, false);
             		TL.setColumnStretchable(1, false);
             		TL.setColumnStretchable(2, false);
-            		//TL.setColumnStretchable(3, false);
-            		TL.setColumnStretchable(4, true);            		
-            		//TL.setColumnStretchable(3, true);   
+            		TL.setColumnStretchable(3, true);
+            		TL.setColumnStretchable(4, true);            		  
             		TL.invalidate();
             		ViewList.m_myAdapter = new NoteListCursorAdapter(ViewList.this,ViewList.m_clCursor);
             		ListView memoList = (ListView) ViewList.this.findViewById(R.id.listviewmemo);
@@ -150,6 +159,79 @@ public class ViewList extends TabActivity
         		}	
         	}
         });
+		
+		Button clBTMemoMoveIn = (Button) findViewById(R.id.B_view_memo_move);
+		clBTMemoMoveIn.setOnClickListener(new Button.OnClickListener(){
+        	public void onClick(View v)
+        	{
+        		if(m_MoveIn_State == MoveIn_State.MoveIn_Invalid)
+        		{
+        			m_MoveIn_State = MoveIn_State.MoveIn_SelectMoveItem;
+            		TableLayout TL = (TableLayout) ViewList.this.findViewById(R.id.memolistmenu);            		
+            		TL.setColumnCollapsed(0, true);
+            		TL.setColumnCollapsed(1, true);
+            		TL.setColumnCollapsed(2, false);
+            		TL.setColumnCollapsed(3, true);	
+            		TL.setColumnCollapsed(4, false);
+            		TL.setColumnStretchable(0, false);
+            		TL.setColumnStretchable(1, false);
+            		TL.setColumnStretchable(2, true);
+            		TL.setColumnStretchable(3, false);
+            		TL.setColumnStretchable(4, true);            		
+            		TL.invalidate();
+            		ViewList.m_myAdapter = new NoteListCursorAdapter(ViewList.this,ViewList.m_clCursor);
+            		ListView memoList = (ListView) ViewList.this.findViewById(R.id.listviewmemo);
+            		memoList.setAdapter(m_myAdapter);
+        		}	
+        		else if(m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem)
+        		{
+        			m_MoveIn_State = MoveIn_State.MoveIn_SelectFolder;
+        			//show folder to select rec--->
+        			LayoutInflater factory = LayoutInflater.from(ViewList.this);
+        			final View DialogView = factory.inflate(R.layout.folderlist, null);
+        			
+        			ViewList.m_dlgFolderList = new AlertDialog.Builder(ViewList.this)
+        				.setTitle("请选择文件夹")
+        				.setView(DialogView)
+        				.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+        					public void onClick(DialogInterface dialog, int i)
+        					{
+        						m_MoveIn_State = MoveIn_State.MoveIn_SelectMoveItem;
+        						dialog.cancel();
+        					}
+        				})
+        				.create();
+        			ListView folderList = (ListView) DialogView.findViewById(R.id.folderlist_view);
+        			Cursor cursorFolderList	=	m_clCNoteDBCtrl.getFolderInRoot();
+        			if(cursorFolderList!=null){
+        				startManagingCursor(cursorFolderList);
+        				ListAdapter LA_FolderList = new SimpleCursorAdapter(
+        						ViewList.this,
+        						android.R.layout.simple_list_item_1,
+        						cursorFolderList,
+        						new String[]{CNoteDBCtrl.KEY_detail},
+        						new int[]{android.R.id.text1}
+        						);
+        				folderList.setAdapter(LA_FolderList);
+        			} 
+        			folderList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3){
+        					ListAdapter LA = (ListAdapter)arg0.getAdapter();
+        					long id = LA.getItemId(arg2);
+        					Toast toast = Toast.makeText(ViewList.this, "移入文件夹 "+String.valueOf(id), Toast.LENGTH_SHORT);
+                    		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+                    		toast.show();
+                    		ViewList.m_dlgFolderList.cancel();
+                    		Return2MemoList();
+        				}
+        			});
+        			m_dlgFolderList.show();      			
+        		}else{
+        			
+        		}
+        	}
+        });
+		
 		Button clBTMemoCancel = (Button) findViewById(R.id.B_view_memo_cancel);
 		clBTMemoCancel.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
@@ -189,22 +271,21 @@ public class ViewList extends TabActivity
 	
 	void Return2MemoList()
 	{
-		m_bIsMoveIn = false;
+		m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
 		m_bIsDelete = false;
 		TableLayout TL = (TableLayout) ViewList.this.findViewById(R.id.memolistmenu);  
 		
 		TL.setColumnCollapsed(0, false);
 		TL.setColumnCollapsed(1, false);
 		TL.setColumnCollapsed(2, false);	
-
+		TL.setColumnCollapsed(3, false);
 		TL.setColumnCollapsed(4, true);
 
 		TL.setColumnStretchable(0, true);
 		TL.setColumnStretchable(1, true);
 		TL.setColumnStretchable(2, true);
-		//TL.setColumnStretchable(3, false);
-		TL.setColumnStretchable(4, false);
-		//TL.setColumnStretchable(3, true); 
+		TL.setColumnStretchable(3, true);
+		TL.setColumnStretchable(4, false); 
 		TL.invalidate();
 		m_clCursor	=	m_clCNoteDBCtrl.getMemoRootInfo();
 		ViewList.m_myAdapter = new NoteListCursorAdapter(ViewList.this,ViewList.m_clCursor);

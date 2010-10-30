@@ -6,7 +6,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:background="@drawable/bg_blue">
         <TabWidget
             android:id="@android:id/tabs"
             android:layout_width="fill_parent"
@@ -63,8 +64,10 @@
 		          </TableLayout>
 							<ListView 
 	                android:id="@+id/listviewmemo"
-	                android:layout_width="fill_parent"
+	                android:layout_width="270px"
 	                android:layout_height="fill_parent" 
+	                android:layout_centerHorizontal="true"
+	                android:listSelector="@drawable/listitem_bk"
 	                android:layout_above="@id/memolistmenu"  />
 						</RelativeLayout>
 						<RelativeLayout

@@ -3,6 +3,7 @@ package com.main;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,10 +44,15 @@ public class NoteListCursorAdapter extends CursorAdapter {
 		int iTypeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_type);
 		int iTypeValue = cursor.getInt(iTypeIndex);
 		if(iTypeValue == CMemoInfo.Type_Folder){
-			v.setBackgroundColor(Color.YELLOW);
+			Drawable drawable = v.getResources().getDrawable(R.drawable.list);   
+			v.setBackgroundDrawable( drawable );
+//			v.setBackgroundColor(Color.YELLOW);
 		}else if(iTypeValue == CMemoInfo.Type_Memo){
-			
-		}else{			
+			Drawable drawable = v.getResources().getDrawable(R.drawable.list);   
+			v.setBackgroundDrawable( drawable );
+		}else{	
+			Drawable drawable = v.getResources().getDrawable(R.drawable.list);   
+			v.setBackgroundDrawable( drawable );
 		}
 		
 		return v;

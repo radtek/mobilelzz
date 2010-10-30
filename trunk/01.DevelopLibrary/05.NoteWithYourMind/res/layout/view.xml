@@ -67,7 +67,7 @@
 	                android:layout_width="270px"
 	                android:layout_height="fill_parent" 
 	                android:layout_centerHorizontal="true"
-	                android:listSelector="@drawable/listitem_bk"
+	               	android:listSelector="@drawable/listitem_bk" 
 	                android:layout_above="@id/memolistmenu"  />
 						</RelativeLayout>
 						<RelativeLayout

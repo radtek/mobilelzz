@@ -8,6 +8,7 @@
       android:layout_height="wrap_content"
       android:layout_alignParentRight = "true"
       android:layout_centerVertical="true"
+      android:background="#00000000"
       android:gravity="right"
     >
     </TextView>
@@ -20,6 +21,7 @@
       android:singleLine = "true"
       android:ellipsize = "end"
       android:gravity="left"
+      android:background="#00000000"
     >
     </TextView>
 </RelativeLayout>

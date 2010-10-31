@@ -1,5 +1,23 @@
 package com.main;
 
+/*对于编辑画面
+
+编辑的类型分为：
+未知
+Memo（编辑已有）
+文件夹（编辑已有）
+
+未知
+3个CheckBox都可选
+all default
+
+Memo
+加密和文件夹选项不可选
+更新detail
+
+文件夹
+文件夹和提醒不可选
+更新加密、detail*/
 
 import java.util.Calendar;
 
@@ -23,12 +41,19 @@ import android.widget.Button;
 import android.widget.SimpleCursorAdapter;
 
 public class NoteWithYourMind extends Activity {
+	public enum NewNoteKindEnum{
+		NewNoteKind_Unknown,
+		NewNoteKind_Memo,
+		NewNoteKind_Folder
+	}
 	public static String ExtraData_MemoID = "com.main.ExtraData_MemoID";
+	public static String NewNoteKind = "com.main.ExtraData_NewNoteKind";
 	private CheckBox m_clCheckBoxWarning;
 	public static	CNoteDBCtrl		m_clCNoteDBCtrl;
 	private Calendar c;
 	private static String m_strPassWord = "123456";
 	private int m_ExtraData_MemoID = CMemoInfo.Id_Invalid;
+	private NewNoteKindEnum m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
     /** Called when the activity is first created. */
 	
     @Override
@@ -36,8 +61,13 @@ public class NoteWithYourMind extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         m_ExtraData_MemoID = CMemoInfo.Id_Invalid;
+        m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
         Intent iExtraData = this.getIntent();
 		m_ExtraData_MemoID = iExtraData.getIntExtra(ExtraData_MemoID, CMemoInfo.Id_Invalid );
+		m_ExtraData_NewNoteKind = (NewNoteKindEnum)iExtraData.getSerializableExtra(NewNoteKind);
+		if(m_ExtraData_NewNoteKind==null){
+			m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
+		}
         m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
         UpdateViewStatus();
         
@@ -131,31 +161,54 @@ public class NoteWithYourMind extends Activity {
         });
     }
     private void UpdateViewStatus(){
-    	Cursor curExtraMemo;
-    	EditText etMemoDetail = (EditText) findViewById(R.id.ET_main_Memo);
-    	CheckBox CBFolder = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsFolder);
-    	CheckBox CBEncode = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsEncode);
-        if(m_ExtraData_MemoID!=CMemoInfo.Id_Invalid){
+    	Cursor curExtraMemo = null;
+    	if(m_ExtraData_MemoID!=CMemoInfo.Id_Invalid){
         	curExtraMemo = m_clCNoteDBCtrl.getMemoRec(m_ExtraData_MemoID);
         	startManagingCursor(curExtraMemo);
         	curExtraMemo.moveToFirst();
-        	int iIndex = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_detail);
-        	String strDetail = curExtraMemo.getString(iIndex);
-        	etMemoDetail.setText(strDetail);
+    	}
+    	EditText etMemoDetail = (EditText) findViewById(R.id.ET_main_Memo);
+    	CheckBox CBFolder = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsFolder);
+    	CheckBox CBEncode = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsEncode);
+    	CheckBox CBRemind = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsWarning);
 
-       		CBFolder.setChecked(false);
-
-        	iIndex = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_password);
-        	String strPassWord = curExtraMemo.getString(iIndex);
-        	if((strPassWord != null) && (strPassWord.length() > 0)){
-        		CBEncode.setChecked(true);
-        	}else{
-        		CBEncode.setChecked(false);
-        	}
-        }else{
-        	etMemoDetail.setText("");
-        	CBFolder.setChecked(false);
-        	CBEncode.setChecked(false);   	
-        }
+    	if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown){
+    		etMemoDetail.setText("");
+    		CBFolder.setChecked(false);
+        	CBEncode.setChecked(false);  
+    	}else if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Memo){
+    		CBFolder.setChecked(false);
+    		CBFolder.setClickable(false);
+    		CBEncode.setChecked(false);
+    		CBEncode.setClickable(false);
+    		if(curExtraMemo!=null){
+    			UpdateDetail(curExtraMemo, etMemoDetail);
+    		}
+    	}else if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Folder){
+    		CBFolder.setChecked(false);
+    		CBFolder.setClickable(false);
+    		CBRemind.setChecked(false);
+    		CBRemind.setClickable(false);
+    		if(curExtraMemo!=null){
+    			UpdateDetail(curExtraMemo, etMemoDetail);
+    			UpdateEncode(curExtraMemo, CBEncode);
+    		}
+    	}else{
+    		
+    	}
+    }
+    private void UpdateDetail(Cursor cur, EditText etDetail){
+    	int iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_detail);
+    	String strDetail = cur.getString(iIndex);
+    	etDetail.setText(strDetail);
+    }
+    private void UpdateEncode(Cursor cur, CheckBox isEncode){
+    	int iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_password);
+    	String strPassWord = cur.getString(iIndex);
+    	if((strPassWord != null) && (strPassWord.length() > 0)){
+    		isEncode.setChecked(true);
+    	}else{
+    		isEncode.setChecked(false);
+    	}
     }
 }

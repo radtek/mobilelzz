@@ -29,7 +29,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	private static final String	DB_TABLE		= "Notes";
 	
 	// Êý¾Ý¿â°æ±¾
-	private static final int	DB_VERSION		= 1;
+	private static final int	DB_VERSION		= 2;
 	
 	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" + KEY_id + " INTEGER PRIMARY KEY AUTOINCREMENT," + 
 		KEY_preid + " INTERGER,"+ KEY_type + " INTERGER," + KEY_isremind + " INTERGER," + KEY_remindtime + " double," + KEY_createtime + " double,"+

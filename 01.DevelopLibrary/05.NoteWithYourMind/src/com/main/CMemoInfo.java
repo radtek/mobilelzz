@@ -14,8 +14,7 @@ public class CMemoInfo {
 	public final static Integer IsRemind_No = 1;
 	
 	public final static Integer PreId_Root = 0;
-	
-	public final static String Encode_Folder = "º”√‹";
+	public final static Integer Id_Invalid = -1;
 	
 	Integer		iId;
 	Integer		iPreId;

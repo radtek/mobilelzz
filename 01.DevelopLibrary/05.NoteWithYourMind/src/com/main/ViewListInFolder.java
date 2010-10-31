@@ -52,6 +52,7 @@ public class ViewListInFolder extends Activity
 	private NoteListCursorAdapter m_myAdapter;
 	private Cursor m_clCursor;
 	private AlertDialog m_dlgFolderList;
+	private Cursor m_cursorFolderList;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -83,7 +84,15 @@ public class ViewListInFolder extends Activity
 				memoList.setOnItemClickListener(new OnItemClickListener(){
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
-						
+						NoteListCursorAdapter LA = (NoteListCursorAdapter)arg0.getAdapter();
+						Cursor cur = LA.getCursor();
+						cur.moveToPosition(arg2);
+						int iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_id);
+						int iIDValue = cur.getInt(iIndex);
+						Intent toNew = new Intent();
+		        		toNew.setClass(ViewListInFolder.this, NoteWithYourMind.class);
+		        		toNew.putExtra(NoteWithYourMind.ExtraData_MemoID, iIDValue);
+		        		startActivity(toNew);
 					}		
 				});
 			}
@@ -93,6 +102,16 @@ public class ViewListInFolder extends Activity
         	public void onClick(View v)
         	{      		
         		ViewListInFolder.this.finish();
+        	}
+        });
+		Button clBTMemoNew = (Button) findViewById(R.id.B_view_memo_new_infolder);
+		clBTMemoNew.setOnClickListener(new Button.OnClickListener(){
+        	public void onClick(View v)
+        	{     
+        		Intent toNew = new Intent();
+        		toNew.setClass(ViewListInFolder.this, NoteWithYourMind.class);
+        		toNew.putExtra(NoteWithYourMind.ExtraData_MemoID, m_Cur_FolderID);
+        		startActivity(toNew);
         	}
         });
 		Button clBTMemoDelete = (Button) findViewById(R.id.B_view_memo_delete_infolder);
@@ -115,6 +134,7 @@ public class ViewListInFolder extends Activity
             		TL.setColumnStretchable(4, true);            		  
             		TL.invalidate();
             		m_myAdapter = new NoteListCursorAdapter(ViewListInFolder.this,m_clCursor);
+            		m_myAdapter.setSelectableStyle(true);
             		ListView memoList = (ListView) ViewListInFolder.this.findViewById(R.id.listviewmemo_infolder);
             		memoList.setAdapter(m_myAdapter);
         		}	
@@ -152,6 +172,7 @@ public class ViewListInFolder extends Activity
             		TL.setColumnStretchable(4, true);            		
             		TL.invalidate();
             		m_myAdapter = new NoteListCursorAdapter(ViewListInFolder.this,m_clCursor);
+            		m_myAdapter.setSelectableStyle(true);
             		ListView memoList = (ListView) ViewListInFolder.this.findViewById(R.id.listviewmemo_infolder);
             		memoList.setAdapter(m_myAdapter);
         		}	
@@ -174,13 +195,13 @@ public class ViewListInFolder extends Activity
         				})
         				.create();
         			ListView folderList = (ListView) DialogView.findViewById(R.id.folderlist_view);
-        			Cursor cursorFolderList	=	m_clCNoteDBCtrl.getFolderInRoot();
-        			if(cursorFolderList!=null){
-        				startManagingCursor(cursorFolderList);
+        			m_cursorFolderList	=	m_clCNoteDBCtrl.getFolderInRoot();
+        			startManagingCursor(m_cursorFolderList);
+        			if(m_cursorFolderList!=null){
         				ListAdapter LA_FolderList = new SimpleCursorAdapter(
         						ViewListInFolder.this,
         						android.R.layout.simple_list_item_1,
-        						cursorFolderList,
+        						m_cursorFolderList,
         						new String[]{CNoteDBCtrl.KEY_detail},
         						new int[]{android.R.id.text1}
         						);
@@ -217,7 +238,7 @@ public class ViewListInFolder extends Activity
 	{
 		m_MoveIn_State_InFolder = MoveIn_State.MoveIn_Invalid;
 		m_bIsDelete_InFolder = false;
-		TableLayout TL = (TableLayout) this.findViewById(R.id.memolistmenu);  
+		TableLayout TL = (TableLayout) this.findViewById(R.id.memolistmenu_infolder);  
 		
 		TL.setColumnCollapsed(0, false);
 		TL.setColumnCollapsed(1, false);
@@ -231,7 +252,8 @@ public class ViewListInFolder extends Activity
 		TL.setColumnStretchable(3, true);
 		TL.setColumnStretchable(4, false); 
 		TL.invalidate();
-		m_clCursor	=	m_clCNoteDBCtrl.getMemoRootInfo();
+		m_clCursor	=	m_clCNoteDBCtrl.getMemoInFolder(m_Cur_FolderID);
+		startManagingCursor(m_clCursor);
 		m_myAdapter = new NoteListCursorAdapter(this,m_clCursor);
 		ListView memoList = (ListView) this.findViewById(R.id.listviewmemo_infolder);
 		memoList.setAdapter(m_myAdapter);

@@ -44,7 +44,7 @@
 									</Button>
 									<Button
 			            	android:id="@+id/B_view_memo_move"
-										android:text="移入文件夹"
+										android:text="移动到文件夹"
 										android:textSize="20sp"
 										android:padding="3dip">
 									</Button>

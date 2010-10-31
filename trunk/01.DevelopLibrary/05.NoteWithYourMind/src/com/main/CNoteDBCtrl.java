@@ -58,16 +58,9 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		onCreate(db);
 	} 
 	
-	public boolean findEncodeFolder()
+	public Cursor findEncodeFolder()
 	{
-		boolean bR = false;
-		Cursor cur = m_db.rawQuery("select _id from "+DB_TABLE+" where "+KEY_detail+"=?", new String[]{CMemoInfo.Encode_Folder});
-		int count = cur.getCount();
-		if(count>0)
-		{
-			bR = true;
-		}
-		return bR;
+		return m_db.rawQuery("select _id from "+DB_TABLE+" where "+KEY_detail+"=?", new String[]{CMemoInfo.Encode_Folder});
 	}
 	
 	public	Cursor	getMemoRootInfo()
@@ -85,6 +78,11 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	public	Cursor	getMemoInFolder( int id )
 	{
 		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=?", new String[]{String.valueOf(id)});
+	}
+	
+	public	Cursor	getMemoRec( int id )
+	{
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_id+"=?", new String[]{String.valueOf(id)});
 	}
 	
 	public	Cursor	getRemindInfo()
@@ -144,17 +142,17 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 			cv.put(KEY_isremind, clCMemoInfo.iIsRemind.toString());
 		}
 		
-		if ( -1.0 != clCMemoInfo.dRemindTime )
+		if ( -1 != clCMemoInfo.dRemindTime )
 		{
 			cv.put(KEY_remindtime, Long.toString(clCMemoInfo.dRemindTime));
 		}
 		
-		if ( -1.0 != clCMemoInfo.dCreateTime )
+		if ( -1 != clCMemoInfo.dCreateTime )
 		{
 			cv.put(KEY_createtime, Long.toString(clCMemoInfo.dCreateTime));
 		}
 		
-		if ( -1.0 != clCMemoInfo.dLastModifyTime )
+		if ( -1 != clCMemoInfo.dLastModifyTime )
 		{
 			cv.put(KEY_lastmodifytime, Long.toString(clCMemoInfo.dLastModifyTime));
 		}

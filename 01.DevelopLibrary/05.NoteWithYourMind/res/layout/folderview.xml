@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	android:id="@+id/folderview"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+>
+	<TextView
+		android:id="@+id/memolisttitle_infolder"
+		android:layout_width="fill_parent"
+    	android:layout_height="66px"
+    	android:layout_alignParentTop="true"
+    	android:gravity="center|left"
+	/>
+	<View
+		android:id="@+id/memolistdivideline_infolder"
+		android:layout_height="5dip"
+		android:layout_width="fill_parent"
+		android:background="#FF909090"
+		android:layout_below="@id/memolisttitle_infolder"
+	/>
+	<TableLayout 
+		android:id="@+id/memolistmenu_infolder"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:collapseColumns="4"
+	    android:stretchColumns="0,1,2,3">   
+	    <TableRow>
+	    	<Button
+	      	android:id="@+id/B_view_memo_return_infolder"
+					android:text="返回"
+					android:textSize="20sp"
+					android:padding="3dip">
+			</Button>
+			<Button
+      			android:id="@+id/B_view_memo_new_infolder"
+				android:text="新建"
+				android:textSize="20sp"
+				android:padding="3dip">
+			</Button>
+			<Button
+      			android:id="@+id/B_view_memo_move_infolder"
+				android:text="移动到文件夹"
+				android:textSize="20sp"
+				android:padding="3dip">
+			</Button>
+			<Button
+      			android:id="@+id/B_view_memo_delete_infolder"
+				android:text="删除"
+				android:textSize="20sp"
+				android:padding="3dip">
+			</Button>
+			<Button
+      			android:id="@+id/B_view_memo_cancel_infolder"
+				android:text="取消"
+				android:textSize="20sp"
+				android:padding="3dip">
+			</Button>
+	    </TableRow>
+ 	</TableLayout>
+	<ListView 
+      android:id="@+id/listviewmemo_infolder"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent" 
+      android:layout_below="@id/memolistdivideline_infolder"
+      android:layout_above="@id/memolistmenu_infolder"  />
+</RelativeLayout>
+

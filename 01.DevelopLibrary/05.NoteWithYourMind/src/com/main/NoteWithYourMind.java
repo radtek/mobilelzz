@@ -35,8 +35,8 @@ public class NoteWithYourMind extends Activity {
         setContentView(R.layout.main);
 
         m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
-        boolean bExistEncodeFolder = m_clCNoteDBCtrl.findEncodeFolder();
-        if(!bExistEncodeFolder)
+        Cursor cur = m_clCNoteDBCtrl.findEncodeFolder();
+        if(cur.getCount()<=0)
         {
     		CMemoInfo clCMemoInfo = new CMemoInfo();
     		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Disable;
@@ -65,6 +65,14 @@ public class NoteWithYourMind extends Activity {
             		clCMemoInfo.strDetail	=	strMemoText;
             		clCMemoInfo.dLastModifyTime = c.getTimeInMillis();
             		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
+            		CheckBox CB = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsEncode);
+            		if(CB.isChecked()){
+            			Cursor cur = m_clCNoteDBCtrl.findEncodeFolder();
+            			cur.moveToFirst();
+            			int index = cur.getColumnIndex(CNoteDBCtrl.KEY_id);
+            			int value = cur.getInt(index);
+            			clCMemoInfo.iPreId = value;
+            		}
             		m_clCNoteDBCtrl.Create(clCMemoInfo);     		
             		memotext.setText("");
             		Toast toast = Toast.makeText(NoteWithYourMind.this, "±£´æ³É¹¦", Toast.LENGTH_SHORT);
@@ -85,7 +93,6 @@ public class NoteWithYourMind extends Activity {
         		Intent intent = new Intent();
         		intent.setClass(NoteWithYourMind.this, ViewList.class);
         		startActivity(intent);
-        		
         	}
         });
         

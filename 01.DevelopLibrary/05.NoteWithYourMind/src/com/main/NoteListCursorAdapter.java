@@ -11,10 +11,13 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 public class NoteListCursorAdapter extends CursorAdapter {
+	private boolean m_isSelectableStyle = false;
 	private LayoutInflater m_inflater;
+	private Cursor m_cursor;
 	public NoteListCursorAdapter(Context context, Cursor c) {
 		super(context, c);
 		m_inflater = LayoutInflater.from(context);
+		m_cursor = c;
 	}
  
 	@Override
@@ -28,11 +31,11 @@ public class NoteListCursorAdapter extends CursorAdapter {
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		View v;
-		if((ViewList.m_MoveIn_State == ViewList.MoveIn_State.MoveIn_SelectMoveItem) || ViewList.m_bIsDelete)
+		if(m_isSelectableStyle)
 		{
-			int iTypeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_type);
-			int iTypeValue = cursor.getInt(iTypeIndex);
-			if(iTypeValue != CMemoInfo.Type_Folder)
+			int iIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_iseditenable);
+			int iValue = cursor.getInt(iIndex);
+			if(iValue != CMemoInfo.IsEditEnable_Disable)
 			{
 				v = m_inflater.inflate(R.layout.memolistitemselect, parent, false);
 			}else{
@@ -56,5 +59,13 @@ public class NoteListCursorAdapter extends CursorAdapter {
 		}
 		
 		return v;
+	}
+	
+	public void setSelectableStyle(boolean bEnable){
+		m_isSelectableStyle = bEnable;
+	}
+	
+	public Cursor getCursor(){
+		return m_cursor;
 	}
 }

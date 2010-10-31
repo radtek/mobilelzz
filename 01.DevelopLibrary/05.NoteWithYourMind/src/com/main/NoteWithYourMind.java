@@ -220,7 +220,7 @@ public class NoteWithYourMind extends Activity {
     		}else{
     			clCMemoInfo.iType = CMemoInfo.Type_Memo;
     		}
-    		clCMemoInfo.iPreId	=	m_ExtraData_MemoID;
+    		clCMemoInfo.iPreId	=	CMemoInfo.PreId_Root;
     		m_clCNoteDBCtrl.Create(clCMemoInfo);
     	}else if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Memo){
     		if(CBEncode.isChecked()){

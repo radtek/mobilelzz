@@ -10,14 +10,17 @@ Memo（编辑已有）
 未知
 3个CheckBox都可选
 all default
+保存encode、detail、folder、remind，之后清空所有
 
 Memo
 加密和文件夹选项不可选
-更新detail
+更新detail、remind
+保存detail、remind
 
 文件夹
 文件夹和提醒不可选
-更新加密、detail*/
+更新加密、detail
+保存加密、detail*/
 
 import java.util.Calendar;
 
@@ -86,37 +89,7 @@ public class NoteWithYourMind extends Activity {
         		EditText memotext = (EditText) findViewById(R.id.ET_main_Memo);
         		String strMemoText = memotext.getText().toString();
         		if(strMemoText.length()>0){
-        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-        			clCMemoInfo.strDetail	=	strMemoText;
-            		clCMemoInfo.dLastModifyTime = c.getTimeInMillis();
-            		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
-            		CheckBox CBEncode = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsEncode);
-            		if(CBEncode.isChecked()){
-            			clCMemoInfo.strPassword = m_strPassWord;
-            		}else{
-            			clCMemoInfo.strPassword = "";
-            		}
-            		CheckBox CBFolder = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsFolder);
-            		if(CBFolder.isChecked()){
-            			clCMemoInfo.iType = CMemoInfo.Type_Folder;
-            		}else{
-            			clCMemoInfo.iType = CMemoInfo.Type_Memo;
-            		}
-        			if(m_ExtraData_MemoID!=CMemoInfo.Id_Invalid){
-        				Cursor cur = m_clCNoteDBCtrl.getMemoRec(m_ExtraData_MemoID);
-        				cur.moveToFirst();
-        				int index = cur.getColumnIndex(CNoteDBCtrl.KEY_type);
-        				int value = cur.getInt(index);
-        				if(value == CMemoInfo.Type_Folder){
-        					clCMemoInfo.iPreId	=	m_ExtraData_MemoID;
-        					m_clCNoteDBCtrl.Create(clCMemoInfo);
-        				}else{
-        					m_clCNoteDBCtrl.Update(m_ExtraData_MemoID,clCMemoInfo);
-        				}     				
-        	        }else{       	        	
-                		clCMemoInfo.iPreId	=	CMemoInfo.PreId_Root;                		
-                		m_clCNoteDBCtrl.Create(clCMemoInfo);
-        	        }      			     		
+        			SaveEditData(strMemoText);       				     		
         			UpdateViewStatus();
             		Toast toast = Toast.makeText(NoteWithYourMind.this, "保存成功", Toast.LENGTH_SHORT);
             		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
@@ -176,13 +149,13 @@ public class NoteWithYourMind extends Activity {
     		etMemoDetail.setText("");
     		CBFolder.setChecked(false);
         	CBEncode.setChecked(false);  
+        	CBRemind.setChecked(false);
     	}else if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Memo){
     		CBFolder.setChecked(false);
     		CBFolder.setClickable(false);
-    		CBEncode.setChecked(false);
-    		CBEncode.setClickable(false);
     		if(curExtraMemo!=null){
     			UpdateDetail(curExtraMemo, etMemoDetail);
+    			UpdateEncode(curExtraMemo, CBEncode);
     		}
     	}else if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Folder){
     		CBFolder.setChecked(false);
@@ -198,9 +171,15 @@ public class NoteWithYourMind extends Activity {
     	}
     }
     private void UpdateDetail(Cursor cur, EditText etDetail){
-    	int iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_detail);
-    	String strDetail = cur.getString(iIndex);
-    	etDetail.setText(strDetail);
+    	int index = cur.getColumnIndex(CNoteDBCtrl.KEY_type);
+		int value = cur.getInt(index);
+		if(value == CMemoInfo.Type_Folder){
+			
+		}else{
+			index = cur.getColumnIndex(CNoteDBCtrl.KEY_detail);
+	    	String strDetail = cur.getString(index);
+	    	etDetail.setText(strDetail);
+		}	
     }
     private void UpdateEncode(Cursor cur, CheckBox isEncode){
     	int iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_password);
@@ -209,6 +188,57 @@ public class NoteWithYourMind extends Activity {
     		isEncode.setChecked(true);
     	}else{
     		isEncode.setChecked(false);
+    	}
+    }
+    private void SaveEditData(String strMemoText)
+    {
+    	CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+		clCMemoInfo.strDetail	=	strMemoText;
+		clCMemoInfo.dLastModifyTime = c.getTimeInMillis();
+		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
+		CheckBox CBEncode = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsEncode);
+		CheckBox CBFolder = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsFolder);
+
+    	if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown){
+    		if(CBEncode.isChecked()){
+    			clCMemoInfo.strPassword = m_strPassWord;
+    		}else{
+    			clCMemoInfo.strPassword = "";
+    		}
+    		if(CBFolder.isChecked()){
+    			clCMemoInfo.iType = CMemoInfo.Type_Folder;
+    		}else{
+    			clCMemoInfo.iType = CMemoInfo.Type_Memo;
+    		}
+    		clCMemoInfo.iPreId	=	m_ExtraData_MemoID;
+    		m_clCNoteDBCtrl.Create(clCMemoInfo);
+    	}else if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Memo){
+    		if(CBEncode.isChecked()){
+    			clCMemoInfo.strPassword = m_strPassWord;
+    		}else{
+    			clCMemoInfo.strPassword = "";
+    		}
+    		if(m_ExtraData_MemoID!=CMemoInfo.Id_Invalid){
+    			Cursor cur = m_clCNoteDBCtrl.getMemoRec(m_ExtraData_MemoID);
+    			cur.moveToFirst();
+    			int index = cur.getColumnIndex(CNoteDBCtrl.KEY_type);
+    			int value = cur.getInt(index);
+    			if(value == CMemoInfo.Type_Folder){
+    				clCMemoInfo.iPreId	=	m_ExtraData_MemoID;
+    				m_clCNoteDBCtrl.Create(clCMemoInfo);
+    			}else{
+    				m_clCNoteDBCtrl.Update(m_ExtraData_MemoID,clCMemoInfo);
+    			}     				
+            }
+    	}else if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Folder){
+    		if(CBEncode.isChecked()){
+    			clCMemoInfo.strPassword = m_strPassWord;
+    		}else{
+    			clCMemoInfo.strPassword = "";
+    		}
+    		m_clCNoteDBCtrl.Update(m_ExtraData_MemoID,clCMemoInfo);
+    	}else{
+    		
     	}
     }
 }

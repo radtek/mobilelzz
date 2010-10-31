@@ -112,7 +112,7 @@ public class ViewListInFolder extends Activity
         		Intent toNew = new Intent();
         		toNew.setClass(ViewListInFolder.this, NoteWithYourMind.class);
         		toNew.putExtra(NoteWithYourMind.ExtraData_MemoID, m_Cur_FolderID);
-        		toNew.putExtra(NoteWithYourMind.NewNoteKind,NoteWithYourMind.NewNoteKindEnum.NewNoteKind_Folder);
+        		toNew.putExtra(NoteWithYourMind.NewNoteKind,NoteWithYourMind.NewNoteKindEnum.NewNoteKind_Memo);
         		startActivity(toNew);
         	}
         });

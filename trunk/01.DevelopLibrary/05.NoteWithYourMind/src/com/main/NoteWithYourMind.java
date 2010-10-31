@@ -23,28 +23,24 @@ import android.widget.Button;
 import android.widget.SimpleCursorAdapter;
 
 public class NoteWithYourMind extends Activity {
-	
-	CheckBox m_clCheckBoxWarning;
+	public static String ExtraData_MemoID = "com.main.ExtraData_MemoID";
+	private CheckBox m_clCheckBoxWarning;
 	public static	CNoteDBCtrl		m_clCNoteDBCtrl;
-	Calendar c;
-	
+	private Calendar c;
+	private static String m_strPassWord = "123456";
+	private int m_ExtraData_MemoID = CMemoInfo.Id_Invalid;
     /** Called when the activity is first created. */
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
+        m_ExtraData_MemoID = CMemoInfo.Id_Invalid;
+        Intent iExtraData = this.getIntent();
+		m_ExtraData_MemoID = iExtraData.getIntExtra(ExtraData_MemoID, CMemoInfo.Id_Invalid );
         m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
-        Cursor cur = m_clCNoteDBCtrl.findEncodeFolder();
-        if(cur.getCount()<=0)
-        {
-    		CMemoInfo clCMemoInfo = new CMemoInfo();
-    		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Disable;
-    		clCMemoInfo.iPreId = CMemoInfo.PreId_Root;
-    		clCMemoInfo.iType = CMemoInfo.Type_Folder;
-    		clCMemoInfo.strDetail = CMemoInfo.Encode_Folder;
-    		m_clCNoteDBCtrl.Create(clCMemoInfo);
-        }
+        UpdateViewStatus();
+        
         Button clBT = (Button) findViewById(R.id.B_main_Exit);
         clBT.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
@@ -61,20 +57,37 @@ public class NoteWithYourMind extends Activity {
         		String strMemoText = memotext.getText().toString();
         		if(strMemoText.length()>0){
         			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-            		clCMemoInfo.iPreId	=	0;
-            		clCMemoInfo.strDetail	=	strMemoText;
+        			clCMemoInfo.strDetail	=	strMemoText;
             		clCMemoInfo.dLastModifyTime = c.getTimeInMillis();
             		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
-            		CheckBox CB = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsEncode);
-            		if(CB.isChecked()){
-            			Cursor cur = m_clCNoteDBCtrl.findEncodeFolder();
-            			cur.moveToFirst();
-            			int index = cur.getColumnIndex(CNoteDBCtrl.KEY_id);
-            			int value = cur.getInt(index);
-            			clCMemoInfo.iPreId = value;
+            		CheckBox CBEncode = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsEncode);
+            		if(CBEncode.isChecked()){
+            			clCMemoInfo.strPassword = m_strPassWord;
+            		}else{
+            			clCMemoInfo.strPassword = "";
             		}
-            		m_clCNoteDBCtrl.Create(clCMemoInfo);     		
-            		memotext.setText("");
+            		CheckBox CBFolder = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsFolder);
+            		if(CBFolder.isChecked()){
+            			clCMemoInfo.iType = CMemoInfo.Type_Folder;
+            		}else{
+            			clCMemoInfo.iType = CMemoInfo.Type_Memo;
+            		}
+        			if(m_ExtraData_MemoID!=CMemoInfo.Id_Invalid){
+        				Cursor cur = m_clCNoteDBCtrl.getMemoRec(m_ExtraData_MemoID);
+        				cur.moveToFirst();
+        				int index = cur.getColumnIndex(CNoteDBCtrl.KEY_type);
+        				int value = cur.getInt(index);
+        				if(value == CMemoInfo.Type_Folder){
+        					clCMemoInfo.iPreId	=	m_ExtraData_MemoID;
+        					m_clCNoteDBCtrl.Create(clCMemoInfo);
+        				}else{
+        					m_clCNoteDBCtrl.Update(m_ExtraData_MemoID,clCMemoInfo);
+        				}     				
+        	        }else{       	        	
+                		clCMemoInfo.iPreId	=	CMemoInfo.PreId_Root;                		
+                		m_clCNoteDBCtrl.Create(clCMemoInfo);
+        	        }      			     		
+        			UpdateViewStatus();
             		Toast toast = Toast.makeText(NoteWithYourMind.this, "±£´æ³É¹¦", Toast.LENGTH_SHORT);
             		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
             		toast.show();
@@ -116,5 +129,33 @@ public class NoteWithYourMind extends Activity {
         		}
         	}
         });
+    }
+    private void UpdateViewStatus(){
+    	Cursor curExtraMemo;
+    	EditText etMemoDetail = (EditText) findViewById(R.id.ET_main_Memo);
+    	CheckBox CBFolder = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsFolder);
+    	CheckBox CBEncode = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsEncode);
+        if(m_ExtraData_MemoID!=CMemoInfo.Id_Invalid){
+        	curExtraMemo = m_clCNoteDBCtrl.getMemoRec(m_ExtraData_MemoID);
+        	startManagingCursor(curExtraMemo);
+        	curExtraMemo.moveToFirst();
+        	int iIndex = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_detail);
+        	String strDetail = curExtraMemo.getString(iIndex);
+        	etMemoDetail.setText(strDetail);
+
+       		CBFolder.setChecked(false);
+
+        	iIndex = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_password);
+        	String strPassWord = curExtraMemo.getString(iIndex);
+        	if((strPassWord != null) && (strPassWord.length() > 0)){
+        		CBEncode.setChecked(true);
+        	}else{
+        		CBEncode.setChecked(false);
+        	}
+        }else{
+        	etMemoDetail.setText("");
+        	CBFolder.setChecked(false);
+        	CBEncode.setChecked(false);   	
+        }
     }
 }

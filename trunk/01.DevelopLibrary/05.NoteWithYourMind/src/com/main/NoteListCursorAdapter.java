@@ -47,15 +47,12 @@ public class NoteListCursorAdapter extends CursorAdapter {
 		int iTypeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_type);
 		int iTypeValue = cursor.getInt(iTypeIndex);
 		if(iTypeValue == CMemoInfo.Type_Folder){
-			Drawable drawable = v.getResources().getDrawable(R.drawable.list);   
-			v.setBackgroundDrawable( drawable );
-//			v.setBackgroundColor(Color.YELLOW);
+			TextView tv = (TextView) v.findViewById(R.id.memoitem_memotext);
+			tv.setCompoundDrawables(null, null, null, null);
 		}else if(iTypeValue == CMemoInfo.Type_Memo){
-			Drawable drawable = v.getResources().getDrawable(R.drawable.list);   
-			v.setBackgroundDrawable( drawable );
+			
 		}else{	
-			Drawable drawable = v.getResources().getDrawable(R.drawable.list);   
-			v.setBackgroundDrawable( drawable );
+			
 		}
 		
 		return v;

@@ -41,6 +41,7 @@ public class ViewList extends TabActivity
 	private NoteListCursorAdapter m_myAdapter;
 	private Cursor m_clCursor;
 	private AlertDialog m_dlgFolderList;
+	private Cursor m_cursorFolderList;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -66,18 +67,21 @@ public class ViewList extends TabActivity
 							int arg2, long arg3) {
 						NoteListCursorAdapter LA = (NoteListCursorAdapter)arg0.getAdapter();
 						Cursor cur = LA.getCursor();
-						cur.move(arg2);
+						cur.moveToPosition(arg2);
 						int iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_type);
 						int iValue = cur.getInt(iIndex);
+						iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_id);
+						int iIDValue = cur.getInt(iIndex);
 						if(iValue == CMemoInfo.Type_Folder){
 							Intent intent = new Intent();
-							intent.setClass(ViewList.this, ViewListInFolder.class);
-							iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_id);
-							iValue = cur.getInt(iIndex);
-							intent.putExtra(ViewListInFolder.ExtraData_FolderID, iValue);
+							intent.setClass(ViewList.this, ViewListInFolder.class);							
+							intent.putExtra(ViewListInFolder.ExtraData_FolderID, iIDValue);
 							startActivity(intent);
 						}else if(iValue == CMemoInfo.Type_Memo){
-							
+							Intent toNew = new Intent();
+			        		toNew.setClass(ViewList.this, NoteWithYourMind.class);
+			        		toNew.putExtra(NoteWithYourMind.ExtraData_MemoID, iIDValue);
+			        		startActivity(toNew);
 						}else{
 							
 						}
@@ -117,6 +121,15 @@ public class ViewList extends TabActivity
         	public void onClick(View v)
         	{      		
         		ViewList.this.finish();
+        	}
+        });
+		Button clBTMemoNew = (Button) findViewById(R.id.B_view_memo_new);
+		clBTMemoNew.setOnClickListener(new Button.OnClickListener(){
+        	public void onClick(View v)
+        	{     
+        		Intent toNew = new Intent();
+        		toNew.setClass(ViewList.this, NoteWithYourMind.class);
+        		startActivity(toNew);
         	}
         });
 		Button clBTMemoDelete = (Button) findViewById(R.id.B_view_memo_delete);
@@ -200,13 +213,13 @@ public class ViewList extends TabActivity
         				})
         				.create();
         			ListView folderList = (ListView) DialogView.findViewById(R.id.folderlist_view);
-        			Cursor cursorFolderList	=	m_clCNoteDBCtrl.getFolderInRoot();
-        			if(cursorFolderList!=null){
-        				startManagingCursor(cursorFolderList);
+        			m_cursorFolderList	=	m_clCNoteDBCtrl.getFolderInRoot();
+        			startManagingCursor(m_cursorFolderList);
+        			if(m_cursorFolderList!=null){
         				ListAdapter LA_FolderList = new SimpleCursorAdapter(
         						ViewList.this,
         						android.R.layout.simple_list_item_1,
-        						cursorFolderList,
+        						m_cursorFolderList,
         						new String[]{CNoteDBCtrl.KEY_detail},
         						new int[]{android.R.id.text1}
         						);
@@ -286,6 +299,7 @@ public class ViewList extends TabActivity
 		TL.setColumnStretchable(4, false); 
 		TL.invalidate();
 		m_clCursor	=	m_clCNoteDBCtrl.getMemoRootInfo();
+		startManagingCursor(m_clCursor);
 		m_myAdapter = new NoteListCursorAdapter(this,m_clCursor);
 		ListView memoList = (ListView) this.findViewById(R.id.listviewmemo);
 		memoList.setAdapter(m_myAdapter);

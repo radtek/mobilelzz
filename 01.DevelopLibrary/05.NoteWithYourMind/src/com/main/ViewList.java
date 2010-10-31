@@ -1,5 +1,4 @@
 package com.main;
-
 import java.util.ArrayList;
 import android.app.AlertDialog;
 import android.app.TabActivity;
@@ -81,6 +80,7 @@ public class ViewList extends TabActivity
 							Intent toNew = new Intent();
 			        		toNew.setClass(ViewList.this, NoteWithYourMind.class);
 			        		toNew.putExtra(NoteWithYourMind.ExtraData_MemoID, iIDValue);
+			        		toNew.putExtra(NoteWithYourMind.NewNoteKind,NoteWithYourMind.NewNoteKindEnum.NewNoteKind_Memo);
 			        		startActivity(toNew);
 						}else{
 							
@@ -129,6 +129,7 @@ public class ViewList extends TabActivity
         	{     
         		Intent toNew = new Intent();
         		toNew.setClass(ViewList.this, NoteWithYourMind.class);
+        		toNew.putExtra(NoteWithYourMind.NewNoteKind,NoteWithYourMind.NewNoteKindEnum.NewNoteKind_Unknown);
         		startActivity(toNew);
         	}
         });

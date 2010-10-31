@@ -34,31 +34,36 @@
 			            	android:id="@+id/B_view_memo_return"
 										android:text="返回"
 										android:textSize="20sp"
-										android:padding="3dip">
+										android:padding="3dip"
+										android:gravity="center">
 									</Button>
 									<Button
 			            	android:id="@+id/B_view_memo_new"
 										android:text="新建"
 										android:textSize="20sp"
-										android:padding="3dip">
+										android:padding="3dip"
+										android:gravity="center">
 									</Button>
 									<Button
 			            	android:id="@+id/B_view_memo_move"
 										android:text="移动到文件夹"
 										android:textSize="20sp"
-										android:padding="3dip">
+										android:padding="3dip"
+										android:gravity="center">
 									</Button>
 									<Button
 			            	android:id="@+id/B_view_memo_delete"
 										android:text="删除"
 										android:textSize="20sp"
-										android:padding="3dip">
+										android:padding="3dip"
+										android:gravity="center">
 									</Button>
 									<Button
 			            	android:id="@+id/B_view_memo_cancel"
 										android:text="取消"
 										android:textSize="20sp"
-										android:padding="3dip">
+										android:padding="3dip"
+										android:gravity="center">
 									</Button>
 		            </TableRow>
 		          </TableLayout>

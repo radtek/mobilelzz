@@ -14,10 +14,9 @@
     </TextView>
     <TextView
       android:id="@+id/memoitem_memotext"
-      android:layout_width="170px"
+      android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:layout_centerVertical="true"
-      android:layout_alignParentRight = "true"
       android:layout_toLeftOf="@id/memoitem_memodate"
       android:singleLine = "true"
       android:ellipsize = "end"

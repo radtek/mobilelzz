@@ -11,8 +11,19 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int gradient=0x7f020000;
-        public static final int icon=0x7f020001;
+        public static final int bg_blue=0x7f020000;
+        public static final int bg_green=0x7f020001;
+        public static final int bg_orenge=0x7f020002;
+        public static final int bg_tree=0x7f020003;
+        public static final int btn_delect=0x7f020004;
+        public static final int btn_down=0x7f020005;
+        public static final int clock=0x7f020006;
+        public static final int content=0x7f020007;
+        public static final int gradient=0x7f020008;
+        public static final int icon=0x7f020009;
+        public static final int list=0x7f02000a;
+        public static final int listitem_bk=0x7f02000b;
+        public static final int notice=0x7f02000c;
     }
     public static final class id {
         public static final int B_main_Exit=0x7f050012;

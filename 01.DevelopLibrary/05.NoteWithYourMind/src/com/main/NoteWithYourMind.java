@@ -33,6 +33,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TableLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.view.View;
@@ -47,7 +48,8 @@ public class NoteWithYourMind extends Activity {
 	public enum NewNoteKindEnum{
 		NewNoteKind_Unknown,
 		NewNoteKind_Memo,
-		NewNoteKind_Folder
+		NewNoteKind_Folder,
+		NewNoteKind_Both
 	}
 	public static String ExtraData_MemoID = "com.main.ExtraData_MemoID";
 	public static String NewNoteKind = "com.main.ExtraData_NewNoteKind";
@@ -144,12 +146,19 @@ public class NoteWithYourMind extends Activity {
     	CheckBox CBFolder = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsFolder);
     	CheckBox CBEncode = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsEncode);
     	CheckBox CBRemind = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsWarning);
-
-    	if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown){
+    	TableLayout TL = (TableLayout) findViewById(R.id.BMenu_main); 
+    	if(m_ExtraData_NewNoteKind != NewNoteKindEnum.NewNoteKind_Unknown){
+    		TL.setColumnCollapsed(1, true);
+    	}else{
+    		TL.setColumnCollapsed(1, false);
+    	}
+    	if((m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown)||
+    			(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Both)){
     		etMemoDetail.setText("");
     		CBFolder.setChecked(false);
         	CBEncode.setChecked(false);  
         	CBRemind.setChecked(false);
+        	
     	}else if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Memo){
     		CBFolder.setChecked(false);
     		CBFolder.setClickable(false);
@@ -199,7 +208,8 @@ public class NoteWithYourMind extends Activity {
 		CheckBox CBEncode = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsEncode);
 		CheckBox CBFolder = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsFolder);
 
-    	if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown){
+    	if((m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown)||
+    			(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Both)){
     		if(CBEncode.isChecked()){
     			clCMemoInfo.strPassword = m_strPassWord;
     		}else{

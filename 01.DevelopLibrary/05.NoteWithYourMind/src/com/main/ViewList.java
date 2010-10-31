@@ -27,7 +27,7 @@ import android.widget.TabHost.OnTabChangeListener;
 
 public class ViewList extends TabActivity
 {
-	public enum MoveIn_State{
+	private enum MoveIn_State{
 		MoveIn_Invalid,
 		MoveIn_SelectMoveItem,
 		MoveIn_SelectFolder
@@ -35,12 +35,12 @@ public class ViewList extends TabActivity
 	//声明TabHost对象
 	TabHost mTabHost;
 	CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
-	public static boolean m_bIsDelete = false;
-	public static MoveIn_State m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
+	private boolean m_bIsDelete = false;
+	private MoveIn_State m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
 	
-	public static NoteListCursorAdapter m_myAdapter;
-	public static Cursor m_clCursor;
-	public static AlertDialog m_dlgFolderList;
+	private NoteListCursorAdapter m_myAdapter;
+	private Cursor m_clCursor;
+	private AlertDialog m_dlgFolderList;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -138,8 +138,8 @@ public class ViewList extends TabActivity
             		TL.setColumnStretchable(3, true);
             		TL.setColumnStretchable(4, true);            		  
             		TL.invalidate();
-            		ViewList.m_myAdapter = new NoteListCursorAdapter(ViewList.this,ViewList.m_clCursor);
-            		ViewList.m_myAdapter.setSelectableStyle(true);
+            		m_myAdapter = new NoteListCursorAdapter(ViewList.this,m_clCursor);
+            		m_myAdapter.setSelectableStyle(true);
             		ListView memoList = (ListView) ViewList.this.findViewById(R.id.listviewmemo);
             		memoList.setAdapter(m_myAdapter);
         		}	
@@ -176,8 +176,8 @@ public class ViewList extends TabActivity
             		TL.setColumnStretchable(3, false);
             		TL.setColumnStretchable(4, true);            		
             		TL.invalidate();
-            		ViewList.m_myAdapter = new NoteListCursorAdapter(ViewList.this,ViewList.m_clCursor);
-            		ViewList.m_myAdapter.setSelectableStyle(true);
+            		m_myAdapter = new NoteListCursorAdapter(ViewList.this,m_clCursor);
+            		m_myAdapter.setSelectableStyle(true);
             		ListView memoList = (ListView) ViewList.this.findViewById(R.id.listviewmemo);
             		memoList.setAdapter(m_myAdapter);
         		}	
@@ -188,7 +188,7 @@ public class ViewList extends TabActivity
         			LayoutInflater factory = LayoutInflater.from(ViewList.this);
         			final View DialogView = factory.inflate(R.layout.folderlist, null);
         			
-        			ViewList.m_dlgFolderList = new AlertDialog.Builder(ViewList.this)
+        			m_dlgFolderList = new AlertDialog.Builder(ViewList.this)
         				.setTitle("请选择文件夹")
         				.setView(DialogView)
         				.setNegativeButton("取消",new DialogInterface.OnClickListener(){
@@ -219,7 +219,7 @@ public class ViewList extends TabActivity
         					ArrayList<Integer> alIDs = new ArrayList<Integer>();
         					findSelectItemDBID(alIDs);
         					Move2Folder(alIDs, (int)id);
-                    		ViewList.m_dlgFolderList.cancel();
+                    		m_dlgFolderList.cancel();
                     		Return2MemoList();
         				}
         			});
@@ -286,7 +286,7 @@ public class ViewList extends TabActivity
 		TL.setColumnStretchable(4, false); 
 		TL.invalidate();
 		m_clCursor	=	m_clCNoteDBCtrl.getMemoRootInfo();
-		ViewList.m_myAdapter = new NoteListCursorAdapter(this,ViewList.m_clCursor);
+		m_myAdapter = new NoteListCursorAdapter(this,m_clCursor);
 		ListView memoList = (ListView) this.findViewById(R.id.listviewmemo);
 		memoList.setAdapter(m_myAdapter);
 	}

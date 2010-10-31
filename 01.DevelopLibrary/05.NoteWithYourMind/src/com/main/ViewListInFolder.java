@@ -39,19 +39,19 @@ import android.widget.TabHost.OnTabChangeListener;
 public class ViewListInFolder extends Activity
 {
 	public static String ExtraData_FolderID = "com.main.ExtraData_FolderID";
-	private static int m_Cur_FolderID = -1;
+	private int m_Cur_FolderID = -1;
 	private enum MoveIn_State{
 		MoveIn_Invalid,
 		MoveIn_SelectMoveItem,
 		MoveIn_SelectFolder
 	}
-	CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
-	public static boolean m_bIsDelete_InFolder = false;
-	public static MoveIn_State m_MoveIn_State_InFolder = MoveIn_State.MoveIn_Invalid;
+	private CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
+	private boolean m_bIsDelete_InFolder = false;
+	private MoveIn_State m_MoveIn_State_InFolder = MoveIn_State.MoveIn_Invalid;
 	
-	public static NoteListCursorAdapter m_myAdapter;
-	public static Cursor m_clCursor;
-	public static AlertDialog m_dlgFolderList;
+	private NoteListCursorAdapter m_myAdapter;
+	private Cursor m_clCursor;
+	private AlertDialog m_dlgFolderList;
 
 	/** Called when the activity is first created. */
 	@Override

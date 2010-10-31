@@ -129,7 +129,7 @@ public class ViewList extends TabActivity
         	{     
         		Intent toNew = new Intent();
         		toNew.setClass(ViewList.this, NoteWithYourMind.class);
-        		toNew.putExtra(NoteWithYourMind.NewNoteKind,NoteWithYourMind.NewNoteKindEnum.NewNoteKind_Unknown);
+        		toNew.putExtra(NoteWithYourMind.NewNoteKind,NoteWithYourMind.NewNoteKindEnum.NewNoteKind_Both);
         		startActivity(toNew);
         	}
         });

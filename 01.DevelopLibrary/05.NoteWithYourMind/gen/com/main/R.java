@@ -34,16 +34,16 @@ public final class R {
         public static final int B_view_memo_cancel_infolder=0x7f05000d;
         public static final int B_view_memo_delete=0x7f05001f;
         public static final int B_view_memo_delete_infolder=0x7f05000c;
+        public static final int B_view_memo_editfolder_infolder=0x7f050009;
         public static final int B_view_memo_move=0x7f050027;
         public static final int B_view_memo_move_infolder=0x7f05000b;
         public static final int B_view_memo_movein=0x7f050021;
         public static final int B_view_memo_new=0x7f050020;
         public static final int B_view_memo_new_infolder=0x7f05000a;
         public static final int B_view_memo_return=0x7f05001e;
-        public static final int B_view_memo_return_infolder=0x7f050009;
-        public static final int B_view_remind_delete=0x7f05002c;
+        public static final int B_view_remind_delete=0x7f05002e;
         public static final int B_view_remind_new=0x7f05002d;
-        public static final int B_view_remind_return=0x7f05002b;
+        public static final int B_view_remind_return=0x7f05002c;
         public static final int B_view_warning_delete=0x7f050024;
         public static final int B_view_warning_new=0x7f050025;
         public static final int B_view_warning_return=0x7f050023;
@@ -60,7 +60,7 @@ public final class R {
         public static final int folderview=0x7f050005;
         public static final int listviewmemo=0x7f050029;
         public static final int listviewmemo_infolder=0x7f05000e;
-        public static final int listviewremind=0x7f05002e;
+        public static final int listviewremind=0x7f05002f;
         public static final int main=0x7f05000f;
         public static final int memoitem_memodate=0x7f050019;
         public static final int memoitem_memoselect=0x7f05001b;
@@ -71,6 +71,7 @@ public final class R {
         public static final int memolistmenu_infolder=0x7f050008;
         public static final int memolisttitle_infolder=0x7f050006;
         public static final int remindlist=0x7f05002a;
+        public static final int remindlistmenu=0x7f05002b;
         public static final int textview1=0x7f05001d;
         public static final int warninglist=0x7f050022;
     }

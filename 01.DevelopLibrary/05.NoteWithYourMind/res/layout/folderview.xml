@@ -9,7 +9,7 @@
 	<TextView
 		android:id="@+id/memolisttitle_infolder"
 		android:layout_width="fill_parent"
-    	android:layout_height="60px"
+    	android:layout_height="60dp"
     	android:layout_alignParentTop="true"
     	android:gravity="center|left"
     	android:textSize="30sp"
@@ -30,8 +30,8 @@
 	    android:stretchColumns="0,1,2,3">   
 	    <TableRow>
 	    	<Button
-	      	android:id="@+id/B_view_memo_return_infolder"
-					android:text="返回"
+	      	android:id="@+id/B_view_memo_editfolder_infolder"
+					android:text="编辑文件夹"
 					android:textSize="20sp"
 					android:padding="3dip"
 					android:gravity="center">
@@ -45,7 +45,7 @@
 			</Button>
 			<Button
       			android:id="@+id/B_view_memo_move_infolder"
-				android:text="移动到文件夹"
+				android:text="移动"
 				android:textSize="20sp"
 				android:padding="3dip"
 				android:gravity="center">

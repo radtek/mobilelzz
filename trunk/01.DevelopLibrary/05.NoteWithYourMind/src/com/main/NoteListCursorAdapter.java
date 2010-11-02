@@ -2,8 +2,6 @@ package com.main;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +10,7 @@ import android.widget.TextView;
 
 public class NoteListCursorAdapter extends CursorAdapter {
 	private boolean m_isSelectableStyle = false;
+	private boolean m_isFolderSelectable = true;
 	private LayoutInflater m_inflater;
 	private Cursor m_cursor;
 	public NoteListCursorAdapter(Context context, Cursor c) {
@@ -31,21 +30,25 @@ public class NoteListCursorAdapter extends CursorAdapter {
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		View v;
+		int iTypeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_type);
+		int iTypeValue = cursor.getInt(iTypeIndex);
 		if(m_isSelectableStyle)
 		{
 			int iIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_iseditenable);
 			int iValue = cursor.getInt(iIndex);
 			if(iValue != CMemoInfo.IsEditEnable_Disable)
 			{
-				v = m_inflater.inflate(R.layout.memolistitemselect, parent, false);
+				if(iTypeValue==CMemoInfo.Type_Folder&&(!m_isFolderSelectable)){
+					v = m_inflater.inflate(R.layout.memolistitem, parent, false);
+				}else{
+					v = m_inflater.inflate(R.layout.memolistitemselect, parent, false);
+				}				
 			}else{
 				v = m_inflater.inflate(R.layout.memolistitem, parent, false);
 			}		
 		}else{
 			v = m_inflater.inflate(R.layout.memolistitem, parent, false);
 		}	
-		int iTypeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_type);
-		int iTypeValue = cursor.getInt(iTypeIndex);
 		if(iTypeValue == CMemoInfo.Type_Folder){
 			TextView tv = (TextView) v.findViewById(R.id.memoitem_memotext);
 			tv.setCompoundDrawables(null, null, null, null);
@@ -60,6 +63,9 @@ public class NoteListCursorAdapter extends CursorAdapter {
 	
 	public void setSelectableStyle(boolean bEnable){
 		m_isSelectableStyle = bEnable;
+	}
+	public void setFolderSelectable(boolean bEnable){
+		m_isFolderSelectable = bEnable;
 	}
 	
 	public Cursor getCursor(){

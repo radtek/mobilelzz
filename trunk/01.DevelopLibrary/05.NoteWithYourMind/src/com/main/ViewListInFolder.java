@@ -98,11 +98,15 @@ public class ViewListInFolder extends Activity
 				});
 			}
 		}
-		Button clBTMemoR = (Button) findViewById(R.id.B_view_memo_return_infolder);
+		Button clBTMemoR = (Button) findViewById(R.id.B_view_memo_editfolder_infolder);
 		clBTMemoR.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{      		
-        		ViewListInFolder.this.finish();
+        		Intent toEditFolder = new Intent();
+        		toEditFolder.setClass(ViewListInFolder.this, NoteWithYourMind.class);
+        		toEditFolder.putExtra(NoteWithYourMind.ExtraData_MemoID, m_Cur_FolderID);
+        		toEditFolder.putExtra(NoteWithYourMind.NewNoteKind,NoteWithYourMind.NewNoteKindEnum.NewNoteKind_Folder);
+        		startActivity(toEditFolder);
         	}
         });
 		Button clBTMemoNew = (Button) findViewById(R.id.B_view_memo_new_infolder);
@@ -175,6 +179,7 @@ public class ViewListInFolder extends Activity
             		TL.invalidate();
             		m_myAdapter = new NoteListCursorAdapter(ViewListInFolder.this,m_clCursor);
             		m_myAdapter.setSelectableStyle(true);
+            		m_myAdapter.setFolderSelectable(false);
             		ListView memoList = (ListView) ViewListInFolder.this.findViewById(R.id.listviewmemo_infolder);
             		memoList.setAdapter(m_myAdapter);
         		}	
@@ -197,6 +202,11 @@ public class ViewListInFolder extends Activity
         				})
         				.create();
         			ListView folderList = (ListView) DialogView.findViewById(R.id.folderlist_view);
+        			TextView tvRoot = new TextView(ViewListInFolder.this);
+        			tvRoot.setText("根目录");
+        			tvRoot.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
+        			tvRoot.setHeight(65);
+        			folderList.addHeaderView(tvRoot);
         			m_cursorFolderList	=	m_clCNoteDBCtrl.getFolderInRoot();
         			startManagingCursor(m_cursorFolderList);
         			if(m_cursorFolderList!=null){
@@ -213,9 +223,12 @@ public class ViewListInFolder extends Activity
         				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3){
         					ListAdapter LA = (ListAdapter)arg0.getAdapter();
         					long id = LA.getItemId(arg2);
-        					Toast toast = Toast.makeText(ViewListInFolder.this, "移动到文件夹 "+String.valueOf(id), Toast.LENGTH_SHORT);
-                    		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-                    		toast.show();
+        					if(id<0){
+        						id = 0;
+        					}
+        					ArrayList<Integer> alIDs = new ArrayList<Integer>();
+        					findSelectItemDBID(alIDs);
+        					Move2Folder(alIDs, (int)id);
                     		m_dlgFolderList.cancel();
                     		Return2MemoList();
         				}
@@ -274,6 +287,17 @@ public class ViewListInFolder extends Activity
 					alIDs.add(new Integer(iID));
 				}
 			}
+		}
+	}
+	void Move2Folder(ArrayList<Integer> alIDs, int id)
+	{
+		int count = alIDs.size();
+		CMemoInfo clRec = new CMemoInfo();
+		clRec.iPreId = id;
+		for(int i = 0; i < count; i++ )
+		{
+			int iId = alIDs.get(i);
+			m_clCNoteDBCtrl.Update(iId, clRec);
 		}
 	}
 }

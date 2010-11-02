@@ -54,10 +54,12 @@ public class NoteWithYourMind extends Activity {
 	}
 	public static String ExtraData_MemoID = "com.main.ExtraData_MemoID";
 	public static String NewNoteKind = "com.main.ExtraData_NewNoteKind";
-	private CheckBox m_clCheckBoxWarning;
-	public static	CNoteDBCtrl		m_clCNoteDBCtrl;
-	private Calendar c;
 	private static String m_strPassWord = "123456";
+	
+	public static	CNoteDBCtrl		m_clCNoteDBCtrl;
+	
+	private Calendar c;
+
 	private int m_ExtraData_MemoID = CMemoInfo.Id_Invalid;
 	private NewNoteKindEnum m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
     /** Called when the activity is first created. */
@@ -119,12 +121,15 @@ public class NoteWithYourMind extends Activity {
         	}
         });
         
-        m_clCheckBoxWarning = (CheckBox) findViewById(R.id.CB_main_IsWarning);
-        m_clCheckBoxWarning.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
+        CheckBox clCheckBoxWarning = (CheckBox) findViewById(R.id.CB_main_IsWarning);
+        clCheckBoxWarning.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
         	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
         	{
-        		if(m_clCheckBoxWarning.isChecked())
+        		CheckBox clCheckBoxFolder = (CheckBox) findViewById(R.id.CB_main_IsFolder);
+        		if(isChecked)
         		{
+        			clCheckBoxFolder.setChecked(false);
+        			clCheckBoxFolder.setClickable(false);
         			LayoutInflater factory = LayoutInflater.from(NoteWithYourMind.this);
         			final View DialogView = factory.inflate(R.layout.dateandtime, null);
         			AlertDialog dlg = new AlertDialog.Builder(NoteWithYourMind.this)
@@ -136,6 +141,21 @@ public class NoteWithYourMind extends Activity {
         			dlg.show();
         			TimePicker clTP = (TimePicker) DialogView.findViewById(R.id.TimePicker01);
         			clTP.setIs24HourView(true);
+        		}else{
+        			clCheckBoxFolder.setClickable(true);
+        		}
+        	}
+        });
+        CheckBox clCheckBoxFolder = (CheckBox) findViewById(R.id.CB_main_IsFolder);
+        clCheckBoxFolder.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
+        	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+        	{
+        		CheckBox clCheckBoxWarnings = (CheckBox) findViewById(R.id.CB_main_IsWarning);
+        		if(isChecked){
+        			clCheckBoxWarnings.setChecked(false);
+        			clCheckBoxWarnings.setClickable(false);
+        		}else{
+        			clCheckBoxWarnings.setClickable(true);
         		}
         	}
         });
@@ -163,13 +183,15 @@ public class NoteWithYourMind extends Activity {
     		CBFolder.setChecked(false);
         	CBEncode.setChecked(false);  
         	CBRemind.setChecked(false);
-        	
+        	etMemoDetail.setHint("请在此处编辑文件夹名称或者便签内容");
     	}else if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Memo){
     		CBFolder.setChecked(false);
     		CBFolder.setClickable(false);
     		if(curExtraMemo!=null){
     			UpdateDetail(curExtraMemo, etMemoDetail);
     			UpdateEncode(curExtraMemo, CBEncode);
+    		}else{
+    			etMemoDetail.setHint("请在此处编辑便签内容");
     		}
     	}else if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Folder){
     		CBFolder.setChecked(false);
@@ -179,6 +201,8 @@ public class NoteWithYourMind extends Activity {
     		if(curExtraMemo!=null){
     			UpdateDetail(curExtraMemo, etMemoDetail);
     			UpdateEncode(curExtraMemo, CBEncode);
+    		}else{
+    			etMemoDetail.setHint("请在此处编辑文件夹名称");
     		}
     	}else{
     		

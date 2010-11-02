@@ -28,6 +28,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -64,7 +65,11 @@ public class NoteWithYourMind extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+		
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		setContentView(R.layout.main);
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+		
         m_ExtraData_MemoID = CMemoInfo.Id_Invalid;
         m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
         Intent iExtraData = this.getIntent();

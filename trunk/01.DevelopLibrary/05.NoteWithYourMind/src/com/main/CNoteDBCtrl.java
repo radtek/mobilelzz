@@ -63,10 +63,10 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 //		return m_db.rawQuery("select _id from "+DB_TABLE+" where "+KEY_detail+"=?", new String[]{CMemoInfo.Encode_Folder});
 //	}
 	
-	public	Cursor	getMemoRootInfo()
-	{
-		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? order by "+KEY_type+" asc", new String[]{String.valueOf(0)});
-	}
+//	public	Cursor	getMemoRootInfo()
+//	{
+//		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? order by "+KEY_type+" asc", new String[]{String.valueOf(0)});
+//	}
 	
 	public	Cursor	getFolderInRoot()
 	{
@@ -75,7 +75,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 					new String[]{String.valueOf(0), String.valueOf(CMemoInfo.Type_Folder)});
 	}
 	
-	public	Cursor	getMemoInFolder( int id )
+	public	Cursor	getMemosByID( int id )
 	{
 		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=?", new String[]{String.valueOf(id)});
 	}

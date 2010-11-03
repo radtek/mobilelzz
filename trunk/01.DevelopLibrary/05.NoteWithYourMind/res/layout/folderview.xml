@@ -21,51 +21,48 @@
 		android:background="#FF909090"
 		android:layout_below="@id/memolisttitle_infolder"
 	/>
-	<TableLayout 
-		android:id="@+id/memolistmenu_infolder"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_alignParentBottom="true"
-	    android:collapseColumns="4"
-	    android:stretchColumns="0,1,2,3">   
-	    <TableRow>
-	    	<Button
-	      	android:id="@+id/B_view_memo_editfolder_infolder"
-					android:text="编辑文件夹"
-					android:textSize="20sp"
-					android:padding="3dip"
-					android:gravity="center">
+	<LinearLayout
+	style="@android:style/ButtonBar"
+	android:id="@+id/memolistmenu_infolder"
+	android:orientation="horizontal"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_alignParentBottom="true">
+			<Button
+			android:id="@+id/B_view_memo_delete_infolder"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"		
+			android:layout_gravity="center_vertical"
+			android:text="删除"
+			android:textSize="20sp"
+			android:padding="3dip"
+			android:gravity="center">
 			</Button>
 			<Button
-      			android:id="@+id/B_view_memo_new_infolder"
-				android:text="新建"
-				android:textSize="20sp"
-				android:padding="3dip"
-				android:gravity="center">
+			android:id="@+id/B_view_memo_move_infolder"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"	
+			android:layout_gravity="center_vertical"
+			android:text="移动"
+			android:textSize="20sp"
+			android:padding="3dip"
+			android:gravity="center">
 			</Button>
 			<Button
-      			android:id="@+id/B_view_memo_move_infolder"
-				android:text="移动"
-				android:textSize="20sp"
-				android:padding="3dip"
-				android:gravity="center">
+			android:id="@+id/B_view_memo_cancel_infolder"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"	
+			android:layout_gravity="center_vertical"
+			android:text="取消"
+			android:textSize="20sp"
+			android:padding="3dip"
+			android:gravity="center"
+			android:visibility="gone">
 			</Button>
-			<Button
-      			android:id="@+id/B_view_memo_delete_infolder"
-				android:text="删除"
-				android:textSize="20sp"
-				android:padding="3dip"
-				android:gravity="center">
-			</Button>
-			<Button
-      			android:id="@+id/B_view_memo_cancel_infolder"
-				android:text="取消"
-				android:textSize="20sp"
-				android:padding="3dip"
-				android:gravity="center">
-			</Button>
-	    </TableRow>
- 	</TableLayout>
+	</LinearLayout>
 	<ListView 
       android:id="@+id/listviewmemo_infolder"
       android:layout_width="fill_parent"

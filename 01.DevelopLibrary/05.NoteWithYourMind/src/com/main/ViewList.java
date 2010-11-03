@@ -82,7 +82,15 @@ public class ViewList extends TabActivity
 	public void onStop()
 	{
 		super.onStop();
+		//m_NoteListUICtrl.releaseSource();
+		//m_NoteListUICtrl = null;
+		//mTabHost = null;
+	}
+	public void onDestroy()
+	{
+		super.onDestroy();
 		m_NoteListUICtrl.releaseSource();
+		m_NoteListUICtrl = null;
 		mTabHost = null;
 	}
 

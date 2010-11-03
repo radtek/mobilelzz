@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,6 +27,9 @@ class NoteListUICtrl{
 		MoveIn_SelectMoveItem,
 		MoveIn_SelectFolder
 	}
+	private int m_ButtonID_delete = 0;
+	private int m_ButtonID_move = 1;
+	private int m_ButtonID_cancel = 2;
 	
 	CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
 	private boolean m_bIsDelete = false;
@@ -80,7 +84,7 @@ class NoteListUICtrl{
 				}
 			}
 		});
-		Button clBTMemoDelete = (Button) m_toolBarLayout.findViewById(R.id.B_view_memo_delete);
+		Button clBTMemoDelete = (Button) m_toolBarLayout.getChildAt(m_ButtonID_delete);
 		clBTMemoDelete.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
@@ -108,7 +112,7 @@ class NoteListUICtrl{
         	}
         });
 		
-		Button clBTMemoMoveIn = (Button) m_toolBarLayout.findViewById(R.id.B_view_memo_move);
+		Button clBTMemoMoveIn = (Button) m_toolBarLayout.getChildAt(m_ButtonID_move);
 		clBTMemoMoveIn.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
@@ -126,6 +130,14 @@ class NoteListUICtrl{
         		else if(m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem)
         		{
         			m_MoveIn_State = MoveIn_State.MoveIn_SelectFolder;
+        			ArrayList<Integer> alIDs = new ArrayList<Integer>();
+        			findSelectItemDBID(alIDs);
+        			if(alIDs.size()<=0){
+        				m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
+        				updateListData();
+                		Return2TargetList();
+                		return;
+        			}
         			//show folder to select rec--->
         			LayoutInflater factory = LayoutInflater.from(m_sourceManager);
         			final View DialogView = factory.inflate(R.layout.folderlist, null);
@@ -172,7 +184,7 @@ class NoteListUICtrl{
         		}
         	}
         });
-		Button clBTMemoCancel = (Button) m_sourceManager.findViewById(R.id.B_view_memo_cancel);
+		Button clBTMemoCancel = (Button) m_toolBarLayout.getChildAt(m_ButtonID_cancel);
 		clBTMemoCancel.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
@@ -187,28 +199,30 @@ class NoteListUICtrl{
 	}
 	
 	private void updateToolBar(){
-		Button btDelete = (Button)m_toolBarLayout.findViewById(R.id.B_view_memo_delete);
-		Button btCancel = (Button)m_toolBarLayout.findViewById(R.id.B_view_memo_cancel);
-		Button btMove = (Button)m_toolBarLayout.findViewById(R.id.B_view_memo_move);
+		Button btDelete = (Button)m_toolBarLayout.getChildAt(m_ButtonID_delete);
+		Button btCancel = (Button)m_toolBarLayout.getChildAt(m_ButtonID_cancel);
+		Button btMove = (Button)m_toolBarLayout.getChildAt(m_ButtonID_move);
 		if(m_bIsDelete){		
-			btMove.setVisibility(View.GONE);			
+			btMove.setVisibility(View.GONE);
+			btDelete.setBackgroundResource(R.drawable.buttonshape);
 			btCancel.setVisibility(View.VISIBLE);
 		}else if(m_MoveIn_State==MoveIn_State.MoveIn_SelectMoveItem){		
-			btDelete.setVisibility(View.GONE);			
+			btDelete.setVisibility(View.GONE);	
+			btMove.setBackgroundResource(R.drawable.buttonshape);
 			btCancel.setVisibility(View.VISIBLE);
 		}else{
+			btMove.setBackgroundResource(android.R.drawable.btn_default);
 			btMove.setVisibility(View.VISIBLE);
+			btDelete.setBackgroundResource(android.R.drawable.btn_default);
 			btDelete.setVisibility(View.VISIBLE);	
 			btCancel.setVisibility(View.GONE);
 		}
 	}
 	
 	private void updateListData(){
-		Cursor clCursor;
+		Cursor clCursor = null;
 		if(m_iPreID!=CommonDefine.g_int_Invalid_ID){
-			clCursor = m_clCNoteDBCtrl.getMemoRootInfo();
-		}else{
-			clCursor = m_clCNoteDBCtrl.getMemoInFolder(m_iPreID);
+			clCursor = m_clCNoteDBCtrl.getMemosByID(m_iPreID);
 		}
 		if(clCursor!=null)
 		{

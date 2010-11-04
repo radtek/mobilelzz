@@ -32,18 +32,14 @@ import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TableLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.view.View;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.widget.Button;
-import android.widget.SimpleCursorAdapter;
 
 public class NoteWithYourMind extends Activity {
 	public enum NewNoteKindEnum{

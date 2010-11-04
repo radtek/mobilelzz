@@ -1,11 +1,9 @@
 package com.main;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
 
 public class CNoteDBCtrl extends SQLiteOpenHelper {
@@ -77,7 +75,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	
 	public	Cursor	getMemosByID( int id )
 	{
-		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=?", new String[]{String.valueOf(id)});
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? order by "+KEY_type+" asc", new String[]{String.valueOf(id)});
 	}
 	
 	public	Cursor	getMemoRec( int id )

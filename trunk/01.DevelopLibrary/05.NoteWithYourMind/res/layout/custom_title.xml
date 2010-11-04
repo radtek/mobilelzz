@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
 android:id="@+id/custom_title_layout"
 android:layout_width="fill_parent"
@@ -15,12 +16,26 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:text="小妮妮身无分文闯天下" />
-    <TextView android:id="@+id/right_text"
+	  	android:drawableLeft="@drawable/clock"
+        android:text="特工狂妮" />
+	<Button
+		android:id="@+id/B_main_Save"
+		android:text="保存"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:text="誓做欧也妮葛朗台" />
+		android:layout_marginLeft="30dip" 
+		android:background="#00000000"	/>  
+		
+	<Button
+		android:id="@+id/B_main_View"
+		android:text="查看"
+      	android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+		android:layout_alignTop="@id/B_main_Save" 
+		android:layout_toLeftOf="@id/B_main_Save" 
+		android:background="#00000000"	/>  
+		      
 </RelativeLayout>
 
 </LinearLayout>

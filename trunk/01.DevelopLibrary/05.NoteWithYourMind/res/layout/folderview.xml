@@ -10,7 +10,6 @@
 		android:id="@+id/memolisttitle_infolder"
 		android:layout_width="fill_parent"
     	android:layout_height="60dp"
-    	android:layout_alignParentTop="true"
     	android:gravity="center|left"
     	android:textSize="30sp"
 	/>
@@ -21,53 +20,7 @@
 		android:background="#FF909090"
 		android:layout_below="@id/memolisttitle_infolder"
 	/>
-	<LinearLayout
-	style="@android:style/ButtonBar"
-	android:id="@+id/memolistmenu_infolder"
-	android:orientation="horizontal"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:layout_alignParentBottom="true">
-			<Button
-			android:id="@+id/B_view_memo_delete_infolder"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"		
-			android:layout_gravity="center_vertical"
-			android:text="删除"
-			android:textSize="20sp"
-			android:padding="3dip"
-			android:gravity="center">
-			</Button>
-			<Button
-			android:id="@+id/B_view_memo_move_infolder"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"	
-			android:layout_gravity="center_vertical"
-			android:text="移动"
-			android:textSize="20sp"
-			android:padding="3dip"
-			android:gravity="center">
-			</Button>
-			<Button
-			android:id="@+id/B_view_memo_cancel_infolder"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"	
-			android:layout_gravity="center_vertical"
-			android:text="取消"
-			android:textSize="20sp"
-			android:padding="3dip"
-			android:gravity="center"
-			android:visibility="gone">
-			</Button>
-	</LinearLayout>
-	<ListView 
-      android:id="@+id/listviewmemo_infolder"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent" 
-      android:layout_below="@id/memolistdivideline_infolder"
-      android:layout_above="@id/memolistmenu_infolder"  />
+	<include layout="@layout/listctrlview"
+		android:layout_below="@id/memolistdivideline_infolder"/>
 </RelativeLayout>
 

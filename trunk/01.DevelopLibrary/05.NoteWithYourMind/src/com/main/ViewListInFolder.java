@@ -32,8 +32,8 @@ public class ViewListInFolder extends Activity
 			String folderName = folderRec.getString(index);
 			tvFolderName.setText(folderName);
 		}
-		ListView memoList = (ListView) findViewById(R.id.listviewmemo_infolder);
-		LinearLayout toolbarLayout = (LinearLayout) findViewById(R.id.memolistmenu_infolder);
+		ListView memoList = (ListView) findViewById(R.id.listviewmemo);
+		LinearLayout toolbarLayout = (LinearLayout) findViewById(R.id.memolistmenu);
 		m_NoteListUICtrl = new NoteListUICtrl(this, memoList, m_Cur_FolderID, toolbarLayout);
 		m_NoteListUICtrl.initializeSource();
 	}

@@ -217,7 +217,7 @@ class NoteListUICtrl{
 		}
 	}
 	
-	private void updateListData(){
+	public void updateListData(){
 		Cursor clCursor = null;
 		if(m_iPreID!=CommonDefine.g_int_Invalid_ID){
 			clCursor = m_clCNoteDBCtrl.getMemosByID(m_iPreID);

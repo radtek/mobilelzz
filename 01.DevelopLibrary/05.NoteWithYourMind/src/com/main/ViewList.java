@@ -61,8 +61,8 @@ public class ViewList extends TabActivity
 	    LinearLayout LL = (LinearLayout)mTabHost.getChildAt(0);
 	    TabWidget TW = (TabWidget)LL.getChildAt(0);
 
-//	    updateWidgetView(TW,0,"备忘", R.drawable.tabmemo);
-//	    updateWidgetView(TW,1,"提醒", R.drawable.tabremind);
+	    updateWidgetView(TW,0,"备忘", R.drawable.tabmemo);
+	    updateWidgetView(TW,1,"提醒", R.drawable.tabremind);
 	    //设置TabHost的背景颜色
 	    //mTabHost.setBackgroundColor(Color.argb(150, 22, 70, 150));
 	    //设置TabHost的背景图片资源

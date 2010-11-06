@@ -22,7 +22,18 @@
         		android:theme="@style/NoteTitle">
         	
         </activity>
+        <receiver android:name=".AlarmReceiver" android:enabled="true" />
+        <receiver android:name=".BootReceiver"> 
+            <intent-filter>   
+        		<action android:name="android.intent.action.BOOT_COMPLETED"/>   
+        		<category android:name="android.intent.category.HOME" />   
+   	    </intent-filter>   
+	</receiver>
+	
     </application>
+    
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/> 
+    
     <uses-sdk android:minSdkVersion="4" />
 
 </manifest> 

@@ -28,7 +28,8 @@ android:orientation="horizontal"
 			android:textSize="20sp"
 			android:layout_marginLeft="3dip"
 			android:layout_marginRight="3dip"
-			android:gravity="center">
+			android:gravity="center"
+			android:background="@drawable/buttonviewlist">
 			</Button>
 			<Button
 			android:id="@+id/B_main_Save"
@@ -39,7 +40,8 @@ android:orientation="horizontal"
 			android:textSize="20sp"
 			android:layout_marginLeft="3dip"
 			android:layout_marginRight="3dip"
-			android:gravity="center_horizontal|center_vertical">
+			android:gravity="center_horizontal|center_vertical"
+			android:background="@drawable/buttonsave">
 			</Button>
 			<Button
 			android:id="@+id/B_main_NewMemo"
@@ -50,7 +52,8 @@ android:orientation="horizontal"
 			android:textSize="20sp"
 			android:layout_marginLeft="3dip"
 			android:layout_marginRight="3dip"
-			android:gravity="center_horizontal|center_vertical">
+			android:gravity="center_horizontal|center_vertical"
+			android:background="@drawable/buttonnewmemo">
 			</Button>
 			<Button
 			android:id="@+id/B_main_NewFolder"
@@ -61,7 +64,8 @@ android:orientation="horizontal"
 			android:textSize="20sp"
 			android:layout_marginLeft="3dip"
 			android:layout_marginRight="3dip"
-			android:gravity="center_horizontal|center_vertical">
+			android:gravity="center_horizontal|center_vertical"
+			android:background="@drawable/buttonnewfolder">
 			</Button>
 	</LinearLayout>
 </LinearLayout>

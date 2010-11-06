@@ -180,12 +180,12 @@ public class NoteWithYourMind extends Activity {
         });
     }
     private void UpdateViewStatus(){
-    	Button btViewList = (Button)findViewById(R.id.B_main_View);
+/*    	Button btViewList = (Button)findViewById(R.id.B_main_View);
     	if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown){
     		btViewList.setVisibility(View.VISIBLE);
     	}else{
     		btViewList.setVisibility(View.GONE);
-    	}
+    	}*/
     	if(m_ExtraData_MemoID!=CMemoInfo.Id_Invalid){
     		Cursor curExtraMemo = m_clCNoteDBCtrl.getMemoRec(m_ExtraData_MemoID);
         	startManagingCursor(curExtraMemo);
@@ -213,9 +213,6 @@ public class NoteWithYourMind extends Activity {
     	}else{
     		UpdateStatusOfMemoInfo("",false);
     	}
-
-
-		
 	}
     private void UpdateStatusOfMemoInfo(String detail, boolean bIsRemind){
     	EditText etDetail = (EditText)findViewById(R.id.ET_main_Memo);

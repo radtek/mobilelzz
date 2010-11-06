@@ -27,12 +27,12 @@ public class ViewListInFolder extends Activity
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.folderview);
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+        Button btSkin = (Button)findViewById(R.id.B_main_setting_skin);
+		Button btEncode = (Button)findViewById(R.id.B_main_setting_encode);
+		btSkin.setVisibility(View.GONE);
+		btEncode.setVisibility(View.GONE);
         Button btNewFolder = (Button)findViewById(R.id.B_main_NewFolder);
-        Button btList = (Button)findViewById(R.id.B_main_View);
-		Button btSave = (Button)findViewById(R.id.B_main_Save);
 		btNewFolder.setVisibility(View.GONE);
-		btList.setVisibility(View.GONE);
-		btSave.setVisibility(View.GONE);
 
 		Intent iExtraData = this.getIntent();
 		m_Cur_FolderID = iExtraData.getIntExtra(ExtraData_FolderID, CommonDefine.g_int_Invalid_ID );

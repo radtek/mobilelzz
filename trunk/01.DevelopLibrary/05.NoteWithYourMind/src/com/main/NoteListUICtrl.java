@@ -75,7 +75,7 @@ class NoteListUICtrl{
 					Intent toNew = new Intent();
 	        		toNew.setClass(m_sourceManager, NoteWithYourMind.class);
 	        		toNew.putExtra(NoteWithYourMind.ExtraData_MemoID, iIDValue);
-	        		toNew.putExtra(NoteWithYourMind.NewNoteKind,NoteWithYourMind.NewNoteKindEnum.NewNoteKind_Memo);
+	        		toNew.putExtra(NoteWithYourMind.ExtraData_NewNoteKind,NoteWithYourMind.NewNoteKindEnum.NewNoteKind_Intent);
 	        		m_sourceManager.startActivity(toNew);
 				}else{
 					

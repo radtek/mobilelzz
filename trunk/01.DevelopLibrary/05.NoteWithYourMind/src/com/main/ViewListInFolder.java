@@ -27,6 +27,12 @@ public class ViewListInFolder extends Activity
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.folderview);
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+        Button btNewFolder = (Button)findViewById(R.id.B_main_NewFolder);
+        Button btList = (Button)findViewById(R.id.B_main_View);
+		Button btSave = (Button)findViewById(R.id.B_main_Save);
+		btNewFolder.setVisibility(View.GONE);
+		btList.setVisibility(View.GONE);
+		btSave.setVisibility(View.GONE);
 
 		Intent iExtraData = this.getIntent();
 		m_Cur_FolderID = iExtraData.getIntExtra(ExtraData_FolderID, CommonDefine.g_int_Invalid_ID );
@@ -50,7 +56,9 @@ public class ViewListInFolder extends Activity
         	public void onClick(View v)
         	{
         		Intent intent = new Intent();
-        		intent.setClass(ViewListInFolder.this, NoteWithYourMind.class);       		
+        		intent.setClass(ViewListInFolder.this, NoteWithYourMind.class); 
+        		intent.putExtra(NoteWithYourMind.ExtraData_MemoID, m_Cur_FolderID);
+        		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_Intent);
         		startActivity(intent);
         	}
         });

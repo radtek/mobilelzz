@@ -41,6 +41,8 @@ import android.database.Cursor;
 import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.content.DialogInterface;
+
 
 public class NoteWithYourMind extends Activity {
 	public enum NewNoteKindEnum{
@@ -49,7 +51,7 @@ public class NoteWithYourMind extends Activity {
 	}
 	public static String ExtraData_MemoID = "com.main.ExtraData_MemoID";
 	public static String ExtraData_NewNoteKind = "com.main.ExtraData_NewNoteKind";
-	private static String m_strPassWord = "123456";
+	private static String m_strPassWord = "";
 	
 	public static final int ITEM0 = Menu.FIRST;
 	public static final int ITEM1 = Menu.FIRST + 1;
@@ -86,16 +88,44 @@ public class NoteWithYourMind extends Activity {
 		}
         m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
         UpdateViewStatus();
-        
-		/*
-		Button clBT = (Button) findViewById(R.id.B_main_Exit);
-        clBT.setOnClickListener(new Button.OnClickListener(){
+
+    	Cursor curPassWord = m_clCNoteDBCtrl.getPassWord();
+
+		startManagingCursor(curPassWord);
+        curPassWord.moveToFirst();
+		int count = curPassWord.getCount();
+		
+    	if(count > 0 ){	
+			int index = curPassWord.getColumnIndex(CNoteDBCtrl.KEY_type);
+			int value = curPassWord.getInt(index);
+			if(value == CMemoInfo.Type_PassWord){
+				index = curPassWord.getColumnIndex(CNoteDBCtrl.KEY_password);
+		    	m_strPassWord = curPassWord.getString(index);			
+			}else{
+				m_strPassWord = "";			
+			}		
+
+		}else{
+			m_strPassWord = "";
+		}
+		
+
+		Button clBTSkin = (Button) findViewById(R.id.B_main_setting_skin);
+        clBTSkin.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
-        		NoteWithYourMind.this.finish();
+        		
         	}
         });
-        */
+
+		Button clBTEncode = (Button) findViewById(R.id.B_main_setting_encode);
+        clBTEncode.setOnClickListener(new Button.OnClickListener(){
+        	public void onClick(View v)
+        	{
+        		EncodeSettingDlg();
+        	}
+        });
+
         c = Calendar.getInstance();
         Button clBTSave = (Button) findViewById(R.id.B_main_Save);
         clBTSave.setOnClickListener(new Button.OnClickListener(){
@@ -176,8 +206,10 @@ public class NoteWithYourMind extends Activity {
     	}else{
     		UpdateStatusOfMemoInfo("",false);
     	}
-    	
-    }
+
+
+		
+	}
     private void UpdateStatusOfMemoInfo(String detail, boolean bIsRemind){
     	EditText etDetail = (EditText)findViewById(R.id.ET_main_Memo);
     	CheckBox cbIsRemind = (CheckBox)findViewById(R.id.CB_main_IsWarning);
@@ -200,7 +232,128 @@ public class NoteWithYourMind extends Activity {
         }
     }
 
-		/*
+    private void EncodeSettingDlg()
+	{
+		if(m_strPassWord==""){
+			
+				LayoutInflater factory = LayoutInflater.from(NoteWithYourMind.this);
+				final View DialogView = factory.inflate(R.layout.dialog_passwordsetting, null);
+				
+				AlertDialog clDlgNewFolder = new AlertDialog.Builder(NoteWithYourMind.this)	
+					.setIcon(R.drawable.clock)
+					.setTitle("请设置您的私人密码")
+					.setView(DialogView)
+					.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+						public void onClick(DialogInterface dialog, int i)
+						{
+			        		EditText PassWord = (EditText) DialogView.findViewById(R.id.ET_passwordsetting);
+			        		String strPassWord = PassWord.getText().toString();
+			        		if(strPassWord.length()>0){
+			        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+	 						    c = Calendar.getInstance();
+								clCMemoInfo.dLastModifyTime = c.getTimeInMillis();							
+			            		clCMemoInfo.strPassword = strPassWord;	
+			            		clCMemoInfo.iPreId = CMemoInfo.Id_Invalid;										
+			            		clCMemoInfo.iType = CMemoInfo.Type_PassWord;		            		
+			            		m_clCNoteDBCtrl.Create(clCMemoInfo);
+								m_strPassWord = strPassWord;
+			            		PassWord.setText("");
+			            		Toast toast = Toast.makeText(NoteWithYourMind.this, "私人密码已设置", Toast.LENGTH_SHORT);
+			            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+			            		toast.show();
+			        		}else{
+			        			Toast toast = Toast.makeText(NoteWithYourMind.this, "请输入私人密码", Toast.LENGTH_SHORT);
+			            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+			            		toast.show();
+			        		}
+							dialog.cancel();
+						}
+					})
+					.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+						public void onClick(DialogInterface dialog, int i)
+						{
+							dialog.cancel();
+						}
+					})
+
+					
+					.create();
+
+				clDlgNewFolder.show(); 
+
+		}else{
+
+				LayoutInflater factory = LayoutInflater.from(NoteWithYourMind.this);
+				final View DialogView = factory.inflate(R.layout.dialog_passwordchang, null);
+				
+				AlertDialog clDlgNewFolder = new AlertDialog.Builder(NoteWithYourMind.this)	
+					.setIcon(R.drawable.clock)
+					.setView(DialogView)
+					.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+						public void onClick(DialogInterface dialog, int i)
+						{
+			        		EditText PassWord_old = (EditText) DialogView.findViewById(R.id.ET_password_old);
+			        		String strPassWord_old = PassWord_old.getText().toString();
+			        		EditText PassWord_new = (EditText) DialogView.findViewById(R.id.ET_password_new);
+			        		String strPassWord_new = PassWord_new.getText().toString();
+			        		EditText PassWord_new2 = (EditText) DialogView.findViewById(R.id.ET_password_new2);
+			        		String strPassWord_new2 = PassWord_new2.getText().toString();
+							
+			        		if(strPassWord_old.equals( m_strPassWord)){
+
+								if(strPassWord_new.equals(strPassWord_new2)){
+				        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+		 						    c = Calendar.getInstance();
+									clCMemoInfo.dLastModifyTime = c.getTimeInMillis();							
+				            		clCMemoInfo.strPassword = strPassWord_new;	
+				            		clCMemoInfo.iPreId = CMemoInfo.Id_Invalid;										
+				            		clCMemoInfo.iType = CMemoInfo.Type_PassWord;		            		
+				            		m_clCNoteDBCtrl.Create(clCMemoInfo);
+									m_strPassWord = strPassWord_new;
+									PassWord_old.setText("");
+									PassWord_new.setText("");
+									PassWord_new2.setText("");
+									Toast toast = Toast.makeText(NoteWithYourMind.this, "新密码已设置", Toast.LENGTH_SHORT);
+				            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+				            		toast.show();
+									dialog.cancel();
+								}else{
+				        			Toast toast = Toast.makeText(NoteWithYourMind.this, "新密码不一致!请重新输入", Toast.LENGTH_SHORT);
+				            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+									PassWord_new.setText("");
+									PassWord_new2.setText("");
+				            		toast.show();
+
+								}									
+
+			        		}else{
+			        			PassWord_old.setText("");
+								PassWord_new.setText("");
+								PassWord_new2.setText("");
+			        			Toast toast = Toast.makeText(NoteWithYourMind.this, "密码错误!请重新输入", Toast.LENGTH_SHORT);
+			            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+			            		toast.show();
+			        		}
+
+						}
+					})
+					.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+						public void onClick(DialogInterface dialog, int i)
+						{
+							dialog.cancel();
+						}
+					})
+
+					
+					.create();
+
+				clDlgNewFolder.show(); 
+
+		}
+		
+	}
+
+	 /*
 	 * menu.findItem(EXIT_ID);找到特定的MenuItem
 	 * MenuItem.setIcon.可以设置menu按钮的背景
 	 */
@@ -216,14 +369,11 @@ public class NoteWithYourMind extends Activity {
 		switch (item.getItemId()) {
 		case ITEM0: 
 				/*   menu button push action */ 
-
-
 				
 			break;
 		case ITEM1: 
 				/*   menu button push action */ 
-
-
+			EncodeSettingDlg();
 			break;
 
 		}

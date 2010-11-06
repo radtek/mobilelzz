@@ -1,60 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
 android:id="@+id/custom_title_layout"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
-android:orientation="vertical"
-xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="horizontal"
 >
-<RelativeLayout android:id="@+id/screen"
-    android:layout_width="wrap_content" 
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
-<TextView android:id="@+id/left_text"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentLeft="true"
-	android:drawableLeft="@drawable/clock"
-    android:text="碧玺工作室" />
-
-<TableLayout
-		android:id="@+id/CTL_Title"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:collapseColumns="0,1,2,3"
-		android:layout_alignParentRight="true">
-			<TableRow>	
-				<Button
-				android:id="@+id/B_main_View"
-				android:text="查看"
-		      	android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-				android:background="#00000000"	/>  
-				
-				<Button
-				android:id="@+id/B_main_Save"
-				android:text="保存"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-				android:background="#00000000"	/>  
-
-				<Button
-				android:id="@+id/B_main_NewMemo"
-				android:text="新建便签"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-				android:background="#00000000"	/>  				
-
-				<Button
-				android:id="@+id/B_main_NewFolder"
-				android:text="新建文件夹"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-				android:background="#00000000"	/>  
-					
-			</TableRow>
-		</TableLayout>		      
-	</RelativeLayout>
-
+	<TextView android:id="@+id/left_text"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+			android:drawableLeft="@drawable/clock"
+			android:layout_gravity="center_vertical"
+			android:layout_weight="0"
+			android:singleLine="true"
+	    android:text="碧玺工作室" />
+	<LinearLayout
+	style="@android:style/ButtonBar"
+	android:id="@+id/CTL_Title"
+	android:orientation="horizontal"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:layout_weight="1">
+			<Button
+			android:id="@+id/B_main_View"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:layout_weight="1"		
+			android:text="List"
+			android:textSize="20sp"
+			android:layout_marginLeft="3dip"
+			android:layout_marginRight="3dip"
+			android:gravity="center">
+			</Button>
+			<Button
+			android:id="@+id/B_main_Save"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:layout_weight="1"	
+			android:text="Save"
+			android:textSize="20sp"
+			android:layout_marginLeft="3dip"
+			android:layout_marginRight="3dip"
+			android:gravity="center_horizontal|center_vertical">
+			</Button>
+			<Button
+			android:id="@+id/B_main_NewMemo"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:layout_weight="1"	
+			android:text="NewM"
+			android:textSize="20sp"
+			android:layout_marginLeft="3dip"
+			android:layout_marginRight="3dip"
+			android:gravity="center_horizontal|center_vertical">
+			android:visibility="gone">
+			</Button>
+			<Button
+			android:id="@+id/B_main_NewFolder"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:layout_weight="1"	
+			android:text="NewF"
+			android:textSize="20sp"
+			android:layout_marginLeft="3dip"
+			android:layout_marginRight="3dip"
+			android:gravity="center_horizontal|center_vertical">
+			android:visibility="gone">
+			</Button>
+	</LinearLayout>
+      
 </LinearLayout>

@@ -5,6 +5,7 @@
 	android:layout_height="fill_parent"
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
+
 	<CheckBox
 		android:id="@+id/CB_main_IsWarning"
 		android:text="提醒我"
@@ -16,7 +17,7 @@
 		>
 	</CheckBox>
 
-	<LinearLayout
+<LinearLayout
 	style="@android:style/ButtonBar"
 	android:id="@+id/main_bottombar"
 	android:orientation="horizontal"

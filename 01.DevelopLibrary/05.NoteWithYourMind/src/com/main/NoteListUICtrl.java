@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 class NoteListUICtrl{
@@ -157,6 +159,13 @@ class NoteListUICtrl{
         				})
         				.create();
         			ListView folderList = (ListView) DialogView.findViewById(R.id.folderlist_view);
+        			if(m_iPreID!=CMemoInfo.PreId_Root){
+        				TextView tvRootFolder = new TextView(m_sourceManager);
+        				tvRootFolder.setText("¸ùÄ¿Â¼");
+        				tvRootFolder.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
+        				tvRootFolder.setHeight(CommonDefine.g_int_ListItemHeight);
+        				folderList.addHeaderView(tvRootFolder);
+        			}
         			Cursor cursorFolderList	=	m_clCNoteDBCtrl.getFolderInRoot();
         			m_sourceManager.startManagingCursor(cursorFolderList);
         			if(cursorFolderList!=null){
@@ -173,6 +182,9 @@ class NoteListUICtrl{
         				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3){
         					ListAdapter LA = (ListAdapter)arg0.getAdapter();
         					long id = LA.getItemId(arg2);
+        					if(id<0){
+        						id = 0;
+        					}
         					ArrayList<Integer> alIDs = new ArrayList<Integer>();
         					findSelectItemDBID(alIDs);
         					Move2Folder(alIDs, (int)id);

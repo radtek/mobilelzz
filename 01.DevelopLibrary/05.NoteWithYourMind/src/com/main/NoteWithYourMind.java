@@ -46,8 +46,9 @@ import android.content.DialogInterface;
 
 public class NoteWithYourMind extends Activity {
 	public enum NewNoteKindEnum{
-		NewNoteKind_Boot,
-		NewNoteKind_Intent,
+		NewNoteKind_Unknown,
+		NewNoteKind_InRoot,
+		NewNoteKind_InFolder,
 	}
 	public static String ExtraData_MemoID = "com.main.ExtraData_MemoID";
 	public static String ExtraData_NewNoteKind = "com.main.ExtraData_NewNoteKind";
@@ -61,7 +62,7 @@ public class NoteWithYourMind extends Activity {
 	private Calendar c;
 
 	private int m_ExtraData_MemoID = CMemoInfo.Id_Invalid;
-	private NewNoteKindEnum m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Boot;
+	private NewNoteKindEnum m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
 
 
     /** Called when the activity is first created. */
@@ -79,12 +80,12 @@ public class NoteWithYourMind extends Activity {
 		btNewFolder.setVisibility(View.GONE);
 		
         m_ExtraData_MemoID = CMemoInfo.Id_Invalid;
-        m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Boot;
+        m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
         Intent iExtraData = this.getIntent();
 		m_ExtraData_MemoID = iExtraData.getIntExtra(ExtraData_MemoID, CMemoInfo.Id_Invalid );
 		m_ExtraData_NewNoteKind = (NewNoteKindEnum)iExtraData.getSerializableExtra(ExtraData_NewNoteKind);
 		if(m_ExtraData_NewNoteKind==null){
-			m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Boot;
+			m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
 		}
         m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
         UpdateViewStatus();
@@ -180,7 +181,7 @@ public class NoteWithYourMind extends Activity {
     }
     private void UpdateViewStatus(){
     	Button btViewList = (Button)findViewById(R.id.B_main_View);
-    	if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Boot){
+    	if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown){
     		btViewList.setVisibility(View.VISIBLE);
     	}else{
     		btViewList.setVisibility(View.GONE);
@@ -190,15 +191,21 @@ public class NoteWithYourMind extends Activity {
         	startManagingCursor(curExtraMemo);
         	if(curExtraMemo.getCount()>0){
         		curExtraMemo.moveToFirst();
-        		int index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_detail);
-    	    	String strDetail = curExtraMemo.getString(index);
-    	    	index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_isremind);
-    	    	int isRemind = curExtraMemo.getInt(index);
-    	    	if(isRemind == CMemoInfo.IsRemind_Yes){
-    	    		UpdateStatusOfMemoInfo(strDetail,true);
-    	    	}else{
-    	    		UpdateStatusOfMemoInfo(strDetail,false);
-    	    	}
+        		int index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_type);
+        		int TypeValue = curExtraMemo.getInt(index);
+        		if(TypeValue==CMemoInfo.Type_Folder){
+        			UpdateStatusOfMemoInfo("",false);
+        		}else{
+        			index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_detail);
+        	    	String strDetail = curExtraMemo.getString(index);
+        	    	index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_isremind);
+        	    	int isRemind = curExtraMemo.getInt(index);
+        	    	if(isRemind == CMemoInfo.IsRemind_Yes){
+        	    		UpdateStatusOfMemoInfo(strDetail,true);
+        	    	}else{
+        	    		UpdateStatusOfMemoInfo(strDetail,false);
+        	    	}
+        		}
         	}else{
         		UpdateStatusOfMemoInfo("",false);
         	}
@@ -222,12 +229,20 @@ public class NoteWithYourMind extends Activity {
     	CMemoInfo clCMemoInfo	=	new	CMemoInfo();
 		clCMemoInfo.strDetail	=	strMemoText;
 		clCMemoInfo.dLastModifyTime = c.getTimeInMillis();
-		if(m_ExtraData_MemoID!=CMemoInfo.Id_Invalid){	
-			m_clCNoteDBCtrl.Update(m_ExtraData_MemoID,clCMemoInfo);
+		
+		if(m_ExtraData_MemoID!=CMemoInfo.Id_Invalid){
+			if(m_ExtraData_NewNoteKind==NewNoteKindEnum.NewNoteKind_InFolder){
+				clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
+	    		clCMemoInfo.iType = CMemoInfo.Type_Memo;
+	        	clCMemoInfo.iPreId	=	m_ExtraData_MemoID;
+	        	m_clCNoteDBCtrl.Create(clCMemoInfo);
+			}else{
+				m_clCNoteDBCtrl.Update(m_ExtraData_MemoID,clCMemoInfo);
+			}
         }else{
-    		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
-    		clCMemoInfo.iPreId	=	CMemoInfo.PreId_Root;
+        	clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
     		clCMemoInfo.iType = CMemoInfo.Type_Memo;
+        	clCMemoInfo.iPreId	=	CMemoInfo.PreId_Root;
         	m_clCNoteDBCtrl.Create(clCMemoInfo);
         }
     }

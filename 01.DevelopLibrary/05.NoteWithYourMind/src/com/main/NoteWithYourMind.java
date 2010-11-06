@@ -40,6 +40,8 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
 
 public class NoteWithYourMind extends Activity {
 	public enum NewNoteKindEnum{
@@ -52,12 +54,17 @@ public class NoteWithYourMind extends Activity {
 	public static String NewNoteKind = "com.main.ExtraData_NewNoteKind";
 	private static String m_strPassWord = "123456";
 	
+	public static final int ITEM0 = Menu.FIRST;
+	public static final int ITEM1 = Menu.FIRST + 1;
+	
 	public static	CNoteDBCtrl		m_clCNoteDBCtrl;
 	
 	private Calendar c;
 
 	private int m_ExtraData_MemoID = CMemoInfo.Id_Invalid;
 	private NewNoteKindEnum m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
+
+
     /** Called when the activity is first created. */
 	
     @Override
@@ -79,13 +86,15 @@ public class NoteWithYourMind extends Activity {
         m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
         UpdateViewStatus();
         
-        Button clBT = (Button) findViewById(R.id.B_main_Exit);
+		/*
+		Button clBT = (Button) findViewById(R.id.B_main_Exit);
         clBT.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
         		NoteWithYourMind.this.finish();
         	}
         });
+        */
         c = Calendar.getInstance();
         Button clBTSave = (Button) findViewById(R.id.B_main_Save);
         clBTSave.setOnClickListener(new Button.OnClickListener(){
@@ -155,6 +164,17 @@ public class NoteWithYourMind extends Activity {
         		}
         	}
         });
+
+	   	TableLayout TL = (TableLayout) findViewById(R.id.CTL_Title);		
+		TL.setColumnCollapsed(0, false);
+		TL.setColumnCollapsed(1, false);
+		TL.setColumnCollapsed(2, true);
+		TL.setColumnCollapsed(3, true);
+		TL.setColumnStretchable(0, true);		
+		TL.setColumnStretchable(1, true);	
+		TL.setColumnStretchable(2, false);		
+		TL.setColumnStretchable(3, false);	
+		
     }
     private void UpdateViewStatus(){
     	Cursor curExtraMemo = null;
@@ -165,19 +185,19 @@ public class NoteWithYourMind extends Activity {
     	}
     	EditText etMemoDetail = (EditText) findViewById(R.id.ET_main_Memo);
     	CheckBox CBFolder = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsFolder);
-    	CheckBox CBEncode = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsEncode);
+ //   	CheckBox CBEncode = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsEncode);
     	CheckBox CBRemind = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsWarning);
-    	TableLayout TL = (TableLayout) findViewById(R.id.BMenu_main); 
+        Button clBTView = (Button) findViewById(R.id.B_main_View);
     	if(m_ExtraData_NewNoteKind != NewNoteKindEnum.NewNoteKind_Unknown){
-    		TL.setColumnCollapsed(1, true);
+    		clBTView.setVisibility(View.INVISIBLE);
     	}else{
-    		TL.setColumnCollapsed(1, false);
+    		clBTView.setVisibility(View.VISIBLE);
     	}
     	if((m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown)||
     			(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Both)){
     		etMemoDetail.setText("");
     		CBFolder.setChecked(false);
-        	CBEncode.setChecked(false);  
+//        	CBEncode.setChecked(false);  
         	CBRemind.setChecked(false);
         	etMemoDetail.setHint("请在此处编辑文件夹名称或者便签内容");
     	}else if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Memo){
@@ -185,7 +205,7 @@ public class NoteWithYourMind extends Activity {
     		CBFolder.setClickable(false);
     		if(curExtraMemo!=null){
     			UpdateDetail(curExtraMemo, etMemoDetail);
-    			UpdateEncode(curExtraMemo, CBEncode);
+ //   			UpdateEncode(curExtraMemo, CBEncode);
     		}else{
     			etMemoDetail.setHint("请在此处编辑便签内容");
     		}
@@ -196,7 +216,7 @@ public class NoteWithYourMind extends Activity {
     		CBRemind.setClickable(false);
     		if(curExtraMemo!=null){
     			UpdateDetail(curExtraMemo, etMemoDetail);
-    			UpdateEncode(curExtraMemo, CBEncode);
+ //   			UpdateEncode(curExtraMemo, CBEncode);
     		}else{
     			etMemoDetail.setHint("请在此处编辑文件夹名称");
     		}
@@ -230,16 +250,17 @@ public class NoteWithYourMind extends Activity {
 		clCMemoInfo.strDetail	=	strMemoText;
 		clCMemoInfo.dLastModifyTime = c.getTimeInMillis();
 		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
-		CheckBox CBEncode = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsEncode);
+//		CheckBox CBEncode = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsEncode);
 		CheckBox CBFolder = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsFolder);
 
     	if((m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown)||
     			(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Both)){
-    		if(CBEncode.isChecked()){
-    			clCMemoInfo.strPassword = m_strPassWord;
-    		}else{
+ //   		if(CBEncode.isChecked()){
+  //  			clCMemoInfo.strPassword = m_strPassWord;
+  //  		}
+ //   		else{
     			clCMemoInfo.strPassword = "";
-    		}
+ //   		}
     		if(CBFolder.isChecked()){
     			clCMemoInfo.iType = CMemoInfo.Type_Folder;
     		}else{
@@ -248,11 +269,11 @@ public class NoteWithYourMind extends Activity {
     		clCMemoInfo.iPreId	=	CMemoInfo.PreId_Root;
     		m_clCNoteDBCtrl.Create(clCMemoInfo);
     	}else if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Memo){
-    		if(CBEncode.isChecked()){
-    			clCMemoInfo.strPassword = m_strPassWord;
-    		}else{
+ //   		if(CBEncode.isChecked()){
+ //   			clCMemoInfo.strPassword = m_strPassWord;
+ //   		}else{
     			clCMemoInfo.strPassword = "";
-    		}
+ //   		}
     		if(m_ExtraData_MemoID!=CMemoInfo.Id_Invalid){
     			Cursor cur = m_clCNoteDBCtrl.getMemoRec(m_ExtraData_MemoID);
     			cur.moveToFirst();
@@ -266,14 +287,43 @@ public class NoteWithYourMind extends Activity {
     			}     				
             }
     	}else if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Folder){
-    		if(CBEncode.isChecked()){
-    			clCMemoInfo.strPassword = m_strPassWord;
-    		}else{
+ //   		if(CBEncode.isChecked()){
+ //   			clCMemoInfo.strPassword = m_strPassWord;
+  //  		}else{
     			clCMemoInfo.strPassword = "";
-    		}
+   // 		}
     		m_clCNoteDBCtrl.Update(m_ExtraData_MemoID,clCMemoInfo);
     	}else{
     		
     	}
     }
+
+		/*
+	 * menu.findItem(EXIT_ID);找到特定的MenuItem
+	 * MenuItem.setIcon.可以设置menu按钮的背景
+	 */
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		menu.add(0, ITEM0, 0, "皮肤设置");
+		menu.add(0, ITEM1, 0, "加密设置");
+		menu.findItem(ITEM1);
+		return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case ITEM0: 
+				/*   menu button push action */ 
+
+
+				
+			break;
+		case ITEM1: 
+				/*   menu button push action */ 
+
+
+			break;
+
+		}
+		return super.onOptionsItemSelected(item);}
 }

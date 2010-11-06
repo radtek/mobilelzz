@@ -84,7 +84,7 @@ public class NoteWithYourMind extends Activity {
 			m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
 		}
         m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
-        UpdateViewStatus();
+        //UpdateViewStatus();
         
 		/*
 		Button clBT = (Button) findViewById(R.id.B_main_Exit);

@@ -7,35 +7,54 @@ android:layout_height="fill_parent"
 android:orientation="vertical"
 xmlns:android="http://schemas.android.com/apk/res/android"
 >
-
 <RelativeLayout android:id="@+id/screen"
-    android:layout_width="fill_parent" 
+    android:layout_width="wrap_content" 
     android:layout_height="fill_parent"
     android:orientation="vertical">
-    <TextView android:id="@+id/left_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-	  	android:drawableLeft="@drawable/clock"
-        android:text="特工狂妮" />
-	<Button
-		android:id="@+id/B_main_Save"
-		android:text="保存"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-		android:layout_marginLeft="30dip" 
-		android:background="#00000000"	/>  
-		
-	<Button
-		android:id="@+id/B_main_View"
-		android:text="查看"
-      	android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-		android:layout_alignTop="@id/B_main_Save" 
-		android:layout_toLeftOf="@id/B_main_Save" 
-		android:background="#00000000"	/>  
-		      
-</RelativeLayout>
+<TextView android:id="@+id/left_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+	android:drawableLeft="@drawable/clock"
+    android:text="碧玺工作室" />
+
+<TableLayout
+		android:id="@+id/CTL_Title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:collapseColumns="0,1,2,3"
+		android:layout_alignParentRight="true">
+			<TableRow>	
+				<Button
+				android:id="@+id/B_main_View"
+				android:text="查看"
+		      	android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+				android:background="#00000000"	/>  
+				
+				<Button
+				android:id="@+id/B_main_Save"
+				android:text="保存"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+				android:background="#00000000"	/>  
+
+				<Button
+				android:id="@+id/B_main_NewMemo"
+				android:text="新建便签"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+				android:background="#00000000"	/>  				
+
+				<Button
+				android:id="@+id/B_main_NewFolder"
+				android:text="新建文件夹"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+				android:background="#00000000"	/>  
+					
+			</TableRow>
+		</TableLayout>		      
+	</RelativeLayout>
 
 </LinearLayout>

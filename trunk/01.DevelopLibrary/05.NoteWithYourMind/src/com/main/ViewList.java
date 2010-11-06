@@ -11,6 +11,11 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.TabHost.TabSpec;
+import android.widget.TableLayout;
+import android.view.Window;
+import android.widget.Button;
+import android.app.AlertDialog;
+import android.content.Intent;
 
 public class ViewList extends TabActivity
 {
@@ -24,7 +29,12 @@ public class ViewList extends TabActivity
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.view);	
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+		
+
 		ListView memoList = (ListView) findViewById(R.id.listviewmemo);
 		LinearLayout toolbarLayout = (LinearLayout) findViewById(R.id.memolistmenu);
 		m_NoteListUICtrl = new NoteListUICtrl(this, memoList, 0, toolbarLayout);
@@ -70,6 +80,30 @@ public class ViewList extends TabActivity
 	    
 	    //设置当前显示哪一个标签
 	    mTabHost.setCurrentTab(0);
+
+	   	TableLayout TL = (TableLayout) findViewById(R.id.CTL_Title);		
+		TL.setColumnCollapsed(0, true);
+		TL.setColumnCollapsed(1, true);
+		TL.setColumnCollapsed(2, false);
+		TL.setColumnCollapsed(3, false);
+		TL.setColumnStretchable(0, false);		
+		TL.setColumnStretchable(1, false);	
+		TL.setColumnStretchable(2, true);		
+		TL.setColumnStretchable(3, true);	
+
+
+        Button clBTNewMemo = (Button) findViewById(R.id.B_main_NewMemo);
+        clBTNewMemo.setOnClickListener(new Button.OnClickListener(){
+        	public void onClick(View v)
+        	{
+        		Intent intent = new Intent();
+        		intent.setClass(ViewList.this, NoteWithYourMind.class);
+        		startActivity(intent);
+        	}
+        });
+
+		
+
 	}
 	
 	public void onStop()

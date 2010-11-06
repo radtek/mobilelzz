@@ -17,12 +17,6 @@
 		android:stretchColumns="0,1,2">
 		<TableRow>
 			<CheckBox
-				android:id="@+id/CB_main_IsEncode"
-				android:text="加密  "
-				android:textSize="22sp"
-				>
-			</CheckBox>
-			<CheckBox
 				android:id="@+id/CB_main_IsFolder"
 				android:text="文件夹"
 				android:textSize="22sp"
@@ -36,6 +30,7 @@
 			</CheckBox>
 		</TableRow>
 	</TableLayout>
+	<!--
 	<TableLayout
 		android:id="@+id/BMenu_main"
 		android:layout_width="fill_parent"
@@ -55,6 +50,7 @@
 			</Button>
 		</TableRow>
 	</TableLayout>
+		-->	
 	<EditText
 		android:id="@+id/ET_main_Memo"
 		android:layout_width="fill_parent"
@@ -63,7 +59,6 @@
 		android:textSize="22sp"
 		android:gravity = "top"
 		android:layout_below="@id/CBMenu_main"
-		android:layout_above="@id/BMenu_main"
 		android:layout_marginRight="10dip"
 		android:layout_marginLeft="10dip"
 		android:layout_marginTop="10dip"

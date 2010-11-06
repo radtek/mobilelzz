@@ -3,67 +3,62 @@
 	android:id="@+id/main"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:background="@drawable/bg_blue">
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
+	<CheckBox
+		android:id="@+id/CB_main_IsWarning"
+		android:text="提醒我"
+		android:textSize="22sp"
+		android:layout_gravity="center_horizontal"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="5dip"
+		>
+	</CheckBox>
 
-	<TableLayout
-		android:id="@+id/CBMenu_main"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginLeft="10dip"
-		android:layout_marginTop="10dip"
-		android:layout_marginRight="10dip"
-		android:stretchColumns="0,1,2">
-		<TableRow>
-			<CheckBox
-				android:id="@+id/CB_main_IsFolder"
-				android:text="文件夹"
-				android:textSize="22sp"
-				>
-			</CheckBox>
-			<CheckBox
-				android:id="@+id/CB_main_IsWarning"
-				android:text="提醒我"
-				android:textSize="22sp"
-				>
-			</CheckBox>
-		</TableRow>
-	</TableLayout>
-	<!--
-	<TableLayout
-		android:id="@+id/BMenu_main"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginLeft="10dip"
-		android:layout_marginBottom="10dip"
-		android:layout_marginRight="10dip"
-		android:layout_alignParentBottom="true"
-		android:stretchColumns="*">
-		<TableRow>
+	<LinearLayout
+	style="@android:style/ButtonBar"
+	android:id="@+id/main_bottombar"
+	android:orientation="horizontal"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_alignParentBottom="true">
 			<Button
-				android:id="@+id/B_main_Exit"
-				android:text="返回"
-				android:textSize="22sp"
-				android:background="#00000000"
-				>
+			android:id="@+id/B_main_setting_skin"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"		
+			android:layout_gravity="center_vertical"
+			android:text="皮肤设置"
+			android:textSize="20sp"
+			android:layout_marginLeft="3dip"
+			android:layout_marginRight="3dip"
+			android:gravity="center">
 			</Button>
-		</TableRow>
-	</TableLayout>
-		-->	
+			<Button
+			android:id="@+id/B_main_setting_encode"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"	
+			android:layout_gravity="center_vertical"
+			android:text="加密设置"
+			android:textSize="20sp"
+			android:layout_marginLeft="3dip"
+			android:layout_marginRight="3dip"
+			android:gravity="center">
+			</Button>
+	</LinearLayout>
 	<EditText
 		android:id="@+id/ET_main_Memo"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:hint="请输入内容"
 		android:textSize="22sp"
 		android:gravity = "top"
-		android:layout_below="@id/CBMenu_main"
-		android:layout_marginRight="10dip"
-		android:layout_marginLeft="10dip"
-		android:layout_marginTop="10dip"
-		android:layout_marginBottom="10dip"
-		android:background="@drawable/content"
+		android:layout_above="@id/main_bottombar"
+		android:layout_below="@id/CB_main_IsWarning"
+		android:layout_marginLeft="3dip"
+		android:layout_marginRight="3dip"
+		android:layout_marginTop="5dip"
 	>
 	</EditText>
 </RelativeLayout>

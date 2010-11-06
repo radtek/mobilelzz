@@ -68,7 +68,7 @@ public class ViewList extends Activity
         	{
         		Intent intent = new Intent();
         		intent.setClass(ViewList.this, NoteWithYourMind.class); 
-        		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_Intent);
+        		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot);
  
         		startActivity(intent);
         	}

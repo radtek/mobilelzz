@@ -22,31 +22,33 @@
 	android:id="@+id/main_bottombar"
 	android:orientation="horizontal"
 	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
+	android:layout_height="70dp"
 	android:layout_alignParentBottom="true">
 			<Button
-			android:id="@+id/B_main_setting_skin"
+			android:id="@+id/B_main_View"
 			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
+			android:layout_height="fill_parent"
 			android:layout_weight="1"		
 			android:layout_gravity="center_vertical"
-			android:text="皮肤设置"
+			android:text="查看"
 			android:textSize="20sp"
 			android:layout_marginLeft="3dip"
 			android:layout_marginRight="3dip"
-			android:gravity="center">
+			android:gravity="center"
+			android:background="@drawable/buttonviewlist">
 			</Button>
 			<Button
-			android:id="@+id/B_main_setting_encode"
+			android:id="@+id/B_main_Save"
 			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
+			android:layout_height="fill_parent"
 			android:layout_weight="1"	
 			android:layout_gravity="center_vertical"
-			android:text="加密设置"
+			android:text="保存"
 			android:textSize="20sp"
 			android:layout_marginLeft="3dip"
 			android:layout_marginRight="3dip"
-			android:gravity="center">
+			android:gravity="center"
+			android:background="@drawable/buttonsave">
 			</Button>
 	</LinearLayout>
 	<EditText

@@ -37,10 +37,10 @@ public class ViewList extends Activity
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.view);	
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
-        Button btList = (Button)findViewById(R.id.B_main_View);
-		Button btSave = (Button)findViewById(R.id.B_main_Save);
-		btList.setVisibility(View.GONE);
-		btSave.setVisibility(View.GONE);
+        Button btSkin = (Button)findViewById(R.id.B_main_setting_skin);
+		Button btEncode = (Button)findViewById(R.id.B_main_setting_encode);
+		btSkin.setVisibility(View.GONE);
+		btEncode.setVisibility(View.GONE);
 
 		ListView memoList = (ListView) findViewById(R.id.listviewmemo);
 		LinearLayout toolbarLayout = (LinearLayout) findViewById(R.id.memolistmenu);

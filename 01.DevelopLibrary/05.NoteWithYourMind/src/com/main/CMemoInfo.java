@@ -8,6 +8,8 @@ public class CMemoInfo {
 	public final static Integer Type_Invalid = -1;
 	public final static Integer Type_Folder = 0;
 	public final static Integer Type_Memo = 1;
+	public final static Integer Type_PassWord = 2;
+
 	
 	public final static Integer IsRemind_Invalid = -1;
 	public final static Integer IsRemind_Yes = 0;

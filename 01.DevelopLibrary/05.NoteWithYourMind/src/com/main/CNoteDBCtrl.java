@@ -27,7 +27,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	private static final String	DB_TABLE		= "Notes";
 	
 	// Êý¾Ý¿â°æ±¾
-	private static final int	DB_VERSION		= 2;
+	private static final int	DB_VERSION		= 3;
 	
 	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" + KEY_id + " INTEGER PRIMARY KEY AUTOINCREMENT," + 
 		KEY_preid + " INTERGER,"+ KEY_type + " INTERGER," + KEY_isremind + " INTERGER," + KEY_remindtime + " double," + KEY_createtime + " double,"+
@@ -87,7 +87,13 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	{
 		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_isremind+"=?", new String[]{String.valueOf(1)});
 	}
-	
+
+	public	Cursor	getPassWord()
+	{
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+
+					KEY_type+"=?", 
+					new String[]{String.valueOf(-1), String.valueOf(CMemoInfo.Type_PassWord)});
+	}	
 	public	void Create( CMemoInfo clCMemoInfo )
 	{
 		//m_db.execSQL("insert into DB_TABLE("+KEY_preid+","+KEY_type+","+KEY_isremind+","+KEY_remindtime+","+KEY_createtime+","+KEY_lastmodifytime+","+

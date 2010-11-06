@@ -1,4 +1,5 @@
 package com.main;
+import android.app.Activity;
 import android.app.TabActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -22,13 +23,10 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.widget.Toast;
 
-public class ViewList extends TabActivity
+public class ViewList extends Activity
 {
 	private NoteListUICtrl m_NoteListUICtrl;
 	private Calendar c;
-	
-	//声明TabHost对象
-	TabHost mTabHost;
 	CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
 	
 	/** Called when the activity is first created. */
@@ -47,8 +45,8 @@ public class ViewList extends TabActivity
 		m_NoteListUICtrl = new NoteListUICtrl(this, memoList, 0, toolbarLayout);
 		m_NoteListUICtrl.initializeSource();
 		//取得TabHost对象
-		mTabHost = getTabHost();
-	    
+		TabHost TabHost = (TabHost)findViewById(android.R.id.tabhost);
+		TabHost.setup();
 		/* 为TabHost添加标签 */
 		//新建一个newTabSpec(newTabSpec)
 		//设置其标签和图标(setIndicator)
@@ -58,9 +56,10 @@ public class ViewList extends TabActivity
 		memotag.setTextSize(25);
 		memotag.setGravity(Gravity.CENTER);*/
 		
+		TabWidget TW = TabHost.getTabWidget();
+		TabSpec specmemo = TabHost.newTabSpec("tab_test1");
 		
-		TabSpec specmemo = mTabHost.newTabSpec("tab_test1");
-		specmemo.setIndicator("");
+		specmemo.setIndicator(composeLayout("备忘",R.drawable.tabmemo));
 		//specmemo.setIndicator("备忘",getResources().getDrawable(R.drawable.tabmemo));
 		specmemo.setContent(R.id.memolist);
 		
@@ -68,25 +67,25 @@ public class ViewList extends TabActivity
 		remindtag.setText("提醒");
 		remindtag.setTextSize(25);
 		remindtag.setGravity(Gravity.CENTER);*/
-		TabSpec specremind = mTabHost.newTabSpec("tab_test2");
-		specremind.setIndicator("");
+		TabSpec specremind = TabHost.newTabSpec("tab_test2");
+		specremind.setIndicator(composeLayout("提醒",R.drawable.tabremind));
 		//specremind.setIndicator("提醒",getResources().getDrawable(R.drawable.tabremind));
 		specremind.setContent(R.id.remindlist);
-	    mTabHost.addTab(specmemo);
-	    mTabHost.addTab(specremind);
+		TabHost.addTab(specmemo);
+	    TabHost.addTab(specremind);
+		//LinearLayout LL = (LinearLayout)mTabHost.getChildAt(0);
+	    /*TabWidget TW = TabHost.getTabWidget();
+		updateWidgetView(TW,0,"备忘", R.drawable.tabmemo);
+	    updateWidgetView(TW,1,"提醒", R.drawable.tabremind);*/
 	    
-	    LinearLayout LL = (LinearLayout)mTabHost.getChildAt(0);
-	    TabWidget TW = (TabWidget)LL.getChildAt(0);
 
-	    updateWidgetView(TW,0,"备忘", R.drawable.tabmemo);
-	    updateWidgetView(TW,1,"提醒", R.drawable.tabremind);
 	    //设置TabHost的背景颜色
 	    //mTabHost.setBackgroundColor(Color.argb(150, 22, 70, 150));
 	    //设置TabHost的背景图片资源
 	    //mTabHost.setBackgroundResource(R.drawable.bg0);
 	    
 	    //设置当前显示哪一个标签
-	    mTabHost.setCurrentTab(0);
+	    TabHost.setCurrentTab(0);
 
 	   	TableLayout TL = (TableLayout) findViewById(R.id.CTL_Title);		
 		TL.setColumnCollapsed(0, true);
@@ -97,6 +96,7 @@ public class ViewList extends TabActivity
 		TL.setColumnStretchable(1, false);	
 		TL.setColumnStretchable(2, true);		
 		TL.setColumnStretchable(3, true);			
+
 
 		Button clBTNewMemo = (Button) findViewById(R.id.B_main_NewMemo);
         clBTNewMemo.setOnClickListener(new Button.OnClickListener(){
@@ -192,11 +192,13 @@ public class ViewList extends TabActivity
 		tv.setGravity(Gravity.CENTER);  
 		tv.setSingleLine(true);  
 		tv.setText(s);  
+		//tv.setTextSize(20);
 		layout.addView(tv,   
 		        new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));  
 		  
 		ImageView iv = new ImageView(this);  
 		iv.setImageResource(i);  
+		iv.setScaleType(ImageView.ScaleType.CENTER);
 		layout.addView(iv,   
 		        new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));  
 		return layout;  

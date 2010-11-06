@@ -1,18 +1,15 @@
 package com.main;
+
 import android.app.Activity;
-import android.app.TabActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TabHost;
-import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.TabHost.TabSpec;
-import android.widget.TableLayout;
 import android.view.Window;
 import android.widget.Button;
 import android.app.AlertDialog;
@@ -23,10 +20,12 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.widget.Toast;
 
+
 public class ViewList extends Activity
 {
 	private NoteListUICtrl m_NoteListUICtrl;
 	private Calendar c;
+
 	CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
 	
 	/** Called when the activity is first created. */
@@ -70,6 +69,7 @@ public class ViewList extends Activity
         		Intent intent = new Intent();
         		intent.setClass(ViewList.this, NoteWithYourMind.class); 
         		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_Intent);
+ 
         		startActivity(intent);
         	}
         });
@@ -93,7 +93,7 @@ public class ViewList extends Activity
 		        		String strFolderNameText = FolderNameText.getText().toString();
 		        		if(strFolderNameText.length()>0){
 		        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-		            		clCMemoInfo.iPreId	=	clCMemoInfo.PreId_Root;
+		            		clCMemoInfo.iPreId	=	CMemoInfo.PreId_Root;
 		            		clCMemoInfo.iType	=	CMemoInfo.Type_Folder;
 		            		clCMemoInfo.iIsRemind	=	CMemoInfo.IsRemind_No;
 

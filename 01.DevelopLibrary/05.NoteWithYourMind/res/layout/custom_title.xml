@@ -11,16 +11,15 @@ android:orientation="horizontal"
 	    android:layout_height="wrap_content"
 			android:drawableLeft="@drawable/clock"
 			android:layout_gravity="center_vertical"
-			android:layout_weight="0"
 			android:singleLine="true"
-	    android:text="碧玺工作室" />
+	    android:text="碧玺工作室"
+	    android:gravity="center_vertical" />
 	<LinearLayout
 	style="@android:style/ButtonBar"
 	android:id="@+id/CTL_Title"
 	android:orientation="horizontal"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:layout_weight="1">
+	android:layout_width="wrap_content"
+	android:layout_height="fill_parent">
 			<Button
 			android:id="@+id/B_main_View"
 			android:layout_width="wrap_content"

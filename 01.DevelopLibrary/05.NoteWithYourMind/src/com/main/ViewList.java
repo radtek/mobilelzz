@@ -14,15 +14,22 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TableLayout;
 import android.view.Window;
 import android.widget.Button;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.view.LayoutInflater;
+import android.widget.EditText;
+import java.util.Calendar;
+import android.widget.Toast;
 
 public class ViewList extends TabActivity
 {
 	private NoteListUICtrl m_NoteListUICtrl;
 	//声明TabHost对象
 	TabHost mTabHost;
-
+	private Calendar c;
+	CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -102,7 +109,62 @@ public class ViewList extends TabActivity
         	}
         });
 
+        Button clBTMemoNewFolder = (Button) findViewById(R.id.B_main_NewFolder);
+		clBTMemoNewFolder.setOnClickListener(new Button.OnClickListener(){
+        	public void onClick(View v)
+        	{  			
+
+			LayoutInflater factory = LayoutInflater.from(ViewList.this);
+			final View DialogView = factory.inflate(R.layout.dialognewfolder, null);
+			
+			AlertDialog clDlgNewFolder = new AlertDialog.Builder(ViewList.this)	
+				.setIcon(R.drawable.clock)
+				.setTitle("请输入文件夹名称")
+				.setView(DialogView)
+				.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int i)
+					{
+		        		EditText FolderNameText = (EditText) findViewById(R.id.foldername_edit);
+		        		String strFolderNameText = FolderNameText.getText().toString();
+		        		if(strFolderNameText.length()>0){
+		        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+		            		clCMemoInfo.iPreId	=	0;
+		            		clCMemoInfo.iType	=	CMemoInfo.Type_Folder;
+		            		clCMemoInfo.iIsRemind	=	CMemoInfo.IsRemind_No;
+
+ 						    c = Calendar.getInstance();
+							clCMemoInfo.dLastModifyTime = c.getTimeInMillis();							
+		            		clCMemoInfo.strDetail	=	strFolderNameText;
+		            		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
+		            		m_clCNoteDBCtrl.Create(clCMemoInfo);     		
+		            		FolderNameText.setText("");
+		            		Toast toast = Toast.makeText(ViewList.this, "保存成功", Toast.LENGTH_SHORT);
+		            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+		            		toast.show();
+		        		}else{
+		        			Toast toast = Toast.makeText(ViewList.this, "请输入文件夹名称", Toast.LENGTH_SHORT);
+		            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+		            		toast.show();
+		        		}
+						dialog.cancel();
+					}
+				})
+				.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int i)
+					{
+						dialog.cancel();
+					}
+				})
+
+				
+				.create();
+
+			clDlgNewFolder.show();      			
+
+        	}
+        });
 		
+
 
 	}
 	

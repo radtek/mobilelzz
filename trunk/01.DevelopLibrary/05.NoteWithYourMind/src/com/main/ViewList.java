@@ -14,21 +14,21 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TableLayout;
 import android.view.Window;
 import android.widget.Button;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.app.AlertDialog;
-import android.content.Intent;
-import android.view.LayoutInflater;
 import android.widget.EditText;
 import java.util.Calendar;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.view.LayoutInflater;
 import android.widget.Toast;
 
 public class ViewList extends TabActivity
 {
 	private NoteListUICtrl m_NoteListUICtrl;
+	private Calendar c;
+	
 	//声明TabHost对象
 	TabHost mTabHost;
-	private Calendar c;
 	CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
 	
 	/** Called when the activity is first created. */
@@ -96,15 +96,14 @@ public class ViewList extends TabActivity
 		TL.setColumnStretchable(0, false);		
 		TL.setColumnStretchable(1, false);	
 		TL.setColumnStretchable(2, true);		
-		TL.setColumnStretchable(3, true);	
+		TL.setColumnStretchable(3, true);			
 
-
-        Button clBTNewMemo = (Button) findViewById(R.id.B_main_NewMemo);
+		Button clBTNewMemo = (Button) findViewById(R.id.B_main_NewMemo);
         clBTNewMemo.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
         		Intent intent = new Intent();
-        		intent.setClass(ViewList.this, NoteWithYourMind.class);
+        		intent.setClass(ViewList.this, NoteWithYourMind.class);       		
         		startActivity(intent);
         	}
         });
@@ -124,11 +123,11 @@ public class ViewList extends TabActivity
 				.setPositiveButton("确定",new DialogInterface.OnClickListener(){
 					public void onClick(DialogInterface dialog, int i)
 					{
-		        		EditText FolderNameText = (EditText) findViewById(R.id.foldername_edit);
+		        		EditText FolderNameText = (EditText) DialogView.findViewById(R.id.foldername_edit);
 		        		String strFolderNameText = FolderNameText.getText().toString();
 		        		if(strFolderNameText.length()>0){
 		        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-		            		clCMemoInfo.iPreId	=	0;
+		            		clCMemoInfo.iPreId	=	clCMemoInfo.PreId_Root;
 		            		clCMemoInfo.iType	=	CMemoInfo.Type_Folder;
 		            		clCMemoInfo.iIsRemind	=	CMemoInfo.IsRemind_No;
 
@@ -136,8 +135,12 @@ public class ViewList extends TabActivity
 							clCMemoInfo.dLastModifyTime = c.getTimeInMillis();							
 		            		clCMemoInfo.strDetail	=	strFolderNameText;
 		            		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
+		            		clCMemoInfo.strPassword = null;
+		            		
 		            		m_clCNoteDBCtrl.Create(clCMemoInfo);     		
 		            		FolderNameText.setText("");
+		            		
+		            		m_NoteListUICtrl.updateListData();
 		            		Toast toast = Toast.makeText(ViewList.this, "保存成功", Toast.LENGTH_SHORT);
 		            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
 		            		toast.show();
@@ -163,8 +166,6 @@ public class ViewList extends TabActivity
 
         	}
         });
-		
-
 
 	}
 	

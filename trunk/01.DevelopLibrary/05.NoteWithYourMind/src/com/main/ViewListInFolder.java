@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TableLayout;
+import android.view.Window;
+import android.widget.Button;
+import android.view.View;
 
 public class ViewListInFolder extends Activity
 {
@@ -19,7 +23,11 @@ public class ViewListInFolder extends Activity
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.folderview);	
+	
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		setContentView(R.layout.folderview);
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+
 		Intent iExtraData = this.getIntent();
 		m_Cur_FolderID = iExtraData.getIntExtra(ExtraData_FolderID, CommonDefine.g_int_Invalid_ID );
 		
@@ -36,6 +44,27 @@ public class ViewListInFolder extends Activity
 		LinearLayout toolbarLayout = (LinearLayout) findViewById(R.id.memolistmenu);
 		m_NoteListUICtrl = new NoteListUICtrl(this, memoList, m_Cur_FolderID, toolbarLayout);
 		m_NoteListUICtrl.initializeSource();
+
+	   	TableLayout TL = (TableLayout) findViewById(R.id.CTL_Title);		
+		TL.setColumnCollapsed(0, true);
+		TL.setColumnCollapsed(1, true);
+		TL.setColumnCollapsed(2, false);
+		TL.setColumnCollapsed(3, true);
+		TL.setColumnStretchable(0, false);		
+		TL.setColumnStretchable(1, false);	
+		TL.setColumnStretchable(2, true);		
+		TL.setColumnStretchable(3, false);	
+
+		Button clBTNewMemo = (Button) findViewById(R.id.B_main_NewMemo);
+        clBTNewMemo.setOnClickListener(new Button.OnClickListener(){
+        	public void onClick(View v)
+        	{
+        		Intent intent = new Intent();
+        		intent.setClass(ViewListInFolder.this, NoteWithYourMind.class);       		
+        		startActivity(intent);
+        	}
+        });
+		
 	}
 	public void onStop()
 	{

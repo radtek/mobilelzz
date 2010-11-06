@@ -60,18 +60,6 @@ public class ViewList extends Activity
 	    
 	    //设置当前显示哪一个标签
 	    TabHost.setCurrentTab(0);
-
-	   	TableLayout TL = (TableLayout) findViewById(R.id.CTL_Title);		
-		TL.setColumnCollapsed(0, true);
-		TL.setColumnCollapsed(1, true);
-		TL.setColumnCollapsed(2, false);
-		TL.setColumnCollapsed(3, false);
-		TL.setColumnStretchable(0, false);		
-		TL.setColumnStretchable(1, false);	
-		TL.setColumnStretchable(2, true);		
-		TL.setColumnStretchable(3, true);			
-
-
 		Button clBTNewMemo = (Button) findViewById(R.id.B_main_NewMemo);
         clBTNewMemo.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)

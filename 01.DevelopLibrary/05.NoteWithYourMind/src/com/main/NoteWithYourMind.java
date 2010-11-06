@@ -164,17 +164,6 @@ public class NoteWithYourMind extends Activity {
         		}
         	}
         });
-
-	   	TableLayout TL = (TableLayout) findViewById(R.id.CTL_Title);		
-		TL.setColumnCollapsed(0, false);
-		TL.setColumnCollapsed(1, false);
-		TL.setColumnCollapsed(2, true);
-		TL.setColumnCollapsed(3, true);
-		TL.setColumnStretchable(0, true);		
-		TL.setColumnStretchable(1, true);	
-		TL.setColumnStretchable(2, false);		
-		TL.setColumnStretchable(3, false);	
-		
     }
     private void UpdateViewStatus(){
     	Cursor curExtraMemo = null;
@@ -189,7 +178,7 @@ public class NoteWithYourMind extends Activity {
     	CheckBox CBRemind = (CheckBox) NoteWithYourMind.this.findViewById(R.id.CB_main_IsWarning);
         Button clBTView = (Button) findViewById(R.id.B_main_View);
     	if(m_ExtraData_NewNoteKind != NewNoteKindEnum.NewNoteKind_Unknown){
-    		clBTView.setVisibility(View.INVISIBLE);
+    		clBTView.setVisibility(View.GONE);
     	}else{
     		clBTView.setVisibility(View.VISIBLE);
     	}

@@ -46,43 +46,17 @@ public class ViewList extends Activity
 		m_NoteListUICtrl.initializeSource();
 		//取得TabHost对象
 		TabHost TabHost = (TabHost)findViewById(android.R.id.tabhost);
-		TabHost.setup();
-		/* 为TabHost添加标签 */
-		//新建一个newTabSpec(newTabSpec)
-		//设置其标签和图标(setIndicator)
-		//设置内容(setContent)
-		/*TextView memotag = new TextView(ViewList.this);
-		memotag.setText("备忘");
-		memotag.setTextSize(25);
-		memotag.setGravity(Gravity.CENTER);*/
-		
-		TabWidget TW = TabHost.getTabWidget();
+		TabHost.setup();	
 		TabSpec specmemo = TabHost.newTabSpec("tab_test1");
 		
 		specmemo.setIndicator(composeLayout("备忘",R.drawable.tabmemo));
-		//specmemo.setIndicator("备忘",getResources().getDrawable(R.drawable.tabmemo));
 		specmemo.setContent(R.id.memolist);
 		
-		/*TextView remindtag = new TextView(ViewList.this);
-		remindtag.setText("提醒");
-		remindtag.setTextSize(25);
-		remindtag.setGravity(Gravity.CENTER);*/
 		TabSpec specremind = TabHost.newTabSpec("tab_test2");
 		specremind.setIndicator(composeLayout("提醒",R.drawable.tabremind));
-		//specremind.setIndicator("提醒",getResources().getDrawable(R.drawable.tabremind));
 		specremind.setContent(R.id.remindlist);
 		TabHost.addTab(specmemo);
 	    TabHost.addTab(specremind);
-		//LinearLayout LL = (LinearLayout)mTabHost.getChildAt(0);
-	    /*TabWidget TW = TabHost.getTabWidget();
-		updateWidgetView(TW,0,"备忘", R.drawable.tabmemo);
-	    updateWidgetView(TW,1,"提醒", R.drawable.tabremind);*/
-	    
-
-	    //设置TabHost的背景颜色
-	    //mTabHost.setBackgroundColor(Color.argb(150, 22, 70, 150));
-	    //设置TabHost的背景图片资源
-	    //mTabHost.setBackgroundResource(R.drawable.bg0);
 	    
 	    //设置当前显示哪一个标签
 	    TabHost.setCurrentTab(0);
@@ -172,41 +146,23 @@ public class ViewList extends Activity
 	public void onStop()
 	{
 		super.onStop();
-		//m_NoteListUICtrl.releaseSource();
-		//m_NoteListUICtrl = null;
-		//mTabHost = null;
 	}
 	public void onDestroy()
 	{
 		super.onDestroy();
 		m_NoteListUICtrl.releaseSource();
 		m_NoteListUICtrl = null;
-		mTabHost = null;
 	}
 	
-	public View composeLayout(String s, int i){  
-		LinearLayout layout = new LinearLayout(this);  
-		layout.setOrientation(LinearLayout.VERTICAL);  
-		  
-		TextView tv = new TextView(this);  
-		tv.setGravity(Gravity.CENTER);  
-		tv.setSingleLine(true);  
+	public View composeLayout(String s, int i){
+		LayoutInflater factory = LayoutInflater.from(this);
+		LinearLayout layout = (LinearLayout)factory.inflate(R.layout.tabwidgetview, null, false); 
+		TextView tv = (TextView)layout.findViewById(R.id.tabindicatorview_text);  
 		tv.setText(s);  
-		//tv.setTextSize(20);
-		layout.addView(tv,   
-		        new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));  
-		  
-		ImageView iv = new ImageView(this);  
+		ImageView iv = (ImageView)layout.findViewById(R.id.tabindicatorview_image);  
 		iv.setImageResource(i);  
 		iv.setScaleType(ImageView.ScaleType.CENTER);
-		layout.addView(iv,   
-		        new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));  
 		return layout;  
 	}  
-	public void updateWidgetView(TabWidget TW, int i, String text, int image){  
-        RelativeLayout rl =(RelativeLayout)TW.getChildAt(i);  
-          
-        rl.addView(composeLayout(text,image));  
-    }  
 
 }

@@ -39,10 +39,10 @@ class NoteListUICtrl{
 	private MoveIn_State m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
 	
 	private AlertDialog m_dlgFolderList;
-	private ListView m_targetList;
+	public ListView m_targetList;
 	private int m_iPreID = CommonDefine.g_int_Invalid_ID;
 	private LinearLayout m_toolBarLayout;
-	private Activity m_sourceManager;
+	public Activity m_sourceManager;
 	private NoteListCursorAdapter m_myAdapter;
 
 	//private String m_strPassWord;

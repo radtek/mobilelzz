@@ -10,6 +10,8 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 import android.widget.Button;
 import android.app.AlertDialog;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import android.content.DialogInterface;
 import android.widget.EditText;
@@ -18,6 +20,21 @@ import android.widget.Toast;
 import android.widget.ImageButton;
 
 public class NoteListCursorAdapter extends CursorAdapter {
+	public class CursorDataHolder{
+		View btFolder;
+		View btEncode;
+		int iItemPos;
+		boolean bCheckedStatus;
+		int iDBID;
+		CursorDataHolder(){
+			btFolder = null;
+			btEncode = null;
+			iItemPos = CommonDefine.g_int_Invalid_ID;
+			iDBID = CommonDefine.g_int_Invalid_ID;
+			bCheckedStatus = false;
+		}
+	}
+	private ArrayList<CursorDataHolder> m_CursorDataHolder;
 	private boolean m_isSelectableStyle = false;
 	private boolean m_isFolderSelectable = true;
 	private Context m_context;
@@ -25,13 +42,19 @@ public class NoteListCursorAdapter extends CursorAdapter {
 	private Cursor m_cursor;
 	private Calendar m_c;
 	private CNoteDBCtrl m_clCNoteDBCtrl;
-	//private String  m_strPassWord;
 	
-	public NoteListCursorAdapter(Context context, Cursor c) {
+	private View m_DialogView;
+	private NoteListUICtrl m_NoteListUICtrl;
+	//private String  m_strPassWord;
+	private int m_DBId2BeEdited = CommonDefine.g_int_Invalid_ID;
+	
+	public NoteListCursorAdapter(Context context, Cursor c, NoteListUICtrl NoteListUICtrl) {
 		super(context, c);
 		m_context = context;
 		m_inflater = LayoutInflater.from(context);
 		m_cursor = c;
+		m_NoteListUICtrl = NoteListUICtrl;
+		m_CursorDataHolder = new ArrayList<CursorDataHolder>();
 	}
  
 	@Override
@@ -82,32 +105,33 @@ public class NoteListCursorAdapter extends CursorAdapter {
 
 			}
 		}	
+		Button clBTFolder=null;
+		Button  clBTLockIf=null;		
 		if(iTypeValue == CMemoInfo.Type_Folder){
-			Button clBTFolder = (Button) v.findViewById(R.id.B_FolderItem_FolderIcon);
+			clBTFolder = (Button) v.findViewById(R.id.B_FolderItem_FolderIcon);
 			//clBTFolder.setBackgroundColor(Color.argb(0, 0, 0, 0));
 	        clBTFolder.setOnClickListener(new Button.OnClickListener(){
 	        	public void onClick(View v)
 	        	{		
-					final View DialogView = m_inflater.inflate(R.layout.dialognewfolder, null);
-					
+	        		m_DBId2BeEdited = findDBIdByFolderButton(v);
+	        		m_DialogView = m_inflater.inflate(R.layout.dialognewfolder, null);
 					AlertDialog clDlgNewFolder = new AlertDialog.Builder(m_context)	
 						.setIcon(R.drawable.clock)
 						.setTitle("请编辑文件夹名称")
-						.setView(DialogView)
+						.setView(m_DialogView)
 						.setPositiveButton("确定",new DialogInterface.OnClickListener(){
 							public void onClick(DialogInterface dialog, int i)
 							{
-								int Index = m_cursor.getColumnIndex(CNoteDBCtrl.KEY_id);
-								int iIDValue = m_cursor.getInt(Index);
-								
-								EditText FolderNameText = (EditText) DialogView.findViewById(R.id.foldername_edit);
+								EditText FolderNameText = (EditText) m_DialogView.findViewById(R.id.foldername_edit);
 				        		String strFolderNameText = FolderNameText.getText().toString();
 				        		if(strFolderNameText.length()>0){
 				        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
 		 						    m_c = Calendar.getInstance();
 									clCMemoInfo.dLastModifyTime = m_c.getTimeInMillis();							
 				            		clCMemoInfo.strDetail	=	strFolderNameText;
-				            		m_clCNoteDBCtrl.Update(iIDValue,clCMemoInfo);     		
+				            		m_clCNoteDBCtrl.Update(m_DBId2BeEdited,clCMemoInfo); 
+				            		m_NoteListUICtrl.updateListData();
+				            		m_DBId2BeEdited = CommonDefine.g_int_Invalid_ID;
 				            		FolderNameText.setText("");
 
 				            		Toast toast = Toast.makeText(m_context, "保存成功", Toast.LENGTH_SHORT);
@@ -132,11 +156,8 @@ public class NoteListCursorAdapter extends CursorAdapter {
 	        	}   
 			});
 
-
 			int Index = cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
 			int iEncodeValue = cursor.getInt(Index);
-
-			Button  clBTLockIf;			
 			if(iEncodeValue == CMemoInfo.IsEncode_Yes){
 				clBTLockIf = (Button)  v.findViewById(R.id.B_FolderItem_LockIcon);
 				clBTLockIf.setBackgroundResource(R.drawable.itemicon_lock);
@@ -148,24 +169,37 @@ public class NoteListCursorAdapter extends CursorAdapter {
 	        clBTLockIf.setOnClickListener(new Button.OnClickListener(){
         		public void onClick(View v)
 	        	{
-					int Index = m_cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
-					int iEncodeValue = m_cursor.getInt(Index);
-					
+        			m_DBId2BeEdited = findDBIdByEncodeButton(v);
+        			int iEncodeValue=CMemoInfo.IsEncode_Invalid;
+        			Cursor cur = m_clCNoteDBCtrl.getMemoRec(m_DBId2BeEdited);
+        			if(cur!=null){
+        				cur.moveToFirst();
+        				int Index = cur.getColumnIndex(CNoteDBCtrl.KEY_isencode);
+    					iEncodeValue = cur.getInt(Index);
+        			}
+        			cur = null;
 					if(iEncodeValue == CMemoInfo.IsEncode_Yes){
 	
-						final View DialogView = m_inflater.inflate(R.layout.dialog_encodesetting, null);
+						m_DialogView = m_inflater.inflate(R.layout.dialog_encodesetting, null);
 						
 						AlertDialog clDlgNewFolder = new AlertDialog.Builder(m_context)	
 							.setIcon(R.drawable.clock)
 							.setTitle("取消加密请输入密码")
-							.setView(DialogView)
+							.setView(m_DialogView)
 							.setPositiveButton("确定",new DialogInterface.OnClickListener(){
 								public void onClick(DialogInterface dialog, int i)
 								{
-					        		EditText PassWord = (EditText) DialogView.findViewById(R.id.ET_passwordsetting);
+					        		EditText PassWord = (EditText) m_DialogView.findViewById(R.id.ET_encodesetting);
 					        		String strPassWord = PassWord.getText().toString();
 					        		if(strPassWord.length()>0){
 										if(strPassWord.equals(CommonDefine.g_str_PassWord)){
+											CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+				 						    m_c = Calendar.getInstance();
+											clCMemoInfo.dLastModifyTime = m_c.getTimeInMillis();							
+						            		clCMemoInfo.iIsEncode	=	CMemoInfo.IsEncode_No;
+						            		m_clCNoteDBCtrl.Update(m_DBId2BeEdited,clCMemoInfo);     		
+						            		m_DBId2BeEdited = CommonDefine.g_int_Invalid_ID;
+						            		m_NoteListUICtrl.updateListData();
 						            		Toast toast = Toast.makeText(m_context, "加密已取消", Toast.LENGTH_SHORT);
 						            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
 						            		toast.show();
@@ -197,15 +231,13 @@ public class NoteListCursorAdapter extends CursorAdapter {
 							.setPositiveButton("确定",new DialogInterface.OnClickListener(){
 								public void onClick(DialogInterface dialog, int i)
 								{
-									int Index = m_cursor.getColumnIndex(CNoteDBCtrl.KEY_id);
-									int iIDValue = m_cursor.getInt(Index);
-									
 				        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
 		 						    m_c = Calendar.getInstance();
 									clCMemoInfo.dLastModifyTime = m_c.getTimeInMillis();							
 				            		clCMemoInfo.iIsEncode	=	CMemoInfo.IsEncode_Yes;
-				            		m_clCNoteDBCtrl.Update(iIDValue,clCMemoInfo);     		
-
+				            		m_clCNoteDBCtrl.Update(m_DBId2BeEdited,clCMemoInfo);     		
+				            		m_DBId2BeEdited = CommonDefine.g_int_Invalid_ID;
+				            		m_NoteListUICtrl.updateListData();
 				            		Toast toast = Toast.makeText(m_context, "已设置为加密文件夹", Toast.LENGTH_SHORT);
 				            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
 				            		toast.show();
@@ -229,7 +261,13 @@ public class NoteListCursorAdapter extends CursorAdapter {
 		}else{	
 			
 		}
-		
+		CursorDataHolder clHolder = new CursorDataHolder();
+		clHolder.btFolder = (View)clBTFolder;
+		clHolder.btEncode = (View)clBTLockIf;
+		int iIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_id);
+		int iValue = cursor.getInt(iIndex);
+		clHolder.iDBID = iValue;
+		m_CursorDataHolder.add(clHolder);
 		return v;
 	}
 	
@@ -249,5 +287,26 @@ public class NoteListCursorAdapter extends CursorAdapter {
 	/*public void TransforPassWord(String strPassWord){
 		m_strPassWord = strPassWord;
 	}*/
-
+	private int findDBIdByFolderButton(View v2BeFinded){
+		int iDBId = CommonDefine.g_int_Invalid_ID;
+		int iCount = m_CursorDataHolder.size();
+		for(int i = 0; i < iCount; i++){
+			CursorDataHolder clHolder = m_CursorDataHolder.get(i);
+			if(clHolder.btFolder == v2BeFinded){
+				iDBId = clHolder.iDBID;
+			}
+		}
+		return iDBId;
+	}
+	private int findDBIdByEncodeButton(View v2BeFinded){
+		int iDBId = CommonDefine.g_int_Invalid_ID;
+		int iCount = m_CursorDataHolder.size();
+		for(int i = 0; i < iCount; i++){
+			CursorDataHolder clHolder = m_CursorDataHolder.get(i);
+			if(clHolder.btEncode == v2BeFinded){
+				iDBId = clHolder.iDBID;
+			}
+		}
+		return iDBId;
+	}
 }

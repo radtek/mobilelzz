@@ -8,6 +8,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.text.TextPaint;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 class NoteListUICtrl{
@@ -162,22 +165,33 @@ class NoteListUICtrl{
         			if(m_iPreID!=CMemoInfo.PreId_Root){
         				TextView tvRootFolder = new TextView(m_sourceManager);
         				tvRootFolder.setText("根目录");
+        				tvRootFolder.setPadding(2, 0, 0, 0);
         				tvRootFolder.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
         				tvRootFolder.setHeight(CommonDefine.g_int_ListItemHeight);
+        				tvRootFolder.setTextColor(Color.WHITE);       				
+        				TextPaint tp = tvRootFolder.getPaint(); 
+        				tp.setFakeBoldText(true); 
         				folderList.addHeaderView(tvRootFolder);
         			}
         			Cursor cursorFolderList	=	m_clCNoteDBCtrl.getFolderInRoot();
-        			m_sourceManager.startManagingCursor(cursorFolderList);
-        			if(cursorFolderList!=null){
-        				ListAdapter LA_FolderList = new SimpleCursorAdapter(
-        						m_sourceManager,
-        						android.R.layout.simple_list_item_1,
-        						cursorFolderList,
-        						new String[]{CNoteDBCtrl.KEY_detail},
-        						new int[]{android.R.id.text1}
-        						);
-        				folderList.setAdapter(LA_FolderList);
-        			} 
+        			if(cursorFolderList.getCount()>0){
+        				m_sourceManager.startManagingCursor(cursorFolderList);
+            			if(cursorFolderList!=null){
+            				ListAdapter LA_FolderList = new SimpleCursorAdapter(
+            						m_sourceManager,
+            						android.R.layout.simple_list_item_1,
+            						cursorFolderList,
+            						new String[]{CNoteDBCtrl.KEY_detail},
+            						new int[]{android.R.id.text1}
+            						);
+            				folderList.setAdapter(LA_FolderList);
+            			} 
+        			}else{
+        				Toast toast = Toast.makeText(m_sourceManager, "当前没有可以移动到的文件夹\n请先建立文件夹", Toast.LENGTH_LONG);
+	            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+	            		toast.show();
+        			}
+        			
         			folderList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
         				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3){
         					ListAdapter LA = (ListAdapter)arg0.getAdapter();

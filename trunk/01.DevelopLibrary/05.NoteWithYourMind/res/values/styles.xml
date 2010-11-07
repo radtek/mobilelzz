@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<style name="NoteTitle" parent="android:WindowTitle">
+	<style name="NoteTitle" parent="android:Theme">
 	     <item name="android:windowTitleSize">64dp</item>
 	</style>
 </resources>

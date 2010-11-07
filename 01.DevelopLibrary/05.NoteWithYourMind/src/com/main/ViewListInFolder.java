@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -51,7 +52,7 @@ public class ViewListInFolder extends Activity
 		m_NoteListUICtrl = new NoteListUICtrl(this, memoList, m_Cur_FolderID, toolbarLayout);
 		m_NoteListUICtrl.initializeSource();
 
-		Button clBTNewMemo = (Button) findViewById(R.id.B_main_NewMemo);
+		ImageButton clBTNewMemo = (ImageButton) findViewById(R.id.B_main_NewMemo);
         clBTNewMemo.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{

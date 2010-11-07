@@ -2,6 +2,7 @@ package com.main;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,7 @@ public class NoteListCursorAdapter extends CursorAdapter {
 						v = m_inflater.inflate(R.layout.memolistitemfolder, parent, false);		
 					}					
 				}else{
-						v = m_inflater.inflate(R.layout.memolistitem, parent, false);
+						v = m_inflater.inflate(R.layout.memolistitemselect, parent, false);
 				}
 
 			}else{
@@ -83,69 +84,53 @@ public class NoteListCursorAdapter extends CursorAdapter {
 
 			}
 		}	
-
-
-		// 
-
 		if(iTypeValue == CMemoInfo.Type_Folder){
-
-
-
-
-			
-//			tv.setCompoundDrawables(null, null, null, null);
-			Button clBTFolder = (Button) v.findViewById(R.id.B_FolderItem_FolderIcon);
+			ImageButton clBTFolder = (ImageButton) v.findViewById(R.id.B_FolderItem_FolderIcon);
+			//clBTFolder.setBackgroundColor(Color.argb(0, 0, 0, 0));
 	        clBTFolder.setOnClickListener(new Button.OnClickListener(){
 	        	public void onClick(View v)
-	        	{
-						{  			
-							final View DialogView = m_inflater.inflate(R.layout.dialognewfolder, null);
-							
-							AlertDialog clDlgNewFolder = new AlertDialog.Builder(m_context)	
-								.setIcon(R.drawable.clock)
-								.setTitle("请编辑文件夹名称")
-								.setView(DialogView)
-								.setPositiveButton("确定",new DialogInterface.OnClickListener(){
-									public void onClick(DialogInterface dialog, int i)
-									{
-										int Index = m_cursor.getColumnIndex(CNoteDBCtrl.KEY_id);
-										int iIDValue = m_cursor.getInt(Index);
-										
-										EditText FolderNameText = (EditText) DialogView.findViewById(R.id.foldername_edit);
-						        		String strFolderNameText = FolderNameText.getText().toString();
-						        		if(strFolderNameText.length()>0){
-						        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-				 						    m_c = Calendar.getInstance();
-											clCMemoInfo.dLastModifyTime = m_c.getTimeInMillis();							
-						            		clCMemoInfo.strDetail	=	strFolderNameText;
-						            		m_clCNoteDBCtrl.Update(iIDValue,clCMemoInfo);     		
-						            		FolderNameText.setText("");
-
-						            		Toast toast = Toast.makeText(m_context, "保存成功", Toast.LENGTH_SHORT);
-						            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-						            		toast.show();
-						        		}else{
-						        			Toast toast = Toast.makeText(m_context, "请输入文件夹名称", Toast.LENGTH_SHORT);
-						            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-						            		toast.show();
-						        		}
-										dialog.cancel();
-									}
-								})
-								.setNegativeButton("取消",new DialogInterface.OnClickListener(){
-									public void onClick(DialogInterface dialog, int i)
-									{
-										dialog.cancel();
-									}
-								})
-
+	        	{		
+					final View DialogView = m_inflater.inflate(R.layout.dialognewfolder, null);
+					
+					AlertDialog clDlgNewFolder = new AlertDialog.Builder(m_context)	
+						.setIcon(R.drawable.clock)
+						.setTitle("请编辑文件夹名称")
+						.setView(DialogView)
+						.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+							public void onClick(DialogInterface dialog, int i)
+							{
+								int Index = m_cursor.getColumnIndex(CNoteDBCtrl.KEY_id);
+								int iIDValue = m_cursor.getInt(Index);
 								
-								.create();
+								EditText FolderNameText = (EditText) DialogView.findViewById(R.id.foldername_edit);
+				        		String strFolderNameText = FolderNameText.getText().toString();
+				        		if(strFolderNameText.length()>0){
+				        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+		 						    m_c = Calendar.getInstance();
+									clCMemoInfo.dLastModifyTime = m_c.getTimeInMillis();							
+				            		clCMemoInfo.strDetail	=	strFolderNameText;
+				            		m_clCNoteDBCtrl.Update(iIDValue,clCMemoInfo);     		
+				            		FolderNameText.setText("");
 
-							clDlgNewFolder.show();      			
-
-				        	}
-
+				            		Toast toast = Toast.makeText(m_context, "保存成功", Toast.LENGTH_SHORT);
+				            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+				            		toast.show();
+				        		}else{
+				        			Toast toast = Toast.makeText(m_context, "请输入文件夹名称", Toast.LENGTH_SHORT);
+				            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+				            		toast.show();
+				        		}
+								dialog.cancel();
+							}
+						})
+						.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+							public void onClick(DialogInterface dialog, int i)
+							{
+								dialog.cancel();
+							}
+						})
+						.create();
+						clDlgNewFolder.show();      			
 	        	}   
 			});
 
@@ -155,115 +140,95 @@ public class NoteListCursorAdapter extends CursorAdapter {
 
 			ImageButton  clBTLockIf;			
 			if(iEncodeValue == CMemoInfo.IsEncode_Yes){
-
 				clBTLockIf = (ImageButton)  v.findViewById(R.id.B_FolderItem_LockIcon);
-				clBTLockIf.setImageResource(R.drawable.btn_lock);
-
+				clBTLockIf.setImageResource(R.drawable.itemicon_lock);
 			}else{
 				clBTLockIf = (ImageButton)  v.findViewById(R.id.B_FolderItem_LockIcon);
-				clBTLockIf.setImageResource(R.drawable.btn_unlock);
+				clBTLockIf.setImageResource(R.drawable.itemicon_unlock);
 			}	
-
+			//clBTLockIf.setBackgroundColor(Color.argb(0, 0, 0, 0));
 	        clBTLockIf.setOnClickListener(new Button.OnClickListener(){
         		public void onClick(View v)
 	        	{
-
-						int Index = m_cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
-						int iEncodeValue = m_cursor.getInt(Index);
-						
-						if(iEncodeValue == CMemoInfo.IsEncode_Yes){
-		
-							final View DialogView = m_inflater.inflate(R.layout.dialog_encodesetting, null);
-							
-							AlertDialog clDlgNewFolder = new AlertDialog.Builder(m_context)	
-								.setIcon(R.drawable.clock)
-								.setTitle("取消加密请输入密码")
-								.setView(DialogView)
-								.setPositiveButton("确定",new DialogInterface.OnClickListener(){
-									public void onClick(DialogInterface dialog, int i)
-									{
-							        		EditText PassWord = (EditText) DialogView.findViewById(R.id.ET_passwordsetting);
-							        		String strPassWord = PassWord.getText().toString();
-							        		if(strPassWord.length()>0){
+					int Index = m_cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
+					int iEncodeValue = m_cursor.getInt(Index);
+					
+					if(iEncodeValue == CMemoInfo.IsEncode_Yes){
 	
-												if(strPassWord.equals(m_strPassWord)){
-								            		Toast toast = Toast.makeText(m_context, "加密已取消", Toast.LENGTH_SHORT);
-								            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-								            		toast.show();
+						final View DialogView = m_inflater.inflate(R.layout.dialog_encodesetting, null);
+						
+						AlertDialog clDlgNewFolder = new AlertDialog.Builder(m_context)	
+							.setIcon(R.drawable.clock)
+							.setTitle("取消加密请输入密码")
+							.setView(DialogView)
+							.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+								public void onClick(DialogInterface dialog, int i)
+								{
+					        		EditText PassWord = (EditText) DialogView.findViewById(R.id.ET_passwordsetting);
+					        		String strPassWord = PassWord.getText().toString();
+					        		if(strPassWord.length()>0){
 
-												}else{
-								        			Toast toast = Toast.makeText(m_context, "密码错误!请重新输入", Toast.LENGTH_SHORT);
-								            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-								            		toast.show();
-												}
+										if(strPassWord.equals(m_strPassWord)){
+						            		Toast toast = Toast.makeText(m_context, "加密已取消", Toast.LENGTH_SHORT);
+						            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+						            		toast.show();
 
-							        		}else{
-							        			Toast toast = Toast.makeText(m_context, "请输入私人密码", Toast.LENGTH_SHORT);
-							            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-							            		toast.show();
-							        		}
-											dialog.cancel();
-									}
-								})
-								.setNegativeButton("取消",new DialogInterface.OnClickListener(){
-									public void onClick(DialogInterface dialog, int i)
-									{
-										dialog.cancel();
-									}
-								})
+										}else{
+						        			Toast toast = Toast.makeText(m_context, "密码错误!请重新输入", Toast.LENGTH_SHORT);
+						            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+						            		toast.show();
+										}
 
-								
-								.create();
-
-							clDlgNewFolder.show();      							       
-
-
-						}else{
-							
-							AlertDialog clDlgNewFolder = new AlertDialog.Builder(m_context)	
-								.setIcon(R.drawable.clock)
-								.setTitle("设置为加密文件夹")
-								.setPositiveButton("确定",new DialogInterface.OnClickListener(){
-									public void onClick(DialogInterface dialog, int i)
-									{
-										int Index = m_cursor.getColumnIndex(CNoteDBCtrl.KEY_id);
-										int iIDValue = m_cursor.getInt(Index);
-										
-					        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-			 						    m_c = Calendar.getInstance();
-										clCMemoInfo.dLastModifyTime = m_c.getTimeInMillis();							
-					            		clCMemoInfo.iIsEncode	=	CMemoInfo.IsEncode_Yes;
-					            		m_clCNoteDBCtrl.Update(iIDValue,clCMemoInfo);     		
-
-					            		Toast toast = Toast.makeText(m_context, "已设置为加密文件夹", Toast.LENGTH_SHORT);
+					        		}else{
+					        			Toast toast = Toast.makeText(m_context, "请输入私人密码", Toast.LENGTH_SHORT);
 					            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
 					            		toast.show();
+					        		}
+									dialog.cancel();
+								}
+							})
+							.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+								public void onClick(DialogInterface dialog, int i)
+								{
+									dialog.cancel();
+								}
+							})					
+							.create();
+						clDlgNewFolder.show();      							       
+					}else{
+						AlertDialog clDlgNewFolder = new AlertDialog.Builder(m_context)	
+							.setIcon(R.drawable.clock)
+							.setTitle("设置为加密文件夹")
+							.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+								public void onClick(DialogInterface dialog, int i)
+								{
+									int Index = m_cursor.getColumnIndex(CNoteDBCtrl.KEY_id);
+									int iIDValue = m_cursor.getInt(Index);
+									
+				        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+		 						    m_c = Calendar.getInstance();
+									clCMemoInfo.dLastModifyTime = m_c.getTimeInMillis();							
+				            		clCMemoInfo.iIsEncode	=	CMemoInfo.IsEncode_Yes;
+				            		m_clCNoteDBCtrl.Update(iIDValue,clCMemoInfo);     		
 
-										dialog.cancel();
-	
-									}
-								})
-								.setNegativeButton("取消",new DialogInterface.OnClickListener(){
-									public void onClick(DialogInterface dialog, int i)
-									{
-										dialog.cancel();
-									}
-								})
+				            		Toast toast = Toast.makeText(m_context, "已设置为加密文件夹", Toast.LENGTH_SHORT);
+				            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+				            		toast.show();
 
-								
-								.create();
-
-							clDlgNewFolder.show();     
-
-						}						
-
+									dialog.cancel();
+								}
+							})
+							.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+								public void onClick(DialogInterface dialog, int i)
+								{
+									dialog.cancel();
+								}
+							})		
+							.create();
+						clDlgNewFolder.show();     
+					}						
 	        	}
-
-
 		    });
-			
-
-
 		}else if(iTypeValue == CMemoInfo.Type_Memo){
 			
 		}else{	

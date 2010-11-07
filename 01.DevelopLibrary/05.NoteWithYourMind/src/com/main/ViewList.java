@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TabHost;
+import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.TabHost.TabSpec;
 import android.view.Window;
@@ -49,6 +51,8 @@ public class ViewList extends Activity
 		//取得TabHost对象
 		TabHost TabHost = (TabHost)findViewById(android.R.id.tabhost);
 		TabHost.setup();	
+		TabWidget tw = TabHost.getTabWidget();
+		//tw.setDividerDrawable(android.R.drawable.divider_horizontal_bright);
 		TabSpec specmemo = TabHost.newTabSpec("tab_test1");
 		
 		specmemo.setIndicator(composeLayout("备忘",R.drawable.tabmemo));
@@ -62,7 +66,7 @@ public class ViewList extends Activity
 	    
 	    //设置当前显示哪一个标签
 	    TabHost.setCurrentTab(0);
-		Button clBTNewMemo = (Button) findViewById(R.id.B_main_NewMemo);
+	    ImageButton clBTNewMemo = (ImageButton) findViewById(R.id.B_main_NewMemo);
         clBTNewMemo.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
@@ -74,7 +78,7 @@ public class ViewList extends Activity
         	}
         });
 
-        Button clBTMemoNewFolder = (Button) findViewById(R.id.B_main_NewFolder);
+        ImageButton clBTMemoNewFolder = (ImageButton) findViewById(R.id.B_main_NewFolder);
 		clBTMemoNewFolder.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{  			

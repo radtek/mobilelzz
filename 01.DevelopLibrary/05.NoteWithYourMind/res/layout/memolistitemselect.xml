@@ -22,7 +22,7 @@
       android:ellipsize = "end"
       android:gravity="center|left"
       android:textSize="25sp"
-	  android:drawableLeft="@drawable/clock"
+	  android:drawableLeft="@drawable/itemicon_memo"
 	  android:drawablePadding="3dip"
       android:background="#00000000"
       android:textColor="#000000"

@@ -22,9 +22,9 @@
 	android:id="@+id/main_bottombar"
 	android:orientation="horizontal"
 	android:layout_width="fill_parent"
-	android:layout_height="70dp"
+	android:layout_height="64dp"
 	android:layout_alignParentBottom="true">
-			<Button
+			<ImageButton
 			android:id="@+id/B_main_View"
 			android:layout_width="wrap_content"
 			android:layout_height="fill_parent"
@@ -35,9 +35,10 @@
 			android:layout_marginLeft="3dip"
 			android:layout_marginRight="3dip"
 			android:gravity="center"
-			android:background="@drawable/buttonviewlist">
-			</Button>
-			<Button
+			android:src="@drawable/buttonviewlist"
+			android:scaleType="center">
+			</ImageButton>
+			<ImageButton
 			android:id="@+id/B_main_Save"
 			android:layout_width="wrap_content"
 			android:layout_height="fill_parent"
@@ -48,8 +49,9 @@
 			android:layout_marginLeft="3dip"
 			android:layout_marginRight="3dip"
 			android:gravity="center"
-			android:background="@drawable/buttonsave">
-			</Button>
+			android:src="@drawable/buttonsave"
+			android:scaleType="center">
+			</ImageButton>
 	</LinearLayout>
 	<EditText
 		android:id="@+id/ET_main_Memo"

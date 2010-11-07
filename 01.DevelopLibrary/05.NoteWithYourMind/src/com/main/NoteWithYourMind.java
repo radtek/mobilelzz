@@ -32,6 +32,7 @@ import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.view.View;
@@ -128,7 +129,7 @@ public class NoteWithYourMind extends Activity {
         });
 
         c = Calendar.getInstance();
-        Button clBTSave = (Button) findViewById(R.id.B_main_Save);
+        ImageButton clBTSave = (ImageButton) findViewById(R.id.B_main_Save);
         clBTSave.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
@@ -148,7 +149,7 @@ public class NoteWithYourMind extends Activity {
         	}
         });
         
-        Button clBTView = (Button) findViewById(R.id.B_main_View);
+        ImageButton clBTView = (ImageButton) findViewById(R.id.B_main_View);
         clBTView.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
@@ -180,12 +181,12 @@ public class NoteWithYourMind extends Activity {
         });
     }
     private void UpdateViewStatus(){
-/*    	Button btViewList = (Button)findViewById(R.id.B_main_View);
+    	ImageButton btViewList = (ImageButton)findViewById(R.id.B_main_View);
     	if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown){
     		btViewList.setVisibility(View.VISIBLE);
     	}else{
     		btViewList.setVisibility(View.GONE);
-    	}*/
+    	}
     	if(m_ExtraData_MemoID!=CMemoInfo.Id_Invalid){
     		Cursor curExtraMemo = m_clCNoteDBCtrl.getMemoRec(m_ExtraData_MemoID);
         	startManagingCursor(curExtraMemo);

@@ -11,7 +11,9 @@ android:layout_height="fill_parent">
 		<TabWidget
 		android:id="@android:id/tabs"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content" 
+    android:layout_height="wrap_content"
+    android:divider="#FF0000" 
+    android:dividerHeight="2dip" 
     />
 		<FrameLayout
 		android:id="@android:id/tabcontent"

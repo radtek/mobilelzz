@@ -75,8 +75,8 @@ public class NoteWithYourMind extends Activity {
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.main);
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
-        Button btNewMemo = (Button)findViewById(R.id.B_main_NewMemo);
-		Button btNewFolder = (Button)findViewById(R.id.B_main_NewFolder);
+        ImageButton btNewMemo = (ImageButton)findViewById(R.id.B_main_NewMemo);
+        ImageButton btNewFolder = (ImageButton)findViewById(R.id.B_main_NewFolder);
 		btNewMemo.setVisibility(View.GONE);
 		btNewFolder.setVisibility(View.GONE);
 		

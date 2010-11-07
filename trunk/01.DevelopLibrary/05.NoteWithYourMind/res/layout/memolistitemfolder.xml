@@ -7,9 +7,10 @@
       android:id="@+id/B_FolderItem_FolderIcon"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+	  android:background="@drawable/btn_folder"
       android:layout_alignParentLeft = "true"
       android:layout_centerVertical="true"  />
-    <Button
+    <ImageButton
       android:id="@+id/B_FolderItem_LockIcon"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -20,12 +21,11 @@
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:layout_centerVertical="true"
-      android:layout_toLeftOf="@id/B_FolderItem_FolderIcon"
+      android:layout_toRightOf="@id/B_FolderItem_FolderIcon"
       android:singleLine = "true"
       android:ellipsize = "end"
       android:gravity="center|left"
       android:textSize="25sp"
-	  android:drawableLeft="@drawable/clock"
 	  android:drawablePadding="3dip"
       android:background="#00000000"
       android:textColor="#000000"

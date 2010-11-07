@@ -24,10 +24,10 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	private static final String	DB_NAME			= "NoteWithYourMind.db";
 	
 	// 数据库表名
-	private static final String	DB_TABLE		= "Notes";
-	
+	private static final String	DB_TABLE				= "Notes";
+	private static final String	DB_TABLE_PassWord		= "PassWord";
 	// 数据库版本
-	private static final int	DB_VERSION		= 6;
+	private static final int	DB_VERSION		= 2;
 	
 	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" + KEY_id + " INTEGER PRIMARY KEY AUTOINCREMENT," + 
 		KEY_preid + " INTERGER,"+ KEY_type + " INTERGER," + KEY_isremind + " INTERGER," + KEY_remindtime + " double," + KEY_createtime + " double,"+
@@ -37,7 +37,8 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 			"begin " +
 			"delete from " + DB_TABLE + " where Preid=old._id;" +
 			"end;";
-	
+	private static final String	DB_CREATE_Table_PassWord = "CREATE TABLE  if not exists "+ DB_TABLE_PassWord + " (" + KEY_id + " INTEGER PRIMARY KEY AUTOINCREMENT,"+
+		KEY_password+" TEXT)";
 	private	SQLiteDatabase m_db;
 	public CNoteDBCtrl(Context context) {		
 		super( context, DB_NAME, null, DB_VERSION);
@@ -48,6 +49,10 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL( DB_CREATE );	
 		db.execSQL( Trigger_CREATE );
+		db.execSQL( DB_CREATE_Table_PassWord );
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(KEY_password, "");
+		db.insert(DB_TABLE_PassWord, KEY_id, initialValues);
 	}
 
 	@Override
@@ -93,10 +98,16 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	}
 	public	Cursor	getPassWord()
 	{
-		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+
-					KEY_type+"=?", 
-					new String[]{String.valueOf(-1), String.valueOf(CMemoInfo.Type_PassWord)});
+		return	m_db.rawQuery("select * from "+DB_TABLE_PassWord, 
+					null);
 	}	
+	public	void	setPassWord(String strPassWord)
+	{
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(KEY_password, strPassWord);
+		String[] whereValue={ Integer.toString(1)};
+		m_db.update(DB_TABLE_PassWord, initialValues, KEY_id, whereValue);
+	}
 	public	void Create( CMemoInfo clCMemoInfo )
 	{
 		//m_db.execSQL("insert into DB_TABLE("+KEY_preid+","+KEY_type+","+KEY_isremind+","+KEY_remindtime+","+KEY_createtime+","+KEY_lastmodifytime+","+

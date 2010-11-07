@@ -45,7 +45,7 @@ class NoteListUICtrl{
 	private Activity m_sourceManager;
 	private NoteListCursorAdapter m_myAdapter;
 
-	private String m_strPassWord;
+	//private String m_strPassWord;
 
 	NoteListUICtrl(Activity sourceManager, ListView target, int iPreID, LinearLayout toolBarLayout){
 		m_sourceManager = sourceManager;
@@ -262,8 +262,7 @@ class NoteListUICtrl{
 			int count = clCursor.getCount();
 			if(count>=0)
 			{
-		    	Cursor curPassWord = m_clCNoteDBCtrl.getPassWord();
-
+		    	/*Cursor curPassWord = m_clCNoteDBCtrl.getPassWord();
 				m_sourceManager.startManagingCursor(curPassWord);
 		        curPassWord.moveToFirst();
 				int Codecount = curPassWord.getCount();
@@ -280,11 +279,11 @@ class NoteListUICtrl{
 
 				}else{
 					m_strPassWord = "";
-				}
+				}*/
 
 				m_myAdapter = new NoteListCursorAdapter(m_sourceManager,clCursor);
 				m_myAdapter.setNoteDBCtrl(m_clCNoteDBCtrl);
-				m_myAdapter.TransforPassWord(m_strPassWord);
+				//m_myAdapter.TransforPassWord(m_strPassWord);
 				m_targetList.setAdapter(m_myAdapter);
 			}
 		}

@@ -17,8 +17,6 @@ import android.view.Gravity;
 import android.widget.Toast;
 import android.widget.ImageButton;
 
-
-
 public class NoteListCursorAdapter extends CursorAdapter {
 	private boolean m_isSelectableStyle = false;
 	private boolean m_isFolderSelectable = true;
@@ -27,7 +25,7 @@ public class NoteListCursorAdapter extends CursorAdapter {
 	private Cursor m_cursor;
 	private Calendar m_c;
 	private CNoteDBCtrl m_clCNoteDBCtrl;
-	private String  m_strPassWord;
+	//private String  m_strPassWord;
 	
 	public NoteListCursorAdapter(Context context, Cursor c) {
 		super(context, c);
@@ -167,18 +165,15 @@ public class NoteListCursorAdapter extends CursorAdapter {
 					        		EditText PassWord = (EditText) DialogView.findViewById(R.id.ET_passwordsetting);
 					        		String strPassWord = PassWord.getText().toString();
 					        		if(strPassWord.length()>0){
-
-										if(strPassWord.equals(m_strPassWord)){
+										if(strPassWord.equals(CommonDefine.g_str_PassWord)){
 						            		Toast toast = Toast.makeText(m_context, "加密已取消", Toast.LENGTH_SHORT);
 						            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
 						            		toast.show();
-
 										}else{
 						        			Toast toast = Toast.makeText(m_context, "密码错误!请重新输入", Toast.LENGTH_SHORT);
 						            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
 						            		toast.show();
 										}
-
 					        		}else{
 					        			Toast toast = Toast.makeText(m_context, "请输入私人密码", Toast.LENGTH_SHORT);
 					            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
@@ -251,8 +246,8 @@ public class NoteListCursorAdapter extends CursorAdapter {
 	public void setNoteDBCtrl(CNoteDBCtrl clCNoteDBCtrl){
 		m_clCNoteDBCtrl = clCNoteDBCtrl;
 	}
-	public void TransforPassWord(String strPassWord){
+	/*public void TransforPassWord(String strPassWord){
 		m_strPassWord = strPassWord;
-	}
+	}*/
 
 }

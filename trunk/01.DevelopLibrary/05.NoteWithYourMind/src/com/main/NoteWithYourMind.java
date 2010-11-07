@@ -53,7 +53,6 @@ public class NoteWithYourMind extends Activity {
 	}
 	public static String ExtraData_MemoID = "com.main.ExtraData_MemoID";
 	public static String ExtraData_NewNoteKind = "com.main.ExtraData_NewNoteKind";
-	private static String m_strPassWord = "";
 	
 	public static final int ITEM0 = Menu.FIRST;
 	public static final int ITEM1 = Menu.FIRST + 1;
@@ -96,21 +95,10 @@ public class NoteWithYourMind extends Activity {
 		startManagingCursor(curPassWord);
         curPassWord.moveToFirst();
 		int count = curPassWord.getCount();
-		
     	if(count > 0 ){	
-			int index = curPassWord.getColumnIndex(CNoteDBCtrl.KEY_type);
-			int value = curPassWord.getInt(index);
-			if(value == CMemoInfo.Type_PassWord){
-				index = curPassWord.getColumnIndex(CNoteDBCtrl.KEY_password);
-		    	m_strPassWord = curPassWord.getString(index);			
-			}else{
-				m_strPassWord = "";			
-			}		
-
-		}else{
-			m_strPassWord = "";
+			int index = curPassWord.getColumnIndex(CNoteDBCtrl.KEY_password);
+			CommonDefine.g_str_PassWord = curPassWord.getString(index);					
 		}
-		
 
 		Button clBTSkin = (Button) findViewById(R.id.B_main_setting_skin);
         clBTSkin.setOnClickListener(new Button.OnClickListener(){
@@ -247,7 +235,7 @@ public class NoteWithYourMind extends Activity {
 
     private void EncodeSettingDlg()
 	{
-		if(m_strPassWord==""){
+		if(CommonDefine.g_str_PassWord.equals(new String(""))){
 			
 				LayoutInflater factory = LayoutInflater.from(NoteWithYourMind.this);
 				final View DialogView = factory.inflate(R.layout.dialog_passwordsetting, null);
@@ -262,14 +250,8 @@ public class NoteWithYourMind extends Activity {
 			        		EditText PassWord = (EditText) DialogView.findViewById(R.id.ET_passwordsetting);
 			        		String strPassWord = PassWord.getText().toString();
 			        		if(strPassWord.length()>0){
-			        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-	 						    c = Calendar.getInstance();
-								clCMemoInfo.dLastModifyTime = c.getTimeInMillis();							
-			            		clCMemoInfo.strPassword = strPassWord;	
-			            		clCMemoInfo.iPreId = CMemoInfo.Id_Invalid;										
-			            		clCMemoInfo.iType = CMemoInfo.Type_PassWord;		            		
-			            		m_clCNoteDBCtrl.Create(clCMemoInfo);
-								m_strPassWord = strPassWord;
+			            		m_clCNoteDBCtrl.setPassWord(strPassWord);
+			            		CommonDefine.g_str_PassWord = strPassWord;
 			            		PassWord.setText("");
 			            		Toast toast = Toast.makeText(NoteWithYourMind.this, "ÀΩ»À√‹¬Î“—…Ë÷√", Toast.LENGTH_SHORT);
 			            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
@@ -288,17 +270,11 @@ public class NoteWithYourMind extends Activity {
 							dialog.cancel();
 						}
 					})
-
-					
 					.create();
-
 				clDlgNewFolder.show(); 
-
 		}else{
-
 				LayoutInflater factory = LayoutInflater.from(NoteWithYourMind.this);
-				final View DialogView = factory.inflate(R.layout.dialog_passwordchang, null);
-				
+				final View DialogView = factory.inflate(R.layout.dialog_passwordchang, null);				
 				AlertDialog clDlgNewFolder = new AlertDialog.Builder(NoteWithYourMind.this)	
 					.setIcon(R.drawable.clock)
 					.setView(DialogView)
@@ -311,18 +287,10 @@ public class NoteWithYourMind extends Activity {
 			        		String strPassWord_new = PassWord_new.getText().toString();
 			        		EditText PassWord_new2 = (EditText) DialogView.findViewById(R.id.ET_password_new2);
 			        		String strPassWord_new2 = PassWord_new2.getText().toString();
-							
-			        		if(strPassWord_old.equals( m_strPassWord)){
-
-								if(strPassWord_new.equals(strPassWord_new2)){
-				        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-		 						    c = Calendar.getInstance();
-									clCMemoInfo.dLastModifyTime = c.getTimeInMillis();							
-				            		clCMemoInfo.strPassword = strPassWord_new;	
-				            		clCMemoInfo.iPreId = CMemoInfo.Id_Invalid;										
-				            		clCMemoInfo.iType = CMemoInfo.Type_PassWord;		            		
-				            		m_clCNoteDBCtrl.Create(clCMemoInfo);
-									m_strPassWord = strPassWord_new;
+			        		if(strPassWord_old == CommonDefine.g_str_PassWord){
+								if(strPassWord_new.equals(strPassWord_new2)){	            		
+				            		m_clCNoteDBCtrl.setPassWord(strPassWord_new);
+				            		CommonDefine.g_str_PassWord = strPassWord_new;
 									PassWord_old.setText("");
 									PassWord_new.setText("");
 									PassWord_new2.setText("");
@@ -336,9 +304,7 @@ public class NoteWithYourMind extends Activity {
 									PassWord_new.setText("");
 									PassWord_new2.setText("");
 				            		toast.show();
-
 								}									
-
 			        		}else{
 			        			PassWord_old.setText("");
 								PassWord_new.setText("");
@@ -356,14 +322,9 @@ public class NoteWithYourMind extends Activity {
 							dialog.cancel();
 						}
 					})
-
-					
 					.create();
-
 				clDlgNewFolder.show(); 
-
 		}
-		
 	}
 
 	 /*

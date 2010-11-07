@@ -16,6 +16,8 @@ import android.view.Gravity;
 import android.widget.Toast;
 import android.widget.ImageButton;
 
+
+
 public class NoteListCursorAdapter extends CursorAdapter {
 	private boolean m_isSelectableStyle = false;
 	private boolean m_isFolderSelectable = true;
@@ -24,6 +26,7 @@ public class NoteListCursorAdapter extends CursorAdapter {
 	private Cursor m_cursor;
 	private Calendar m_c;
 	private CNoteDBCtrl m_clCNoteDBCtrl;
+	private String  m_strPassWord;
 	
 	public NoteListCursorAdapter(Context context, Cursor c) {
 		super(context, c);
@@ -165,8 +168,94 @@ public class NoteListCursorAdapter extends CursorAdapter {
         		public void onClick(View v)
 	        	{
 
+						int Index = m_cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
+						int iEncodeValue = m_cursor.getInt(Index);
+						
+						if(iEncodeValue == CMemoInfo.IsEncode_Yes){
+		
+							final View DialogView = m_inflater.inflate(R.layout.dialog_encodesetting, null);
+							
+							AlertDialog clDlgNewFolder = new AlertDialog.Builder(m_context)	
+								.setIcon(R.drawable.clock)
+								.setTitle("取消加密请输入密码")
+								.setView(DialogView)
+								.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+									public void onClick(DialogInterface dialog, int i)
+									{
+							        		EditText PassWord = (EditText) DialogView.findViewById(R.id.ET_passwordsetting);
+							        		String strPassWord = PassWord.getText().toString();
+							        		if(strPassWord.length()>0){
+	
+												if(strPassWord.equals(m_strPassWord)){
+								            		Toast toast = Toast.makeText(m_context, "加密已取消", Toast.LENGTH_SHORT);
+								            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+								            		toast.show();
+
+												}else{
+								        			Toast toast = Toast.makeText(m_context, "密码错误!请重新输入", Toast.LENGTH_SHORT);
+								            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+								            		toast.show();
+												}
+
+							        		}else{
+							        			Toast toast = Toast.makeText(m_context, "请输入私人密码", Toast.LENGTH_SHORT);
+							            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+							            		toast.show();
+							        		}
+											dialog.cancel();
+									}
+								})
+								.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+									public void onClick(DialogInterface dialog, int i)
+									{
+										dialog.cancel();
+									}
+								})
+
+								
+								.create();
+
+							clDlgNewFolder.show();      							       
 
 
+						}else{
+							
+							AlertDialog clDlgNewFolder = new AlertDialog.Builder(m_context)	
+								.setIcon(R.drawable.clock)
+								.setTitle("设置为加密文件夹")
+								.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+									public void onClick(DialogInterface dialog, int i)
+									{
+										int Index = m_cursor.getColumnIndex(CNoteDBCtrl.KEY_id);
+										int iIDValue = m_cursor.getInt(Index);
+										
+					        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+			 						    m_c = Calendar.getInstance();
+										clCMemoInfo.dLastModifyTime = m_c.getTimeInMillis();							
+					            		clCMemoInfo.iIsEncode	=	CMemoInfo.IsEncode_Yes;
+					            		m_clCNoteDBCtrl.Update(iIDValue,clCMemoInfo);     		
+
+					            		Toast toast = Toast.makeText(m_context, "已设置为加密文件夹", Toast.LENGTH_SHORT);
+					            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+					            		toast.show();
+
+										dialog.cancel();
+	
+									}
+								})
+								.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+									public void onClick(DialogInterface dialog, int i)
+									{
+										dialog.cancel();
+									}
+								})
+
+								
+								.create();
+
+							clDlgNewFolder.show();     
+
+						}						
 
 	        	}
 
@@ -197,6 +286,8 @@ public class NoteListCursorAdapter extends CursorAdapter {
 	public void setNoteDBCtrl(CNoteDBCtrl clCNoteDBCtrl){
 		m_clCNoteDBCtrl = clCNoteDBCtrl;
 	}
-
+	public void TransforPassWord(String strPassWord){
+		m_strPassWord = strPassWord;
+	}
 
 }

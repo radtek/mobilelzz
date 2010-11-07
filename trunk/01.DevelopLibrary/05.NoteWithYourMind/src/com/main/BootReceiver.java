@@ -16,9 +16,10 @@ public class BootReceiver extends BroadcastReceiver {
     	Toast toast = Toast.makeText(null, "收到启动通知", Toast.LENGTH_LONG);
 		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
 		toast.show();
-    	AlarmManager alarmManager = (AlarmManager)ctx.getSystemService(Context.ALARM_SERVICE);
-    	Intent MyIntent = new Intent( ctx, AlarmReceiver.class );
-    	PendingIntent pendingIntent = PendingIntent.getBroadcast(ctx, 0,MyIntent, 0);
-    	alarmManager.setRepeating(AlarmManager.RTC, 0, 60 * 1000, pendingIntent);
+    	AlarmManager	alarmManager	=	(AlarmManager)ctx.getSystemService( Context.ALARM_SERVICE );
+    	Intent 			MyIntent		=	new Intent( ctx, AlarmReceiver.class );
+    	
+    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(ctx, 0,MyIntent, 0);
+    	alarmManager.setRepeating( AlarmManager.RTC, 0, 60 * 1000, pendingIntent );
     }    
 } 

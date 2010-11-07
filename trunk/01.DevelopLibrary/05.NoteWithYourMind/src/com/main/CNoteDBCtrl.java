@@ -19,7 +19,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	public static final String	KEY_remindmask			= "remindmask";
 	public static final String	KEY_detail				= "detail";
 	public static final String	KEY_password			= "password";
-
+	public static final String	KEY_isencode		= "isencode";
 	// 数据库名称为data
 	private static final String	DB_NAME			= "NoteWithYourMind.db";
 	
@@ -27,11 +27,11 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	private static final String	DB_TABLE		= "Notes";
 	
 	// 数据库版本
-	private static final int	DB_VERSION		= 1;
+	private static final int	DB_VERSION		= 6;
 	
 	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" + KEY_id + " INTEGER PRIMARY KEY AUTOINCREMENT," + 
 		KEY_preid + " INTERGER,"+ KEY_type + " INTERGER," + KEY_isremind + " INTERGER," + KEY_remindtime + " double," + KEY_createtime + " double,"+
-		KEY_lastmodifytime + " double,"+ KEY_iseditenable + " INTERGER,"+ KEY_remindmask + " INTERGER,"+ KEY_detail + " TEXT," + KEY_password + " TEXT )";
+		KEY_lastmodifytime + " double,"+ KEY_iseditenable + " INTERGER,"+ KEY_remindmask + " INTERGER,"+ KEY_detail + " TEXT," + KEY_password + " TEXT," + KEY_isencode + " INTERGER )";
 
 	private static final String	Trigger_CREATE	=	"create trigger delete_sub_rec before delete on " + DB_TABLE +" for each row " +
 			"begin " +
@@ -87,7 +87,10 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	{
 		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_isremind+"=?", new String[]{String.valueOf(1)});
 	}
-
+	public	Cursor	getEncodeInfo()
+	{
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_isencode+"=?", new String[]{String.valueOf(1)});
+	}
 	public	Cursor	getPassWord()
 	{
 		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+
@@ -112,6 +115,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		initialValues.put(KEY_remindmask, clCMemoInfo.iRemindMask);
 		initialValues.put(KEY_detail, clCMemoInfo.strDetail);
 		initialValues.put(KEY_password, clCMemoInfo.strPassword);
+		initialValues.put(KEY_isencode, clCMemoInfo.iIsEncode);
 
 		m_db.insert(DB_TABLE, KEY_id, initialValues);
 	}
@@ -179,6 +183,11 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		if ( null != clCMemoInfo.strPassword )
 		{
 			cv.put(KEY_password, clCMemoInfo.strPassword);
+		}
+		
+		if ( -1 != clCMemoInfo.iIsEncode)
+		{
+			cv.put(KEY_isencode, clCMemoInfo.iIsEncode.toString());
 		}
 		
 		String[] whereValue={ Integer.toString(id)};

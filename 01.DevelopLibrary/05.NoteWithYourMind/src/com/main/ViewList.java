@@ -105,6 +105,7 @@ public class ViewList extends Activity
 							clCMemoInfo.dLastModifyTime = c.getTimeInMillis();							
 		            		clCMemoInfo.strDetail	=	strFolderNameText;
 		            		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
+		            		clCMemoInfo.iIsEncode = CMemoInfo.IsEncode_No;
 		            		clCMemoInfo.strPassword = null;
 		            		
 		            		m_clCNoteDBCtrl.Create(clCMemoInfo);     		

@@ -105,8 +105,8 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	{
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_password, strPassWord);
-		String[] whereValue={ Integer.toString(1)};
-		m_db.update(DB_TABLE_PassWord, initialValues, KEY_id, whereValue);
+		//String[] whereValue={ Integer.toString(1)};
+		m_db.update(DB_TABLE_PassWord, initialValues, null, null);
 	}
 	public	void Create( CMemoInfo clCMemoInfo )
 	{

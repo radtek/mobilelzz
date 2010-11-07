@@ -32,7 +32,7 @@ public class ViewListInFolder extends Activity
 		Button btEncode = (Button)findViewById(R.id.B_main_setting_encode);
 		btSkin.setVisibility(View.GONE);
 		btEncode.setVisibility(View.GONE);
-        Button btNewFolder = (Button)findViewById(R.id.B_main_NewFolder);
+        ImageButton btNewFolder = (ImageButton)findViewById(R.id.B_main_NewFolder);
 		btNewFolder.setVisibility(View.GONE);
 
 		Intent iExtraData = this.getIntent();

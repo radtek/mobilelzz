@@ -7,14 +7,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+import android.widget.Button;
+import android.app.AlertDialog;
+import java.util.Calendar;
+import android.content.DialogInterface;
+import android.widget.EditText;
+import android.view.Gravity;
+import android.widget.Toast;
+import android.widget.ImageButton;
 
 public class NoteListCursorAdapter extends CursorAdapter {
 	private boolean m_isSelectableStyle = false;
 	private boolean m_isFolderSelectable = true;
+	private Context m_context;
 	private LayoutInflater m_inflater;
 	private Cursor m_cursor;
+	private Calendar m_c;
+	private CNoteDBCtrl m_clCNoteDBCtrl;
+	
 	public NoteListCursorAdapter(Context context, Cursor c) {
 		super(context, c);
+		m_context = context;
 		m_inflater = LayoutInflater.from(context);
 		m_cursor = c;
 	}
@@ -38,20 +51,130 @@ public class NoteListCursorAdapter extends CursorAdapter {
 			int iValue = cursor.getInt(iIndex);
 			if(iValue != CMemoInfo.IsEditEnable_Disable)
 			{
-				if(iTypeValue==CMemoInfo.Type_Folder&&(!m_isFolderSelectable)){
-					v = m_inflater.inflate(R.layout.memolistitem, parent, false);
+
+				if( iTypeValue==CMemoInfo.Type_Folder ){
+					if(m_isFolderSelectable){
+						v = m_inflater.inflate(R.layout.memolistitemfolderwithselect, parent, false);
+					}else{
+
+						v = m_inflater.inflate(R.layout.memolistitemfolder, parent, false);		
+					}					
 				}else{
-					v = m_inflater.inflate(R.layout.memolistitemselect, parent, false);
-				}				
+						v = m_inflater.inflate(R.layout.memolistitem, parent, false);
+				}
+
+			}else{
+				if( iTypeValue == CMemoInfo.Type_Folder ){
+					v = m_inflater.inflate(R.layout.memolistitemfolder, parent, false);
+				}else{
+					v = m_inflater.inflate(R.layout.memolistitem, parent, false);
+				}
+			}		
+		}
+		else{
+			if(iTypeValue == CMemoInfo.Type_Folder){
+				v = m_inflater.inflate(R.layout.memolistitemfolder, parent, false);
+
 			}else{
 				v = m_inflater.inflate(R.layout.memolistitem, parent, false);
-			}		
-		}else{
-			v = m_inflater.inflate(R.layout.memolistitem, parent, false);
+
+			}
 		}	
+
+
+		// 
+
 		if(iTypeValue == CMemoInfo.Type_Folder){
-			TextView tv = (TextView) v.findViewById(R.id.memoitem_memotext);
-			tv.setCompoundDrawables(null, null, null, null);
+
+
+
+
+			
+//			tv.setCompoundDrawables(null, null, null, null);
+			Button clBTFolder = (Button) v.findViewById(R.id.B_FolderItem_FolderIcon);
+	        clBTFolder.setOnClickListener(new Button.OnClickListener(){
+	        	public void onClick(View v)
+	        	{
+						{  			
+							final View DialogView = m_inflater.inflate(R.layout.dialognewfolder, null);
+							
+							AlertDialog clDlgNewFolder = new AlertDialog.Builder(m_context)	
+								.setIcon(R.drawable.clock)
+								.setTitle("请编辑文件夹名称")
+								.setView(DialogView)
+								.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+									public void onClick(DialogInterface dialog, int i)
+									{
+										int Index = m_cursor.getColumnIndex(CNoteDBCtrl.KEY_id);
+										int iIDValue = m_cursor.getInt(Index);
+										
+										EditText FolderNameText = (EditText) DialogView.findViewById(R.id.foldername_edit);
+						        		String strFolderNameText = FolderNameText.getText().toString();
+						        		if(strFolderNameText.length()>0){
+						        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+				 						    m_c = Calendar.getInstance();
+											clCMemoInfo.dLastModifyTime = m_c.getTimeInMillis();							
+						            		clCMemoInfo.strDetail	=	strFolderNameText;
+						            		m_clCNoteDBCtrl.Update(iIDValue,clCMemoInfo);     		
+						            		FolderNameText.setText("");
+
+						            		Toast toast = Toast.makeText(m_context, "保存成功", Toast.LENGTH_SHORT);
+						            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+						            		toast.show();
+						        		}else{
+						        			Toast toast = Toast.makeText(m_context, "请输入文件夹名称", Toast.LENGTH_SHORT);
+						            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+						            		toast.show();
+						        		}
+										dialog.cancel();
+									}
+								})
+								.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+									public void onClick(DialogInterface dialog, int i)
+									{
+										dialog.cancel();
+									}
+								})
+
+								
+								.create();
+
+							clDlgNewFolder.show();      			
+
+				        	}
+
+	        	}   
+			});
+
+
+			int Index = cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
+			int iEncodeValue = cursor.getInt(Index);
+
+			ImageButton  clBTLockIf;			
+			if(iEncodeValue == CMemoInfo.IsEncode_Yes){
+
+				clBTLockIf = (ImageButton)  v.findViewById(R.id.B_FolderItem_LockIcon);
+				clBTLockIf.setImageResource(R.drawable.btn_lock);
+
+			}else{
+				clBTLockIf = (ImageButton)  v.findViewById(R.id.B_FolderItem_LockIcon);
+				clBTLockIf.setImageResource(R.drawable.btn_unlock);
+			}	
+
+	        clBTLockIf.setOnClickListener(new Button.OnClickListener(){
+        		public void onClick(View v)
+	        	{
+
+
+
+
+	        	}
+
+
+		    });
+			
+
+
 		}else if(iTypeValue == CMemoInfo.Type_Memo){
 			
 		}else{	
@@ -71,4 +194,9 @@ public class NoteListCursorAdapter extends CursorAdapter {
 	public Cursor getCursor(){
 		return m_cursor;
 	}
+	public void setNoteDBCtrl(CNoteDBCtrl clCNoteDBCtrl){
+		m_clCNoteDBCtrl = clCNoteDBCtrl;
+	}
+
+
 }

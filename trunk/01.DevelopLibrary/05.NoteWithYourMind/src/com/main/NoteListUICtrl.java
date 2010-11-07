@@ -174,8 +174,8 @@ class NoteListUICtrl{
         				folderList.addHeaderView(tvRootFolder);
         			}
         			Cursor cursorFolderList	=	m_clCNoteDBCtrl.getFolderInRoot();
+        			m_sourceManager.startManagingCursor(cursorFolderList);
         			if(cursorFolderList.getCount()>0){
-        				m_sourceManager.startManagingCursor(cursorFolderList);
             			if(cursorFolderList!=null){
             				ListAdapter LA_FolderList = new SimpleCursorAdapter(
             						m_sourceManager,

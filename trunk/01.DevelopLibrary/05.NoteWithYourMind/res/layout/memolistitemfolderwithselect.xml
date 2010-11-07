@@ -3,21 +3,19 @@
     android:layout_width="fill_parent"
     android:layout_height="65dp"
     android:background="@drawable/listselector">
-    <ImageButton
+    <Button
       android:id="@+id/B_FolderItem_FolderIcon"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:src="@drawable/itemicon_folder"
-		  android:scaleType="center"
+      android:background="@drawable/itemicon_folder"
       android:layout_alignParentLeft = "true"
       android:layout_centerVertical="true"
       android:focusable="false"  />
-    <ImageButton
+    <Button
       android:id="@+id/B_FolderItem_LockIcon"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:src="@drawable/itemicon_unlock"
-		  android:scaleType="center"
+      android:background="@drawable/itemicon_unlock"
       android:layout_toRightOf="@id/B_FolderItem_FolderIcon"
       android:layout_centerVertical="true"
       android:focusable="false"    />

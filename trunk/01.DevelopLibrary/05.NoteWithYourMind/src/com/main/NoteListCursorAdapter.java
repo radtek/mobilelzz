@@ -85,7 +85,7 @@ public class NoteListCursorAdapter extends CursorAdapter {
 			}
 		}	
 		if(iTypeValue == CMemoInfo.Type_Folder){
-			ImageButton clBTFolder = (ImageButton) v.findViewById(R.id.B_FolderItem_FolderIcon);
+			Button clBTFolder = (Button) v.findViewById(R.id.B_FolderItem_FolderIcon);
 			//clBTFolder.setBackgroundColor(Color.argb(0, 0, 0, 0));
 	        clBTFolder.setOnClickListener(new Button.OnClickListener(){
 	        	public void onClick(View v)
@@ -138,13 +138,13 @@ public class NoteListCursorAdapter extends CursorAdapter {
 			int Index = cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
 			int iEncodeValue = cursor.getInt(Index);
 
-			ImageButton  clBTLockIf;			
+			Button  clBTLockIf;			
 			if(iEncodeValue == CMemoInfo.IsEncode_Yes){
-				clBTLockIf = (ImageButton)  v.findViewById(R.id.B_FolderItem_LockIcon);
-				clBTLockIf.setImageResource(R.drawable.itemicon_lock);
+				clBTLockIf = (Button)  v.findViewById(R.id.B_FolderItem_LockIcon);
+				clBTLockIf.setBackgroundResource(R.drawable.itemicon_lock);
 			}else{
-				clBTLockIf = (ImageButton)  v.findViewById(R.id.B_FolderItem_LockIcon);
-				clBTLockIf.setImageResource(R.drawable.itemicon_unlock);
+				clBTLockIf = (Button)  v.findViewById(R.id.B_FolderItem_LockIcon);
+				clBTLockIf.setBackgroundResource(R.drawable.itemicon_unlock);
 			}	
 			//clBTLockIf.setBackgroundColor(Color.argb(0, 0, 0, 0));
 	        clBTLockIf.setOnClickListener(new Button.OnClickListener(){

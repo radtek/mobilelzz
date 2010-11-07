@@ -17,6 +17,10 @@ public class CMemoInfo {
 	
 	public final static Integer PreId_Root = 0;
 	public final static Integer Id_Invalid = -1;
+
+	public final static Integer IsEncode_Invalid = -1;
+	public final static Integer IsEncode_Yes = 0;
+	public final static Integer IsEncode_No = 1;
 	
 	Integer		iId;
 	Integer		iPreId;
@@ -29,7 +33,7 @@ public class CMemoInfo {
 	Integer		iRemindMask;
 	String		strDetail;
 	String		strPassword;
-	
+	Integer		iIsEncode;	
 	CMemoInfo()
 	{
 		iId				=	-1;
@@ -43,6 +47,7 @@ public class CMemoInfo {
 		iRemindMask		=	-1;
 		strDetail		=	null;
 		strPassword		=	null;
+		iIsEncode		=	-1;
 	}
 	
 }

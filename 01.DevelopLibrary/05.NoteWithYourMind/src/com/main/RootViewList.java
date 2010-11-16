@@ -3,6 +3,9 @@ package com.main;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -52,55 +55,57 @@ public class RootViewList extends Activity
 		m_TabHost.setup();	
 		TabWidget tw = m_TabHost.getTabWidget();
 		TabSpec specmemo = m_TabHost.newTabSpec("1");
-		//specmemo.setIndicator(composeLayout("备忘",R.drawable.tabmemo));
-		specmemo.setIndicator("备忘");
+		specmemo.setIndicator(composeLayout("备忘",R.drawable.tabmemo));
+		//specmemo.setIndicator("备忘");
 		specmemo.setContent(R.id.memolist);
 		
 		TabSpec specremind = m_TabHost.newTabSpec("2");
-		//specremind.setIndicator(composeLayout("提醒",R.drawable.tabremind));
-		specremind.setIndicator("提醒");
+		specremind.setIndicator(composeLayout("提醒",R.drawable.tabremind));
+		//specremind.setIndicator("提醒");
 		specremind.setContent(R.id.remindlist);
 		
-		//TextView tvNewNote = new TextView(this);
-		//tvNewNote.setText("新建便签");
+/*		Button btNewNote = new Button(this);
+		btNewNote.setText();
+		btNewNote.setFocusable(true);
+		btNewNote.setFocusableInTouchMode(true);
+		btNewNote.setOnClickListener(new Button.OnClickListener(){
+			public void onClick(View v)
+        	{
+				Intent intent = new Intent();
+        		intent.setClass(RootViewList.this, NoteWithYourMind.class); 
+        		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot);
+        		startActivity(intent);
+        	}
+		});*/
 		TabSpec specNewNote = m_TabHost.newTabSpec("3");
-		specNewNote.setIndicator("新建便签");
+		//specNewNote.setIndicator("新建便签");
+		specNewNote.setIndicator(composeLayout("新建便签",R.drawable.tabnewnote));
 		specNewNote.setContent(R.id.newnote);
 		
 		m_TabHost.addTab(specmemo);
 		m_TabHost.addTab(specremind);
 		m_TabHost.addTab(specNewNote);
 	    
-	    //设置当前显示哪一个标签
-		m_TabHost.setCurrentTab(0);
 		m_TabHost.setOnTabChangedListener(new OnTabChangeListener(){
 	    	public void onTabChanged(String tabId){
 	    		if(tabId.equals(String.valueOf(3))){
 	    			Intent intent = new Intent();
 	        		intent.setClass(RootViewList.this, NoteWithYourMind.class); 
-	        		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot);
-	 
+	        		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot); 
 	        		startActivity(intent);
 	    		}else if(tabId.equals(String.valueOf(2))){
-	    			
+	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundResource(R.drawable.tabshape);
+	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundDrawable(null);
 	    		}else if(tabId.equals(String.valueOf(1))){
-	    			
+	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundResource(R.drawable.tabshape);
+	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundDrawable(null);
 	    		}else{
 	    			
 	    		}
 	    	}
 	    });
-	    /*ImageButton clBTNewMemo = (ImageButton) findViewById(R.id.B_main_NewMemo);
-        clBTNewMemo.setOnClickListener(new Button.OnClickListener(){
-        	public void onClick(View v)
-        	{
-        		Intent intent = new Intent();
-        		intent.setClass(RootViewList.this, NoteWithYourMind.class); 
-        		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot);
- 
-        		startActivity(intent);
-        	}
-        });*/
+		m_TabHost.setCurrentTab(1);
+		m_TabHost.setCurrentTab(0);
         View vMemoList = (View) findViewById(R.id.memolist);
         Button clBTMemoNewFolder = (Button) vMemoList.findViewById(R.id.RootViewListContent_NewFolder_B);
 		clBTMemoNewFolder.setOnClickListener(new Button.OnClickListener(){
@@ -212,6 +217,33 @@ public class RootViewList extends Activity
 		clCMemoInfo.strPassword = null;
 		
 		m_clCNoteDBCtrl.Create(clCMemoInfo); 
+		if(bIsRemind==CMemoInfo.IsRemind_Yes){
+			m_remindListAdapter.updateCursor();
+			m_remindListAdapter.notifyDataSetChanged();
+		}else{
+			m_memoListAdapter.updateCursor();
+			m_memoListAdapter.notifyDataSetChanged();
+		}
+		
 	}
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inf = getMenuInflater();
+		inf.inflate(R.menu.menu_listctrl, menu);
+		return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_delete: 
+				/*   menu button push action */ 
+				
+			break;
+		case R.id.menu_move: 
+				/*   menu button push action */ 
+			
+			break;
 
+		}
+		return true;
+		}
 }

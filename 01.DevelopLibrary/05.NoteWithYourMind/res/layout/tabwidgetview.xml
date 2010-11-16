@@ -4,18 +4,17 @@ android:id="@+id/tabindicatorview"
 android:orientation="vertical"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
-android:background = "@drawable/tabshape"
 xmlns:android="http://schemas.android.com/apk/res/android"
 >
+	<ImageView
+		android:id="@+id/tabindicatorview_image"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:padding="1dip"/>
 	<TextView
 		android:id="@+id/tabindicatorview_text"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:gravity="center"/>
-	<ImageView
-		android:id="@+id/tabindicatorview_image"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:padding="3dip"/>
 </LinearLayout>
 

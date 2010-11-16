@@ -80,7 +80,13 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	
 	public	Cursor	getMemosByID( int id )
 	{
-		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? order by "+KEY_type+" asc", new String[]{String.valueOf(id)});
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+KEY_isremind+"!=? order by "+KEY_type+" asc", 
+					new String[]{String.valueOf(id), String.valueOf(CMemoInfo.IsRemind_Yes)});
+	}
+	public	Cursor	getRemindsByID( int id )
+	{
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+KEY_isremind+"=? order by "+KEY_type+" asc", 
+					new String[]{String.valueOf(id), String.valueOf(CMemoInfo.IsRemind_Yes)});
 	}
 	
 	public	Cursor	getMemoRec( int id )

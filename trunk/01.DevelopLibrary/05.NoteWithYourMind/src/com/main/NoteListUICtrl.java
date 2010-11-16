@@ -262,7 +262,7 @@ class NoteListUICtrl{
 			int count = clCursor.getCount();
 			if(count>=0)
 			{
-				m_myAdapter = new NoteListCursorAdapter(m_sourceManager,clCursor, this);
+				m_myAdapter = new NoteListCursorAdapter(m_sourceManager,clCursor);
 				m_myAdapter.setNoteDBCtrl(m_clCNoteDBCtrl);
 				m_targetList.setAdapter(m_myAdapter);
 			}

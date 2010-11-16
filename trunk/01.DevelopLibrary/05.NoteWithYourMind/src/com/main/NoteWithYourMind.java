@@ -142,7 +142,7 @@ public class NoteWithYourMind extends Activity {
         	public void onClick(View v)
         	{
         		Intent intent = new Intent();
-        		intent.setClass(NoteWithYourMind.this, ViewList.class);
+        		intent.setClass(NoteWithYourMind.this, RootViewList.class);
         		startActivity(intent);
         	}
         });

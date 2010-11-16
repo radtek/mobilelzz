@@ -1,60 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-android:id="@+id/memolist"
+<LinearLayout
+android:id="@+id/RootViewListContent"
+android:orientation="vertical"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
-xmlns:android="http://schemas.android.com/apk/res/android"
->
-	<LinearLayout
-	style="@android:style/ButtonBar"
-	android:id="@+id/memolistmenu"
-	android:orientation="horizontal"
-	android:layout_width="fill_parent"
+android:layout_marginLeft="5dp"
+android:layout_marginRight="5dp"
+xmlns:android="http://schemas.android.com/apk/res/android">
+	<Button
+	android:id="@+id/RootViewListContent_NewFolder_B"
+	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
-	android:layout_alignParentBottom="true">
-			<Button
-			android:id="@+id/B_view_memo_delete"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"		
-			android:layout_gravity="center_vertical"
-			android:text="删除"
-			android:textSize="20sp"
-			android:layout_marginLeft="3dip"
-			android:layout_marginRight="3dip"
-			android:gravity="center">
-			</Button>
-			<Button
-			android:id="@+id/B_view_memo_move"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"	
-			android:layout_gravity="center_vertical"
-			android:text="移动"
-			android:textSize="20sp"
-			android:layout_marginLeft="3dip"
-			android:layout_marginRight="3dip"
-			android:gravity="center">
-			</Button>
-			<Button
-			android:id="@+id/B_view_memo_cancel"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"	
-			android:layout_gravity="center_vertical"
-			android:text="取消"
-			android:textSize="20sp"
-			android:layout_marginLeft="3dip"
-			android:layout_marginRight="3dip"
-			android:gravity="center"
-			android:visibility="gone">
-			</Button>
-	</LinearLayout>
+	android:layout_gravity="center_horizontal"
+	android:text="新建文件夹">
+	</Button>
 	<ListView 
-	android:id="@+id/listviewmemo"
+	android:id="@+id/RootViewListContent_List"
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent" 
-	android:layout_above="@id/memolistmenu"
-	/>
-</RelativeLayout>
+	android:layout_height="fill_parent" />
+</LinearLayout>
+
+
 

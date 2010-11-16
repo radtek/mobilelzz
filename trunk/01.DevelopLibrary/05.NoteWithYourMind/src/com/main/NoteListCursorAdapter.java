@@ -64,16 +64,20 @@ public class NoteListCursorAdapter extends CursorAdapter {
 		int iDetailIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_detail);
 		String sDetail = cursor.getString(iDetailIndex);
 		TextView tV = (TextView)view.findViewById(R.id.noteitem_notetext);
+		tV.setCompoundDrawablePadding(15);
 		if(iTypeValue==CMemoInfo.Type_Folder){
 			int iEncodeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
 			int iEncodeFlag = cursor.getInt(iEncodeIndex);
 			if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
+				//tV.setCompoundDrawables(NoteWithYourMind.g_drawable_FolderLocked, null, null, null);
 				tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.folderlocked, 0, 0, 0);
 			}else{
+				//tV.setCompoundDrawables(NoteWithYourMind.g_drawable_Folder, null, null, null);
 				tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.folder, 0, 0, 0);
 			}
 		}else{
-			tV.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+			//tV.setCompoundDrawables(NoteWithYourMind.g_drawable_Memo, null, null, null);
+			tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.memo, 0, 0, 0);
 		}
 		tV.setText(sDetail);
 	}
@@ -276,7 +280,10 @@ public class NoteListCursorAdapter extends CursorAdapter {
 		*/
 		
 	}
-	
+	public void updateCursor(){
+		m_cursor.deactivate();
+		m_cursor.requery();
+	}
 	public void setSelectableStyle(boolean bEnable){
 		m_isSelectableStyle = bEnable;
 	}

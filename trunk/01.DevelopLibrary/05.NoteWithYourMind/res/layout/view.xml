@@ -3,16 +3,23 @@
 android:id="@android:id/tabhost"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent">
-	<LinearLayout
-	android:orientation="vertical"
+	<RelativeLayout
+	
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:gravity="bottom"
+	
 	>
+		<TabWidget
+		android:id="@android:id/tabs"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    />
 		<FrameLayout
 		android:id="@android:id/tabcontent"
 		android:layout_width="fill_parent"
-		android:layout_height="400dp"
+		android:layout_height="fill_parent"
+		android:layout_above="@android:id/tabs"
 		>
 			<include android:id="@+id/memolist" layout="@layout/listctrlview"/>
 			<include android:id="@+id/remindlist" layout="@layout/listctrlview"/>
@@ -22,10 +29,6 @@ android:layout_height="fill_parent">
     		android:layout_height="wrap_content">
 			</TextView>
 		</FrameLayout>
-		<TabWidget
-		android:id="@android:id/tabs"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    />
-	</LinearLayout>
+		
+	</RelativeLayout>
 </TabHost>

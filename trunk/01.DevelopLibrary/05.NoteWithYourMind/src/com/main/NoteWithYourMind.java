@@ -39,13 +39,19 @@ import android.view.View;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 
 
 public class NoteWithYourMind extends Activity {
+	public static Drawable g_drawable_Folder;
+	public static Drawable g_drawable_FolderLocked;
+	public static Drawable g_drawable_Memo;
+	
 	public enum NewNoteKindEnum{
 		NewNoteKind_Unknown,
 		NewNoteKind_InRoot,
@@ -70,7 +76,11 @@ public class NoteWithYourMind extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		
+        Resources r = this.getResources();
+        g_drawable_Folder = r.getDrawable(R.drawable.folder);
+        g_drawable_FolderLocked = r.getDrawable(R.drawable.folderlocked);
+        g_drawable_Memo = r.getDrawable(R.drawable.memo);
+        
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.main);
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);

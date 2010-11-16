@@ -44,39 +44,49 @@ public class NoteListCursorAdapter extends CursorAdapter {
 	private CNoteDBCtrl m_clCNoteDBCtrl;
 	
 	private View m_DialogView;
-	private NoteListUICtrl m_NoteListUICtrl;
+	//private NoteListUICtrl m_NoteListUICtrl;
 	//private String  m_strPassWord;
 	private int m_DBId2BeEdited = CommonDefine.g_int_Invalid_ID;
 	
-	public NoteListCursorAdapter(Context context, Cursor c, NoteListUICtrl NoteListUICtrl) {
+	public NoteListCursorAdapter(Context context, Cursor c) {
 		super(context, c);
 		m_context = context;
 		m_inflater = LayoutInflater.from(context);
 		m_cursor = c;
-		m_NoteListUICtrl = NoteListUICtrl;
+		//m_NoteListUICtrl = NoteListUICtrl;
 		m_CursorDataHolder = new ArrayList<CursorDataHolder>();
 	}
  
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
+		int iTypeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_type);
+		int iTypeValue = cursor.getInt(iTypeIndex);
 		int iDetailIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_detail);
 		String sDetail = cursor.getString(iDetailIndex);
-		TextView tV = (TextView)view.findViewById(R.id.memoitem_memotext);
+		TextView tV = (TextView)view.findViewById(R.id.noteitem_notetext);
+		if(iTypeValue==CMemoInfo.Type_Folder){
+			int iEncodeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
+			int iEncodeFlag = cursor.getInt(iEncodeIndex);
+			if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
+				tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.folderlocked, 0, 0, 0);
+			}else{
+				tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.folder, 0, 0, 0);
+			}
+		}else{
+			tV.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+		}
 		tV.setText(sDetail);
 	}
  
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
-		View v;
-		int iTypeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_type);
-		int iTypeValue = cursor.getInt(iTypeIndex);
+		View v = null;
 		if(m_isSelectableStyle)
 		{
-			int iIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_iseditenable);
+/*			int iIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_iseditenable);
 			int iValue = cursor.getInt(iIndex);
 			if(iValue != CMemoInfo.IsEditEnable_Disable)
 			{
-
 				if( iTypeValue==CMemoInfo.Type_Folder ){
 					if(m_isFolderSelectable){
 						v = m_inflater.inflate(R.layout.memolistitemfolderwithselect, parent, false);
@@ -92,20 +102,15 @@ public class NoteListCursorAdapter extends CursorAdapter {
 				if( iTypeValue == CMemoInfo.Type_Folder ){
 					v = m_inflater.inflate(R.layout.memolistitemfolder, parent, false);
 				}else{
-					v = m_inflater.inflate(R.layout.memolistitem, parent, false);
+					v = m_inflater.inflate(R.layout.notelistitem, parent, false);
 				}
-			}		
+			}	*/	
 		}
 		else{
-			if(iTypeValue == CMemoInfo.Type_Folder){
-				v = m_inflater.inflate(R.layout.memolistitemfolder, parent, false);
-
-			}else{
-				v = m_inflater.inflate(R.layout.memolistitem, parent, false);
-
-			}
+			v = m_inflater.inflate(R.layout.notelistitem, parent, false);
 		}	
-		Button clBTFolder=null;
+		return v;
+/*		Button clBTFolder=null;
 		Button  clBTLockIf=null;		
 		if(iTypeValue == CMemoInfo.Type_Folder){
 			clBTFolder = (Button) v.findViewById(R.id.B_FolderItem_FolderIcon);
@@ -130,7 +135,7 @@ public class NoteListCursorAdapter extends CursorAdapter {
 									clCMemoInfo.dLastModifyTime = m_c.getTimeInMillis();							
 				            		clCMemoInfo.strDetail	=	strFolderNameText;
 				            		m_clCNoteDBCtrl.Update(m_DBId2BeEdited,clCMemoInfo); 
-				            		m_NoteListUICtrl.updateListData();
+//				            		m_NoteListUICtrl.updateListData();
 				            		m_DBId2BeEdited = CommonDefine.g_int_Invalid_ID;
 				            		FolderNameText.setText("");
 
@@ -199,7 +204,7 @@ public class NoteListCursorAdapter extends CursorAdapter {
 						            		clCMemoInfo.iIsEncode	=	CMemoInfo.IsEncode_No;
 						            		m_clCNoteDBCtrl.Update(m_DBId2BeEdited,clCMemoInfo);     		
 						            		m_DBId2BeEdited = CommonDefine.g_int_Invalid_ID;
-						            		m_NoteListUICtrl.updateListData();
+//						            		m_NoteListUICtrl.updateListData();
 						            		Toast toast = Toast.makeText(m_context, "加密已取消", Toast.LENGTH_SHORT);
 						            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
 						            		toast.show();
@@ -237,7 +242,7 @@ public class NoteListCursorAdapter extends CursorAdapter {
 				            		clCMemoInfo.iIsEncode	=	CMemoInfo.IsEncode_Yes;
 				            		m_clCNoteDBCtrl.Update(m_DBId2BeEdited,clCMemoInfo);     		
 				            		m_DBId2BeEdited = CommonDefine.g_int_Invalid_ID;
-				            		m_NoteListUICtrl.updateListData();
+//				            		m_NoteListUICtrl.updateListData();
 				            		Toast toast = Toast.makeText(m_context, "已设置为加密文件夹", Toast.LENGTH_SHORT);
 				            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
 				            		toast.show();
@@ -268,7 +273,8 @@ public class NoteListCursorAdapter extends CursorAdapter {
 		int iValue = cursor.getInt(iIndex);
 		clHolder.iDBID = iValue;
 		m_CursorDataHolder.add(clHolder);
-		return v;
+		*/
+		
 	}
 	
 	public void setSelectableStyle(boolean bEnable){

@@ -47,10 +47,10 @@ public class ViewListInFolder extends Activity
 			String folderName = folderRec.getString(index);
 			tvFolderName.setText(folderName);
 		}
-		ListView memoList = (ListView) findViewById(R.id.listviewmemo);
+		/*ListView memoList = (ListView) findViewById(R.id.listviewmemo);
 		LinearLayout toolbarLayout = (LinearLayout) findViewById(R.id.memolistmenu);
 		m_NoteListUICtrl = new NoteListUICtrl(this, memoList, m_Cur_FolderID, toolbarLayout);
-		m_NoteListUICtrl.initializeSource();
+		m_NoteListUICtrl.initializeSource();*/
 
 		ImageButton clBTNewMemo = (ImageButton) findViewById(R.id.B_main_NewMemo);
         clBTNewMemo.setOnClickListener(new Button.OnClickListener(){

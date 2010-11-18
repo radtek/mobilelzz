@@ -6,35 +6,46 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 import android.widget.Button;
+import android.widget.TimePicker;
 import android.app.AlertDialog;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+
 import android.content.DialogInterface;
 import android.widget.EditText;
 import android.view.Gravity;
 import android.widget.Toast;
 import android.widget.ImageButton;
 
-public class NoteListCursorAdapter extends CursorAdapter {
-	public class CursorDataHolder{
-		View btFolder;
-		View btEncode;
+public class NoteListCursorAdapter extends CursorAdapter implements Serializable {
+	private static final long serialVersionUID = -7060210544600464481L;
+	public class ItemSelectResult{
+		int iDBRecID;
+		boolean bIsSelected;
 		int iItemPos;
-		boolean bCheckedStatus;
-		int iDBID;
-		CursorDataHolder(){
-			btFolder = null;
-			btEncode = null;
-			iItemPos = CommonDefine.g_int_Invalid_ID;
-			iDBID = CommonDefine.g_int_Invalid_ID;
-			bCheckedStatus = false;
+		ItemSelectResult(){
+			iDBRecID = CommonDefine.g_int_Invalid_ID;
+			bIsSelected = false;
 		}
 	}
-	private ArrayList<CursorDataHolder> m_CursorDataHolder;
+	public class CheckBoxMapItem{
+		int iDBRecID;
+		CheckBox checkBox;
+		CheckBoxMapItem(){
+			iDBRecID = CommonDefine.g_int_Invalid_ID;
+			checkBox = null;
+		}
+	}
+	private HashMap<String,ItemSelectResult> m_ListItemSelectResult;
+	private HashMap<CheckBox,CheckBoxMapItem> m_ListCheckBoxMapItem;
 	private boolean m_isSelectableStyle = false;
 	private boolean m_isFolderSelectable = true;
 	private Context m_context;
@@ -42,7 +53,8 @@ public class NoteListCursorAdapter extends CursorAdapter {
 	private Cursor m_cursor;
 	private Calendar m_c;
 	private CNoteDBCtrl m_clCNoteDBCtrl;
-	
+	private int m_listPreDBID;
+	private int m_isRemind;
 	private View m_DialogView;
 	//private NoteListUICtrl m_NoteListUICtrl;
 	//private String  m_strPassWord;
@@ -54,11 +66,26 @@ public class NoteListCursorAdapter extends CursorAdapter {
 		m_inflater = LayoutInflater.from(context);
 		m_cursor = c;
 		//m_NoteListUICtrl = NoteListUICtrl;
-		m_CursorDataHolder = new ArrayList<CursorDataHolder>();
+		m_ListItemSelectResult = new HashMap<String,ItemSelectResult>();
+		m_ListCheckBoxMapItem = new HashMap<CheckBox,CheckBoxMapItem>();
+		m_listPreDBID = CommonDefine.g_int_Invalid_ID;
+		m_isRemind = CommonDefine.g_int_Invalid_ID;
 	}
  
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
+		CheckBox cbView = (CheckBox) view.findViewById(R.id.noteitem_noteselect);
+		int iIDIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_id);
+		int iIDValue = cursor.getInt(iIDIndex);
+		ItemSelectResult result = m_ListItemSelectResult.get(String.valueOf(iIDValue));
+		if(result!=null){
+			cbView.setChecked(result.bIsSelected);
+		}		
+		CheckBoxMapItem mapItem = new CheckBoxMapItem();
+		mapItem.checkBox = cbView;
+		mapItem.iDBRecID = iIDValue;
+		m_ListCheckBoxMapItem.put(cbView, mapItem);
+		
 		int iTypeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_type);
 		int iTypeValue = cursor.getInt(iTypeIndex);
 		int iDetailIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_detail);
@@ -80,6 +107,14 @@ public class NoteListCursorAdapter extends CursorAdapter {
 			tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.memo, 0, 0, 0);
 		}
 		tV.setText(sDetail);
+		if(m_listPreDBID == CommonDefine.g_int_Invalid_ID){
+			int iPreIDIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_preid);
+			m_listPreDBID = cursor.getInt(iPreIDIndex);
+		}
+		if(m_isRemind == CommonDefine.g_int_Invalid_ID){
+			int isRemindIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isremind);
+			m_isRemind = cursor.getInt(isRemindIndex);
+		}
 	}
  
 	@Override
@@ -87,32 +122,28 @@ public class NoteListCursorAdapter extends CursorAdapter {
 		View v = null;
 		if(m_isSelectableStyle)
 		{
-/*			int iIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_iseditenable);
-			int iValue = cursor.getInt(iIndex);
-			if(iValue != CMemoInfo.IsEditEnable_Disable)
-			{
-				if( iTypeValue==CMemoInfo.Type_Folder ){
-					if(m_isFolderSelectable){
-						v = m_inflater.inflate(R.layout.memolistitemfolderwithselect, parent, false);
-					}else{
-
-						v = m_inflater.inflate(R.layout.memolistitemfolder, parent, false);		
-					}					
-				}else{
-						v = m_inflater.inflate(R.layout.memolistitemselect, parent, false);
-				}
-
-			}else{
-				if( iTypeValue == CMemoInfo.Type_Folder ){
-					v = m_inflater.inflate(R.layout.memolistitemfolder, parent, false);
-				}else{
-					v = m_inflater.inflate(R.layout.notelistitem, parent, false);
-				}
-			}	*/	
+			v = m_inflater.inflate(R.layout.notelistitemselect, parent, false);
+			CheckBox cbView = (CheckBox) v.findViewById(R.id.noteitem_noteselect);
+			cbView.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+	        	{
+	        		if(isChecked)
+	        		{
+	        			CheckBoxMapItem mapItem = m_ListCheckBoxMapItem.get(buttonView);
+	        			ItemSelectResult result = new ItemSelectResult();
+	        			result.bIsSelected = true;
+	        			result.iDBRecID = mapItem.iDBRecID;
+	        			if(mapItem!=null){
+	        				m_ListItemSelectResult.put(String.valueOf(mapItem.iDBRecID), result);
+	        			}	        			
+	        		}
+	        	}
+			});
 		}
 		else{
 			v = m_inflater.inflate(R.layout.notelistitem, parent, false);
 		}	
+		
 		return v;
 /*		Button clBTFolder=null;
 		Button  clBTLockIf=null;		
@@ -297,29 +328,39 @@ public class NoteListCursorAdapter extends CursorAdapter {
 	public void setNoteDBCtrl(CNoteDBCtrl clCNoteDBCtrl){
 		m_clCNoteDBCtrl = clCNoteDBCtrl;
 	}
+	public void getSelectItemDBID(ArrayList<Integer> alIDs){
+		
+	}
+	
+	public int getListPreDBID(){
+		return m_listPreDBID;
+	}
+	public int getIsRemind(){
+		return m_isRemind;
+	}
 	/*public void TransforPassWord(String strPassWord){
 		m_strPassWord = strPassWord;
 	}*/
-	private int findDBIdByFolderButton(View v2BeFinded){
-		int iDBId = CommonDefine.g_int_Invalid_ID;
-		int iCount = m_CursorDataHolder.size();
-		for(int i = 0; i < iCount; i++){
-			CursorDataHolder clHolder = m_CursorDataHolder.get(i);
-			if(clHolder.btFolder == v2BeFinded){
-				iDBId = clHolder.iDBID;
-			}
-		}
-		return iDBId;
-	}
-	private int findDBIdByEncodeButton(View v2BeFinded){
-		int iDBId = CommonDefine.g_int_Invalid_ID;
-		int iCount = m_CursorDataHolder.size();
-		for(int i = 0; i < iCount; i++){
-			CursorDataHolder clHolder = m_CursorDataHolder.get(i);
-			if(clHolder.btEncode == v2BeFinded){
-				iDBId = clHolder.iDBID;
-			}
-		}
-		return iDBId;
-	}
+//	private int findDBIdByFolderButton(View v2BeFinded){
+//		int iDBId = CommonDefine.g_int_Invalid_ID;
+//		int iCount = m_CursorDataHolder.size();
+//		for(int i = 0; i < iCount; i++){
+//			CursorDataHolder clHolder = m_CursorDataHolder.get(i);
+//			if(clHolder.btFolder == v2BeFinded){
+//				iDBId = clHolder.iDBID;
+//			}
+//		}
+//		return iDBId;
+//	}
+//	private int findDBIdByEncodeButton(View v2BeFinded){
+//		int iDBId = CommonDefine.g_int_Invalid_ID;
+//		int iCount = m_CursorDataHolder.size();
+//		for(int i = 0; i < iCount; i++){
+//			CursorDataHolder clHolder = m_CursorDataHolder.get(i);
+//			if(clHolder.btEncode == v2BeFinded){
+//				iDBId = clHolder.iDBID;
+//			}
+//		}
+//		return iDBId;
+//	}
 }

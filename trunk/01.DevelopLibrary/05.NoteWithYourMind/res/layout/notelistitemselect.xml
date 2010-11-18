@@ -1,31 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="65dp"
+    android:layout_height="50dp"
     android:background="@drawable/listselector">
     <CheckBox
-      android:id="@+id/memoitem_memoselect"
+      android:id="@+id/noteitem_noteselect"
       android:focusable="false"
-      android:layout_width="65dp"
-      android:layout_height="65dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
       android:layout_alignParentRight = "true"
       android:layout_centerVertical="true"
     >
     </CheckBox>
     <TextView
-      android:id="@+id/memoitem_memotext"
+      android:id="@+id/noteitem_notetext"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:layout_centerVertical="true"
-      android:layout_toLeftOf="@id/memoitem_memoselect"
+      android:layout_toLeftOf="@id/noteitem_noteselect"
       android:singleLine = "true"
       android:ellipsize = "end"
       android:gravity="center|left"
-      android:textSize="25sp"
-	  android:drawableLeft="@drawable/itemicon_memo"
-	  android:drawablePadding="3dip"
-      android:background="#00000000"
-      android:textColor="#000000"
+      android:textSize="2sp"
     >
     </TextView>
 </RelativeLayout>

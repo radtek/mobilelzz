@@ -64,22 +64,13 @@ public class RootViewList extends Activity
 		//specremind.setIndicator("提醒");
 		specremind.setContent(R.id.remindlist);
 		
-/*		Button btNewNote = new Button(this);
-		btNewNote.setText();
-		btNewNote.setFocusable(true);
-		btNewNote.setFocusableInTouchMode(true);
-		btNewNote.setOnClickListener(new Button.OnClickListener(){
-			public void onClick(View v)
-        	{
-				Intent intent = new Intent();
-        		intent.setClass(RootViewList.this, NoteWithYourMind.class); 
-        		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot);
-        		startActivity(intent);
-        	}
-		});*/
 		TabSpec specNewNote = m_TabHost.newTabSpec("3");
 		//specNewNote.setIndicator("新建便签");
 		specNewNote.setIndicator(composeLayout("新建便签",R.drawable.tabnewnote));
+		TextView tv = new TextView(this);
+		//Intent intent = new Intent();
+		//intent.setClass(this, NoteWithYourMind.class); 
+		//intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot); 
 		specNewNote.setContent(R.id.newnote);
 		
 		m_TabHost.addTab(specmemo);
@@ -138,8 +129,6 @@ public class RootViewList extends Activity
 	public void onDestroy()
 	{
 		super.onDestroy();
-//		m_NoteListUICtrl.releaseSource();
-//		m_NoteListUICtrl = null;
 	}
 	
 	private void BindListViewData(View vParent, Integer bIsRemind){
@@ -215,7 +204,7 @@ public class RootViewList extends Activity
 		clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
 		clCMemoInfo.iIsEncode = CMemoInfo.IsEncode_No;
 		clCMemoInfo.strPassword = null;
-		
+		clCMemoInfo.dCreateTime = c.getTimeInMillis();
 		m_clCNoteDBCtrl.Create(clCMemoInfo); 
 		if(bIsRemind==CMemoInfo.IsRemind_Yes){
 			m_remindListAdapter.updateCursor();
@@ -236,11 +225,33 @@ public class RootViewList extends Activity
 		switch (item.getItemId()) {
 		case R.id.menu_delete: 
 				/*   menu button push action */ 
-				
+			Intent intent = new Intent();
+    		intent.setClass(RootViewList.this, ListItemEdit.class); 
+    		intent.putExtra(ListItemEdit.g_ExtraDataName_ExitType, ListItemEdit.ListItemEditTypeEnum.ListItemEditType_delete);
+    		int tabIndex = m_TabHost.getCurrentTab();
+    		if(tabIndex==0){
+    			//intent.putExtra(ListItemEdit.g_ExtraDataName_ListCursor, m_memoListAdapter); 
+    		}else if(tabIndex==1){
+    			intent.putExtra(ListItemEdit.g_ExtraDataName_ListCursor, m_remindListAdapter); 
+    		}else{
+    			
+    		}
+    		startActivity(intent);	
 			break;
 		case R.id.menu_move: 
 				/*   menu button push action */ 
-			
+			Intent intent1 = new Intent();
+			intent1.setClass(this, ListItemEdit.class); 
+			intent1.putExtra(ListItemEdit.g_ExtraDataName_ExitType, ListItemEdit.ListItemEditTypeEnum.ListItemEditType_move);
+    		int tabIndex1 = m_TabHost.getCurrentTab();
+    		if(tabIndex1==0){
+    			intent1.putExtra(ListItemEdit.g_ExtraDataName_ListCursor, m_memoListAdapter); 
+    		}else if(tabIndex1==1){
+    			intent1.putExtra(ListItemEdit.g_ExtraDataName_ListCursor, m_remindListAdapter); 
+    		}else{
+    			
+    		}
+    		startActivity(intent1);	
 			break;
 
 		}

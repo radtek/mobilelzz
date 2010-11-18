@@ -27,7 +27,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	private static final String	DB_TABLE				= "Notes";
 	private static final String	DB_TABLE_PassWord		= "PassWord";
 	// Êý¾Ý¿â°æ±¾
-	private static final int	DB_VERSION		= 2;
+	private static final int	DB_VERSION		= 1;
 	
 	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" + KEY_id + " INTEGER PRIMARY KEY AUTOINCREMENT," + 
 		KEY_preid + " INTERGER,"+ KEY_type + " INTERGER," + KEY_isremind + " INTERGER," + KEY_remindtime + " double," + KEY_createtime + " double,"+
@@ -71,21 +71,29 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 //		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? order by "+KEY_type+" asc", new String[]{String.valueOf(0)});
 //	}
 	
-	public	Cursor	getFolderInRoot()
+	public	Cursor	getMemoFolderInRoot()
 	{
 		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+
-					KEY_type+"=?", 
-					new String[]{String.valueOf(0), String.valueOf(CMemoInfo.Type_Folder)});
+					KEY_type+"=? and "+KEY_isremind+"!=? order by "+KEY_createtime+" desc", 
+					new String[]{String.valueOf(0), String.valueOf(CMemoInfo.Type_Folder), String.valueOf(CMemoInfo.IsRemind_Yes)});
+	}
+	public	Cursor	getRemindFolderInRoot()
+	{
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+
+					KEY_type+"=? and "+KEY_isremind+"=? order by "+KEY_createtime+" desc", 
+					new String[]{String.valueOf(0), String.valueOf(CMemoInfo.Type_Folder), String.valueOf(CMemoInfo.IsRemind_Yes)});
 	}
 	
 	public	Cursor	getMemosByID( int id )
 	{
-		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+KEY_isremind+"!=? order by "+KEY_type+" asc", 
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+KEY_isremind+"!=? order by "+KEY_type+" asc, "+
+					KEY_createtime+" desc", 
 					new String[]{String.valueOf(id), String.valueOf(CMemoInfo.IsRemind_Yes)});
 	}
 	public	Cursor	getRemindsByID( int id )
 	{
-		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+KEY_isremind+"=? order by "+KEY_type+" asc", 
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+KEY_isremind+"=? order by "+KEY_type+" asc, "+
+				KEY_createtime+" desc", 
 					new String[]{String.valueOf(id), String.valueOf(CMemoInfo.IsRemind_Yes)});
 	}
 	

@@ -176,7 +176,7 @@ class NoteListUICtrl{
         				tp.setFakeBoldText(true); 
         				folderList.addHeaderView(tvRootFolder);
         			}
-        			Cursor cursorFolderList	=	m_clCNoteDBCtrl.getFolderInRoot();
+        			Cursor cursorFolderList	=	m_clCNoteDBCtrl.getMemoFolderInRoot();
         			m_sourceManager.startManagingCursor(cursorFolderList);
         			if(cursorFolderList.getCount()>0){
             			if(cursorFolderList!=null){

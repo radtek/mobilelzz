@@ -231,6 +231,7 @@ public class NoteWithYourMind extends Activity {
 				clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
 	    		clCMemoInfo.iType = CMemoInfo.Type_Memo;
 	        	clCMemoInfo.iPreId	=	m_ExtraData_MemoID;
+	        	clCMemoInfo.dCreateTime = c.getTimeInMillis();
 	        	m_clCNoteDBCtrl.Create(clCMemoInfo);
 			}else{
 				m_clCNoteDBCtrl.Update(m_ExtraData_MemoID,clCMemoInfo);
@@ -239,6 +240,7 @@ public class NoteWithYourMind extends Activity {
         	clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
     		clCMemoInfo.iType = CMemoInfo.Type_Memo;
         	clCMemoInfo.iPreId	=	CMemoInfo.PreId_Root;
+        	clCMemoInfo.dCreateTime = c.getTimeInMillis();
         	m_clCNoteDBCtrl.Create(clCMemoInfo);
         }
     }

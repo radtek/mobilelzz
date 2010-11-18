@@ -18,6 +18,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import android.content.DialogInterface;
 import android.widget.EditText;
@@ -93,6 +95,10 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		TextView tV = (TextView)view.findViewById(R.id.noteitem_notetext);
 		tV.setCompoundDrawablePadding(15);
 		if(iTypeValue==CMemoInfo.Type_Folder){
+			if(m_isFolderSelectable){
+			}else{
+				cbView.setVisibility(View.GONE);
+			}
 			int iEncodeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
 			int iEncodeFlag = cursor.getInt(iEncodeIndex);
 			if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
@@ -136,6 +142,14 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 	        			if(mapItem!=null){
 	        				m_ListItemSelectResult.put(String.valueOf(mapItem.iDBRecID), result);
 	        			}	        			
+	        		}else{
+	        			CheckBoxMapItem mapItem = m_ListCheckBoxMapItem.get(buttonView);
+	        			ItemSelectResult result = new ItemSelectResult();
+	        			result.bIsSelected = false;
+	        			result.iDBRecID = mapItem.iDBRecID;
+	        			if(mapItem!=null){
+	        				m_ListItemSelectResult.put(String.valueOf(mapItem.iDBRecID), result);
+	        			}	        
 	        		}
 	        	}
 			});
@@ -329,7 +343,16 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		m_clCNoteDBCtrl = clCNoteDBCtrl;
 	}
 	public void getSelectItemDBID(ArrayList<Integer> alIDs){
-		
+		Iterator iter = m_ListItemSelectResult.entrySet().iterator(); 
+		while (iter.hasNext()) { 
+			Map.Entry entry = (Map.Entry) iter.next(); 
+		    
+		    ItemSelectResult val = (ItemSelectResult)entry.getValue(); 
+		    if(val.bIsSelected){
+		    	String key = (String)entry.getKey(); 
+		    	alIDs.add(Integer.valueOf(key));
+		    }
+		} 
 	}
 	
 	public int getListPreDBID(){

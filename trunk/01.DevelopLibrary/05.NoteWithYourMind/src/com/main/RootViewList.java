@@ -230,9 +230,15 @@ public class RootViewList extends Activity
     		intent.putExtra(ListItemEdit.g_ExtraDataName_ExitType, ListItemEdit.ListItemEditTypeEnum.ListItemEditType_delete);
     		int tabIndex = m_TabHost.getCurrentTab();
     		if(tabIndex==0){
+    			CommonDefine.g_listAdapter = m_memoListAdapter;
+    			CommonDefine.g_bIsRemind = false;
+    			CommonDefine.g_preID = CMemoInfo.PreId_Root;
     			//intent.putExtra(ListItemEdit.g_ExtraDataName_ListCursor, m_memoListAdapter); 
     		}else if(tabIndex==1){
-    			intent.putExtra(ListItemEdit.g_ExtraDataName_ListCursor, m_remindListAdapter); 
+    			CommonDefine.g_listAdapter = m_remindListAdapter;
+    			CommonDefine.g_bIsRemind = true;
+    			CommonDefine.g_preID = CMemoInfo.PreId_Root;
+    			//intent.putExtra(ListItemEdit.g_ExtraDataName_ListCursor, m_remindListAdapter); 
     		}else{
     			
     		}
@@ -245,9 +251,15 @@ public class RootViewList extends Activity
 			intent1.putExtra(ListItemEdit.g_ExtraDataName_ExitType, ListItemEdit.ListItemEditTypeEnum.ListItemEditType_move);
     		int tabIndex1 = m_TabHost.getCurrentTab();
     		if(tabIndex1==0){
-    			intent1.putExtra(ListItemEdit.g_ExtraDataName_ListCursor, m_memoListAdapter); 
+    			CommonDefine.g_listAdapter = m_memoListAdapter;
+    			CommonDefine.g_bIsRemind = false;
+    			CommonDefine.g_preID = CMemoInfo.PreId_Root;
+    			//intent1.putExtra(ListItemEdit.g_ExtraDataName_ListCursor, m_memoListAdapter); 
     		}else if(tabIndex1==1){
-    			intent1.putExtra(ListItemEdit.g_ExtraDataName_ListCursor, m_remindListAdapter); 
+    			CommonDefine.g_listAdapter = m_remindListAdapter;
+    			CommonDefine.g_bIsRemind = true;
+    			CommonDefine.g_preID = CMemoInfo.PreId_Root;
+    			//intent1.putExtra(ListItemEdit.g_ExtraDataName_ListCursor, m_remindListAdapter); 
     		}else{
     			
     		}

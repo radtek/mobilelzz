@@ -73,16 +73,27 @@ public class ListItemEdit extends Activity
 		btEncode.setVisibility(View.GONE);
 		
 		Intent intent = getIntent();
-		m_sourceListAdapter = (NoteListCursorAdapter)intent.getSerializableExtra(g_ExtraDataName_ListCursor);
-		m_ListAdapter = new NoteListCursorAdapter(this, m_sourceListAdapter.getCursor());
+		Cursor cursor = null;
+		m_sourceListAdapter = CommonDefine.g_listAdapter;
+		if(!CommonDefine.g_bIsRemind){
+			cursor = m_clCNoteDBCtrl.getMemosByID(CommonDefine.g_preID);
+		}else{
+			cursor = m_clCNoteDBCtrl.getRemindsByID(CommonDefine.g_preID);
+		}
+		if(cursor.getCount()>0){
+			int a = 0;
+		}
+		startManagingCursor(cursor);
+		m_ListAdapter = new NoteListCursorAdapter(this, cursor);
 		m_ListAdapter.setSelectableStyle(true);
 		m_ListItemEditType = (ListItemEditTypeEnum)intent.getSerializableExtra(g_ExtraDataName_ExitType);
 		if(m_ListItemEditType == ListItemEditTypeEnum.ListItemEditType_delete){
 			m_ListAdapter.setFolderSelectable(true);
 		}else{
-			
+			m_ListAdapter.setFolderSelectable(false);
 		}
 		ListView targetList = (ListView)findViewById(R.id.listedit_list);
+		targetList.setAdapter(m_ListAdapter);
 		targetList.setOnItemClickListener(new OnItemClickListener(){
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {

@@ -17,7 +17,7 @@
         		android:theme="@style/NoteTitle">
         	
         </activity>
-		<activity android:name=".ViewListInFolder"
+		<activity android:name=".FolderViewList"
         		android:label="@string/app_name"
         		android:theme="@style/NoteTitle">
         	

@@ -13,7 +13,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.view.View;
 
-public class ViewListInFolder extends Activity
+public class FolderViewList extends Activity
 {
 	public static String ExtraData_FolderID = "com.main.ExtraData_FolderID";
 	private int m_Cur_FolderID = CommonDefine.g_int_Invalid_ID;
@@ -57,7 +57,7 @@ public class ViewListInFolder extends Activity
         	public void onClick(View v)
         	{
         		Intent intent = new Intent();
-        		intent.setClass(ViewListInFolder.this, NoteWithYourMind.class); 
+        		intent.setClass(FolderViewList.this, NoteWithYourMind.class); 
         		intent.putExtra(NoteWithYourMind.ExtraData_MemoID, m_Cur_FolderID);
         		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InFolder);
         		startActivity(intent);

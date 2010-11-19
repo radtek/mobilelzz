@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,6 +40,7 @@ public class RootViewList extends Activity
 	private CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
 	private NoteListCursorAdapter m_memoListAdapter;
 	private NoteListCursorAdapter m_remindListAdapter;
+	private int m_LastTabIndex = CommonDefine.g_int_Invalid_ID;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -88,9 +90,11 @@ public class RootViewList extends Activity
 	        		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot); 
 	        		startActivity(intent);
 	    		}else if(tabId.equals(String.valueOf(2))){
+	    			m_LastTabIndex = 1;
 	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundResource(R.drawable.tabshape);
 	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundDrawable(null);
 	    		}else if(tabId.equals(String.valueOf(1))){
+	    			m_LastTabIndex = 0;
 	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundResource(R.drawable.tabshape);
 	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundDrawable(null);
 	    		}else{
@@ -128,7 +132,7 @@ public class RootViewList extends Activity
 	public void onResume()
 	{
 		super.onResume();
-		m_TabHost.setCurrentTab(0);
+		m_TabHost.setCurrentTab(m_LastTabIndex);
 	}
 	public void onDestroy()
 	{
@@ -289,12 +293,13 @@ public class RootViewList extends Activity
 		}else{
 			
 		}
-//		if(listadapter.isFolder(((ListView)v).getSelectedView())){
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+		if(listadapter.isFolder(((ListView)v).getChildAt(info.position))){
 			menu.add(0, 0, 0, "修改名称");  
 			menu.add(0, 1, 0, "设置查看锁");  
-//		}else{
-//			menu.add(0, 3, 0, "转换为提醒");   
-//		}
+		}else{
+			menu.add(0, 3, 0, "转换为提醒");   
+		}
 		
 	}  
 	public boolean onContextItemSelected(MenuItem item) {  

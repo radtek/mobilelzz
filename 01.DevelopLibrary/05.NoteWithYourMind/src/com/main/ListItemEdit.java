@@ -97,7 +97,7 @@ public class ListItemEdit extends Activity
 		targetList.setOnItemClickListener(new OnItemClickListener(){
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
-				CheckBox cb = (CheckBox)findViewById(R.id.noteitem_noteselect);
+				CheckBox cb = (CheckBox) arg1.findViewById(R.id.noteitem_noteselect);
 				if(cb!=null){
 					((View)cb).performClick();
 				}

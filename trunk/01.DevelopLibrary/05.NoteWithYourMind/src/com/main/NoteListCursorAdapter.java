@@ -46,8 +46,21 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 			checkBox = null;
 		}
 	}
+	public class ItemDetail{
+		int iDBRecID;
+		View vView;
+		boolean bIsFolder;
+		boolean bIsRemind;
+		ItemDetail(){
+			iDBRecID = CommonDefine.g_int_Invalid_ID;
+			vView = null;
+			bIsFolder = false;
+			bIsRemind = false;
+		}
+	}
 	private HashMap<String,ItemSelectResult> m_ListItemSelectResult;
 	private HashMap<CheckBox,CheckBoxMapItem> m_ListCheckBoxMapItem;
+	private HashMap<View,ItemDetail> m_ListItemDetail;
 	private boolean m_isSelectableStyle = false;
 	private boolean m_isFolderSelectable = true;
 	private Context m_context;
@@ -70,15 +83,19 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		//m_NoteListUICtrl = NoteListUICtrl;
 		m_ListItemSelectResult = new HashMap<String,ItemSelectResult>();
 		m_ListCheckBoxMapItem = new HashMap<CheckBox,CheckBoxMapItem>();
+		m_ListItemDetail = new HashMap<View,ItemDetail>();
 		m_listPreDBID = CommonDefine.g_int_Invalid_ID;
 		m_isRemind = CommonDefine.g_int_Invalid_ID;
 	}
  
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
+		ItemDetail itemdetail = new ItemDetail();
+		itemdetail.vView = view;
 		CheckBox cbView = (CheckBox) view.findViewById(R.id.noteitem_noteselect);
 		int iIDIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_id);
 		int iIDValue = cursor.getInt(iIDIndex);
+		itemdetail.iDBRecID = iIDValue;
 		ItemSelectResult result = m_ListItemSelectResult.get(String.valueOf(iIDValue));
 		if(result!=null){
 			cbView.setChecked(result.bIsSelected);
@@ -95,6 +112,7 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		TextView tV = (TextView)view.findViewById(R.id.noteitem_notetext);
 		tV.setCompoundDrawablePadding(15);
 		if(iTypeValue==CMemoInfo.Type_Folder){
+			itemdetail.bIsFolder = true;
 			if(m_isFolderSelectable){
 			}else{
 				cbView.setVisibility(View.GONE);
@@ -121,6 +139,7 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 			int isRemindIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isremind);
 			m_isRemind = cursor.getInt(isRemindIndex);
 		}
+		m_ListItemDetail.put(view, itemdetail);
 	}
  
 	@Override
@@ -354,7 +373,10 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		    }
 		} 
 	}
-	
+	public boolean isFolder(View view){
+		ItemDetail detail = m_ListItemDetail.get(view);
+		return detail.bIsFolder;
+	}
 	public int getListPreDBID(){
 		return m_listPreDBID;
 	}

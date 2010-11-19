@@ -2,6 +2,7 @@ package com.main;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 import android.view.Window;
@@ -25,6 +27,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.view.LayoutInflater;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.Toast;
 
 
@@ -98,6 +101,7 @@ public class RootViewList extends Activity
 		m_TabHost.setCurrentTab(1);
 		m_TabHost.setCurrentTab(0);
         View vMemoList = (View) findViewById(R.id.memolist);
+        
         Button clBTMemoNewFolder = (Button) vMemoList.findViewById(R.id.RootViewListContent_NewFolder_B);
 		clBTMemoNewFolder.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
@@ -138,6 +142,7 @@ public class RootViewList extends Activity
 				startManagingCursor(rootRemindListCursor);
 			}
 			ListView remindlist = (ListView) vParent.findViewById(R.id.RootViewListContent_List);
+			registerForContextMenu(remindlist); 
 			m_remindListAdapter = new NoteListCursorAdapter(RootViewList.this, rootRemindListCursor);
 			remindlist.setAdapter(m_remindListAdapter);
 		}else{
@@ -146,6 +151,7 @@ public class RootViewList extends Activity
 				startManagingCursor(rootMemoListCursor);
 			}
 			ListView memolist = (ListView) vParent.findViewById(R.id.RootViewListContent_List);
+			registerForContextMenu(memolist); 
 			m_memoListAdapter = new NoteListCursorAdapter(RootViewList.this, rootMemoListCursor);
 			memolist.setAdapter(m_memoListAdapter);
 		}
@@ -268,5 +274,40 @@ public class RootViewList extends Activity
 
 		}
 		return true;
+	}
+	public void onCreateContextMenu(ContextMenu menu, View v,  
+            ContextMenuInfo menuInfo) {  
+		super.onCreateContextMenu(menu, v, menuInfo); 
+		int tabIndex = m_TabHost.getCurrentTab();
+		NoteListCursorAdapter listadapter = null;
+		if(tabIndex==0){
+			listadapter = m_memoListAdapter;
+
+		}else if(tabIndex==1){
+			listadapter = m_remindListAdapter;
+
+		}else{
+			
 		}
+//		if(listadapter.isFolder(((ListView)v).getSelectedView())){
+			menu.add(0, 0, 0, "修改名称");  
+			menu.add(0, 1, 0, "设置查看锁");  
+//		}else{
+//			menu.add(0, 3, 0, "转换为提醒");   
+//		}
+		
+	}  
+	public boolean onContextItemSelected(MenuItem item) {  
+		  AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();  
+		  switch (item.getItemId()) {  
+		  case 0:  
+		    
+		    return true;  
+		  case 1:  
+		    
+		    return true;  
+		  default:  
+		    return super.onContextItemSelected(item);  
+		  }  
+	}  
 }

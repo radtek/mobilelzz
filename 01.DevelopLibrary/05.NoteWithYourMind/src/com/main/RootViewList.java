@@ -1,6 +1,7 @@
 package com.main;
 
 import android.app.Activity;
+import android.app.ActivityGroup;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Gravity;
@@ -32,7 +33,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.Toast;
 
 
-public class RootViewList extends Activity
+public class RootViewList extends ActivityGroup
 {
 	//private NoteListUICtrl m_NoteListUICtrl;
 	private Calendar c;
@@ -42,7 +43,6 @@ public class RootViewList extends Activity
 	private NoteListCursorAdapter m_remindListAdapter;
 	private int m_LastTabIndex = CommonDefine.g_int_Invalid_ID;
 	/** Called when the activity is first created. */
-	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -50,53 +50,50 @@ public class RootViewList extends Activity
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.view);	
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
-        Button btSkin = (Button)findViewById(R.id.B_main_setting_skin);
-		Button btEncode = (Button)findViewById(R.id.B_main_setting_encode);
-		btSkin.setVisibility(View.GONE);
-		btEncode.setVisibility(View.GONE);
 
 		//取得TabHost对象
 		m_TabHost = (TabHost)findViewById(android.R.id.tabhost);
-		m_TabHost.setup();	
+		m_TabHost.setup(this.getLocalActivityManager());	
 		TabWidget tw = m_TabHost.getTabWidget();
 		TabSpec specmemo = m_TabHost.newTabSpec("1");
 		specmemo.setIndicator(composeLayout("备忘",R.drawable.tabmemo));
 		//specmemo.setIndicator("备忘");
 		specmemo.setContent(R.id.memolist);
+		m_TabHost.addTab(specmemo);
 		
 		TabSpec specremind = m_TabHost.newTabSpec("2");
 		specremind.setIndicator(composeLayout("提醒",R.drawable.tabremind));
 		//specremind.setIndicator("提醒");
 		specremind.setContent(R.id.remindlist);
+		m_TabHost.addTab(specremind);  
 		
 		TabSpec specNewNote = m_TabHost.newTabSpec("3");
 		//specNewNote.setIndicator("新建便签");
 		specNewNote.setIndicator(composeLayout("新建便签",R.drawable.tabnewnote));
-		TextView tv = new TextView(this);
-		//Intent intent = new Intent();
-		//intent.setClass(this, NoteWithYourMind.class); 
-		//intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot); 
-		specNewNote.setContent(R.id.newnote);
-		
-		m_TabHost.addTab(specmemo);
-		m_TabHost.addTab(specremind);
+		Intent intent = new Intent();
+		intent.setClass(this, NoteWithYourMind.class); 
+		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot); 
+		specNewNote.setContent(intent/*R.id.newnote*/);
 		m_TabHost.addTab(specNewNote);
-	    
+
 		m_TabHost.setOnTabChangedListener(new OnTabChangeListener(){
 	    	public void onTabChanged(String tabId){
 	    		if(tabId.equals(String.valueOf(3))){
-	    			Intent intent = new Intent();
-	        		intent.setClass(RootViewList.this, NoteWithYourMind.class); 
-	        		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot); 
-	        		startActivity(intent);
+	    			m_LastTabIndex = 2;
+	    			m_TabHost.getTabWidget().getChildAt(2).setBackgroundResource(R.drawable.tabshape);
+	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundDrawable(null);
+	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundDrawable(null);
 	    		}else if(tabId.equals(String.valueOf(2))){
 	    			m_LastTabIndex = 1;
 	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundResource(R.drawable.tabshape);
+	    			m_TabHost.getTabWidget().getChildAt(2).setBackgroundDrawable(null);
 	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundDrawable(null);
 	    		}else if(tabId.equals(String.valueOf(1))){
 	    			m_LastTabIndex = 0;
 	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundResource(R.drawable.tabshape);
 	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundDrawable(null);
+	    			m_TabHost.getTabWidget().getChildAt(2).setBackgroundDrawable(null);
 	    		}else{
 	    			
 	    		}

@@ -67,10 +67,6 @@ public class ListItemEdit extends Activity
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);	
         setContentView(R.layout.listitemedit);
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
-        Button btSkin = (Button)findViewById(R.id.B_main_setting_skin);
-		Button btEncode = (Button)findViewById(R.id.B_main_setting_encode);
-		btSkin.setVisibility(View.GONE);
-		btEncode.setVisibility(View.GONE);
 		
 		Intent intent = getIntent();
 		Cursor cursor = null;

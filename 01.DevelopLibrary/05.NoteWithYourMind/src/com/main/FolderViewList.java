@@ -28,12 +28,6 @@ public class FolderViewList extends Activity
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.folderview);
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
-        Button btSkin = (Button)findViewById(R.id.B_main_setting_skin);
-		Button btEncode = (Button)findViewById(R.id.B_main_setting_encode);
-		btSkin.setVisibility(View.GONE);
-		btEncode.setVisibility(View.GONE);
-        ImageButton btNewFolder = (ImageButton)findViewById(R.id.B_main_NewFolder);
-		btNewFolder.setVisibility(View.GONE);
 
 		Intent iExtraData = this.getIntent();
 		m_Cur_FolderID = iExtraData.getIntExtra(ExtraData_FolderID, CommonDefine.g_int_Invalid_ID );
@@ -52,17 +46,17 @@ public class FolderViewList extends Activity
 		m_NoteListUICtrl = new NoteListUICtrl(this, memoList, m_Cur_FolderID, toolbarLayout);
 		m_NoteListUICtrl.initializeSource();*/
 
-		ImageButton clBTNewMemo = (ImageButton) findViewById(R.id.B_main_NewMemo);
-        clBTNewMemo.setOnClickListener(new Button.OnClickListener(){
-        	public void onClick(View v)
-        	{
-        		Intent intent = new Intent();
-        		intent.setClass(FolderViewList.this, NoteWithYourMind.class); 
-        		intent.putExtra(NoteWithYourMind.ExtraData_MemoID, m_Cur_FolderID);
-        		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InFolder);
-        		startActivity(intent);
-        	}
-        });
+//		ImageButton clBTNewMemo = (ImageButton) findViewById(R.id.B_main_NewMemo);
+//        clBTNewMemo.setOnClickListener(new Button.OnClickListener(){
+//        	public void onClick(View v)
+//        	{
+//        		Intent intent = new Intent();
+//        		intent.setClass(FolderViewList.this, NoteWithYourMind.class); 
+//        		intent.putExtra(NoteWithYourMind.ExtraData_MemoID, m_Cur_FolderID);
+//        		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InFolder);
+//        		startActivity(intent);
+//        	}
+//        });
 		
 	}
 	public void onStop()

@@ -80,15 +80,6 @@ public class NoteWithYourMind extends Activity {
         g_drawable_Folder = r.getDrawable(R.drawable.folder);
         g_drawable_FolderLocked = r.getDrawable(R.drawable.folderlocked);
         g_drawable_Memo = r.getDrawable(R.drawable.memo);
-        
-        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-		setContentView(R.layout.main);
-        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
-        ImageButton btNewMemo = (ImageButton)findViewById(R.id.B_main_NewMemo);
-        ImageButton btNewFolder = (ImageButton)findViewById(R.id.B_main_NewFolder);
-		btNewMemo.setVisibility(View.GONE);
-		btNewFolder.setVisibility(View.GONE);
-		
         m_ExtraData_MemoID = CMemoInfo.Id_Invalid;
         m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
         Intent iExtraData = this.getIntent();
@@ -96,6 +87,13 @@ public class NoteWithYourMind extends Activity {
 		m_ExtraData_NewNoteKind = (NewNoteKindEnum)iExtraData.getSerializableExtra(ExtraData_NewNoteKind);
 		if(m_ExtraData_NewNoteKind==null){
 			m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
+		}
+		if(m_ExtraData_NewNoteKind==NewNoteKindEnum.NewNoteKind_Unknown){
+			requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+			setContentView(R.layout.main);
+	        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+		}else{
+			setContentView(R.layout.main);
 		}
         m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
         UpdateViewStatus();
@@ -109,22 +107,6 @@ public class NoteWithYourMind extends Activity {
 			int index = curPassWord.getColumnIndex(CNoteDBCtrl.KEY_password);
 			CommonDefine.g_str_PassWord = curPassWord.getString(index);					
 		}
-
-		Button clBTSkin = (Button) findViewById(R.id.B_main_setting_skin);
-        clBTSkin.setOnClickListener(new Button.OnClickListener(){
-        	public void onClick(View v)
-        	{
-        		
-        	}
-        });
-
-		Button clBTEncode = (Button) findViewById(R.id.B_main_setting_encode);
-        clBTEncode.setOnClickListener(new Button.OnClickListener(){
-        	public void onClick(View v)
-        	{
-        		EncodeSettingDlg();
-        	}
-        });
 
         c = Calendar.getInstance();
         ImageButton clBTSave = (ImageButton) findViewById(R.id.B_main_Save);

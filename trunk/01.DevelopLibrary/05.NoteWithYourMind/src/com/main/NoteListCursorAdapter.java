@@ -383,6 +383,12 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 	public int getIsRemind(){
 		return m_isRemind;
 	}
+
+	public int getListDBID(View view){
+		ItemDetail detail = m_ListItemDetail.get(view);
+		return detail.iDBRecID;
+	}
+
 	/*public void TransforPassWord(String strPassWord){
 		m_strPassWord = strPassWord;
 	}*/

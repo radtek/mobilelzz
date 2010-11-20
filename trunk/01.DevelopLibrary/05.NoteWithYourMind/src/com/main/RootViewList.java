@@ -42,6 +42,10 @@ public class RootViewList extends ActivityGroup
 	private NoteListCursorAdapter m_memoListAdapter;
 	private NoteListCursorAdapter m_remindListAdapter;
 	private int m_LastTabIndex = CommonDefine.g_int_Invalid_ID;
+	private View  m_vMemoList;
+	private View  m_vRemindList;	
+	private int   m_iDBID = CommonDefine.g_int_Invalid_ID;	
+	
 	/** Called when the activity is first created. */
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -101,25 +105,25 @@ public class RootViewList extends ActivityGroup
 	    });
 		m_TabHost.setCurrentTab(1);
 		m_TabHost.setCurrentTab(0);
-        View vMemoList = (View) findViewById(R.id.memolist);
+        m_vMemoList = (View) findViewById(R.id.memolist);
         
-        Button clBTMemoNewFolder = (Button) vMemoList.findViewById(R.id.RootViewListContent_NewFolder_B);
+        Button clBTMemoNewFolder = (Button) m_vMemoList.findViewById(R.id.RootViewListContent_NewFolder_B);
 		clBTMemoNewFolder.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{  			
         		PopUpNewFolderDlg(CMemoInfo.IsRemind_No); 			
         	}
         });
-		View vRemindList = (View) findViewById(R.id.remindlist);
-        Button clBTMemoNewFolder2 = (Button) vRemindList.findViewById(R.id.RootViewListContent_NewFolder_B);
+		m_vRemindList = (View) findViewById(R.id.remindlist);
+        Button clBTMemoNewFolder2 = (Button) m_vRemindList.findViewById(R.id.RootViewListContent_NewFolder_B);
         clBTMemoNewFolder2.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{  			
         		PopUpNewFolderDlg(CMemoInfo.IsRemind_Yes); 			
         	}
         });
-        BindListViewData(vRemindList, CMemoInfo.IsRemind_Yes);
-        BindListViewData(vMemoList, CMemoInfo.IsRemind_No);
+        BindListViewData(m_vRemindList, CMemoInfo.IsRemind_Yes);
+        BindListViewData(m_vMemoList, CMemoInfo.IsRemind_No);
 	}
 	
 	public void onStop()
@@ -303,7 +307,7 @@ public class RootViewList extends ActivityGroup
 		  AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();  
 		  switch (item.getItemId()) {  
 		  case 0:  
-		    
+			  ChangeFolderName(info);
 		    return true;  
 		  case 1:  
 		    
@@ -312,4 +316,85 @@ public class RootViewList extends ActivityGroup
 		    return super.onContextItemSelected(item);  
 		  }  
 	}  
+
+	private void ChangeFolderName(AdapterContextMenuInfo info){
+
+		//	首先取得list上对应文件夹名称 设置dialog上文本框内显示旧文件夹名  
+		Cursor cursorFolderList = null;	
+		String oldfolderName =""; 
+		m_iDBID = CommonDefine.g_int_Invalid_ID;
+		
+		final int tabIndex = m_TabHost.getCurrentTab();
+		NoteListCursorAdapter listadapter = null;
+		if(tabIndex==0){
+			listadapter = m_memoListAdapter;
+			ListView memolist = (ListView) m_vMemoList.findViewById(R.id.RootViewListContent_List);
+			m_iDBID = listadapter.getListDBID(((ListView)memolist).getChildAt(info.position));
+		
+		}else if(tabIndex==1){
+			listadapter = m_remindListAdapter;
+			ListView remindlist = (ListView) m_vRemindList.findViewById(R.id.RootViewListContent_List);
+			m_iDBID = listadapter.getListDBID(((ListView)remindlist).getChildAt(info.position));
+
+		}else{
+			
+		}
+		
+		cursorFolderList = m_clCNoteDBCtrl.getMemoRec(m_iDBID);
+       	startManagingCursor(cursorFolderList);
+		if(cursorFolderList.getCount()>0){
+			cursorFolderList.moveToFirst();
+			int index = cursorFolderList.getColumnIndex(CNoteDBCtrl.KEY_detail);
+			oldfolderName = cursorFolderList.getString(index);
+		}
+
+		LayoutInflater factory = LayoutInflater.from(RootViewList.this);
+		final View DialogView = factory.inflate(R.layout.dialognewfolder, null);
+		final EditText FolderNameText = (EditText) DialogView.findViewById(R.id.foldername_edit);
+		FolderNameText.setText(oldfolderName);
+
+		// 弹出dialog
+
+		AlertDialog clDlgChangeFolder = new AlertDialog.Builder(RootViewList.this)	
+			.setIcon(R.drawable.clock)
+			.setTitle("请输入新文件夹名称")
+			.setView(DialogView)
+			.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+				public void onClick(DialogInterface dialog, int i)
+				{
+//	        		EditText FolderNameText = (EditText) DialogView.findViewById(R.id.foldername_edit);
+	        		String strFolderNameNew = FolderNameText.getText().toString();
+	        		if(strFolderNameNew.length()>0){
+						CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+						clCMemoInfo.strDetail = strFolderNameNew;
+						m_clCNoteDBCtrl.Update(m_iDBID,clCMemoInfo);
+						if(tabIndex==0){
+							m_memoListAdapter.updateCursor();
+							m_memoListAdapter.notifyDataSetChanged();					
+						}else if(tabIndex==1){
+							m_remindListAdapter.updateCursor();
+							m_remindListAdapter.notifyDataSetChanged();
+						}else{
+							
+						}
+						
+						dialog.cancel();
+	        		}else{
+	        			Toast toast = Toast.makeText(RootViewList.this, "请输入文件夹名称", Toast.LENGTH_SHORT);
+	            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+	            		toast.show();
+	        		}	
+				}
+			})
+			.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+				public void onClick(DialogInterface dialog, int i)
+				{
+					dialog.cancel();
+				}
+			})
+			.create();
+		clDlgChangeFolder.show();
+		
+	}
+
 }

@@ -22,7 +22,7 @@
 	android:id="@+id/main_bottombar"
 	android:orientation="horizontal"
 	android:layout_width="fill_parent"
-	android:layout_height="64dp"
+	android:layout_height="55dp"
 	android:layout_alignParentBottom="true">
 			<ImageButton
 			android:id="@+id/B_main_View"

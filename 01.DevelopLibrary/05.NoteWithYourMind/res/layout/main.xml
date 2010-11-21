@@ -4,19 +4,21 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	xmlns:android="http://schemas.android.com/apk/res/android">
-
-
-	<CheckBox
-		android:id="@+id/CB_main_IsWarning"
-		android:text="提醒我"
-		android:textSize="22sp"
-		android:layout_gravity="center_horizontal"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="5dip"
-		>
-	</CheckBox>
-
+			
+			<EditText 
+				android:id="@+id/CB_main_IsWarning"
+				android:text="点击设定提醒时间" 
+				android:background="@drawable/qq_edit_login" 
+				android:paddingLeft="45.0sp"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content" 
+				android:layout_marginLeft="5.0dip"
+				android:layout_marginTop="5.0dip" 
+				android:layout_marginRight="5.0dip"
+				android:layout_marginBottom="5.0px" 
+				android:editable="false"
+				android:imeOptions="actionGo"
+				android:layout_alignParentTop="true"  />
 <LinearLayout
 	style="@android:style/ButtonBar"
 	android:id="@+id/main_bottombar"
@@ -52,6 +54,45 @@
 			android:src="@drawable/buttonsave"
 			android:scaleType="center">
 			</ImageButton>
+			<Button
+			android:id="@+id/B_Remind_Everyday"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:layout_weight="1"	
+			android:layout_gravity="center_vertical"
+			android:text="每天提醒"
+			android:textSize="20sp"
+			android:layout_marginLeft="3dip"
+			android:layout_marginRight="3dip"
+			android:gravity="center"
+			android:scaleType="center">
+			</Button>
+			<Button
+			android:id="@+id/B_Remind_Once"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:layout_weight="1"	
+			android:layout_gravity="center_vertical"
+			android:text="单次提醒"
+			android:textSize="20sp"
+			android:layout_marginLeft="3dip"
+			android:layout_marginRight="3dip"
+			android:gravity="center"
+			android:scaleType="center">
+			</Button>
+			<Button
+			android:id="@+id/B_Remind_Other"
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:layout_weight="1"	
+			android:layout_gravity="center_vertical"
+			android:text="其他提醒"
+			android:textSize="20sp"
+			android:layout_marginLeft="3dip"
+			android:layout_marginRight="3dip"
+			android:gravity="center"
+			android:scaleType="center">
+			</Button>
 	</LinearLayout>
 	<EditText
 		android:id="@+id/ET_main_Memo"

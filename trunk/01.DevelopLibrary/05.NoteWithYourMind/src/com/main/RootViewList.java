@@ -31,8 +31,8 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.Toast;
-
-
+import android.widget.TimePicker;
+import android.widget.DatePicker;
 public class RootViewList extends ActivityGroup
 {
 	//private NoteListUICtrl m_NoteListUICtrl;
@@ -303,7 +303,13 @@ public class RootViewList extends ActivityGroup
 				menu.add(0, 1, 0, "设置查看锁"); 
 			}
 		}else{
-			menu.add(0, 3, 0, "转换为提醒");   
+			if(tabIndex==0){
+				menu.add(0, 3, 0, "转换为提醒便签"); 
+			}else if(tabIndex==1){
+				menu.add(0, 4, 0, "转换为普通便签"); 
+			}else{
+
+			}
 		}
 		
 	}  
@@ -316,6 +322,12 @@ public class RootViewList extends ActivityGroup
 		  case 1:  
 			ChangeFolderEncode(info);	
 		    return true;  
+		  case 3:  
+			ChangeMemoToRemind(info);	
+		    return true; 
+		  case 4:  
+//			ChangeRemindToMemo(info);	
+		    return true; 
 		  default:  
 		    return super.onContextItemSelected(item);  
 		  }  
@@ -536,5 +548,63 @@ public class RootViewList extends ActivityGroup
 				.create();
 			clDlgChangeFolder.show();
 	}
-	
+
+	private void ChangeMemoToRemind(AdapterContextMenuInfo info){
+
+		String oldfolderName =""; 
+		m_iDBID = CommonDefine.g_int_Invalid_ID;
+
+		ListView memolist = (ListView) m_vMemoList.findViewById(R.id.RootViewListContent_List);
+		m_iDBID = m_memoListAdapter.getListDBID(((ListView)memolist).getChildAt(info.position));
+
+		// 弹出dialog
+		LayoutInflater factory = LayoutInflater.from(RootViewList.this);
+		final View DialogView = factory.inflate(R.layout.dateandtime, null);
+
+
+		c = Calendar.getInstance();	
+		c.getTimeInMillis();
+		final int Year=c.get(Calendar.YEAR);
+		final int Month=c.get(Calendar.MONTH);
+		final int Day=c.get(Calendar.DAY_OF_MONTH);
+
+		DatePicker clDP = (DatePicker) DialogView.findViewById(R.id.DatePicker01);
+		clDP.init(Year, Month, Day, new DatePicker.OnDateChangedListener(){
+		    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth){
+
+			}
+		});
+		
+		TimePicker clTP = (TimePicker) DialogView.findViewById(R.id.TimePicker01);
+		clTP.setIs24HourView(true);		
+		clTP.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
+		clTP.setCurrentMinute(c.get(Calendar.MINUTE));
+		clTP.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener(){
+		      public void onTimeChanged(TimePicker view,int hourOfDay,int minute){
+
+		      }
+	    });
+		
+		
+		AlertDialog clDlg = new AlertDialog.Builder(RootViewList.this)	
+			.setIcon(R.drawable.clock)
+			.setTitle("设置提醒日期")
+			.setView(DialogView)
+			.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+				public void onClick(DialogInterface dialog, int i)
+				{
+
+				}
+			})
+			.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+				public void onClick(DialogInterface dialog, int i)
+				{
+					dialog.cancel();
+				}
+			})
+			.create();
+			clDlg.show();
+		
+	}
+
 }

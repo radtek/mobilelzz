@@ -51,11 +51,13 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		View vView;
 		boolean bIsFolder;
 		boolean bIsRemind;
+		boolean bIsEncode;
 		ItemDetail(){
 			iDBRecID = CommonDefine.g_int_Invalid_ID;
 			vView = null;
 			bIsFolder = false;
 			bIsRemind = false;
+			bIsEncode = false;
 		}
 	}
 	private HashMap<String,ItemSelectResult> m_ListItemSelectResult;
@@ -122,9 +124,11 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 			if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
 				//tV.setCompoundDrawables(NoteWithYourMind.g_drawable_FolderLocked, null, null, null);
 				tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.folderlocked, 0, 0, 0);
+				itemdetail.bIsEncode = true;
 			}else{
 				//tV.setCompoundDrawables(NoteWithYourMind.g_drawable_Folder, null, null, null);
 				tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.folder, 0, 0, 0);
+				itemdetail.bIsEncode = false;
 			}
 		}else{
 			//tV.setCompoundDrawables(NoteWithYourMind.g_drawable_Memo, null, null, null);
@@ -389,6 +393,11 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		return detail.iDBRecID;
 	}
 
+	public boolean getListIsEncode(View view){
+		ItemDetail detail = m_ListItemDetail.get(view);
+		return detail.bIsEncode;
+	}
+	
 	/*public void TransforPassWord(String strPassWord){
 		m_strPassWord = strPassWord;
 	}*/

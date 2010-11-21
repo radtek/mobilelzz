@@ -297,7 +297,11 @@ public class RootViewList extends ActivityGroup
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
 		if(listadapter.isFolder(((ListView)v).getChildAt(info.position))){
 			menu.add(0, 0, 0, "修改名称");  
-			menu.add(0, 1, 0, "设置查看锁");  
+			if(listadapter.getListIsEncode(((ListView)v).getChildAt(info.position))){
+				menu.add(0, 1, 0, "取消查看锁"); 
+			}else{
+				menu.add(0, 1, 0, "设置查看锁"); 
+			}
 		}else{
 			menu.add(0, 3, 0, "转换为提醒");   
 		}
@@ -307,10 +311,10 @@ public class RootViewList extends ActivityGroup
 		  AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();  
 		  switch (item.getItemId()) {  
 		  case 0:  
-			  ChangeFolderName(info);
+			ChangeFolderName(info);
 		    return true;  
 		  case 1:  
-		    
+			ChangeFolderEncode(info);	
 		    return true;  
 		  default:  
 		    return super.onContextItemSelected(item);  
@@ -367,6 +371,8 @@ public class RootViewList extends ActivityGroup
 	        		if(strFolderNameNew.length()>0){
 						CMemoInfo clCMemoInfo	=	new	CMemoInfo();
 						clCMemoInfo.strDetail = strFolderNameNew;
+					    c = Calendar.getInstance();
+						clCMemoInfo.dLastModifyTime = c.getTimeInMillis();	
 						m_clCNoteDBCtrl.Update(m_iDBID,clCMemoInfo);
 						if(tabIndex==0){
 							m_memoListAdapter.updateCursor();
@@ -397,4 +403,138 @@ public class RootViewList extends ActivityGroup
 		
 	}
 
+	private void ChangeFolderEncode(AdapterContextMenuInfo info){
+
+		//	首先取得list上对应文件夹的加密现状:已加密?未加密?
+		Cursor cursorFolderList = null;	
+		int iEncodeFlag = CMemoInfo.IsEncode_No;
+		m_iDBID = CommonDefine.g_int_Invalid_ID;
+		
+		final int tabIndex = m_TabHost.getCurrentTab();
+		NoteListCursorAdapter listadapter = null;
+		if(tabIndex==0){
+			listadapter = m_memoListAdapter;
+			ListView memolist = (ListView) m_vMemoList.findViewById(R.id.RootViewListContent_List);
+			m_iDBID = listadapter.getListDBID(((ListView)memolist).getChildAt(info.position));
+		
+		}else if(tabIndex==1){
+			listadapter = m_remindListAdapter;
+			ListView remindlist = (ListView) m_vRemindList.findViewById(R.id.RootViewListContent_List);
+			m_iDBID = listadapter.getListDBID(((ListView)remindlist).getChildAt(info.position));
+
+		}else{
+			
+		}
+
+		cursorFolderList = m_clCNoteDBCtrl.getMemoRec(m_iDBID);
+       	startManagingCursor(cursorFolderList);
+		if(cursorFolderList.getCount()>0){
+			cursorFolderList.moveToFirst();
+			int index = cursorFolderList.getColumnIndex(CNoteDBCtrl.KEY_isencode);
+			iEncodeFlag = cursorFolderList.getInt(index);
+		}
+		// 弹出对应的dialog
+		if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
+			//弹出取消加密的dialog
+			PopUpCancleFolderEncodeDlg(tabIndex);
+		}else{
+			//弹出设置加密的dialog
+			PopUpSetFolderEncodeDlg( tabIndex );
+		}
+		
+	}
+	private void PopUpSetFolderEncodeDlg( final int tabIndex){
+		AlertDialog clDlgChangeFolder = new AlertDialog.Builder(RootViewList.this)	
+				.setIcon(R.drawable.clock)
+				.setTitle("设置查看锁后需输入密码方可查看")
+				.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int i)
+					{
+
+						CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+						clCMemoInfo.iIsEncode = CMemoInfo.IsEncode_Yes;						;
+						c = Calendar.getInstance();
+						clCMemoInfo.dLastModifyTime = c.getTimeInMillis();	
+						m_clCNoteDBCtrl.Update(m_iDBID,clCMemoInfo);
+						if(tabIndex==0){
+							m_memoListAdapter.updateCursor();
+							m_memoListAdapter.notifyDataSetChanged();					
+						}else if(tabIndex==1){
+							m_remindListAdapter.updateCursor();
+							m_remindListAdapter.notifyDataSetChanged();
+						}else{
+							
+						}
+	        			Toast toast = Toast.makeText(RootViewList.this, "已设置查看锁", Toast.LENGTH_SHORT);
+	            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+	            		toast.show();
+						dialog.cancel();
+					}
+				})
+				.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int i)
+					{
+						dialog.cancel();
+					}
+				})
+				.create();
+			clDlgChangeFolder.show();
+	}
+
+	private void PopUpCancleFolderEncodeDlg( final int tabIndex){
+
+		LayoutInflater factory = LayoutInflater.from(RootViewList.this);
+		final View DialogView = factory.inflate(R.layout.dialog_encodesetting, null);
+
+		AlertDialog clDlgChangeFolder = new AlertDialog.Builder(RootViewList.this)	
+				.setIcon(R.drawable.clock)
+				.setTitle("取消查看锁请输入密码")
+				.setView(DialogView)
+				.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int i)
+					{
+						EditText PassWord = (EditText) DialogView.findViewById(R.id.ET_encodesetting);
+						String strNewPassWord = PassWord.getText().toString();
+		        		if(strNewPassWord.length()>0){
+							if(strNewPassWord.equals(CommonDefine.g_str_PassWord)){
+								CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+	 						    c = Calendar.getInstance();
+								clCMemoInfo.dLastModifyTime = c.getTimeInMillis();							
+			            		clCMemoInfo.iIsEncode	=	CMemoInfo.IsEncode_No;
+			            		m_clCNoteDBCtrl.Update(m_iDBID,clCMemoInfo);     		
+								if(tabIndex==0){
+									m_memoListAdapter.updateCursor();
+									m_memoListAdapter.notifyDataSetChanged();					
+								}else if(tabIndex==1){
+									m_remindListAdapter.updateCursor();
+									m_remindListAdapter.notifyDataSetChanged();
+								}else{
+									
+								}
+			            		Toast toast = Toast.makeText(RootViewList.this, "已取消查看锁", Toast.LENGTH_SHORT);
+			            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+			            		toast.show();
+							}else{
+			        			Toast toast = Toast.makeText(RootViewList.this, "密码错误!请重新输入", Toast.LENGTH_SHORT);
+			            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+			            		toast.show();
+							}
+		        		}else{
+		        			Toast toast = Toast.makeText(RootViewList.this, "请输入查看密码", Toast.LENGTH_SHORT);
+		            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+		            		toast.show();
+		        		}
+						dialog.cancel();
+					}
+				})
+				.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int i)
+					{
+						dialog.cancel();
+					}
+				})
+				.create();
+			clDlgChangeFolder.show();
+	}
+	
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<item
+		android:id="@+id/menu_skin_setting" 	
+		android:icon="@drawable/skinsetting"
+		android:title="皮肤设定"/>
+	<item
+		android:id="@+id/menu_password_setting" 	
+		android:icon="@drawable/passwordsetting"
+		android:title="密码设定"/>
+</menu>

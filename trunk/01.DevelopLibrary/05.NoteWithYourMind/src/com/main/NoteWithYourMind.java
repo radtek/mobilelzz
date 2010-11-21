@@ -22,17 +22,26 @@ Memo
 更新加密、detail
 保存加密、detail*/
 
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.view.View;
@@ -43,6 +52,7 @@ import android.graphics.drawable.Drawable;
 import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 
@@ -65,12 +75,128 @@ public class NoteWithYourMind extends Activity {
 	
 	public static	CNoteDBCtrl		m_clCNoteDBCtrl;
 	
-	private Calendar c;
+	private Calendar c	=	Calendar.getInstance();
 
 	private int m_ExtraData_MemoID = CMemoInfo.Id_Invalid;
 	private NewNoteKindEnum m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
 
+	/**判断是都进行提醒设置的flg**/
+	private	static	boolean		bIsRemindSetting	=	true;
+	
+	/**判断AlertDialog中确认或取消的flg**/
+	private	static	boolean		bIsCheck			=	false;
+	
+	/**设置提醒设置为不显示**/
+	public	void	setRemindButtonGone()
+	{
+		Button btEveryday	=	(Button)findViewById(R.id.B_Remind_Everyday);
+		Button btOnce		=	(Button)findViewById(R.id.B_Remind_Once);
+		Button btOhter		=	(Button)findViewById(R.id.B_Remind_Other);
+		
+		btEveryday.setVisibility(View.GONE);
+		btOnce.setVisibility(View.GONE);
+		btOhter.setVisibility(View.GONE);
+		
+    	ImageButton btViewList	=	(ImageButton)findViewById(R.id.B_main_View);
+    	if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown)
+    	{
+    		btViewList.setVisibility(View.VISIBLE);
+    	}
+    	else
+    	{
+    		btViewList.setVisibility(View.GONE);
+    	}
+    	
+    	ImageButton btSave		=	(ImageButton)findViewById(R.id.B_main_Save);
+    	btSave.setVisibility(View.VISIBLE);
+	}
+	
+	/**设置提醒设置为不显示**/
+	public	void	setRemindButtonVisible()
+	{
+		Button btEveryday	=	(Button)findViewById(R.id.B_Remind_Everyday);
+		Button btOnce		=	(Button)findViewById(R.id.B_Remind_Once);
+		Button btOhter		=	(Button)findViewById(R.id.B_Remind_Other);
+		
+		btEveryday.setVisibility(View.VISIBLE);
+		btOnce.setVisibility(View.VISIBLE);
+		btOhter.setVisibility(View.VISIBLE);
+		
+    	ImageButton btViewList	=	(ImageButton)findViewById(R.id.B_main_View);
+    	ImageButton btSave		=	(ImageButton)findViewById(R.id.B_main_Save);
 
+    	btViewList.setVisibility(View.GONE);
+    	btSave.setVisibility(View.GONE);
+	}
+	
+	public	void	setCurrentDateAndTime( boolean bIsDateDisplay )
+	{
+		bIsCheck	=	false;
+		c.setTimeInMillis(System.currentTimeMillis());
+		LayoutInflater factory = LayoutInflater.from(NoteWithYourMind.this);
+		final View DialogView = factory.inflate(R.layout.dateandtime, null);
+		AlertDialog dlg = new AlertDialog.Builder(NoteWithYourMind.this)
+			.setTitle("设置提醒日期")
+			.setView(DialogView)
+			.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					bIsCheck	=	true;
+
+
+    				EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
+    				EtOnce.setText(c.get(Calendar.YEAR) +"/" + c.get(Calendar.MONTH) +"/"+c.get(Calendar.HOUR_OF_DAY) + " " 
+    								+ c.get(Calendar.HOUR_OF_DAY) + ":" +c.get(Calendar.MINUTE) );
+
+//					finish();
+				}} )
+			.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					bIsCheck	=	false;
+					dialog.cancel();
+				}} )
+			.create();
+
+		dlg.show();
+		DatePicker dateOPicker		=	(DatePicker) DialogView.findViewById(R.id.DatePicker01);
+		//将日历初始化为当前系统时间，并设置其事件监听
+		dateOPicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth)
+            {
+                //当日期更改时，在这里处理
+                c.set( Calendar.YEAR, year);
+                c.set( Calendar.MONTH, monthOfYear);
+                c.set( Calendar.DAY_OF_MONTH, dayOfMonth);
+            }
+        });
+
+		if ( bIsDateDisplay )
+		{
+			dateOPicker.setEnabled(false);
+		}
+		
+		TimePicker clTP = (TimePicker) DialogView.findViewById(R.id.TimePicker01);
+		clTP.setIs24HourView(true);   	
+		
+	       //监听时间改变
+		clTP.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute)
+            {
+                //时间改变时处理
+                c.set( Calendar.HOUR_OF_DAY, hourOfDay);
+                c.set( Calendar.MINUTE, minute);
+            }
+        });
+
+        
+	}
     /** Called when the activity is first created. */
 	
     @Override
@@ -80,6 +206,16 @@ public class NoteWithYourMind extends Activity {
         g_drawable_Folder = r.getDrawable(R.drawable.folder);
         g_drawable_FolderLocked = r.getDrawable(R.drawable.folderlocked);
         g_drawable_Memo = r.getDrawable(R.drawable.memo);
+        
+        /**设置Title的部分暂时注释掉**/
+//        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		setContentView(R.layout.main);
+//        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+//        ImageButton btNewMemo = (ImageButton)findViewById(R.id.B_main_NewMemo);
+//        ImageButton btNewFolder = (ImageButton)findViewById(R.id.B_main_NewFolder);
+//		btNewMemo.setVisibility(View.GONE);
+//		btNewFolder.setVisibility(View.GONE);
+		
         m_ExtraData_MemoID = CMemoInfo.Id_Invalid;
         m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
         Intent iExtraData = this.getIntent();
@@ -88,13 +224,16 @@ public class NoteWithYourMind extends Activity {
 		if(m_ExtraData_NewNoteKind==null){
 			m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
 		}
-		if(m_ExtraData_NewNoteKind==NewNoteKindEnum.NewNoteKind_Unknown){
-			requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-			setContentView(R.layout.main);
-	        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
-		}else{
-			setContentView(R.layout.main);
-		}
+		
+		setContentView(R.layout.main);
+		
+//		if(m_ExtraData_NewNoteKind==NewNoteKindEnum.NewNoteKind_Unknown){
+//			requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+//			setContentView(R.layout.main);
+//	        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+//		}else{
+//			setContentView(R.layout.main);
+//		}
         m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
         UpdateViewStatus();
 
@@ -107,8 +246,54 @@ public class NoteWithYourMind extends Activity {
 			int index = curPassWord.getColumnIndex(CNoteDBCtrl.KEY_password);
 			CommonDefine.g_str_PassWord = curPassWord.getString(index);					
 		}
+    	
+    	/*取得提醒对象添加监听*/
+    	Button btEveryday = (Button) findViewById(R.id.B_Remind_Everyday);
+    	btEveryday.setOnClickListener(new Button.OnClickListener()
+    	{
+    		public void onClick(View v)
+    		{
+    			setCurrentDateAndTime( true );
+    		}
+        });
+    	
+    	Button btOnce = (Button) findViewById(R.id.B_Remind_Once);
+    	btOnce.setOnClickListener(new Button.OnClickListener()
+    	{
+    		public void onClick(View v)
+    		{
+    			setCurrentDateAndTime( false ); 
+    		}
+        });
+    	
+    	Button btOhter = (Button) findViewById(R.id.B_Remind_Other);
+    	btOhter.setOnClickListener(new Button.OnClickListener()
+    	{
+    		public void onClick(View v)
+    		{
+        		Intent intent = new Intent();
+        		intent.setClass(NoteWithYourMind.this, RemindSettingActivity.class);
+        		startActivity(intent);
+    		}
+        });
+    	
+//		Button clBTSkin = (Button) findViewById(R.id.B_main_setting_skin);
+//        clBTSkin.setOnClickListener(new Button.OnClickListener(){
+//        	public void onClick(View v)
+//        	{
+//        		
+//        	}
+//        });
 
-        c = Calendar.getInstance();
+//		Button clBTEncode = (Button) findViewById(R.id.B_main_setting_encode);
+//        clBTEncode.setOnClickListener(new Button.OnClickListener(){
+//        	public void onClick(View v)
+//        	{
+//        		EncodeSettingDlg();
+//        	}
+//        });
+
+//        c = Calendar.getInstance();
         ImageButton clBTSave = (ImageButton) findViewById(R.id.B_main_Save);
         clBTSave.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
@@ -139,34 +324,50 @@ public class NoteWithYourMind extends Activity {
         	}
         });
         
-        CheckBox clCheckBoxWarning = (CheckBox) findViewById(R.id.CB_main_IsWarning);
-        clCheckBoxWarning.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
-        	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-        	{
-        		if(isChecked)
-        		{
-        			LayoutInflater factory = LayoutInflater.from(NoteWithYourMind.this);
-        			final View DialogView = factory.inflate(R.layout.dateandtime, null);
-        			AlertDialog dlg = new AlertDialog.Builder(NoteWithYourMind.this)
-        				.setTitle("设置提醒日期")
-        				.setView(DialogView)
-        				.setPositiveButton("确定",null)
-        				.setNegativeButton("取消",null)
-        				.create();
-        			dlg.show();
-        			TimePicker clTP = (TimePicker) DialogView.findViewById(R.id.TimePicker01);
-        			clTP.setIs24HourView(true);
-        		}
-        	}
-        });
+        ((EditText)findViewById(R.id.CB_main_IsWarning)).setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if ( bIsRemindSetting )
+				{
+					bIsRemindSetting	=	false;
+					setRemindButtonVisible();
+					
+				}
+				else
+				{
+					bIsRemindSetting	=	true;
+					setRemindButtonGone();
+				}			
+			}
+		});
+
+        
+//        CheckBox clCheckBoxWarning = (CheckBox) findViewById(R.id.CB_main_IsWarning);
+//        clCheckBoxWarning.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
+//        	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+//        	{
+//        		if(isChecked)
+//        		{
+//        			LayoutInflater factory = LayoutInflater.from(NoteWithYourMind.this);
+//        			final View DialogView = factory.inflate(R.layout.dateandtime, null);
+//        			AlertDialog dlg = new AlertDialog.Builder(NoteWithYourMind.this)
+//        				.setTitle("设置提醒日期")
+//        				.setView(DialogView)
+//        				.setPositiveButton("确定",null)
+//        				.setNegativeButton("取消",null)
+//        				.create();
+//        			dlg.show();
+//        			TimePicker clTP = (TimePicker) DialogView.findViewById(R.id.TimePicker01);
+//        			clTP.setIs24HourView(true);
+//        		}
+//        	}
+//       });
     }
     private void UpdateViewStatus(){
-    	ImageButton btViewList = (ImageButton)findViewById(R.id.B_main_View);
-    	if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown){
-    		btViewList.setVisibility(View.VISIBLE);
-    	}else{
-    		btViewList.setVisibility(View.GONE);
-    	}
+
+    	setRemindButtonGone();
     	if(m_ExtraData_MemoID!=CMemoInfo.Id_Invalid){
     		Cursor curExtraMemo = m_clCNoteDBCtrl.getMemoRec(m_ExtraData_MemoID);
         	startManagingCursor(curExtraMemo);
@@ -197,23 +398,24 @@ public class NoteWithYourMind extends Activity {
 	}
     private void UpdateStatusOfMemoInfo(String detail, boolean bIsRemind){
     	EditText etDetail = (EditText)findViewById(R.id.ET_main_Memo);
-    	CheckBox cbIsRemind = (CheckBox)findViewById(R.id.CB_main_IsWarning);
+ //   	CheckBox cbIsRemind = (CheckBox)findViewById(R.id.CB_main_IsWarning);
     	etDetail.setText(detail);
-    	cbIsRemind.setChecked(bIsRemind);
+ //   	cbIsRemind.setChecked(bIsRemind);
     }
 
     private void SaveEditData(String strMemoText)
     {
     	CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-		clCMemoInfo.strDetail	=	strMemoText;
 		clCMemoInfo.dLastModifyTime = c.getTimeInMillis();
+		clCMemoInfo.strDetail	=	strMemoText;
 		
 		if(m_ExtraData_MemoID!=CMemoInfo.Id_Invalid){
 			if(m_ExtraData_NewNoteKind==NewNoteKindEnum.NewNoteKind_InFolder){
 				clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
 	    		clCMemoInfo.iType = CMemoInfo.Type_Memo;
 	        	clCMemoInfo.iPreId	=	m_ExtraData_MemoID;
-	        	clCMemoInfo.dCreateTime = c.getTimeInMillis();
+	        	clCMemoInfo.dCreateTime = System.currentTimeMillis();  
+	        	clCMemoInfo.dRemindTime = c.getTimeInMillis(); 
 	        	m_clCNoteDBCtrl.Create(clCMemoInfo);
 			}else{
 				m_clCNoteDBCtrl.Update(m_ExtraData_MemoID,clCMemoInfo);
@@ -222,7 +424,8 @@ public class NoteWithYourMind extends Activity {
         	clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
     		clCMemoInfo.iType = CMemoInfo.Type_Memo;
         	clCMemoInfo.iPreId	=	CMemoInfo.PreId_Root;
-        	clCMemoInfo.dCreateTime = c.getTimeInMillis();
+        	clCMemoInfo.dCreateTime = System.currentTimeMillis();
+        	clCMemoInfo.dRemindTime = c.getTimeInMillis(); 
         	m_clCNoteDBCtrl.Create(clCMemoInfo);
         }
     }
@@ -327,9 +530,8 @@ public class NoteWithYourMind extends Activity {
 	 */
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		menu.add(0, ITEM0, 0, "皮肤设置");
-		menu.add(0, ITEM1, 0, "加密设置");
-		menu.findItem(ITEM1);
+		MenuInflater inf = getMenuInflater();
+		inf.inflate(R.menu.menu_mian_setting, menu);
 		return true;
 	}
 	

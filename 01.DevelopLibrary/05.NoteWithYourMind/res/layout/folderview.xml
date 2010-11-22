@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-	android:id="@+id/folderview"
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@android:id/tabhost"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent">
+	<RelativeLayout
+	
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	xmlns:android="http://schemas.android.com/apk/res/android"
->
-	<TextView
-		android:id="@+id/memolisttitle_infolder"
+	
+	>
+		<TabWidget
+		android:id="@android:id/tabs"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"   />
+		<FrameLayout
+		android:id="@android:id/tabcontent"
 		android:layout_width="fill_parent"
-    	android:layout_height="60dp"
-    	android:gravity="center|left"
-    	android:textSize="30sp"
-	/>
-	<View
-		android:id="@+id/memolistdivideline_infolder"
-		android:layout_height="5dip"
-		android:layout_width="fill_parent"
-		android:background="#FF909090"
-		android:layout_below="@id/memolisttitle_infolder"
-	/>
-	<LinearLayout
 		android:layout_height="fill_parent"
-		android:layout_width="fill_parent"
-		android:layout_below="@id/memolistdivideline_infolder">
-		<include 
-			android:id="@+id/memolist_infolder" 
-			layout="@layout/listctrlview"/>
-	</LinearLayout>	
-</RelativeLayout>
+		android:layout_above="@android:id/tabs"
+		>
+			<include android:id="@+id/MemoOrRemindlistInFolder" layout="@layout/listctrlview"/>
+			<TextView
+				android:id="@+id/newnote"
+				android:layout_width="wrap_content"
+    		android:layout_height="wrap_content">
+			</TextView>
+		</FrameLayout>
+		
+	</RelativeLayout>
+</TabHost>
 

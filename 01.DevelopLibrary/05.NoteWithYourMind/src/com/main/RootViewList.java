@@ -81,30 +81,8 @@ public class RootViewList extends ActivityGroup
 		specNewNote.setContent(intent/*R.id.newnote*/);
 		m_TabHost.addTab(specNewNote);
 
-		m_TabHost.setOnTabChangedListener(new OnTabChangeListener(){
-	    	public void onTabChanged(String tabId){
-	    		if(tabId.equals(String.valueOf(3))){
-	    			m_LastTabIndex = 2;
-	    			m_TabHost.getTabWidget().getChildAt(2).setBackgroundResource(R.drawable.tabshape);
-	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundDrawable(null);
-	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundDrawable(null);
-	    		}else if(tabId.equals(String.valueOf(2))){
-	    			m_LastTabIndex = 1;
-	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundResource(R.drawable.tabshape);
-	    			m_TabHost.getTabWidget().getChildAt(2).setBackgroundDrawable(null);
-	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundDrawable(null);
-	    		}else if(tabId.equals(String.valueOf(1))){
-	    			m_LastTabIndex = 0;
-	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundResource(R.drawable.tabshape);
-	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundDrawable(null);
-	    			m_TabHost.getTabWidget().getChildAt(2).setBackgroundDrawable(null);
-	    		}else{
-	    			
-	    		}
-	    	}
-	    });
-		m_TabHost.setCurrentTab(1);
-		m_TabHost.setCurrentTab(0);
+//
+		
         m_vMemoList = (View) findViewById(R.id.memolist);
         
         Button clBTMemoNewFolder = (Button) m_vMemoList.findViewById(R.id.RootViewListContent_NewFolder_B);
@@ -124,6 +102,98 @@ public class RootViewList extends ActivityGroup
         });
         BindListViewData(m_vRemindList, CMemoInfo.IsRemind_Yes);
         BindListViewData(m_vMemoList, CMemoInfo.IsRemind_No);
+
+
+		m_TabHost.setOnTabChangedListener(new OnTabChangeListener(){
+	    	public void onTabChanged(String tabId){
+	    		if(tabId.equals(String.valueOf(3))){
+	    			m_LastTabIndex = 2;
+	    			m_TabHost.getTabWidget().getChildAt(2).setBackgroundResource(R.drawable.tabshape);
+	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundDrawable(null);
+	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundDrawable(null);
+	    		}else if(tabId.equals(String.valueOf(2))){
+	    			m_LastTabIndex = 1;
+	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundResource(R.drawable.tabshape);
+	    			m_TabHost.getTabWidget().getChildAt(2).setBackgroundDrawable(null);
+	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundDrawable(null);
+					m_remindListAdapter.updateCursor();
+					m_remindListAdapter.notifyDataSetChanged();
+
+	    		}else if(tabId.equals(String.valueOf(1))){
+	    			m_LastTabIndex = 0;
+	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundResource(R.drawable.tabshape);
+	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundDrawable(null);
+	    			m_TabHost.getTabWidget().getChildAt(2).setBackgroundDrawable(null);
+					m_memoListAdapter.updateCursor();
+					m_memoListAdapter.notifyDataSetChanged();					
+
+	    		}else{
+	    			
+	    		}
+	    	}
+	    });
+		m_TabHost.setCurrentTab(1);
+		m_TabHost.setCurrentTab(0);
+
+		
+        ListView MemoList = (ListView) m_vMemoList.findViewById(R.id.RootViewListContent_List);
+		MemoList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				NoteListCursorAdapter LA = (NoteListCursorAdapter)arg0.getAdapter();
+				Cursor cur = LA.getCursor();
+				cur.moveToPosition(arg2);
+				int iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_type);
+				int iType = cur.getInt(iIndex);
+				iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_id);
+				int iDBID = cur.getInt(iIndex);
+				if(iType == CMemoInfo.Type_Folder){
+					Intent intent = new Intent();
+					intent.setClass(RootViewList.this, FolderViewList.class);							
+					intent.putExtra(FolderViewList.ExtraData_FolderDBID, iDBID);
+					intent.putExtra(FolderViewList.ExtraData_PreID, CMemoInfo.PreId_Root+1);
+					startActivity(intent);
+				}else if(iType == CMemoInfo.Type_Memo){
+
+					Intent intent = new Intent();
+	        		intent.setClass( RootViewList.this, NoteWithYourMind.class);
+					intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot); 
+					intent.putExtra(NoteWithYourMind.ExtraData_MemoID,CMemoInfo.PreId_Root);	        		
+	        		startActivity(intent);
+				}else{
+					
+				}
+			}
+		});
+
+
+        ListView RemindList = (ListView) m_vRemindList.findViewById(R.id.RootViewListContent_List);
+		RemindList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				NoteListCursorAdapter LA = (NoteListCursorAdapter)arg0.getAdapter();
+				Cursor cur = LA.getCursor();
+				cur.moveToPosition(arg2);
+				int iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_type);
+				int iType = cur.getInt(iIndex);
+				iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_id);
+				int iDBID = cur.getInt(iIndex);
+				if(iType == CMemoInfo.Type_Folder){
+					Intent intent = new Intent();
+					intent.setClass(RootViewList.this, FolderViewList.class);							
+					intent.putExtra(FolderViewList.ExtraData_FolderDBID, iDBID);
+					intent.putExtra(FolderViewList.ExtraData_PreID, CMemoInfo.PreId_Root+1);
+					startActivity(intent);
+				}else if(iType == CMemoInfo.Type_Memo){
+
+					//
+				}else{
+					
+				}
+			}
+		});
+
+
 	}
 	
 	public void onStop()

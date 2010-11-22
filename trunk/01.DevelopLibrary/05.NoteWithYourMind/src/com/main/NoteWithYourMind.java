@@ -46,6 +46,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.view.View;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -58,10 +59,6 @@ import android.content.res.Resources;
 
 
 public class NoteWithYourMind extends Activity {
-	public static Drawable g_drawable_Folder;
-	public static Drawable g_drawable_FolderLocked;
-	public static Drawable g_drawable_Memo;
-	
 	public enum NewNoteKindEnum{
 		NewNoteKind_Unknown,
 		NewNoteKind_InRoot,
@@ -202,14 +199,10 @@ public class NoteWithYourMind extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Resources r = this.getResources();
-        g_drawable_Folder = r.getDrawable(R.drawable.folder);
-        g_drawable_FolderLocked = r.getDrawable(R.drawable.folderlocked);
-        g_drawable_Memo = r.getDrawable(R.drawable.memo);
-        
+       
         /**设置Title的部分暂时注释掉**/
 //        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-		setContentView(R.layout.main);
+//		setContentView(R.layout.main);
 //        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
 //        ImageButton btNewMemo = (ImageButton)findViewById(R.id.B_main_NewMemo);
 //        ImageButton btNewFolder = (ImageButton)findViewById(R.id.B_main_NewFolder);
@@ -227,6 +220,11 @@ public class NoteWithYourMind extends Activity {
 		
 		setContentView(R.layout.main);
 		
+		AlarmManager	alarmManager	=	(AlarmManager)getSystemService( Context.ALARM_SERVICE );
+    	Intent 			MyIntent		=	new Intent( this, AlarmReceiver.class );
+    	
+    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(this, 0,MyIntent, 0);
+    	alarmManager.setRepeating( AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (10*1000), 60 * 1000, pendingIntent );
 //		if(m_ExtraData_NewNoteKind==NewNoteKindEnum.NewNoteKind_Unknown){
 //			requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 //			setContentView(R.layout.main);

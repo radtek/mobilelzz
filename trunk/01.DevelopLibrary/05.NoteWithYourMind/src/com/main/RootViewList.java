@@ -78,6 +78,7 @@ public class RootViewList extends ActivityGroup
 		intent.setClass(this, NoteWithYourMind.class); 
 		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot); 
+
 		specNewNote.setContent(intent/*R.id.newnote*/);
 		m_TabHost.addTab(specNewNote);
 
@@ -151,14 +152,13 @@ public class RootViewList extends ActivityGroup
 					Intent intent = new Intent();
 					intent.setClass(RootViewList.this, FolderViewList.class);							
 					intent.putExtra(FolderViewList.ExtraData_FolderDBID, iDBID);
-					intent.putExtra(FolderViewList.ExtraData_PreID, CMemoInfo.PreId_Root+1);
 					startActivity(intent);
 				}else if(iType == CMemoInfo.Type_Memo){
 
 					Intent intent = new Intent();
 	        		intent.setClass( RootViewList.this, NoteWithYourMind.class);
-					intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot); 
-					intent.putExtra(NoteWithYourMind.ExtraData_MemoID,CMemoInfo.PreId_Root);	        		
+					intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.EditNoteKind_InRoot); 
+					intent.putExtra(NoteWithYourMind.ExtraData_MemoID,iDBID);	        		
 	        		startActivity(intent);
 				}else{
 					
@@ -182,7 +182,6 @@ public class RootViewList extends ActivityGroup
 					Intent intent = new Intent();
 					intent.setClass(RootViewList.this, FolderViewList.class);							
 					intent.putExtra(FolderViewList.ExtraData_FolderDBID, iDBID);
-					intent.putExtra(FolderViewList.ExtraData_PreID, CMemoInfo.PreId_Root+1);
 					startActivity(intent);
 				}else if(iType == CMemoInfo.Type_Memo){
 

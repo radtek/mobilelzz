@@ -26,17 +26,16 @@ import android.view.MenuItem;
 
 public class FolderViewList extends ActivityGroup
 {
-	public static String ExtraData_PreID = "com.main.ExtraData_PreID";
-	public static String ExtraData_FolderDBID = "com.main.ExtraData_DBID";
-	
-	private int m_Folder_DBID = CommonDefine.g_int_Invalid_ID;
-	private int m_Pre_FolderID = CommonDefine.g_int_Invalid_ID;
+	public static String ExtraData_FolderDBID = "com.main.ExtraData_DBID";	
+	private int m_Folder_DBID = CMemoInfo.Id_Invalid;
+
 	private String m_strFolderName = "";
 	private Integer m_iEncodeFlag = CMemoInfo.IsEncode_Invalid;
 	private Integer m_iRemindFlag = CMemoInfo.IsRemind_Invalid;
 	
 	private CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
-	private int m_LastTabIndex = CommonDefine.g_int_Invalid_ID;
+	private int m_LastTabIndex = CMemoInfo.Id_Invalid;
+
 	private View  m_vListInFolder;
 	private TabHost m_TabHost;	
 
@@ -53,8 +52,8 @@ public class FolderViewList extends ActivityGroup
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
 
 		Intent iExtraData = this.getIntent();
-		m_Pre_FolderID = iExtraData.getIntExtra(ExtraData_PreID, CommonDefine.g_int_Invalid_ID );
-		m_Folder_DBID = iExtraData.getIntExtra(ExtraData_FolderDBID, CommonDefine.g_int_Invalid_ID );
+
+		m_Folder_DBID = iExtraData.getIntExtra(ExtraData_FolderDBID, CMemoInfo.Id_Invalid);
 		
 		Cursor Cursor = m_clCNoteDBCtrl.getMemoRec(m_Folder_DBID);		
        	startManagingCursor(Cursor);
@@ -92,7 +91,7 @@ public class FolderViewList extends ActivityGroup
 		intent.setClass(this, NoteWithYourMind.class); 
 		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InFolder); 
-		intent.putExtra(NoteWithYourMind.ExtraData_MemoID,m_Pre_FolderID ); 
+		intent.putExtra(NoteWithYourMind.ExtraData_MemoID,m_Folder_DBID ); 
 
 		specNewNote.setContent(intent/*R.id.newnote*/);
 		m_TabHost.addTab(specNewNote);
@@ -144,13 +143,12 @@ public class FolderViewList extends ActivityGroup
 					Intent intent = new Intent();
 					intent.setClass(FolderViewList.this, FolderViewList.class);							
 					intent.putExtra(FolderViewList.ExtraData_FolderDBID, iDBID);
-					intent.putExtra(FolderViewList.ExtraData_PreID, m_Pre_FolderID+1);
 					startActivity(intent);
 				}else if(iType == CMemoInfo.Type_Memo){
 					Intent intent = new Intent();
 	        		intent.setClass( FolderViewList.this, NoteWithYourMind.class);
-					intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InFolder); 
-					intent.putExtra(NoteWithYourMind.ExtraData_MemoID,m_Pre_FolderID);	        		
+					intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.EditNoteKind_InFolder); 
+					intent.putExtra(NoteWithYourMind.ExtraData_MemoID,iDBID);	        		
 	        		startActivity(intent);
 				}else{
 					
@@ -176,7 +174,7 @@ public class FolderViewList extends ActivityGroup
 	
 	private void BindListViewData(View vParent, Integer bIsRemind){
 		if(bIsRemind==CMemoInfo.IsRemind_Yes){
-			Cursor rootRemindListCursor = m_clCNoteDBCtrl.getRemindsByID(m_Pre_FolderID);
+			Cursor rootRemindListCursor = m_clCNoteDBCtrl.getRemindsByID(m_Folder_DBID);
 			if(rootRemindListCursor!=null){
 				startManagingCursor(rootRemindListCursor);
 			}
@@ -185,7 +183,7 @@ public class FolderViewList extends ActivityGroup
 			m_ListAdapter = new NoteListCursorAdapter(FolderViewList.this, rootRemindListCursor);
 			remindlist.setAdapter(m_ListAdapter);
 		}else{
-			Cursor rootMemoListCursor = m_clCNoteDBCtrl.getMemosByID(m_Pre_FolderID);
+			Cursor rootMemoListCursor = m_clCNoteDBCtrl.getMemosByID(m_Folder_DBID);
 			if(rootMemoListCursor!=null){
 				startManagingCursor(rootMemoListCursor);
 			}

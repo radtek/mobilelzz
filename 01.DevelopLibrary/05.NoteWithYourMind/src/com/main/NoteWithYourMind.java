@@ -62,8 +62,11 @@ public class NoteWithYourMind extends Activity {
 	public enum NewNoteKindEnum{
 		NewNoteKind_Unknown,
 		NewNoteKind_InRoot,
+		EditNoteKind_InRoot,
 		NewNoteKind_InFolder,
+		EditNoteKind_InFolder
 	}
+	
 	public static String ExtraData_MemoID = "com.main.ExtraData_MemoID";
 	public static String ExtraData_NewNoteKind = "com.main.ExtraData_NewNoteKind";
 	
@@ -366,33 +369,52 @@ public class NoteWithYourMind extends Activity {
     private void UpdateViewStatus(){
 
     	setRemindButtonGone();
-    	if(m_ExtraData_MemoID!=CMemoInfo.Id_Invalid){
-    		Cursor curExtraMemo = m_clCNoteDBCtrl.getMemoRec(m_ExtraData_MemoID);
-        	startManagingCursor(curExtraMemo);
-        	if(curExtraMemo.getCount()>0){
-        		curExtraMemo.moveToFirst();
-        		int index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_type);
-        		int TypeValue = curExtraMemo.getInt(index);
-        		if(TypeValue==CMemoInfo.Type_Folder){
-        			UpdateStatusOfMemoInfo("",false);
-        		}else{
-        			index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_detail);
-        	    	String strDetail = curExtraMemo.getString(index);
-        	    	index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_isremind);
-        	    	int isRemind = curExtraMemo.getInt(index);
-        	    	if(isRemind == CMemoInfo.IsRemind_Yes){
-        	    		UpdateStatusOfMemoInfo(strDetail,true);
-        	    	}else{
-        	    		UpdateStatusOfMemoInfo(strDetail,false);
-        	    	}
-        		}
-        	}else{
-        		UpdateStatusOfMemoInfo("",false);
-        	}
 
-    	}else{
-    		UpdateStatusOfMemoInfo("",false);
-    	}
+		if((m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_InRoot)
+			||(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_InFolder))
+		{
+       		UpdateStatusOfMemoInfo("",false);  //新建便签 不需要显示任何文字在edittext上
+
+		}
+		else if((m_ExtraData_NewNoteKind == NewNoteKindEnum.EditNoteKind_InRoot)
+				||(m_ExtraData_NewNoteKind == NewNoteKindEnum.EditNoteKind_InFolder))
+		{
+				if( m_ExtraData_MemoID != CMemoInfo.Id_Invalid ){
+			   			Cursor curExtraMemo = m_clCNoteDBCtrl.getMemoRec(m_ExtraData_MemoID);
+			        	startManagingCursor(curExtraMemo);
+			        	if(curExtraMemo.getCount()>0){
+			        		curExtraMemo.moveToFirst();
+			        		int index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_type);
+			        		int TypeValue = curExtraMemo.getInt(index);
+			        		if(TypeValue==CMemoInfo.Type_Folder){
+			        			UpdateStatusOfMemoInfo("",false);
+			        		}else{
+			        			index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_detail);
+			        	    	String strDetail = curExtraMemo.getString(index);
+			        	    	index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_isremind);
+			        	    	int isRemind = curExtraMemo.getInt(index);
+			        	    	if(isRemind == CMemoInfo.IsRemind_Yes){
+			        	    		UpdateStatusOfMemoInfo(strDetail,true);    //编辑便签 需要显示旧文字内容在edittext上
+			        	    	}else{
+			        	    		UpdateStatusOfMemoInfo(strDetail,false);
+			        	    	}
+			        		}
+			        	}else{
+			        		UpdateStatusOfMemoInfo("",false);
+			        	}
+
+				}
+				else{
+					UpdateStatusOfMemoInfo("",false);
+				}
+
+
+		}
+		else{
+       		UpdateStatusOfMemoInfo("",false);
+		}
+			
+
 	}
     private void UpdateStatusOfMemoInfo(String detail, boolean bIsRemind){
     	EditText etDetail = (EditText)findViewById(R.id.ET_main_Memo);
@@ -407,25 +429,43 @@ public class NoteWithYourMind extends Activity {
 		clCMemoInfo.dLastModifyTime = c.getTimeInMillis();
 		clCMemoInfo.strDetail	=	strMemoText;
 		
-		if(m_ExtraData_MemoID!=CMemoInfo.Id_Invalid){
-			if(m_ExtraData_NewNoteKind==NewNoteKindEnum.NewNoteKind_InFolder){
-				clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
-	    		clCMemoInfo.iType = CMemoInfo.Type_Memo;
-	        	clCMemoInfo.iPreId	=	m_ExtraData_MemoID;
-	        	clCMemoInfo.dCreateTime = System.currentTimeMillis();  
-	        	clCMemoInfo.dRemindTime = c.getTimeInMillis(); 
-	        	m_clCNoteDBCtrl.Create(clCMemoInfo);
-			}else{
-				m_clCNoteDBCtrl.Update(m_ExtraData_MemoID,clCMemoInfo);
-			}
-        }else{
-        	clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
+
+		if((m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_InRoot)
+			||(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown))
+		{
+			clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
     		clCMemoInfo.iType = CMemoInfo.Type_Memo;
         	clCMemoInfo.iPreId	=	CMemoInfo.PreId_Root;
         	clCMemoInfo.dCreateTime = System.currentTimeMillis();
         	clCMemoInfo.dRemindTime = c.getTimeInMillis(); 
         	m_clCNoteDBCtrl.Create(clCMemoInfo);
+
+		}
+		else if((m_ExtraData_NewNoteKind == NewNoteKindEnum.EditNoteKind_InRoot)
+				||(m_ExtraData_NewNoteKind == NewNoteKindEnum.EditNoteKind_InFolder))
+
+		{
+			if( m_ExtraData_MemoID != CMemoInfo.Id_Invalid ){
+				m_clCNoteDBCtrl.Update(m_ExtraData_MemoID,clCMemoInfo);
+			}else{
+				//Error
+			}
         }
+		else if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_InFolder)
+		{
+			if( m_ExtraData_MemoID != CMemoInfo.Id_Invalid ){
+	        	clCMemoInfo.iIsEditEnable = CMemoInfo.IsEditEnable_Enable;
+	    		clCMemoInfo.iType = CMemoInfo.Type_Memo;
+	        	clCMemoInfo.iPreId	=	m_ExtraData_MemoID;
+	        	clCMemoInfo.dCreateTime = System.currentTimeMillis();
+	        	clCMemoInfo.dRemindTime = c.getTimeInMillis(); 
+	        	m_clCNoteDBCtrl.Create(clCMemoInfo);
+			}else{
+				//Error
+			}
+		}
+
+
     }
 
     private void EncodeSettingDlg()

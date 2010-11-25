@@ -2,58 +2,34 @@ package com.main;
 
 public class CRemindInfo {
 
-	boolean		m_b1;
-	boolean		m_b2;
-	boolean		m_b3;
-	boolean		m_b4;
-	boolean		m_b5;
-	boolean		m_b6;
-	boolean		m_b7;
+	byte		m_b1;		//周一到周日
+	byte		m_b2;
+	byte		m_b3;
+	byte		m_b4;
+	byte		m_b5;
+	byte		m_b6;
+	byte		m_b7;
 	
-	public	int	getRemindInfoIntger()
-	{
-		m_iRemindInfo	=	0;
-		
-		if( 1 == m_iType )
-		{
-			m_iRemindInfo	=	0x10000FF;
-		}
-		else if ( 2 == m_iType )
-		{
-			
-		}
-		else if ( 3 == m_iType )
-		{
-			
-		}
-		
-		return	m_iRemindInfo;
-	}
+	
+	byte		m_bType;	//循环或单次
+	long		lTime;		//如果单次提醒表示日期年月日
+							//如果是循环提醒则高4为表示小时，低位表示分钟
 	
 	public	String	getRemindInfoString()
 	{
-		return	m_strRemindInfo;
-	}
-	
-	public	void	setRemindInfoIntger( int iInfo )
-	{
+		String	str = null;
 		
+		return	str;
 	}
 	
-	CRemindInfo( int iType )
+	
+	CRemindInfo( byte bType )
 	{
-		m_b1	=	false; m_b2	=	false; m_b3	=	false; m_b4	=	false;
-		m_b5	=	false; m_b6	=	false; m_b7	=	false;
+		m_b1	=	-1; m_b2	=	-1; m_b3	=	-1; m_b4	=	-1;
+		m_b5	=	-1; m_b6	=	-1; m_b7	=	-1;
 		
-		m_iType			=	iType;
-		m_iRemindInfo	=	0;
+		m_bType			=	bType;
+		lTime			=	0;
 	}
 	
-	private		int			m_iRemindInfo;
-	private		String		m_strRemindInfo;
-	
-	/**1:EveryDay;2:Once;3:Other**/
-	private		int			m_iType;	
-	
-	public static final int		iMask1		= 0x0000000F;	
 }

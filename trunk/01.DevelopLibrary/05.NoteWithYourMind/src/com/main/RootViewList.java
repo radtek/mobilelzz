@@ -74,12 +74,12 @@ public class RootViewList extends ActivityGroup
 		TabSpec specNewNote = m_TabHost.newTabSpec("3");
 		//specNewNote.setIndicator("新建便签");
 		specNewNote.setIndicator(composeLayout("新建便签",R.drawable.tabnewnote));
-		Intent intent = new Intent();
-		intent.setClass(this, NoteWithYourMind.class); 
-		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot); 
+//		Intent intent = new Intent();
+//		intent.setClass(this, NoteWithYourMind.class); 
+//		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot); 
 
-		specNewNote.setContent(intent/*R.id.newnote*/);
+		specNewNote.setContent(/*intent*/R.id.newnote);
 		m_TabHost.addTab(specNewNote);
 
 //
@@ -108,23 +108,31 @@ public class RootViewList extends ActivityGroup
 		m_TabHost.setOnTabChangedListener(new OnTabChangeListener(){
 	    	public void onTabChanged(String tabId){
 	    		if(tabId.equals(String.valueOf(3))){
-	    			m_LastTabIndex = 2;
-	    			m_TabHost.getTabWidget().getChildAt(2).setBackgroundResource(R.drawable.tabshape);
-	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundDrawable(null);
-	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundDrawable(null);
+//	    			m_LastTabIndex = 2;
+	    			Intent intent = new Intent();
+	    			intent.setClass(RootViewList.this, NoteWithYourMind.class); 
+	    			intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot); 
+	    			startActivity(intent);
+//	    			m_TabHost.getTabWidget().getChildAt(2).setBackgroundResource(R.drawable.tabshape);
+//	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundDrawable(null);
+//	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundDrawable(null);
 	    		}else if(tabId.equals(String.valueOf(2))){
 	    			m_LastTabIndex = 1;
-	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundResource(R.drawable.tabshape);
-	    			m_TabHost.getTabWidget().getChildAt(2).setBackgroundDrawable(null);
-	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundDrawable(null);
+	    			m_TabHost.getTabWidget().getChildAt(1).findViewById(R.id.tabindicatorview)
+	    			.setBackgroundResource(R.drawable.tabshape_selected);
+	    			//m_TabHost.getTabWidget().getChildAt(2).setBackgroundResource(R.drawable.tabshape_normal);
+	    			m_TabHost.getTabWidget().getChildAt(0).findViewById(R.id.tabindicatorview)
+	    			.setBackgroundResource(R.drawable.tabshape_normal);
 					m_remindListAdapter.updateCursor();
 					m_remindListAdapter.notifyDataSetChanged();
 
 	    		}else if(tabId.equals(String.valueOf(1))){
 	    			m_LastTabIndex = 0;
-	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundResource(R.drawable.tabshape);
-	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundDrawable(null);
-	    			m_TabHost.getTabWidget().getChildAt(2).setBackgroundDrawable(null);
+	    			m_TabHost.getTabWidget().getChildAt(0).findViewById(R.id.tabindicatorview)
+	    			.setBackgroundResource(R.drawable.tabshape_selected);
+	    			m_TabHost.getTabWidget().getChildAt(1).findViewById(R.id.tabindicatorview)
+	    			.setBackgroundResource(R.drawable.tabshape_normal);
+	    			//m_TabHost.getTabWidget().getChildAt(2).setBackgroundResource(R.drawable.tabshape_normal);
 					m_memoListAdapter.updateCursor();
 					m_memoListAdapter.notifyDataSetChanged();					
 

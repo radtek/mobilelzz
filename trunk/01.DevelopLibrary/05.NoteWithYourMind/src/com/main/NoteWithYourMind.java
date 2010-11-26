@@ -104,7 +104,7 @@ public class NoteWithYourMind extends Activity {
     	}
     	else
     	{
-    		btViewList.setVisibility(View.GONE);
+    		btViewList.setVisibility(View.INVISIBLE);
     	}
     	
     	ImageButton btSave		=	(ImageButton)findViewById(R.id.B_main_Save);
@@ -222,12 +222,14 @@ public class NoteWithYourMind extends Activity {
 		}
 		
 		setContentView(R.layout.main);
+		int a = CommonDefine.g_test;
+
+//		AlarmManager	alarmManager	=	(AlarmManager)getSystemService( Context.ALARM_SERVICE );
+//    	Intent 			MyIntent		=	new Intent( this, AlarmReceiver.class );
+//    	
+//    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(this, 0,MyIntent, 0);
+//    	alarmManager.setRepeating( AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (10*1000), 60 * 1000, pendingIntent );
 		
-		AlarmManager	alarmManager	=	(AlarmManager)getSystemService( Context.ALARM_SERVICE );
-    	Intent 			MyIntent		=	new Intent( this, AlarmReceiver.class );
-    	
-    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(this, 0,MyIntent, 0);
-    	alarmManager.setRepeating( AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (10*1000), 60 * 1000, pendingIntent );
 //		if(m_ExtraData_NewNoteKind==NewNoteKindEnum.NewNoteKind_Unknown){
 //			requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 //			setContentView(R.layout.main);

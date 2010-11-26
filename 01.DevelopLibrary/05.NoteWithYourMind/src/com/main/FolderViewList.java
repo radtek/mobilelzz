@@ -34,7 +34,7 @@ public class FolderViewList extends ActivityGroup
 	private Integer m_iRemindFlag = CMemoInfo.IsRemind_Invalid;
 	
 	private CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
-	private int m_LastTabIndex = CMemoInfo.Id_Invalid;
+	private boolean m_isOnCreating = false;
 
 	private View  m_vListInFolder;
 	private TabHost m_TabHost;	
@@ -46,11 +46,11 @@ public class FolderViewList extends ActivityGroup
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-	
+		
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.folderview);
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
-
+        m_isOnCreating = true;
 		Intent iExtraData = this.getIntent();
 
 		m_Folder_DBID = iExtraData.getIntExtra(ExtraData_FolderDBID, CMemoInfo.Id_Invalid);
@@ -87,13 +87,13 @@ public class FolderViewList extends ActivityGroup
 		TabSpec specNewNote = m_TabHost.newTabSpec("1");
 		specNewNote.setIndicator(composeLayout("ÐÂ½¨±ãÇ©",R.drawable.tabnewnote));
 		
-		Intent intent = new Intent();
-		intent.setClass(this, NoteWithYourMind.class); 
-		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InFolder); 
-		intent.putExtra(NoteWithYourMind.ExtraData_MemoID,m_Folder_DBID ); 
+//		Intent intent = new Intent();
+//		intent.setClass(this, NoteWithYourMind.class); 
+//		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//		intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InFolder); 
+//		intent.putExtra(NoteWithYourMind.ExtraData_MemoID,m_Folder_DBID ); 
 
-		specNewNote.setContent(intent/*R.id.newnote*/);
+		specNewNote.setContent(/*intent*/R.id.newnote);
 		m_TabHost.addTab(specNewNote);
 
         m_vListInFolder = (View) findViewById(R.id.MemoOrRemindlistInFolder);
@@ -108,17 +108,25 @@ public class FolderViewList extends ActivityGroup
 		m_TabHost.setOnTabChangedListener(new OnTabChangeListener(){
 	    	public void onTabChanged(String tabId){
 	    		if(tabId.equals(String.valueOf(1))){
-	    			m_LastTabIndex = 1;
-	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundResource(R.drawable.tabshape);
-	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundDrawable(null);
-					m_ListAdapter.updateCursor();
-					m_ListAdapter.notifyDataSetChanged();	
+	    			if(!m_isOnCreating){
+	    				Intent intent = new Intent();
+		    			intent.setClass(FolderViewList.this, NoteWithYourMind.class); 
+		    			intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InFolder); 
+		    			intent.putExtra(NoteWithYourMind.ExtraData_MemoID,m_Folder_DBID ); 
+		    			startActivity(intent);
+	    			}
+//	    			m_LastTabIndex = 1;
+//	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundResource(R.drawable.tabshape);
+//	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundDrawable(null);
+//					m_ListAdapter.updateCursor();
+//					m_ListAdapter.notifyDataSetChanged();	
 	    		}else if(tabId.equals(String.valueOf(0))){
-	    			m_LastTabIndex = 0;
-	    			m_TabHost.getTabWidget().getChildAt(0).setBackgroundResource(R.drawable.tabshape);
-	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundDrawable(null);
-					m_ListAdapter.updateCursor();
-					m_ListAdapter.notifyDataSetChanged();	
+//	    			m_LastTabIndex = 0;
+	    			m_TabHost.getTabWidget().getChildAt(0).findViewById(R.id.tabindicatorview)
+	    			.setBackgroundResource(R.drawable.tabshape_selected);
+//	    			m_TabHost.getTabWidget().getChildAt(1).setBackgroundDrawable(null);
+//					m_ListAdapter.updateCursor();
+//					m_ListAdapter.notifyDataSetChanged();	
 	    		}else{
 	    			
 	    		}
@@ -126,8 +134,7 @@ public class FolderViewList extends ActivityGroup
 	    });
 		m_TabHost.setCurrentTab(1);
 		m_TabHost.setCurrentTab(0);
-
-		
+		m_isOnCreating = false;
         ListView MemoList = (ListView) m_vListInFolder.findViewById(R.id.RootViewListContent_List);
 		MemoList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 			public void onItemClick(AdapterView<?> arg0, View arg1,
@@ -165,7 +172,7 @@ public class FolderViewList extends ActivityGroup
 	public void onResume()
 	{
 		super.onResume();
-		m_TabHost.setCurrentTab(m_LastTabIndex);
+		m_TabHost.setCurrentTab(0);
 	}
 	public void onDestroy()
 	{

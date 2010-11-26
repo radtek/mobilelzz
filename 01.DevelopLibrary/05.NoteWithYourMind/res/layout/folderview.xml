@@ -2,7 +2,8 @@
 <TabHost xmlns:android="http://schemas.android.com/apk/res/android"
 android:id="@android:id/tabhost"
 android:layout_width="fill_parent"
-android:layout_height="fill_parent">
+android:layout_height="fill_parent"
+android:background="#AAE0E0E0">
 	<RelativeLayout
 	
 	android:layout_width="fill_parent"
@@ -14,11 +15,18 @@ android:layout_height="fill_parent">
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"   />
+        <View
+		android:id="@+id/tabdivider"
+		android:layout_width="fill_parent"
+		android:layout_height = "4dp"
+		android:background="#DDFF3200"
+		android:layout_above = "@android:id/tabs"
+		/>
 		<FrameLayout
 		android:id="@android:id/tabcontent"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:layout_above="@android:id/tabs"
+		android:layout_above="@id/tabdivider"
 		>
 			<include android:id="@+id/MemoOrRemindlistInFolder" layout="@layout/listctrlview"/>
 			<TextView

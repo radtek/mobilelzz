@@ -4,8 +4,6 @@ android:id="@+id/RootViewListContent"
 android:orientation="vertical"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
-android:layout_marginLeft="5dip"
-android:layout_marginRight="5dip"
 xmlns:android="http://schemas.android.com/apk/res/android">
 	<Button
 	android:id="@+id/RootViewListContent_NewFolder_B"
@@ -14,12 +12,14 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 	android:layout_gravity="center_horizontal"
 	android:paddingLeft="20dp"
 	android:paddingRight="20dp"
-	android:text="新建文件夹">
+	android:text="新建文件夹"
+	android:background="@drawable/btn_default">
 	</Button>
 	<ListView 
 	android:id="@+id/RootViewListContent_List"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent" />
+	
 </LinearLayout>
 
 

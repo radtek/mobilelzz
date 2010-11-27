@@ -23,6 +23,7 @@ android:background="@drawable/tabshape_normal"
 		android:id="@+id/tabindicatorview_text"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
+		android:textColor="#000000"
 		android:gravity="center"/>
 </LinearLayout>
 </LinearLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@android:id/tabhost"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent">
+	<RelativeLayout
+	
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	
+	>
+		<TabWidget
+		android:id="@android:id/tabs"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    />
+		<FrameLayout
+		android:id="@android:id/tabcontent"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_above="@android:id/tabs"
+		>
+			<include android:id="@+id/remindonce" layout="@layout/dateandtime"/>
+			<include android:id="@+id/remindcycel" layout="@layout/remindsetting"/>
+			<include android:id="@+id/remindinterval" layout="@layout/dateandtime"/>
+			
+			<TextView
+				android:id="@+id/newnote"
+				android:layout_width="wrap_content"
+    		android:layout_height="wrap_content">
+			</TextView>
+		</FrameLayout>
+		
+	</RelativeLayout>
+</TabHost>

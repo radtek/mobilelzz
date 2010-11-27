@@ -54,45 +54,6 @@
 			android:src="@drawable/buttonsave"
 			android:scaleType="center">
 			</ImageButton>
-			<Button
-			android:id="@+id/B_Remind_Everyday"
-			android:layout_width="wrap_content"
-			android:layout_height="fill_parent"
-			android:layout_weight="1"	
-			android:layout_gravity="center_vertical"
-			android:text="每天提醒"
-			android:textSize="20sp"
-			android:layout_marginLeft="3dip"
-			android:layout_marginRight="3dip"
-			android:gravity="center"
-			android:scaleType="center">
-			</Button>
-			<Button
-			android:id="@+id/B_Remind_Once"
-			android:layout_width="wrap_content"
-			android:layout_height="fill_parent"
-			android:layout_weight="1"	
-			android:layout_gravity="center_vertical"
-			android:text="单次提醒"
-			android:textSize="20sp"
-			android:layout_marginLeft="3dip"
-			android:layout_marginRight="3dip"
-			android:gravity="center"
-			android:scaleType="center">
-			</Button>
-			<Button
-			android:id="@+id/B_Remind_Other"
-			android:layout_width="wrap_content"
-			android:layout_height="fill_parent"
-			android:layout_weight="1"	
-			android:layout_gravity="center_vertical"
-			android:text="其他提醒"
-			android:textSize="20sp"
-			android:layout_marginLeft="3dip"
-			android:layout_marginRight="3dip"
-			android:gravity="center"
-			android:scaleType="center">
-			</Button>
 	</LinearLayout>
 	<EditText
 		android:id="@+id/ET_main_Memo"

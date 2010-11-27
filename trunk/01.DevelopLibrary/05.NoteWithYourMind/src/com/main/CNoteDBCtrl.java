@@ -121,8 +121,9 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		initialValues.put(KEY_password, strPassWord);
 		//String[] whereValue={ Integer.toString(1)};
 		m_db.update(DB_TABLE_PassWord, initialValues, null, null);
+		
 	}
-	public	void Create( CMemoInfo clCMemoInfo )
+	public	long Create( CMemoInfo clCMemoInfo )
 	{
 		//m_db.execSQL("insert into DB_TABLE("+KEY_preid+","+KEY_type+","+KEY_isremind+","+KEY_remindtime+","+KEY_createtime+","+KEY_lastmodifytime+","+
 		//		KEY_iseditenable+","+KEY_remindmask+","+KEY_detail+") values(?,?,?,?,?,?,?,?,?)"
@@ -142,7 +143,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		initialValues.put(KEY_password, clCMemoInfo.strPassword);
 		initialValues.put(KEY_isencode, clCMemoInfo.iIsEncode);
 
-		m_db.insert(DB_TABLE, KEY_id, initialValues);
+		return	m_db.insert(DB_TABLE, KEY_id, initialValues);
 	}
 
 	public	void Delete( Integer[] id )

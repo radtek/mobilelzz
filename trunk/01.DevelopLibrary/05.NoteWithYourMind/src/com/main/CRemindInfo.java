@@ -1,7 +1,14 @@
 package com.main;
 
-public class CRemindInfo {
+import java.io.Serializable;
 
+public class CRemindInfo implements Serializable
+{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7060210544600464481L;
 	byte		m_b1;		//周一到周日
 	byte		m_b2;
 	byte		m_b3;
@@ -11,7 +18,7 @@ public class CRemindInfo {
 	byte		m_b7;
 	
 	
-	byte		m_bType;	//循环或单次
+	byte		m_bType;	//循环:0,单次:1 ,无效:-1
 	long		lTime;		//如果单次提醒表示日期年月日
 							//如果是循环提醒则高4为表示小时，低位表示分钟
 	

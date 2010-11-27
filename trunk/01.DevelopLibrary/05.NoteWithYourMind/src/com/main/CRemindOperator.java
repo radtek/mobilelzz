@@ -8,9 +8,9 @@ public final class CRemindOperator
 {
     private static final CRemindOperator _INSTANCE	=	new CRemindOperator();  
     
-    private	HashMap< Long, CRemindInfo >	m_hashMap;
+//    private	HashMap< Long, CRemindInfo >	m_hashMap;
     
-    private	CNoteDBCtrl						m_clCNoteDBCtrl;
+    private CNoteDBCtrl			m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
     private CRemindOperator()
     {
     	//读取所有要被提醒的记录保存到hashMap中，并将每条提醒设置到alarmManager中
@@ -48,6 +48,11 @@ public final class CRemindOperator
     	//将一条提醒设置为无效
     	//将其从HashMap和alarmManager中删除，并将DB中的IsAble项设为无效
     	//由于提醒不能转为Memo，所以该方法对删除和设置为Disable都好用
+    }
+    
+    public	void	getRemindInfo( long _id, CRemindInfo _clCRemindInfo )
+    {
+    	//根据ID从DB中取得提醒信息
     }
     
 }

@@ -1,20 +1,68 @@
 package com.main;
 
-import android.app.Activity;
+import android.app.ActivityGroup;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
+import android.widget.TabHost.TabSpec;
 
-public class RemindSettingActivity extends Activity {
-    /** Called when the activity is first created. */
+public class RemindSettingActivity extends ActivityGroup 
+{
    
     static	private		boolean		bIsSelect	=	false;
-    public void onCreate(Bundle savedInstanceState) {
+    
+    TabHost m_TabHost;
+    
+    public void onCreate(Bundle savedInstanceState) 
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.remindsetting);
+        setContentView(R.layout.remindsettingnew);
         
+        //设置TabHost
+        m_TabHost = (TabHost)findViewById(android.R.id.tabhost);
+        m_TabHost.setup(this.getLocalActivityManager());
+        
+        TabSpec specLater = m_TabHost.newTabSpec( "1" );
+        specLater.setIndicator("间隔提醒");
+        specLater.setContent(R.id.remindinterval);
+        m_TabHost.addTab(specLater);
+        
+        TabSpec specCycel = m_TabHost.newTabSpec("2");
+        specCycel.setIndicator("循环提醒");
+        specCycel.setContent(R.id.remindcycel);
+        m_TabHost.addTab(specCycel);
+        
+        TabSpec specOnce = m_TabHost.newTabSpec("3");
+        specOnce.setIndicator("定时提醒");
+        specOnce.setContent(R.id.remindonce);
+        m_TabHost.addTab(specOnce);
+     
+        m_TabHost.setOnTabChangedListener(new OnTabChangeListener()
+        {
+			@Override
+			public void onTabChanged(String tabId)
+			{
+				// TODO Auto-generated method stub
+				if(tabId.equals(String.valueOf(1)))
+				{
+					
+				}
+				else if ( tabId.equals(String.valueOf(2)))	
+				{
+					
+				}			
+				else if ( tabId.equals(String.valueOf(3)))
+				{
+					
+				}
+			}
+        	
+        });
+        //点击确定时迁移画页，将NewNoteKindEnum设置为RemindSetting_Kind，并且设置为SingleTop
+/////////////////////////////////////////////////////////////////////////////////////////        
         ImageButton clSelect = (ImageButton) findViewById(R.id.remind_select);
         clSelect.setOnClickListener(new ImageButton.OnClickListener(){
 
@@ -37,7 +85,8 @@ public class RemindSettingActivity extends Activity {
         });
     }
     
-    void	setCheckBoxFlg( boolean bFlg )
+
+	void	setCheckBoxFlg( boolean bFlg )
     {
     	CheckBox	checkBox1	=	( CheckBox )findViewById( R.id.C1);
     	CheckBox	checkBox2	=	( CheckBox )findViewById( R.id.C2);

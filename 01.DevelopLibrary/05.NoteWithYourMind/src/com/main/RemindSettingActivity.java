@@ -1,6 +1,10 @@
 package com.main;
 
+import com.main.NoteWithYourMind.NewNoteKindEnum;
+
+import android.app.Activity;
 import android.app.ActivityGroup;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,7 +14,7 @@ import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 
-public class RemindSettingActivity extends ActivityGroup 
+public class RemindSettingActivity extends Activity 
 {
    
     static	private		boolean		bIsSelect	=	false;
@@ -24,7 +28,7 @@ public class RemindSettingActivity extends ActivityGroup
         
         //…Ë÷√TabHost
         m_TabHost = (TabHost)findViewById(android.R.id.tabhost);
-        m_TabHost.setup(this.getLocalActivityManager());
+        m_TabHost.setup(/*this.getLocalActivityManager()*/);
         
         TabSpec specLater = m_TabHost.newTabSpec( "1" );
         specLater.setIndicator("º‰∏ÙÃ·–—");
@@ -85,7 +89,12 @@ public class RemindSettingActivity extends ActivityGroup
 			}
         });
     }
-    
+    public void onDestroy(){
+    	super.onDestroy();
+    	Intent intent = new Intent(this, NoteWithYourMind.class);
+    	intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NewNoteKindEnum.RemindSetting_Kind);
+    	startActivity(intent);
+    }
 
 	void	setCheckBoxFlg( boolean bFlg )
     {

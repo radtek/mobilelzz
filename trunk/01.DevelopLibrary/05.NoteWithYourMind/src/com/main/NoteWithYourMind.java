@@ -76,7 +76,12 @@ public class NoteWithYourMind extends Activity
 	
 	CRemindInfo					m_clCRemindInfo	=	new	CRemindInfo( (byte) -1 );
 	///////////////////////onStart////////////////////////////////////////////////
-	public void onStart( )
+	public void onNewIntent(Intent intent)
+	{
+		setIntent(intent);
+	}
+	
+	public void onResume()
 	{
         //调用基类方法	-	zhu.t
 		Intent	iExtraData	=	this.getIntent();
@@ -86,10 +91,12 @@ public class NoteWithYourMind extends Activity
     	if ( m_ExtraData_NewNoteKind == NewNoteKindEnum.RemindSetting_Kind )
     	{
     		m_clCRemindInfo	=	( CRemindInfo )iExtraData.getSerializableExtra( ExtraData_RemindSetting );
-    		
-    		//更新设定的提醒信息
-    		EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
-    		EtOnce.setText( m_clCRemindInfo.getRemindInfoString());
+    		if(m_clCRemindInfo!=null)
+    		{
+    			//更新设定的提醒信息
+        		EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
+        		EtOnce.setText( m_clCRemindInfo.getRemindInfoString());
+    		}
     	}
     	super.onStart();
 	}
@@ -171,15 +178,16 @@ public class NoteWithYourMind extends Activity
         
         //点击Button迁移至RootList画页Activity
         ImageButton	clBTView = (ImageButton) findViewById(R.id.B_main_View);
-        clBTView.setOnClickListener(new Button.OnClickListener()
-        {
-        	public void onClick(View v)
-        	{
-        		Intent intent = new Intent();
-        		intent.setClass(NoteWithYourMind.this, RootViewList.class);
-        		startActivity(intent);
-        	}
-        });
+        clBTView.setVisibility(View.INVISIBLE);
+//        clBTView.setOnClickListener(new Button.OnClickListener()
+//        {
+//        	public void onClick(View v)
+//        	{
+//        		Intent intent = new Intent();
+//        		intent.setClass(NoteWithYourMind.this, RootViewList.class);
+//        		startActivity(intent);
+//        	}
+//        });
         
         //点击提醒设置Edit迁移至提醒设置画页Activity - zhu.t
         ((EditText)findViewById(R.id.CB_main_IsWarning)).setOnClickListener(new View.OnClickListener()

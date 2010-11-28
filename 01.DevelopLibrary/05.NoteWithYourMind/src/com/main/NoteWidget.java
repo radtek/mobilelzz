@@ -1,9 +1,11 @@
 package com.main;
 
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RemoteViews;
 
 
@@ -23,7 +25,11 @@ public class NoteWidget extends AppWidgetProvider
 	}
 	static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int id){
 		RemoteViews  remoteViews = new RemoteViews(context.getPackageName(), R.layout.notewidget);
-		remoteViews.setTextViewText(R.id.widget_text, "HelloWorld");
+		//remoteViews.setTextViewText(R.id.widget_text, "HelloWorld");
+		Intent intent = new Intent(context, RootViewList.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+		PendingIntent pintent = PendingIntent.getActivity(context, 0, intent, 0);
+		remoteViews.setOnClickPendingIntent(R.id.widget_B_Memo, pintent);
 		appWidgetManager.updateAppWidget(id, remoteViews);
 	}
 }

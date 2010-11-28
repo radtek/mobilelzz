@@ -14,7 +14,9 @@ android:background="@drawable/background">
 		android:id="@android:id/tabs"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"   />
+    android:layout_alignParentBottom="true"
+        android:paddingLeft = "3dp"
+    android:paddingRight = "3dp"   />
         <View
 		android:id="@+id/tabdivider"
 		android:layout_width="fill_parent"

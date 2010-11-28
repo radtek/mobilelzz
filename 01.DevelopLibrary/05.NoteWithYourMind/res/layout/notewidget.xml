@@ -4,12 +4,46 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 android:id="@+id/notewidget_layout"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
+android:orientation="horizontal"
+android:background="@drawable/background"
+android:padding="4dp"
+android:layout_marginLeft="4dp"
+android:layout_marginRight="4dp"
 >
-	<TextView
-		android:id="@+id/widget_text"
-		android:layout_width = "fill_parent"
-		android:layout_height = "fill_parent" 
-		android:background = "@drawable/listitem_bk"
-		android:text="我爱你"
-		/>
+	<Button
+		android:id="@+id/widget_B_Memo"
+		android:layout_width = "wrap_content"
+		android:layout_height = "wrap_content" 
+		android:text="备忘"
+		android:layout_weight="1"
+		android:layout_marginLeft="3dp"
+		android:layout_marginRight="3dp"
+		android:layout_gravity="center_vertical"
+		android:background="@drawable/buttonselector"
+		android:textColor="#000000"
+	/>
+	<Button
+		android:id="@+id/widget_B_Remind"
+		android:layout_width = "wrap_content"
+		android:layout_height = "wrap_content" 
+		android:text="提醒"
+		android:layout_weight="1"
+		android:layout_marginLeft="3dp"
+		android:layout_marginRight="3dp"
+		android:layout_gravity="center_vertical"
+		android:background="@drawable/buttonselector"
+		android:textColor="#000000"
+	/>
+	<Button
+		android:id="@+id/widget_B_NewNote"
+		android:layout_width = "wrap_content"
+		android:layout_height = "wrap_content" 
+		android:text="新建"
+		android:layout_weight="1"
+		android:layout_marginLeft="3dp"
+		android:layout_marginRight="3dp"
+		android:layout_gravity="center_vertical"
+		android:background="@drawable/buttonselector"
+		android:textColor="#000000"
+	/>
 </LinearLayout>

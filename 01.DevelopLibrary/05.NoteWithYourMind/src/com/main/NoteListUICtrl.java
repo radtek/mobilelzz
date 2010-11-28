@@ -34,7 +34,7 @@ class NoteListUICtrl{
 	private int m_ButtonID_move = 1;
 	private int m_ButtonID_cancel = 2;
 	
-	private CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
+	private CNoteDBCtrl m_clCNoteDBCtrl = RootViewList.m_clCNoteDBCtrl;
 	private boolean m_bIsDelete = false;
 	private MoveIn_State m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
 	

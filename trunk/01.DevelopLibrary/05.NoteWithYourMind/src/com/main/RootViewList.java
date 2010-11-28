@@ -35,10 +35,12 @@ import android.widget.TimePicker;
 import android.widget.DatePicker;
 public class RootViewList extends ActivityGroup
 {
+	public static String ExtraData_MemoID		=	"com.main.ExtraData_RootList_tabID";
 	//private NoteListUICtrl m_NoteListUICtrl;
 	private Calendar c;
 	TabHost m_TabHost;
-	private CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
+	//进行DB操作的类
+	public static	CNoteDBCtrl		m_clCNoteDBCtrl;
 	private NoteListCursorAdapter m_memoListAdapter;
 	private NoteListCursorAdapter m_remindListAdapter;
 	private int m_LastTabIndex = CommonDefine.g_int_Invalid_ID;
@@ -50,7 +52,9 @@ public class RootViewList extends ActivityGroup
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-
+		//创建DB操作类
+        m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
+        
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.view);	
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);

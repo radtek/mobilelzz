@@ -66,7 +66,7 @@ public class NoteWithYourMind extends Activity
 	public static final int ITEM1	=	Menu.FIRST + 1;
 	
 	//进行DB操作的类
-	public static	CNoteDBCtrl		m_clCNoteDBCtrl;
+	private CNoteDBCtrl m_clCNoteDBCtrl = RootViewList.m_clCNoteDBCtrl;
 	
 	//进行时间操作的类
 //	private Calendar clCalendar	=	Calendar.getInstance();
@@ -122,10 +122,6 @@ public class NoteWithYourMind extends Activity
 		
 		//加载主画页的layout
 		setContentView( R.layout.main );
-		
-		//创建DB操作类
-        m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
-        
         //设定EditText的内容
         UpdateViewStatus();
 

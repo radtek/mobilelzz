@@ -54,7 +54,7 @@ public class ListItemEdit extends Activity
 		ListItemEditType_move
 	}
 	private ListItemEditTypeEnum m_ListItemEditType;
-	private CNoteDBCtrl m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
+	private CNoteDBCtrl m_clCNoteDBCtrl = RootViewList.m_clCNoteDBCtrl;
 	private NoteListCursorAdapter m_ListAdapter;
 	private NoteListCursorAdapter m_sourceListAdapter;
 	

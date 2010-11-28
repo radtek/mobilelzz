@@ -10,7 +10,7 @@ public final class CRemindOperator
     
 //    private	HashMap< Long, CRemindInfo >	m_hashMap;
     
-    private CNoteDBCtrl			m_clCNoteDBCtrl = NoteWithYourMind.m_clCNoteDBCtrl;
+    private CNoteDBCtrl m_clCNoteDBCtrl = RootViewList.m_clCNoteDBCtrl;
     private CRemindOperator()
     {
     	//读取所有要被提醒的记录保存到hashMap中，并将每条提醒设置到alarmManager中

@@ -35,10 +35,11 @@ import android.widget.TimePicker;
 import android.widget.DatePicker;
 public class RootViewList extends ActivityGroup
 {
-	public static String ExtraData_MemoID		=	"com.main.ExtraData_RootList_tabID";
+	public static String ExtraData_initTabID		=	"com.main.ExtraData_RootList_initTabID";
 	//private NoteListUICtrl m_NoteListUICtrl;
 	private Calendar c;
 	TabHost m_TabHost;
+	
 	//进行DB操作的类
 	public static	CNoteDBCtrl		m_clCNoteDBCtrl;
 	private NoteListCursorAdapter m_memoListAdapter;
@@ -47,6 +48,10 @@ public class RootViewList extends ActivityGroup
 	private View  m_vMemoList;
 	private View  m_vRemindList;	
 	private int   m_iDBID = CommonDefine.g_int_Invalid_ID;	
+	
+	public void onNewIntent(Intent intent){
+		setIntent(intent);
+	}
 	
 	/** Called when the activity is first created. */
 	public void onCreate(Bundle savedInstanceState)
@@ -214,7 +219,18 @@ public class RootViewList extends ActivityGroup
 	public void onResume()
 	{
 		super.onResume();
-		m_TabHost.setCurrentTab(m_LastTabIndex);
+		Intent extra = getIntent();
+		if(extra!=null){
+			int initTabId = extra.getIntExtra(ExtraData_initTabID, CommonDefine.g_int_Invalid_ID);
+			if(initTabId!=CommonDefine.g_int_Invalid_ID){
+				m_TabHost.setCurrentTab(initTabId);
+			}else{
+				m_TabHost.setCurrentTab(m_LastTabIndex);
+			}
+			setIntent(null);
+		}else{
+			m_TabHost.setCurrentTab(m_LastTabIndex);
+		}
 	}
 	public void onDestroy()
 	{

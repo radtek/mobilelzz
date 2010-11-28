@@ -11,7 +11,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 	  android:id="@+id/TimePicker01"
 	  android:layout_width="wrap_content"
 	  android:layout_height="wrap_content"
-	  android:layout_gravity="center_horizontal"
+	  android:layout_gravity="center_vertical|center_horizontal"
+	  android:layout_marginTop="3dp"
 	  android:layout_weight="3"
 	>
 	</TimePicker>
@@ -152,15 +153,15 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_weight="1"
 		>
 		</CheckBox>
-		<ImageButton
+		<Button
 		android:id="@+id/remind_select"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="全选/反选"
+		android:text="全选|反选"
 		android:gravity="center"
 		android:layout_weight="3"
 		>
-		</ImageButton>
+		</Button>
 	</LinearLayout>
 	<LinearLayout
 		android:id="@+id/widget53"

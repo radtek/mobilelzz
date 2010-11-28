@@ -3,6 +3,7 @@ package com.main;
 import android.app.ActivityGroup;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TabHost;
@@ -63,7 +64,7 @@ public class RemindSettingActivity extends ActivityGroup
         });
         //点击确定时迁移画页，将NewNoteKindEnum设置为RemindSetting_Kind，并且设置为SingleTop
 /////////////////////////////////////////////////////////////////////////////////////////        
-        ImageButton clSelect = (ImageButton) findViewById(R.id.remind_select);
+        Button clSelect = (Button) findViewById(R.id.remind_select);
         clSelect.setOnClickListener(new ImageButton.OnClickListener(){
 
 			@Override

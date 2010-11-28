@@ -91,7 +91,7 @@ public class NoteWithYourMind extends Activity
     		EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
     		EtOnce.setText( m_clCRemindInfo.getRemindInfoString());
     	}
-    	
+    	super.onStart();
 	}
 	
 	////////////////////////////////////////////////////////////////////

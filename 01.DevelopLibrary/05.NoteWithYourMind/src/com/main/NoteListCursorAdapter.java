@@ -117,7 +117,9 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 			itemdetail.bIsFolder = true;
 			if(m_isFolderSelectable){
 			}else{
-				cbView.setVisibility(View.GONE);
+				if(cbView!=null){
+					cbView.setVisibility(View.GONE);
+				}
 			}
 			int iEncodeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
 			int iEncodeFlag = cursor.getInt(iEncodeIndex);
@@ -131,6 +133,9 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 				itemdetail.bIsEncode = false;
 			}
 		}else{
+			if(cbView!=null){
+				cbView.setVisibility(View.VISIBLE);
+			}
 			//tV.setCompoundDrawables(NoteWithYourMind.g_drawable_Memo, null, null, null);
 			tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.memo, 0, 0, 0);
 		}

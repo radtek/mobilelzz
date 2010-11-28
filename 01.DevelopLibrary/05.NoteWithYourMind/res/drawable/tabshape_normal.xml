@@ -7,6 +7,8 @@
 			android:type="radial" />
     <padding android:left="3dp" android:right="3dp" android:bottom="5dp" /> 
     <corners
-    		 android:bottomRightRadius="5dip" 
-         android:bottomLeftRadius="5dip" /> 
+    	android:topRightRadius="1dip" 
+			android:topLeftRadius="1dip"
+			android:bottomRightRadius="5dip" 
+			android:bottomLeftRadius="5dip" /> 
 </shape>

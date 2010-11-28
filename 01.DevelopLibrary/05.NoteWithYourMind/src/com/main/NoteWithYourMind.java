@@ -81,6 +81,15 @@ public class NoteWithYourMind extends Activity
 		setIntent(intent);
 	}
 	
+	public void onPause()
+	{
+		super.onPause();
+		if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown){
+			Intent intent = new Intent(this, RootViewList.class);
+			startActivity(intent);
+		}
+	}
+	
 	public void onResume()
 	{
         //调用基类方法	-	zhu.t
@@ -97,6 +106,8 @@ public class NoteWithYourMind extends Activity
         		EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
         		EtOnce.setText( m_clCRemindInfo.getRemindInfoString());
     		}
+    	}else if(m_ExtraData_NewNoteKind == null){
+    		m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
     	}
     	super.onStart();
 	}
@@ -119,6 +130,7 @@ public class NoteWithYourMind extends Activity
         
         //取得从前一个画页中传入的数据
 		m_ExtraData_MemoID		=	iExtraData.getIntExtra(ExtraData_MemoID, CMemoInfo.Id_Invalid );
+		
 		m_ExtraData_NewNoteKind	=	(NewNoteKindEnum)iExtraData.getSerializableExtra(ExtraData_NewNoteKind);
 		
 		//新建Memo或第一次程序启动做的处理，设置为无效值
@@ -129,6 +141,9 @@ public class NoteWithYourMind extends Activity
 		
 		//加载主画页的layout
 		setContentView( R.layout.main );
+		if(m_clCNoteDBCtrl==null){
+			m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
+		}
         //设定EditText的内容
         UpdateViewStatus();
 
@@ -163,7 +178,7 @@ public class NoteWithYourMind extends Activity
             		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
             		toast.show();
             		//迁移画页- zhu.t	-	未实现
-            		
+            		NoteWithYourMind.this.finish();
             		
         		}
         		//无输入信息

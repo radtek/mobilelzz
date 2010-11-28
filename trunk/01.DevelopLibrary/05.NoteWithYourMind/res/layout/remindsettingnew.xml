@@ -24,13 +24,6 @@ android:layout_height="fill_parent">
 			<include android:id="@+id/remindonce" layout="@layout/dateandtime"/>
 			<include android:id="@+id/remindcycel" layout="@layout/remindsetting"/>
 			<include android:id="@+id/remindinterval" layout="@layout/dateandtime"/>
-			
-			<TextView
-				android:id="@+id/newnote"
-				android:layout_width="wrap_content"
-    		android:layout_height="wrap_content">
-			</TextView>
 		</FrameLayout>
-		
 	</RelativeLayout>
 </TabHost>

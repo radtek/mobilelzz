@@ -30,10 +30,12 @@ public class CMemoInfo {
 	long		dCreateTime;
 	long		dLastModifyTime;
 	Integer		iIsEditEnable;
-	Integer		iRemindMask;
+	Integer		iIsRemindAble;
+	Integer		RemindType;
 	String		strDetail;
 	String		strPassword;
 	Integer		iIsEncode;	
+	Byte		m_Week[]	=	new Byte[7];
 	CMemoInfo()
 	{
 		iId				=	-1;
@@ -44,10 +46,16 @@ public class CMemoInfo {
 		dCreateTime		=	-1;
 		dLastModifyTime	=	-1;
 		iIsEditEnable	=	-1;
-		iRemindMask		=	-1;
+		iIsRemindAble	=	-1;
+		RemindType		=	-1;
 		strDetail		=	null;
 		strPassword		=	null;
 		iIsEncode		=	-1;
+		int	length	=	m_Week.length;
+		for ( int i = 0; i < length; ++i )
+		{
+			m_Week[ i ]	=	-1;
+		}
 	}
 	
 }

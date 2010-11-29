@@ -64,7 +64,6 @@ public class RemindSettingActivity extends Activity
 				Intent intent = new Intent(RemindSettingActivity.this, NoteWithYourMind.class);  
 				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
 				intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, clCRemindInfo );
-				intent.putExtra( NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.RemindSetting_Kind );
 				startActivity(intent);
 			}
         });
@@ -143,7 +142,6 @@ public class RemindSettingActivity extends Activity
 				Intent intent = new Intent(RemindSettingActivity.this, NoteWithYourMind.class);  
 				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
 				intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, clCRemindInfo );
-				intent.putExtra( NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.RemindSetting_Kind );
 				startActivity(intent);
 			}
         	
@@ -193,7 +191,6 @@ public class RemindSettingActivity extends Activity
 				Intent intent = new Intent(RemindSettingActivity.this, NoteWithYourMind.class);  
 				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
 				intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, clCRemindInfo );
-				intent.putExtra( NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.RemindSetting_Kind );
 				startActivity(intent);
 			}
         	
@@ -245,7 +242,6 @@ public class RemindSettingActivity extends Activity
     public void onDestroy(){
     	super.onDestroy();
     	Intent intent = new Intent(this, NoteWithYourMind.class);
-    	intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.RemindSetting_Kind);
     	startActivity(intent);
     }
 

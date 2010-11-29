@@ -132,7 +132,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	
 	public	Cursor	getRemindInfo()
 	{
-		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_isremind+"=?", new String[]{String.valueOf(1)});
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_isremind+"=? and "+KEY_isremindable+"=?", new String[]{String.valueOf(1),String.valueOf(1)} );
 	}
 	public	Cursor	getEncodeInfo()
 	{

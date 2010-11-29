@@ -82,11 +82,11 @@ public class NoteWithYourMind extends Activity
 	
 	public void onDestroy()
 	{
-		super.onDestroy();
 		if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown){
 			Intent intent = new Intent(this, RootViewList.class);
 			startActivity(intent);
 		}
+		super.onDestroy();
 	}
 	
 	public void onResume()

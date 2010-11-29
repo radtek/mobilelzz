@@ -6,28 +6,22 @@ android:layout_height="wrap_content"
 android:orientation="vertical"
 xmlns:android="http://schemas.android.com/apk/res/android"
 >
-<DatePicker
-  android:id="@+id/DatePicker01"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:layout_gravity="center"
->
-</DatePicker>
 <TimePicker
-  android:id="@+id/TimePicker01"
+  android:id="@+id/TimePicker03"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
   android:layout_gravity="center"
 >
 </TimePicker>
 	<LinearLayout
+		android:id="@+id/TimeLiner"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal"
 		android:layout_weight="1"
 		>
 		<Button
-		android:id="@+id/DateandTimeCancel"
+		android:id="@+id/TimeCancel"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="取消"
@@ -35,7 +29,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		>
 		</Button>
 		<Button
-		android:id="@+id/DateandTimeFix"
+		android:id="@+id/TimeFix"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="确定"

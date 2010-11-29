@@ -8,7 +8,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 >
 
 	<TimePicker
-	  android:id="@+id/TimePicker01"
+	  android:id="@+id/TimePicker02"
 	  android:layout_width="wrap_content"
 	  android:layout_height="wrap_content"
 	  android:layout_gravity="center_vertical|center_horizontal"
@@ -171,7 +171,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_weight="1"
 		>
 		<Button
-		android:id="@+id/widget54"
+		android:id="@+id/CycelCancel"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="取消"
@@ -179,7 +179,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		>
 		</Button>
 		<Button
-		android:id="@+id/widget55"
+		android:id="@+id/CycelFix"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="确定"

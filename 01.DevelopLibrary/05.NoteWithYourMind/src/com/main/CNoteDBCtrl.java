@@ -13,13 +13,22 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	public static final String	KEY_type				= "type";
 	public static final String	KEY_isremind			= "isremind";
 	public static final String	KEY_remindtime			= "remindtime";
+	public static final String	KEY_isremindable		= "isremindable";
+	public static final String	KEY_remindtype			= "remindtype";
 	public static final String	KEY_createtime			= "createtime";
 	public static final String	KEY_lastmodifytime		= "lastmodifytime";
 	public static final String	KEY_iseditenable		= "iseditenable";
-	public static final String	KEY_remindmask			= "remindmask";
 	public static final String	KEY_detail				= "detail";
 	public static final String	KEY_password			= "password";
-	public static final String	KEY_isencode		= "isencode";
+	public static final String	KEY_isencode			= "isencode";
+	
+	public static final String	KEY_monday				= "monday";
+	public static final String	KEY_tuesday				= "tuesday";
+	public static final String	KEY_wednesday			= "wednesday";
+	public static final String	KEY_thursday			= "thursday";
+	public static final String	KEY_friday				= "friday";
+	public static final String	KEY_staturday			= "staturday";
+	public static final String	KEY_sunday				= "sunday";
 	// 数据库名称为data
 	private static final String	DB_NAME			= "NoteWithYourMind.db";
 	
@@ -29,9 +38,28 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	// 数据库版本
 	private static final int	DB_VERSION		= 1;
 	
-	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" + KEY_id + " INTEGER PRIMARY KEY AUTOINCREMENT," + 
-		KEY_preid + " INTERGER,"+ KEY_type + " INTERGER," + KEY_isremind + " INTERGER," + KEY_remindtime + " double," + KEY_createtime + " double,"+
-		KEY_lastmodifytime + " double,"+ KEY_iseditenable + " INTERGER,"+ KEY_remindmask + " INTERGER,"+ KEY_detail + " TEXT," + KEY_password + " TEXT," + KEY_isencode + " INTERGER )";
+	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" 
+												+ KEY_id 				+ " INTEGER PRIMARY KEY AUTOINCREMENT," 
+												+ KEY_preid 			+ " INTERGER,"
+												+ KEY_type 				+ " INTERGER," 
+												+ KEY_isremind 			+ " INTERGER," 
+												+ KEY_remindtime 		+ " double," 
+												+ KEY_isremindable 		+ " INTERGER,"
+												+ KEY_remindtype		+ " INTERGER,"
+												+ KEY_createtime 		+ " double,"
+												+ KEY_lastmodifytime 	+ " double,"
+												+ KEY_iseditenable 		+ " INTERGER,"											
+												+ KEY_detail 			+ " TEXT," 
+												+ KEY_password 			+ " TEXT," 
+												+ KEY_isencode 			+ " INTERGER "
+												+ KEY_monday 			+ " INTERGER "
+												+ KEY_tuesday 			+ " INTERGER "
+												+ KEY_wednesday 		+ " INTERGER "
+												+ KEY_thursday 			+ " INTERGER "
+												+ KEY_friday 			+ " INTERGER "
+												+ KEY_staturday 		+ " INTERGER "
+												+ KEY_sunday 			+ " INTERGER "
+												+ ")";
 
 	private static final String	Trigger_CREATE	=	"create trigger delete_sub_rec before delete on " + DB_TABLE +" for each row " +
 			"begin " +
@@ -138,10 +166,17 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		initialValues.put(KEY_createtime, clCMemoInfo.dCreateTime);
 		initialValues.put(KEY_lastmodifytime, clCMemoInfo.dLastModifyTime);
 		initialValues.put(KEY_iseditenable, clCMemoInfo.iIsEditEnable);
-		initialValues.put(KEY_remindmask, clCMemoInfo.iRemindMask);
+		initialValues.put(KEY_isremindable, clCMemoInfo.iIsRemindAble);
+		initialValues.put(KEY_remindtype, clCMemoInfo.RemindType);
 		initialValues.put(KEY_detail, clCMemoInfo.strDetail);
 		initialValues.put(KEY_password, clCMemoInfo.strPassword);
-		initialValues.put(KEY_isencode, clCMemoInfo.iIsEncode);
+		initialValues.put(KEY_monday, clCMemoInfo.m_Week[0]);
+		initialValues.put(KEY_tuesday, clCMemoInfo.m_Week[1]);
+		initialValues.put(KEY_wednesday, clCMemoInfo.m_Week[2]);
+		initialValues.put(KEY_thursday, clCMemoInfo.m_Week[3]);
+		initialValues.put(KEY_friday, clCMemoInfo.m_Week[4]);
+		initialValues.put(KEY_staturday, clCMemoInfo.m_Week[5]);
+		initialValues.put(KEY_sunday, clCMemoInfo.m_Week[6]);
 
 		return	m_db.insert(DB_TABLE, KEY_id, initialValues);
 	}
@@ -196,9 +231,14 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 			cv.put(KEY_iseditenable, clCMemoInfo.iIsEditEnable.toString());
 		}
 		
-		if ( -1 != clCMemoInfo.iRemindMask )
+		if ( -1 != clCMemoInfo.iIsRemindAble )
 		{
-			cv.put(KEY_remindmask, clCMemoInfo.iRemindMask.toString());
+			cv.put(KEY_isremindable, clCMemoInfo.iIsRemindAble.toString());
+		}
+		
+		if ( -1 != clCMemoInfo.RemindType )
+		{
+			cv.put(KEY_remindtype, clCMemoInfo.RemindType.toString());
 		}
 		
 		if ( null != clCMemoInfo.strDetail )
@@ -214,6 +254,41 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		if ( -1 != clCMemoInfo.iIsEncode)
 		{
 			cv.put(KEY_isencode, clCMemoInfo.iIsEncode.toString());
+		}
+		
+		if ( -1 != clCMemoInfo.m_Week[0])
+		{
+			cv.put(KEY_monday, clCMemoInfo.m_Week[0].toString());
+		}
+		
+		if ( -1 != clCMemoInfo.m_Week[1])
+		{
+			cv.put(KEY_tuesday, clCMemoInfo.m_Week[1].toString());
+		}
+		
+		if ( -1 != clCMemoInfo.m_Week[2])
+		{
+			cv.put(KEY_wednesday, clCMemoInfo.m_Week[2].toString());
+		}
+		
+		if ( -1 != clCMemoInfo.m_Week[3])
+		{
+			cv.put(KEY_thursday, clCMemoInfo.m_Week[3].toString());
+		}
+		
+		if ( -1 != clCMemoInfo.m_Week[4])
+		{
+			cv.put(KEY_friday, clCMemoInfo.m_Week[4].toString());
+		}
+		
+		if ( -1 != clCMemoInfo.m_Week[5])
+		{
+			cv.put(KEY_staturday, clCMemoInfo.m_Week[5].toString());
+		}
+		
+		if ( -1 != clCMemoInfo.m_Week[6])
+		{
+			cv.put(KEY_sunday, clCMemoInfo.m_Week[6].toString());
 		}
 		
 		String[] whereValue={ Integer.toString(id)};

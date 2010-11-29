@@ -93,6 +93,7 @@ public class NoteWithYourMind extends Activity
 	public void onResume()
 	{
         //调用基类方法	-	zhu.t
+		super.onResume();
 		Intent	iExtraData	=	this.getIntent();
     	m_ExtraData_NewNoteKind	=	(NewNoteKindEnum)iExtraData.getSerializableExtra(ExtraData_NewNoteKind);
     	
@@ -106,10 +107,12 @@ public class NoteWithYourMind extends Activity
         		EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
         		EtOnce.setText( m_clCRemindInfo.getRemindInfoString());
     		}
-    	}else if(m_ExtraData_NewNoteKind == null){
+    	}
+    	else if(m_ExtraData_NewNoteKind == null)
+    	{
     		m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
     	}
-    	super.onStart();
+ //   	super.onResume();
 	}
 	
 	////////////////////////////////////////////////////////////////////

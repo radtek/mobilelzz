@@ -52,8 +52,7 @@ public class NoteWithYourMind extends Activity
 		NewNoteKind_InRoot,
 		EditNoteKind_InRoot,
 		NewNoteKind_InFolder,
-		EditNoteKind_InFolder,
-		RemindSetting_Kind,
+		EditNoteKind_InFolder
 	}
 	
 	public static String ExtraData_MemoID		=	"com.main.ExtraData_MemoID";
@@ -81,9 +80,9 @@ public class NoteWithYourMind extends Activity
 		setIntent(intent);
 	}
 	
-	public void onPause()
+	public void onDestroy()
 	{
-		super.onPause();
+		super.onDestroy();
 		if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown){
 			Intent intent = new Intent(this, RootViewList.class);
 			startActivity(intent);
@@ -92,27 +91,17 @@ public class NoteWithYourMind extends Activity
 	
 	public void onResume()
 	{
-        //调用基类方法	-	zhu.t
-		super.onResume();
-		Intent	iExtraData	=	this.getIntent();
-    	m_ExtraData_NewNoteKind	=	(NewNoteKindEnum)iExtraData.getSerializableExtra(ExtraData_NewNoteKind);
-    	
-    	//从提醒画页迁入
-    	if ( m_ExtraData_NewNoteKind == NewNoteKindEnum.RemindSetting_Kind )
-    	{
-    		m_clCRemindInfo	=	( CRemindInfo )iExtraData.getSerializableExtra( ExtraData_RemindSetting );
-    		if(m_clCRemindInfo!=null)
+		Intent iExtraData = getIntent();
+		CRemindInfo temp =	( CRemindInfo )iExtraData.getSerializableExtra( ExtraData_RemindSetting );
+		if(temp!=null)
     		{
     			//更新设定的提醒信息
+			m_clCRemindInfo = temp;
         		EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
         		EtOnce.setText( m_clCRemindInfo.getRemindInfoString());
     		}
-    	}
-    	else if(m_ExtraData_NewNoteKind == null)
-    	{
-    		m_ExtraData_NewNoteKind = NewNoteKindEnum.NewNoteKind_Unknown;
-    	}
- //   	super.onResume();
+
+    	super.onResume();
 	}
 	
 	////////////////////////////////////////////////////////////////////

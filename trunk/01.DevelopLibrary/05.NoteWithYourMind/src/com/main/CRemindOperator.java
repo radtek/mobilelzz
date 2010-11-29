@@ -3,6 +3,7 @@ package com.main;
 import java.util.HashMap;
 
 import android.content.Intent;
+import android.database.Cursor;
 
 public final class CRemindOperator
 {
@@ -14,6 +15,28 @@ public final class CRemindOperator
     private CRemindOperator()
     {
     	//读取所有要被提醒的记录保存到hashMap中，并将每条提醒设置到alarmManager中
+    	Cursor clCursor = m_clCNoteDBCtrl.getRemindInfo();
+    	while( clCursor.moveToNext() )
+    	{
+    		int 	iType	=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_remindtype );
+    		int		id		=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_id );
+    		if ( 0 == iType )
+    		{
+    			
+    		}
+    		else if( 1 == iType )
+    		{
+    			
+    		}
+    		else if( 2 == iType )
+    		{
+    			
+    		}
+    		else if( 3 == iType )
+    		{
+    			
+    		}
+    	}
     }  
       
     public synchronized static CRemindOperator getInstance()

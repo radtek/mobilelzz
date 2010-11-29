@@ -202,7 +202,6 @@ public class NoteWithYourMind extends Activity
 			@Override
 			public void onClick(View v) 
 			{
-				// TODO Auto-generated method stub
 				Intent intent = new Intent();
 				intent.setClass(NoteWithYourMind.this, RemindSettingActivity.class);
 				if( m_clCRemindInfo.m_bType != -1 )

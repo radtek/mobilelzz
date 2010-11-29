@@ -36,7 +36,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	private static final String	DB_TABLE				= "Notes";
 	private static final String	DB_TABLE_PassWord		= "PassWord";
 	// Êý¾Ý¿â°æ±¾
-	private static final int	DB_VERSION		= 2;
+	private static final int	DB_VERSION		= 1;
 	
 	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" 
 												+ KEY_id 				+ " INTEGER PRIMARY KEY AUTOINCREMENT," 
@@ -51,14 +51,14 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 												+ KEY_iseditenable 		+ " INTERGER,"											
 												+ KEY_detail 			+ " TEXT," 
 												+ KEY_password 			+ " TEXT," 
-												+ KEY_isencode 			+ " INTERGER "
-												+ KEY_monday 			+ " INTERGER "
-												+ KEY_tuesday 			+ " INTERGER "
-												+ KEY_wednesday 		+ " INTERGER "
-												+ KEY_thursday 			+ " INTERGER "
-												+ KEY_friday 			+ " INTERGER "
-												+ KEY_staturday 		+ " INTERGER "
-												+ KEY_sunday 			+ " INTERGER "
+												+ KEY_isencode 			+ " INTERGER,"
+												+ KEY_monday 			+ " INTERGER,"
+												+ KEY_tuesday 			+ " INTERGER,"
+												+ KEY_wednesday 		+ " INTERGER,"
+												+ KEY_thursday 			+ " INTERGER,"
+												+ KEY_friday 			+ " INTERGER,"
+												+ KEY_staturday 		+ " INTERGER,"
+												+ KEY_sunday 			+ " INTERGER"
 												+ ")";
 
 	private static final String	Trigger_CREATE	=	"create trigger delete_sub_rec before delete on " + DB_TABLE +" for each row " +
@@ -170,6 +170,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		initialValues.put(KEY_remindtype, clCMemoInfo.RemindType);
 		initialValues.put(KEY_detail, clCMemoInfo.strDetail);
 		initialValues.put(KEY_password, clCMemoInfo.strPassword);
+		initialValues.put(KEY_isencode, clCMemoInfo.iIsEncode);
 		initialValues.put(KEY_monday, clCMemoInfo.m_Week[0]);
 		initialValues.put(KEY_tuesday, clCMemoInfo.m_Week[1]);
 		initialValues.put(KEY_wednesday, clCMemoInfo.m_Week[2]);

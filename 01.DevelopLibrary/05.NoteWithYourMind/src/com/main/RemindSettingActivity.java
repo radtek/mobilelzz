@@ -2,6 +2,7 @@ package com.main;
 
 import java.util.Calendar;
 
+import android.app.Activity;
 import android.app.ActivityGroup;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -21,7 +22,7 @@ import android.widget.Toast;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 
-public class RemindSettingActivity extends ActivityGroup 
+public class RemindSettingActivity extends Activity 
 {
    
     static	private		boolean		bIsSelect	=	false;
@@ -35,7 +36,7 @@ public class RemindSettingActivity extends ActivityGroup
         
         //…Ë÷√TabHost
         m_TabHost = (TabHost)findViewById(android.R.id.tabhost);
-        m_TabHost.setup(this.getLocalActivityManager());
+        m_TabHost.setup(/*this.getLocalActivityManager()*/);
         
         TabSpec specLater = m_TabHost.newTabSpec( "3" );
         specLater.setIndicator("º‰∏ÙÃ·–—");
@@ -63,7 +64,6 @@ public class RemindSettingActivity extends ActivityGroup
 				Intent intent = new Intent(RemindSettingActivity.this, NoteWithYourMind.class);  
 				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
 				intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, clCRemindInfo );
-				intent.putExtra( NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.RemindSetting_Kind );
 				startActivity(intent);
 			}
         });
@@ -142,7 +142,6 @@ public class RemindSettingActivity extends ActivityGroup
 				Intent intent = new Intent(RemindSettingActivity.this, NoteWithYourMind.class);  
 				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
 				intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, clCRemindInfo );
-				intent.putExtra( NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.RemindSetting_Kind );
 				startActivity(intent);
 			}
         	
@@ -192,7 +191,6 @@ public class RemindSettingActivity extends ActivityGroup
 				Intent intent = new Intent(RemindSettingActivity.this, NoteWithYourMind.class);  
 				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
 				intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, clCRemindInfo );
-				intent.putExtra( NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.RemindSetting_Kind );
 				startActivity(intent);
 			}
         	
@@ -244,7 +242,6 @@ public class RemindSettingActivity extends ActivityGroup
     public void onDestroy(){
     	super.onDestroy();
     	Intent intent = new Intent(this, NoteWithYourMind.class);
-    	intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.RemindSetting_Kind);
     	startActivity(intent);
     }
 

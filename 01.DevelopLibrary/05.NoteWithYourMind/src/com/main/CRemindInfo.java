@@ -46,7 +46,7 @@ public class CRemindInfo implements Serializable
 			
 			Long	hour	=	lTime >> 16;
 			Long	minute	=	lTime & 0x0000ffff;
-			strInfo	+=	hour.toString()+ "小时" + minute.toString() + " 提醒";
+			strInfo	+=	hour.toString()+ "小时" + minute.toString() + "分钟 提醒";
 		}
 		else if( 3 == m_bType )
 		{
@@ -55,13 +55,13 @@ public class CRemindInfo implements Serializable
 			Calendar clCalendar	=	Calendar.getInstance();
 			clCalendar.setTimeInMillis(lTime);
 			
-			strType	+= 	clCalendar.get(Calendar.YEAR) +"/" 
+			strInfo	= 	clCalendar.get(Calendar.YEAR) +"/" 
 						+ clCalendar.get(Calendar.MONTH) 
 						+"/"+clCalendar.get(Calendar.HOUR_OF_DAY) + " " 
 						+ clCalendar.get(Calendar.HOUR_OF_DAY) + ":"
 						+clCalendar.get(Calendar.MINUTE);
 			
-			strType	+=	" 进行提醒";
+			strInfo	+=	" 提醒";
 		}
 		else
 		{

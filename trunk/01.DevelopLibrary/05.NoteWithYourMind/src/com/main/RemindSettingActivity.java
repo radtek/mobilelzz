@@ -43,6 +43,13 @@ public class RemindSettingActivity extends Activity
         specLater.setContent(R.id.remindinterval);
         m_TabHost.addTab(specLater);
         
+        TimePicker clTimePicker01 = (TimePicker)findViewById(R.id.TimePicker01);
+        clTimePicker01.setIs24HourView(true);
+        TimePicker clTimePicker02 = (TimePicker)findViewById(R.id.TimePicker02);
+        clTimePicker02.setIs24HourView(true);
+        TimePicker clTimePicker03 = (TimePicker)findViewById(R.id.TimePicker03);
+        clTimePicker03.setIs24HourView(true);
+        
         Button clTimeFix = (Button) findViewById(R.id.TimeFix);
         clTimeFix.setOnClickListener(new Button.OnClickListener()
         {
@@ -100,49 +107,68 @@ public class RemindSettingActivity extends Activity
 		    	CheckBox	checkBox7	=	( CheckBox )findViewById( R.id.C7);
 		    	
 		    	CRemindInfo	clCRemindInfo	=	new	CRemindInfo ( (byte)2 );
+		    	byte	bCheckFlg		=	0;
 		    	
 		    	if( checkBox1.isChecked())
 		    	{
 		    		clCRemindInfo.m_Week[0]	=	1;
+		    		bCheckFlg	=	1;
 		    	}
 		    	if( checkBox2.isChecked())
 		    	{
 		    		clCRemindInfo.m_Week[1]	=	1;
+		    		bCheckFlg	=	1;
 		    	}
 		    	if( checkBox3.isChecked())
 		    	{
 		    		clCRemindInfo.m_Week[2]	=	1;
+		    		bCheckFlg	=	1;
 		    	}
 		    	if( checkBox4.isChecked())
 		    	{
 		    		clCRemindInfo.m_Week[3]	=	1;
+		    		bCheckFlg	=	1;
 		    	}
 		    	if( checkBox5.isChecked())
 		    	{
 		    		clCRemindInfo.m_Week[4]	=	1;
+		    		bCheckFlg	=	1;
 		    	}
 		    	if( checkBox6.isChecked())
 		    	{
 		    		clCRemindInfo.m_Week[5]	=	1;
+		    		bCheckFlg	=	1;
 		    	}
 		    	if( checkBox7.isChecked())
 		    	{
 		    		clCRemindInfo.m_Week[6]	=	1;
+		    		bCheckFlg	=	1;
 		    	}
-		    	TimePicker clTimePicker = (TimePicker)findViewById(R.id.TimePicker02);
 		    	
-				long	lhour	=	clTimePicker.getCurrentHour();
-				long	lminute	=	clTimePicker.getCurrentMinute();
-				
-				lhour	<<=	16;
-				lhour	+=	lminute;
-				
-				clCRemindInfo.lTime	=	lhour;
-				
-				Intent intent = new Intent(RemindSettingActivity.this, NoteWithYourMind.class);  
-				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
-				intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, clCRemindInfo );
-				startActivity(intent);
+		    	if ( 0 == bCheckFlg )
+		    	{
+            		Toast toast = Toast.makeText(RemindSettingActivity.this, "没有设置星期，请重新设置!", Toast.LENGTH_SHORT);
+            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+            		toast.show();		
+		    	}
+		    	else
+		    	{
+			    	TimePicker clTimePicker = (TimePicker)findViewById(R.id.TimePicker02);
+			    	
+					long	lhour	=	clTimePicker.getCurrentHour();
+					long	lminute	=	clTimePicker.getCurrentMinute();
+					
+					lhour	<<=	16;
+					lhour	+=	lminute;
+					
+					clCRemindInfo.lTime	=	lhour;
+					
+					Intent intent = new Intent(RemindSettingActivity.this, NoteWithYourMind.class);  
+					intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
+					intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, clCRemindInfo );
+					startActivity(intent);	    		
+		    	}
+
 			}
         	
         });
@@ -185,13 +211,22 @@ public class RemindSettingActivity extends Activity
 				
 				clCalendar.set(Calendar.SECOND, 0);
 				
-				CRemindInfo	clCRemindInfo	=	new	CRemindInfo ( (byte)3 );
-				clCRemindInfo.lTime			=	clCalendar.getTimeInMillis();
-				
-				Intent intent = new Intent(RemindSettingActivity.this, NoteWithYourMind.class);  
-				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
-				intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, clCRemindInfo );
-				startActivity(intent);
+				if( System.currentTimeMillis()< clCalendar.getTimeInMillis())
+				{
+            		Toast toast = Toast.makeText(RemindSettingActivity.this, "小于当前时间，请重新设置!", Toast.LENGTH_SHORT);
+            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+            		toast.show();
+				}
+				else
+				{
+					CRemindInfo	clCRemindInfo	=	new	CRemindInfo ( (byte)3 );
+					clCRemindInfo.lTime			=	clCalendar.getTimeInMillis();
+					
+					Intent intent = new Intent(RemindSettingActivity.this, NoteWithYourMind.class);  
+					intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
+					intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, clCRemindInfo );
+					startActivity(intent);
+				}
 			}
         	
         });

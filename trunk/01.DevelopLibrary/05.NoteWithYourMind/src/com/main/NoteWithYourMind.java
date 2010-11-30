@@ -306,6 +306,17 @@ public class NoteWithYourMind extends Activity
 		clCMemoInfo.dLastModifyTime =	clCalendar.getTimeInMillis();
 		clCMemoInfo.strDetail		=	strMemoText;
 		
+    	if ( -1 != m_clCRemindInfo.m_bType )
+    	{
+    		clCMemoInfo.iIsRemind		=	1;
+    		clCMemoInfo.iIsRemindAble	=	1;
+    	}
+    	else
+    	{
+    		clCMemoInfo.iIsRemind		=	0;
+    		clCMemoInfo.iIsRemindAble	=	0;
+    	}
+		
 
 		if ( (  m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_InRoot )
 			||( m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown ) )

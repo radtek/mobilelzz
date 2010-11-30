@@ -211,7 +211,10 @@ public class RemindSettingActivity extends Activity
 				
 				clCalendar.set(Calendar.SECOND, 0);
 				
-				if( System.currentTimeMillis()< clCalendar.getTimeInMillis())
+				long	lCur	=	System.currentTimeMillis();
+				long	lSet	=	clCalendar.getTimeInMillis();
+				
+				if( lCur > lSet )
 				{
             		Toast toast = Toast.makeText(RemindSettingActivity.this, "小于当前时间，请重新设置!", Toast.LENGTH_SHORT);
             		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );

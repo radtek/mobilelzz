@@ -1,6 +1,7 @@
 package com.main;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 public class CRemindInfo implements Serializable
 {
@@ -21,6 +22,7 @@ public class CRemindInfo implements Serializable
 	{
 		String	strType		=	null;
 		String	strInfo		=	null;
+		
 		if( 1 == m_bType )
 		{
 			strType	=	Interval;
@@ -31,17 +33,42 @@ public class CRemindInfo implements Serializable
 		else if( 2 == m_bType )
 		{
 			strType	=	Cycel;
+			strInfo	=	"每周" + " ";
+			for ( int i = 0; i < 7; ++i )
+			{
+				if ( -1 != m_Week[i])
+				{
+					Integer	iTemp	=	i + 1;
+					strInfo	+=	iTemp.toString();
+					strInfo	+=	"/";
+				}
+			}
+			
+			Long	hour	=	lTime >> 16;
+			Long	minute	=	lTime & 0x0000ffff;
+			strInfo	+=	hour.toString()+ "小时" + minute.toString() + " 提醒";
 		}
 		else if( 3 == m_bType )
 		{
 			strType	=	Once;
+			
+			Calendar clCalendar	=	Calendar.getInstance();
+			clCalendar.setTimeInMillis(lTime);
+			
+			strType	+= 	clCalendar.get(Calendar.YEAR) +"/" 
+						+ clCalendar.get(Calendar.MONTH) 
+						+"/"+clCalendar.get(Calendar.HOUR_OF_DAY) + " " 
+						+ clCalendar.get(Calendar.HOUR_OF_DAY) + ":"
+						+clCalendar.get(Calendar.MINUTE);
+			
+			strType	+=	" 进行提醒";
 		}
 		else
 		{
-			
+
 		}
 		
-		return	strType + strInfo;
+		return	"["+ strType + "]" + strInfo;
 	}
 	
 	

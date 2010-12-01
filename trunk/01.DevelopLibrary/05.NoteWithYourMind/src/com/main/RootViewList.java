@@ -59,6 +59,16 @@ public class RootViewList extends ActivityGroup
 		super.onCreate(savedInstanceState);
 		//创建DB操作类
         m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
+    	Cursor	curPassWord	=	m_clCNoteDBCtrl.getPassWord();
+		//startManagingCursor ( curPassWord );
+        curPassWord.moveToFirst();
+		int count = curPassWord.getCount();
+    	if ( count > 0 )
+    	{	
+			int index = curPassWord.getColumnIndex(CNoteDBCtrl.KEY_password);
+			CommonDefine.g_str_PassWord = curPassWord.getString(index);					
+		}
+    	curPassWord = null;
         
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.view);	
@@ -201,8 +211,11 @@ public class RootViewList extends ActivityGroup
 					intent.putExtra(FolderViewList.ExtraData_FolderDBID, iDBID);
 					startActivity(intent);
 				}else if(iType == CMemoInfo.Type_Memo){
-
-					//
+					Intent intent = new Intent();
+	        		intent.setClass( RootViewList.this, NoteWithYourMind.class);
+					intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.EditNoteKind_InRoot); 
+					intent.putExtra(NoteWithYourMind.ExtraData_MemoID,iDBID);	        		
+	        		startActivity(intent);
 				}else{
 					
 				}

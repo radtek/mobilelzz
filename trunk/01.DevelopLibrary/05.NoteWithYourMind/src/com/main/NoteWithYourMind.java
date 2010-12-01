@@ -94,13 +94,19 @@ public class NoteWithYourMind extends Activity
 		Intent iExtraData = getIntent();
 		CRemindInfo temp =	( CRemindInfo )iExtraData.getSerializableExtra( ExtraData_RemindSetting );
 		if(temp!=null)
-    		{
-    			//更新设定的提醒信息
-			m_clCRemindInfo = temp;
-        		EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
-        		EtOnce.setText( m_clCRemindInfo.getRemindInfoString());
-    		}
-
+		{
+			//更新设定的提醒信息
+		m_clCRemindInfo = temp;
+    		EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
+    		EtOnce.setText( m_clCRemindInfo.getRemindInfoString());
+		}
+		m_ExtraData_MemoID		=	iExtraData.getIntExtra(ExtraData_MemoID, CMemoInfo.Id_Invalid );
+		m_ExtraData_NewNoteKind	=	(NewNoteKindEnum)iExtraData.getSerializableExtra(ExtraData_NewNoteKind);
+		//新建Memo或第一次程序启动做的处理，设置为无效值
+		if ( m_ExtraData_NewNoteKind == null )
+		{
+			m_ExtraData_NewNoteKind	=	NewNoteKindEnum.NewNoteKind_Unknown;
+		}
     	super.onResume();
 	}
 	
@@ -117,20 +123,6 @@ public class NoteWithYourMind extends Activity
         m_ExtraData_MemoID		=	CMemoInfo.Id_Invalid;
         m_ExtraData_NewNoteKind	=	NewNoteKindEnum.NewNoteKind_Unknown;
 
-        //取得迁移该画面之前的Intent
-        Intent	iExtraData	=	this.getIntent();
-        
-        //取得从前一个画页中传入的数据
-		m_ExtraData_MemoID		=	iExtraData.getIntExtra(ExtraData_MemoID, CMemoInfo.Id_Invalid );
-		
-		m_ExtraData_NewNoteKind	=	(NewNoteKindEnum)iExtraData.getSerializableExtra(ExtraData_NewNoteKind);
-		
-		//新建Memo或第一次程序启动做的处理，设置为无效值
-		if ( m_ExtraData_NewNoteKind == null )
-		{
-			m_ExtraData_NewNoteKind	=	NewNoteKindEnum.NewNoteKind_Unknown;
-		}
-		
 		//加载主画页的layout
 		setContentView( R.layout.main );
 		if(m_clCNoteDBCtrl==null){
@@ -138,17 +130,6 @@ public class NoteWithYourMind extends Activity
 		}
         //设定EditText的内容
         UpdateViewStatus();
-
-    	Cursor	curPassWord	=	m_clCNoteDBCtrl.getPassWord();
-		startManagingCursor ( curPassWord );
-        curPassWord.moveToFirst();
-		int count = curPassWord.getCount();
-    	if ( count > 0 )
-    	{	
-			int index = curPassWord.getColumnIndex(CNoteDBCtrl.KEY_password);
-			CommonDefine.g_str_PassWord = curPassWord.getString(index);					
-		}
-    	
     	//点击保存Button，进行新增或更新操作
         ImageButton	clBTSave	=	(ImageButton) findViewById(R.id.B_main_Save);
         clBTSave.setOnClickListener(new Button.OnClickListener()
@@ -300,6 +281,22 @@ public class NoteWithYourMind extends Activity
 
     private void SaveEditData(String strMemoText)
     {
+    	/*
+    	 1、先判断MemoID是否有效
+    	  	有效
+    	  		再判断MemoID对应的记录是Folder还是Memo
+    	  			Folder
+    	  				判断Folder的是不是提醒
+    	  					是
+    	  						将新记录强制修改为提醒
+    	  					否
+    	  						将当前记录追加到MemoID对应的Folder下
+    	  			Memo
+    	  				更新当前MemoID对应的记录
+    	  	无效
+    	  		将当前记录追加到Root下
+    	  
+    	*/
     	CMemoInfo		clCMemoInfo	=	new	CMemoInfo();
     	
     	Calendar		clCalendar	=	Calendar.getInstance();
@@ -308,12 +305,12 @@ public class NoteWithYourMind extends Activity
 		
     	if ( -1 != m_clCRemindInfo.m_bType )
     	{
-    		clCMemoInfo.iIsRemind		=	1;
+    		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
     		clCMemoInfo.iIsRemindAble	=	1;
     	}
     	else
     	{
-    		clCMemoInfo.iIsRemind		=	0;
+    		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_No;
     		clCMemoInfo.iIsRemindAble	=	0;
     	}
 		

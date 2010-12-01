@@ -328,7 +328,7 @@ public class NoteWithYourMind extends Activity
         	
         	//保存提醒信息 - zhu.t
         	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-        	clCRemindOperator.addRemind(_id, m_clCRemindInfo);
+        	clCRemindOperator.addRemind( this, _id, m_clCRemindInfo);
 
 		}
 		else if ( ( m_ExtraData_NewNoteKind == NewNoteKindEnum.EditNoteKind_InRoot )
@@ -367,7 +367,7 @@ public class NoteWithYourMind extends Activity
 	        	
 	        	//保存提醒信息 - zhu.t
 	        	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-	        	clCRemindOperator.addRemind(_id, m_clCRemindInfo);
+	        	clCRemindOperator.addRemind(this, _id, m_clCRemindInfo);
 			}
 			else
 			{

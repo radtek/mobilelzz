@@ -2,6 +2,9 @@ package com.main;
 
 import java.util.HashMap;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 
@@ -15,28 +18,6 @@ public final class CRemindOperator
     private CRemindOperator()
     {
     	//读取所有要被提醒的记录保存到hashMap中，并将每条提醒设置到alarmManager中
-    	Cursor clCursor = m_clCNoteDBCtrl.getRemindInfo();
-    	while( clCursor.moveToNext() )
-    	{
-    		int 	iType	=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_remindtype );
-    		int		id		=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_id );
-    		if ( 0 == iType )
-    		{
-    			
-    		}
-    		else if( 1 == iType )
-    		{
-    			
-    		}
-    		else if( 2 == iType )
-    		{
-    			
-    		}
-    		else if( 3 == iType )
-    		{
-    			
-    		}
-    	}
     }  
       
     public synchronized static CRemindOperator getInstance()
@@ -44,11 +25,28 @@ public final class CRemindOperator
         return _INSTANCE;  
     }  
     
-    public	void	addRemind( long _id, CRemindInfo _clCRemindInfo )
+    public	void	addRemind( Context context, long _id, CRemindInfo _clCRemindInfo )
     {
     	//将该提醒信息添加到alarmManager中，同时保存到Map中
     	//外面使用时需要先将该条提醒Insert到DB中，然后再调用该方法
     	//Insert时和提醒相关的属性可以设置为无效，这里会进行Update
+    	if ( 1 == _clCRemindInfo.m_bType )
+    	{
+    		
+    	}
+    	else if ( 2 == _clCRemindInfo.m_bType )
+    	{
+    		
+    	}
+    	else if ( 3 == _clCRemindInfo.m_bType )
+    	{		
+			AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
+	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
+	    	MyIntent.putExtra( "id", _id );
+	    	
+	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, 0);
+	    	alarmManager.set(AlarmManager.RTC_WAKEUP, _clCRemindInfo.lTime, pendingIntent);
+    	}
     }
     
     public	void	alarmAlert( long _id )

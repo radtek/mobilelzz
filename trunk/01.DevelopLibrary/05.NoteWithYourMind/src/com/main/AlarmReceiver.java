@@ -14,30 +14,36 @@ import android.view.Gravity;
 import android.widget.Toast;
 
 
+
+
 public class AlarmReceiver extends BroadcastReceiver
 {
-	public static	CNoteDBCtrl		m_clCNoteDBCtrl;
-	private 		Calendar 		m_clCalendar;
-	
-//	public AlarmReceiver( Context context )
-//	{
-//		m_clCNoteDBCtrl	=	new	CNoteDBCtrl( context );
-//		m_clCalendar 	= 	Calendar.getInstance();
-//	}
-	
+
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-//		Cursor clCursor	=	m_clCNoteDBCtrl.getRemindInfo();
-////temp
-//	    Intent i = new Intent(context, AlarmAlert.class);
-//        
-//	    Bundle bundleRet = new Bundle();
-//	    bundleRet.putString("STR_CALLER", "");
-//	    i.putExtras(bundleRet);
-//	    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//	    context.startActivity(i);
-////		
+//temp
+	    Intent i = new Intent(context, AlarmAlert.class);
+	    
+//	    CNoteDBCtrl	clCNoteDBCtrl	=	new	CNoteDBCtrl( context );
+//	    
+//	    Cursor clCursor	=	clCNoteDBCtrl.getRemindInfo();
+        
+	    Bundle bundleRet = new Bundle();
+	    bundleRet.putString("STR_CALLER", "");
+	    i.putExtras(bundleRet);
+	    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    context.startActivity(i);
+	    
+//		/*更新提醒状态*/
+//		int		iIdIndex		=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_id );
+//		int		iID				=	clCursor.getInt( iIdIndex );
+//		
+//		CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+//		clCMemoInfo.iIsRemind	=	0;
+//		
+//		m_clCNoteDBCtrl.Update( iID, clCMemoInfo );
+//		
 //		while( clCursor.moveToNext() )
 //		{
 //			/*取得每个提醒Memo的提醒时间*/

@@ -274,13 +274,13 @@ public class RemindSettingActivity extends Activity
     {
 		Intent intent = new Intent(RemindSettingActivity.this, NoteWithYourMind.class);  
 		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
-		startActivity(intent);	
+		//startActivity(intent);	
     }
     
     public void onDestroy(){
     	super.onDestroy();
     	Intent intent = new Intent(this, NoteWithYourMind.class);
-    	startActivity(intent);
+    	//startActivity(intent);
     }
 
 	void	setCheckBoxFlg( boolean bFlg )

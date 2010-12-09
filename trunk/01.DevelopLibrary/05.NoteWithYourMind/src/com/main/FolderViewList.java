@@ -33,7 +33,7 @@ public class FolderViewList extends ActivityGroup
 	private Integer m_iEncodeFlag = CMemoInfo.IsEncode_Invalid;
 	private Integer m_iRemindFlag = CMemoInfo.IsRemind_Invalid;
 	
-	private CNoteDBCtrl m_clCNoteDBCtrl = RootViewList.m_clCNoteDBCtrl;
+	private CNoteDBCtrl m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
 	private boolean m_isOnCreating = false;
 
 	private View  m_vListInFolder;
@@ -55,7 +55,7 @@ public class FolderViewList extends ActivityGroup
 
 		m_Folder_DBID = iExtraData.getIntExtra(ExtraData_FolderDBID, CMemoInfo.Id_Invalid);
 		
-		Cursor Cursor = m_clCNoteDBCtrl.getMemoRec(m_Folder_DBID);		
+		Cursor Cursor = m_clCNoteDBCtrl.getNoteRec(m_Folder_DBID);		
        	startManagingCursor(Cursor);
 		
 		if(Cursor.getCount()>0){
@@ -111,8 +111,8 @@ public class FolderViewList extends ActivityGroup
 	    			if(!m_isOnCreating){
 	    				Intent intent = new Intent();
 		    			intent.setClass(FolderViewList.this, NoteWithYourMind.class); 
-		    			intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InFolder); 
-		    			intent.putExtra(NoteWithYourMind.ExtraData_MemoID,m_Folder_DBID ); 
+		    			intent.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_New); 
+		    			intent.putExtra(NoteWithYourMind.ExtraData_OperationPreID, m_Folder_DBID ); 
 		    			startActivity(intent);
 	    			}
 //	    			m_LastTabIndex = 1;
@@ -154,8 +154,8 @@ public class FolderViewList extends ActivityGroup
 				}else if(iType == CMemoInfo.Type_Memo){
 					Intent intent = new Intent();
 	        		intent.setClass( FolderViewList.this, NoteWithYourMind.class);
-					intent.putExtra(NoteWithYourMind.ExtraData_NewNoteKind, NoteWithYourMind.NewNoteKindEnum.EditNoteKind_InFolder); 
-					intent.putExtra(NoteWithYourMind.ExtraData_MemoID,iDBID);	        		
+					intent.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Edit); 
+					intent.putExtra(NoteWithYourMind.ExtraData_EditNoteID,iDBID);	        		
 	        		startActivity(intent);
 				}else{
 					

@@ -46,17 +46,15 @@ import android.content.DialogInterface;
 public class NoteWithYourMind extends Activity
 {
 	//前一个Activity的类型
-	public	enum	NewNoteKindEnum
+	public	enum	OperationNoteKindEnum
 	{
-		NewNoteKind_Unknown,
-		NewNoteKind_InRoot,
-		EditNoteKind_InRoot,
-		NewNoteKind_InFolder,
-		EditNoteKind_InFolder
+		OperationNoteKind_New,
+		OperationNoteKind_Edit
 	}
 	
-	public static String ExtraData_MemoID		=	"com.main.ExtraData_MemoID";
-	public static String ExtraData_NewNoteKind	=	"com.main.ExtraData_NewNoteKind";
+	public static String ExtraData_EditNoteID		=	"com.main.ExtraData_EditNoteID";
+	public static String ExtraData_OperationNoteKind	=	"com.main.ExtraData_OperationNoteKind";
+	public static String ExtraData_OperationPreID	=	"com.main.ExtraData_OperationPreID";
 	
 	public static String ExtraData_RemindSetting	=	"com.main.ExtraData_RemindSetting";
 	
@@ -65,13 +63,14 @@ public class NoteWithYourMind extends Activity
 	public static final int ITEM1	=	Menu.FIRST + 1;
 	
 	//进行DB操作的类
-	private CNoteDBCtrl m_clCNoteDBCtrl = RootViewList.m_clCNoteDBCtrl;
+	private CNoteDBCtrl m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
 	
 	//进行时间操作的类
 //	private Calendar clCalendar	=	Calendar.getInstance();
 
-	private int 			m_ExtraData_MemoID 		=	CMemoInfo.Id_Invalid;
-	private NewNoteKindEnum m_ExtraData_NewNoteKind	=	NewNoteKindEnum.NewNoteKind_Unknown;
+	private int 			m_ExtraData_EditNoteID 		=	CMemoInfo.Id_Invalid;
+	private int 			m_ExtraData_PreID 		=	CMemoInfo.Id_Invalid;
+	private OperationNoteKindEnum m_ExtraData_OperationNoteKind;
 	
 	CRemindInfo					m_clCRemindInfo	=	new	CRemindInfo( (byte) -1 );
 	///////////////////////onStart////////////////////////////////////////////////
@@ -82,7 +81,7 @@ public class NoteWithYourMind extends Activity
 	
 	public void onDestroy()
 	{
-		if(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown){
+		if(m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New){
 			Intent intent = new Intent(this, RootViewList.class);
 			startActivity(intent);
 		}
@@ -100,12 +99,12 @@ public class NoteWithYourMind extends Activity
     		EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
     		EtOnce.setText( m_clCRemindInfo.getRemindInfoString());
 		}
-		m_ExtraData_MemoID		=	iExtraData.getIntExtra(ExtraData_MemoID, CMemoInfo.Id_Invalid );
-		m_ExtraData_NewNoteKind	=	(NewNoteKindEnum)iExtraData.getSerializableExtra(ExtraData_NewNoteKind);
+		m_ExtraData_EditNoteID		=	iExtraData.getIntExtra(ExtraData_EditNoteID, CMemoInfo.Id_Invalid );
+		m_ExtraData_OperationNoteKind	=	(OperationNoteKindEnum)iExtraData.getSerializableExtra(ExtraData_OperationNoteKind);
 		//新建Memo或第一次程序启动做的处理，设置为无效值
-		if ( m_ExtraData_NewNoteKind == null )
+		if ( m_ExtraData_OperationNoteKind == null )
 		{
-			m_ExtraData_NewNoteKind	=	NewNoteKindEnum.NewNoteKind_Unknown;
+			//m_ExtraData_OperationNoteKind	=	OperationNoteKindEnum.NewNoteKind_Unknown;
 		}
     	super.onResume();
 	}
@@ -120,8 +119,7 @@ public class NoteWithYourMind extends Activity
     	super.onCreate(savedInstanceState);
        	
     	//初始化为无效
-        m_ExtraData_MemoID		=	CMemoInfo.Id_Invalid;
-        m_ExtraData_NewNoteKind	=	NewNoteKindEnum.NewNoteKind_Unknown;
+        m_ExtraData_EditNoteID		=	CMemoInfo.Id_Invalid;
 
 		//加载主画页的layout
 		setContentView( R.layout.main );
@@ -196,21 +194,19 @@ public class NoteWithYourMind extends Activity
     ///////////////////////////////onCreateEnd/////////////////////////////////////////////////////////
     private void UpdateViewStatus()
     {
-		if( (  m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_InRoot )
-			||(m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_InFolder) )
+		if( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New )
 		{
        		UpdateStatusOfMemoInfo( "", false  );  //新建便签 不需要设置内容
 		}
 		
 		//如果对一条Memo进行编辑
-		else if( (  m_ExtraData_NewNoteKind == NewNoteKindEnum.EditNoteKind_InRoot )
-				||( m_ExtraData_NewNoteKind == NewNoteKindEnum.EditNoteKind_InFolder ) )
+		else if( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Edit )
 		{
 			//m_ExtraData_MemoID中保存被编辑记录的ID	
-			if( m_ExtraData_MemoID != CMemoInfo.Id_Invalid )
+			if( m_ExtraData_EditNoteID != CMemoInfo.Id_Invalid )
 			{
 			   //根据ID取得该条记录的Cursor
-				Cursor	curExtraMemo	=	m_clCNoteDBCtrl.getMemoRec( m_ExtraData_MemoID );
+				Cursor	curExtraMemo	=	m_clCNoteDBCtrl.getNoteRec( m_ExtraData_EditNoteID );
 			    startManagingCursor( curExtraMemo );
 			    if ( curExtraMemo.getCount() > 0 )
 			    {
@@ -269,11 +265,11 @@ public class NoteWithYourMind extends Activity
     	if ( bIsDisplayRemind )
     	{
     		//显示提醒的时间和类型 - zhu.t
-    		if ( m_ExtraData_MemoID	!= CMemoInfo.Id_Invalid )
+    		if ( m_ExtraData_EditNoteID	!= CMemoInfo.Id_Invalid )
     		{
         		EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
         		CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-        		clCRemindOperator.getRemindInfo(m_ExtraData_MemoID, m_clCRemindInfo);
+        		clCRemindOperator.getRemindInfo(m_ExtraData_EditNoteID, m_clCRemindInfo);
         		EtOnce.setText( m_clCRemindInfo.getRemindInfoString());
     		}
     	}
@@ -315,13 +311,10 @@ public class NoteWithYourMind extends Activity
     	}
 		
 
-		if ( (  m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_InRoot )
-			||( m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_Unknown ) )
+		if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New )
 		{
-			//主画页下新建Memo
-			clCMemoInfo.iIsEditEnable	=	CMemoInfo.IsEditEnable_Enable;
     		clCMemoInfo.iType			=	CMemoInfo.Type_Memo;
-        	clCMemoInfo.iPreId			=	CMemoInfo.PreId_Root;
+        	clCMemoInfo.iPreId			=	m_ExtraData_PreID;
         	clCMemoInfo.dCreateTime		=	System.currentTimeMillis();
         	clCMemoInfo.dRemindTime		=	clCalendar.getTimeInMillis(); 
         	long	_id	=	m_clCNoteDBCtrl.Create(clCMemoInfo);
@@ -331,17 +324,16 @@ public class NoteWithYourMind extends Activity
         	clCRemindOperator.addRemind( this, _id, m_clCRemindInfo);
 
 		}
-		else if ( ( m_ExtraData_NewNoteKind == NewNoteKindEnum.EditNoteKind_InRoot )
-				||( m_ExtraData_NewNoteKind == NewNoteKindEnum.EditNoteKind_InFolder ) )
+		else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Edit )
 
 		{
 			//编辑Memo
-			if( m_ExtraData_MemoID != CMemoInfo.Id_Invalid )
+			if( m_ExtraData_EditNoteID != CMemoInfo.Id_Invalid )
 			{
-				m_clCNoteDBCtrl.Update(m_ExtraData_MemoID,clCMemoInfo );
+				m_clCNoteDBCtrl.Update(m_ExtraData_EditNoteID,clCMemoInfo );
 				//判断是否需要更新提醒信息 - zhu.t
 				CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-				clCRemindOperator.getRemindInfo(m_ExtraData_MemoID, m_clCRemindInfo);
+				clCRemindOperator.getRemindInfo(m_ExtraData_EditNoteID, m_clCRemindInfo);
 				if ( m_clCRemindInfo.m_bType != -1 )
 				{
 					EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
@@ -353,29 +345,6 @@ public class NoteWithYourMind extends Activity
 				//Error
 			}
         }
-		else if ( m_ExtraData_NewNoteKind == NewNoteKindEnum.NewNoteKind_InFolder )
-		{
-			//List画页下新建Memo
-			if ( m_ExtraData_MemoID != CMemoInfo.Id_Invalid )
-			{
-	        	clCMemoInfo.iIsEditEnable	=	CMemoInfo.IsEditEnable_Enable;
-	    		clCMemoInfo.iType			=	CMemoInfo.Type_Memo;
-	        	clCMemoInfo.iPreId			=	m_ExtraData_MemoID;
-	        	clCMemoInfo.dCreateTime		=	System.currentTimeMillis();
-	        	clCMemoInfo.dRemindTime		=	clCalendar.getTimeInMillis(); 
-	        	long	_id	=	m_clCNoteDBCtrl.Create(clCMemoInfo);
-	        	
-	        	//保存提醒信息 - zhu.t
-	        	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-	        	clCRemindOperator.addRemind(this, _id, m_clCRemindInfo);
-			}
-			else
-			{
-				//Error
-			}
-		}
-
-
     }
 
     private void EncodeSettingDlg()

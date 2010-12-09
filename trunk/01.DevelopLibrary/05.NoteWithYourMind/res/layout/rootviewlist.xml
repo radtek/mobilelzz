@@ -5,50 +5,43 @@ android:layout_width="fill_parent"
 android:layout_height="fill_parent"
 android:background="@drawable/background">
 	<LinearLayout
-	style="@android:style/ButtonBar"
 	android:id="@+id/rootviewlist_toolbar"
 	android:orientation="horizontal"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:layout_alignParentBottom="true">
-		<Button
+	android:layout_alignParentBottom="true"
+	android:background="@drawable/background_toolbar">
+		<ImageButton
 			android:id="@+id/rootviewlist_toolbar_search"
 			style="@style/ToolBarButton"
-			android:text="搜索">
-		</Button>
-		<Button
+			android:src="@drawable/toolbar_search"/>
+		<ImageButton
 			android:id="@+id/rootviewlist_toolbar_newfolder"
 			style="@style/ToolBarButton"
-			android:text="新建文件夹">
-		</Button>
-		<Button
+			android:src="@drawable/toolbar_newfolder"/>
+		<ImageButton
 			android:id="@+id/rootviewlist_toolbar_newnote"
 			style="@style/ToolBarButton"
-			android:text="新建便签">
-		</Button>
-		<Button
+			android:src="@drawable/toolbar_newnote"/>
+		<ImageButton
 			android:id="@+id/rootviewlist_toolbar_more"
 			style="@style/ToolBarButton"
-			android:text="更多">
-		</Button>
-		<Button
+			android:src="@drawable/toolbar_more"/>
+		<ImageButton
 			android:id="@+id/toolbar_delete"
 			style="@style/ToolBarButton"
 			android:text="删除"
-			android:visibility="gone">
-		</Button>
-		<Button
+			android:visibility="gone"/>
+		<ImageButton
 			android:id="@+id/toolbar_move"
 			style="@style/ToolBarButton"
 			android:text="移动"
-			android:visibility="gone">
-		</Button>
-		<Button
+			android:visibility="gone"/>
+		<ImageButton
 			android:id="@+id/toolbar_cancel"
 			style="@style/ToolBarButton"
 			android:text="取消"
-			android:visibility="gone">
-		</Button>
+			android:visibility="gone"/>
 	</LinearLayout>
 	<ListView 
 		android:id = "@+id/rootviewlist_list"

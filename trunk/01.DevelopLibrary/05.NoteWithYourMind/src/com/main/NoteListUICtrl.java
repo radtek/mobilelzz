@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -91,7 +92,7 @@ class NoteListUICtrl{
 				}
 			}
 		});
-		Button clBTMemoDelete = (Button) m_toolBarLayout.findViewById(R.id.toolbar_delete);
+		ImageButton clBTMemoDelete = (ImageButton) m_toolBarLayout.findViewById(R.id.toolbar_delete);
 		clBTMemoDelete.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
@@ -119,7 +120,7 @@ class NoteListUICtrl{
         	}
         });
 		
-		Button clBTMemoMoveIn = (Button) m_toolBarLayout.findViewById(R.id.toolbar_move);
+		ImageButton clBTMemoMoveIn = (ImageButton) m_toolBarLayout.findViewById(R.id.toolbar_move);
 		clBTMemoMoveIn.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
@@ -212,7 +213,7 @@ class NoteListUICtrl{
         		}
         	}
         });
-		Button clBTMemoCancel = (Button) m_toolBarLayout.findViewById(R.id.toolbar_cancel);
+		ImageButton clBTMemoCancel = (ImageButton) m_toolBarLayout.findViewById(R.id.toolbar_cancel);
 		clBTMemoCancel.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{

@@ -70,14 +70,14 @@ public class RootViewList extends Activity
         m_NoteListUICtrl = new NoteListUICtrl(this, list, CMemoInfo.PreId_Root, toolbar);
         m_NoteListUICtrl.initializeSource();
         
-        Button clBTMemoNewFolder = (Button) findViewById(R.id.rootviewlist_toolbar_newfolder);
+        ImageButton clBTMemoNewFolder = (ImageButton) findViewById(R.id.rootviewlist_toolbar_newfolder);
 		clBTMemoNewFolder.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{  			
         		PopUpNewFolderDlg(); 			
         	}
         });
-        Button clBTMemoNewNote = (Button) findViewById(R.id.rootviewlist_toolbar_newnote);
+		ImageButton clBTMemoNewNote = (ImageButton) findViewById(R.id.rootviewlist_toolbar_newnote);
         clBTMemoNewNote.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{  			

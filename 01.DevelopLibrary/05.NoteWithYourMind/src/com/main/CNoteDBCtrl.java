@@ -124,8 +124,14 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 				KEY_createtime+" desc", 
 					new String[]{String.valueOf(id), String.valueOf(CMemoInfo.IsRemind_Yes)});
 	}
+	public	Cursor	getNotesByID( int id )
+	{
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? order by "+KEY_type+" asc, "+
+					KEY_createtime+" desc", 
+					new String[]{String.valueOf(id)});
+	}
 	
-	public	Cursor	getMemoRec( int id )
+	public	Cursor	getNoteRec( int id )
 	{
 		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_id+"=?", new String[]{String.valueOf(id)});
 	}

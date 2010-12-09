@@ -45,7 +45,7 @@ public class CMemoInfo {
 		dRemindTime		=	-1;
 		dCreateTime		=	-1;
 		dLastModifyTime	=	-1;
-		iIsEditEnable	=	-1;
+		iIsEditEnable	=	IsEditEnable_Enable;
 		iIsRemindAble	=	-1;
 		RemindType		=	-1;
 		strDetail		=	null;

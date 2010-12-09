@@ -9,4 +9,5 @@ class CommonDefine{
 	public static int g_preID = -1;
 	public static boolean g_bIsRemind = false;
 	public static int g_test = -1;
+	public static	CNoteDBCtrl		m_clCNoteDBCtrl = null;
 }

@@ -29,13 +29,13 @@ public class NoteWidget extends AppWidgetProvider
 		Intent intent = new Intent(context, RootViewList.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 		int tabid = 0;
-		intent.putExtra(RootViewList.ExtraData_initTabID, tabid);
+		intent.putExtra(RootViewList.ExtraData_initListItemDBID, tabid);
 		PendingIntent pintent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		remoteViews.setOnClickPendingIntent(R.id.widget_B_Memo, pintent);
 		
 		Intent intentRemind = new Intent(context, RootViewList.class);
 		intentRemind.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-		intentRemind.putExtra(RootViewList.ExtraData_initTabID, 1);
+		intentRemind.putExtra(RootViewList.ExtraData_initListItemDBID, 1);
 		PendingIntent pintentRemind = PendingIntent.getActivity(context, 1, intentRemind, 0);
 		remoteViews.setOnClickPendingIntent(R.id.widget_B_Remind, pintentRemind);
 		

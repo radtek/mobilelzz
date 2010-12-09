@@ -3,6 +3,8 @@ package com.main;
 
 import java.util.ArrayList;
 
+import com.main.NoteListCursorAdapter.ItemDetail;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -30,28 +32,26 @@ class NoteListUICtrl{
 		MoveIn_SelectMoveItem,
 		MoveIn_SelectFolder
 	}
-	private int m_ButtonID_delete = 0;
-	private int m_ButtonID_move = 1;
-	private int m_ButtonID_cancel = 2;
 	
-	private CNoteDBCtrl m_clCNoteDBCtrl = RootViewList.m_clCNoteDBCtrl;
+	private CNoteDBCtrl m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
 	private boolean m_bIsDelete = false;
 	private MoveIn_State m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
 	
 	private AlertDialog m_dlgFolderList;
 	public ListView m_targetList;
 	private int m_iPreID = CommonDefine.g_int_Invalid_ID;
-	private LinearLayout m_toolBarLayout;
+	private View m_toolBarLayout;
 	public Activity m_sourceManager;
 	private NoteListCursorAdapter m_myAdapter;
 
 	//private String m_strPassWord;
 
-	NoteListUICtrl(Activity sourceManager, ListView target, int iPreID, LinearLayout toolBarLayout){
+	NoteListUICtrl(Activity sourceManager, ListView target, int iPreID, View toolBarLayout){
 		m_sourceManager = sourceManager;
 		m_targetList = target;
 		m_iPreID = iPreID;
 		m_toolBarLayout = toolBarLayout;
+		m_myAdapter = null;
 	}
 	
 	public void releaseSource(){
@@ -63,7 +63,7 @@ class NoteListUICtrl{
 	}
 	
 	public void initializeSource(){
-		updateListData();
+		updateListData(CommonDefine.g_int_Invalid_ID);
 		m_targetList.setOnItemClickListener(new OnItemClickListener(){
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
@@ -82,20 +82,16 @@ class NoteListUICtrl{
 				}else if(iValue == CMemoInfo.Type_Memo){
 					Intent toNew = new Intent();
 	        		toNew.setClass(m_sourceManager, NoteWithYourMind.class);
-	        		toNew.putExtra(NoteWithYourMind.ExtraData_MemoID, iIDValue);
-	        		if(m_iPreID==CMemoInfo.PreId_Root){
-	        			toNew.putExtra(NoteWithYourMind.ExtraData_NewNoteKind,NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InRoot);
-	        		}else{
-	        			toNew.putExtra(NoteWithYourMind.ExtraData_NewNoteKind,NoteWithYourMind.NewNoteKindEnum.NewNoteKind_InFolder);
-	        		}
-	        		
+	        		toNew.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Edit);
+	        		toNew.putExtra(NoteWithYourMind.ExtraData_EditNoteID, iIDValue);
+	        			        		
 	        		m_sourceManager.startActivity(toNew);
 				}else{
 					
 				}
 			}
 		});
-		Button clBTMemoDelete = (Button) m_toolBarLayout.getChildAt(m_ButtonID_delete);
+		Button clBTMemoDelete = (Button) m_toolBarLayout.findViewById(R.id.toolbar_delete);
 		clBTMemoDelete.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
@@ -103,7 +99,7 @@ class NoteListUICtrl{
         		{
         			m_bIsDelete = true;
         			updateToolBar();
-        			updateListData();
+        			updateListData(CommonDefine.g_int_Invalid_ID);
         			if(m_myAdapter!=null){
             			m_myAdapter.setSelectableStyle(true);
             		}
@@ -118,12 +114,12 @@ class NoteListUICtrl{
             			m_clCNoteDBCtrl.Delete(needDeleteIDs);
         			}
         			Return2TargetList();
-        			updateListData();
+        			updateListData(CommonDefine.g_int_Invalid_ID);
         		}
         	}
         });
 		
-		Button clBTMemoMoveIn = (Button) m_toolBarLayout.getChildAt(m_ButtonID_move);
+		Button clBTMemoMoveIn = (Button) m_toolBarLayout.findViewById(R.id.toolbar_move);
 		clBTMemoMoveIn.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
@@ -132,7 +128,7 @@ class NoteListUICtrl{
         			m_MoveIn_State = MoveIn_State.MoveIn_SelectMoveItem;
         			//update toolbar
         			updateToolBar();
-        			updateListData();
+        			updateListData(CommonDefine.g_int_Invalid_ID);
             		if(m_myAdapter!=null){
             			m_myAdapter.setSelectableStyle(true);
             			m_myAdapter.setFolderSelectable(false);
@@ -145,7 +141,7 @@ class NoteListUICtrl{
         			findSelectItemDBID(alIDs);
         			if(alIDs.size()<=0){
         				m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
-        				updateListData();
+        				updateListData(CommonDefine.g_int_Invalid_ID);
                 		Return2TargetList();
                 		return;
         			}
@@ -206,7 +202,7 @@ class NoteListUICtrl{
         					findSelectItemDBID(alIDs);
         					Move2Folder(alIDs, (int)id);
                     		m_dlgFolderList.cancel();
-                    		updateListData();
+                    		updateListData(CommonDefine.g_int_Invalid_ID);
                     		Return2TargetList();
         				}
         			});
@@ -216,11 +212,11 @@ class NoteListUICtrl{
         		}
         	}
         });
-		Button clBTMemoCancel = (Button) m_toolBarLayout.getChildAt(m_ButtonID_cancel);
+		Button clBTMemoCancel = (Button) m_toolBarLayout.findViewById(R.id.toolbar_cancel);
 		clBTMemoCancel.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
-        		updateListData();
+        		updateListData(CommonDefine.g_int_Invalid_ID);
         		if(m_myAdapter!=null){
         			m_myAdapter.setSelectableStyle(false);
         		}
@@ -231,9 +227,9 @@ class NoteListUICtrl{
 	}
 	
 	private void updateToolBar(){
-		Button btDelete = (Button)m_toolBarLayout.getChildAt(m_ButtonID_delete);
-		Button btCancel = (Button)m_toolBarLayout.getChildAt(m_ButtonID_cancel);
-		Button btMove = (Button)m_toolBarLayout.getChildAt(m_ButtonID_move);
+		Button btDelete = (Button)m_toolBarLayout.findViewById(R.id.toolbar_delete);
+		Button btCancel = (Button)m_toolBarLayout.findViewById(R.id.toolbar_cancel);
+		Button btMove = (Button)m_toolBarLayout.findViewById(R.id.toolbar_move);
 		if(m_bIsDelete){		
 			btMove.setVisibility(View.GONE);
 			btDelete.setBackgroundResource(R.drawable.buttonshape);
@@ -251,23 +247,36 @@ class NoteListUICtrl{
 		}
 	}
 	
-	public void updateListData(){
-		Cursor clCursor = null;
-		if(m_iPreID!=CommonDefine.g_int_Invalid_ID){
-			clCursor = m_clCNoteDBCtrl.getMemosByID(m_iPreID);
+	public void updateListData(int initListItemDBID){
+		if(m_myAdapter==null){
+			Cursor cursor = m_clCNoteDBCtrl.getNotesByID(m_iPreID);
+			m_sourceManager.startManagingCursor(cursor);
+			m_myAdapter = new NoteListCursorAdapter(m_sourceManager, cursor);
+			m_targetList.setAdapter(m_myAdapter);
+		}else{
+			m_myAdapter.updateCursor();
+			m_myAdapter.notifyDataSetChanged();
 		}
-		if(clCursor!=null)
-		{
-			m_sourceManager.startManagingCursor(clCursor);
-			int count = clCursor.getCount();
-			if(count>=0)
-			{
-				m_myAdapter = new NoteListCursorAdapter(m_sourceManager,clCursor);
-				m_myAdapter.setNoteDBCtrl(m_clCNoteDBCtrl);
-				m_targetList.setAdapter(m_myAdapter);
-			}
+		if(initListItemDBID!=CommonDefine.g_int_Invalid_ID){
+			/*
+			 * 查找initListItemDBID对应的pos
+			 * 移动list光标到pos
+			 */
 		}
 	}
+	
+	public boolean isFolder(View view){
+		return m_myAdapter.isFolder(view);
+	}
+	
+	public boolean getListIsEncode(View view){
+		return m_myAdapter.getListIsEncode(view);
+	}
+	
+	public int getListDBID(View view){
+		return m_myAdapter.getListDBID(view);
+	}
+	
 	private void Return2TargetList()
 	{
 		m_MoveIn_State = MoveIn_State.MoveIn_Invalid;

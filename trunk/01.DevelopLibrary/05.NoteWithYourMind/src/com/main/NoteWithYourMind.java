@@ -105,7 +105,6 @@ public class NoteWithYourMind extends Activity
     {
     	super.onCreate(savedInstanceState);
 		setContentView( R.layout.editnote );
-		m_clCRemindInfo = new	CRemindInfo( (byte) -1 );
 		if(m_clCNoteDBCtrl==null){
 			m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
 			CommonDefine.m_clCNoteDBCtrl = m_clCNoteDBCtrl;

@@ -49,7 +49,8 @@ public class NoteWithYourMind extends Activity
 	public	enum	OperationNoteKindEnum
 	{
 		OperationNoteKind_New,
-		OperationNoteKind_Edit
+		OperationNoteKind_Edit,
+		OperationNoteKind_Update
 	}
 	
 	public static String ExtraData_EditNoteID		=	"com.main.ExtraData_EditNoteID";
@@ -70,43 +71,30 @@ public class NoteWithYourMind extends Activity
 
 	private int 			m_ExtraData_EditNoteID 		=	CMemoInfo.Id_Invalid;
 	private int 			m_ExtraData_PreID 		=	CMemoInfo.Id_Invalid;
-	private OperationNoteKindEnum m_ExtraData_OperationNoteKind;
+	private OperationNoteKindEnum m_ExtraData_OperationNoteKind = null;
 	
-	CRemindInfo					m_clCRemindInfo	=	new	CRemindInfo( (byte) -1 );
+	CRemindInfo					m_clCRemindInfo	=	null;
 	///////////////////////onStart////////////////////////////////////////////////
-	public void onNewIntent(Intent intent)
-	{
-		setIntent(intent);
-	}
+//	public void onNewIntent(Intent intent)
+//	{
+//		setIntent(intent);
+//	}
 	
-	public void onDestroy()
-	{
-		if(m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New){
-			Intent intent = new Intent(this, RootViewList.class);
-			startActivity(intent);
-		}
-		super.onDestroy();
-	}
+//	public void onDestroy()
+//	{
+//		if(m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New){
+//			Intent intent = new Intent(this, RootViewList.class);
+//			startActivity(intent);
+//		}
+//		super.onDestroy();
+//	}
 	
 	public void onResume()
 	{
-		Intent iExtraData = getIntent();
-		CRemindInfo temp =	( CRemindInfo )iExtraData.getSerializableExtra( ExtraData_RemindSetting );
-		if(temp!=null)
-		{
-			//更新设定的提醒信息
-		m_clCRemindInfo = temp;
-    		EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
-    		EtOnce.setText( m_clCRemindInfo.getRemindInfoString());
-		}
-		m_ExtraData_EditNoteID		=	iExtraData.getIntExtra(ExtraData_EditNoteID, CMemoInfo.Id_Invalid );
-		m_ExtraData_OperationNoteKind	=	(OperationNoteKindEnum)iExtraData.getSerializableExtra(ExtraData_OperationNoteKind);
-		//新建Memo或第一次程序启动做的处理，设置为无效值
-		if ( m_ExtraData_OperationNoteKind == null )
-		{
-			//m_ExtraData_OperationNoteKind	=	OperationNoteKindEnum.NewNoteKind_Unknown;
-		}
-    	super.onResume();
+		super.onResume();
+		
+		UpdateViewData();
+    	
 	}
 	
 	////////////////////////////////////////////////////////////////////
@@ -115,21 +103,15 @@ public class NoteWithYourMind extends Activity
     @Override
     public void onCreate( Bundle savedInstanceState )
     {
-        //调用基类方法
     	super.onCreate(savedInstanceState);
-       	
-    	//初始化为无效
-        m_ExtraData_EditNoteID		=	CMemoInfo.Id_Invalid;
-
-		//加载主画页的layout
-		setContentView( R.layout.main );
+		setContentView( R.layout.editnote );
+		m_clCRemindInfo = new	CRemindInfo( (byte) -1 );
 		if(m_clCNoteDBCtrl==null){
 			m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
+			CommonDefine.m_clCNoteDBCtrl = m_clCNoteDBCtrl;
 		}
-        //设定EditText的内容
-        UpdateViewStatus();
     	//点击保存Button，进行新增或更新操作
-        ImageButton	clBTSave	=	(ImageButton) findViewById(R.id.B_main_Save);
+        ImageButton	clBTSave	=	(ImageButton) findViewById(R.id.editnote_toolbar_save);
         clBTSave.setOnClickListener(new Button.OnClickListener()
         {
         	public void onClick(View v)
@@ -161,20 +143,7 @@ public class NoteWithYourMind extends Activity
         		}
         	}
         });
-        
-        //点击Button迁移至RootList画页Activity
-        ImageButton	clBTView = (ImageButton) findViewById(R.id.B_main_View);
-        clBTView.setVisibility(View.INVISIBLE);
-//        clBTView.setOnClickListener(new Button.OnClickListener()
-//        {
-//        	public void onClick(View v)
-//        	{
-//        		Intent intent = new Intent();
-//        		intent.setClass(NoteWithYourMind.this, RootViewList.class);
-//        		startActivity(intent);
-//        	}
-//        });
-        
+
         //点击提醒设置Edit迁移至提醒设置画页Activity - zhu.t
         ((EditText)findViewById(R.id.CB_main_IsWarning)).setOnClickListener(new View.OnClickListener()
         {			
@@ -192,22 +161,27 @@ public class NoteWithYourMind extends Activity
         });
     }
     ///////////////////////////////onCreateEnd/////////////////////////////////////////////////////////
-    private void UpdateViewStatus()
+    private void UpdateViewData()
     {
-		if( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New )
+    	/*
+    	 * 新建便签
+    	 * 		所有内容更新为空
+    	 * 编辑便签
+    	 * 		根据编辑的便签的DBID，获取便签具有的信息，分别更新时间、语音、文本
+    	 * 更新便签
+    	 * 		根据用户在提醒时间设定画页设置的提醒信息，更新便签中的时间
+    	 */
+    	Intent iExtraData = getIntent();
+    	m_ExtraData_PreID = iExtraData.getIntExtra(ExtraData_OperationPreID, CommonDefine.g_int_Invalid_ID);
+		m_ExtraData_OperationNoteKind	=	(OperationNoteKindEnum)iExtraData.getSerializableExtra(ExtraData_OperationNoteKind);
+		if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Edit )
 		{
-       		UpdateStatusOfMemoInfo( "", false  );  //新建便签 不需要设置内容
-		}
-		
-		//如果对一条Memo进行编辑
-		else if( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Edit )
-		{
-			//m_ExtraData_MemoID中保存被编辑记录的ID	
+			m_ExtraData_EditNoteID		=	iExtraData.getIntExtra(ExtraData_EditNoteID, CMemoInfo.Id_Invalid );
+			String strDetail = null;
 			if( m_ExtraData_EditNoteID != CMemoInfo.Id_Invalid )
 			{
 			   //根据ID取得该条记录的Cursor
 				Cursor	curExtraMemo	=	m_clCNoteDBCtrl.getNoteRec( m_ExtraData_EditNoteID );
-			    startManagingCursor( curExtraMemo );
 			    if ( curExtraMemo.getCount() > 0 )
 			    {
 			        curExtraMemo.moveToFirst();
@@ -216,82 +190,85 @@ public class NoteWithYourMind extends Activity
 			        
 			        if ( TypeValue==CMemoInfo.Type_Folder)
 			        {
-			        	UpdateStatusOfMemoInfo( "", false );
+			        	//error
 			        }
 			        else
 			        {
 	        			//取得Memo中的Text信息
 			        	index	=	curExtraMemo.getColumnIndex( CNoteDBCtrl.KEY_detail );
-	        	    	String strDetail = curExtraMemo.getString( index );
+	        	    	strDetail = curExtraMemo.getString( index );
 	        	    	
-	        	    	index	=	curExtraMemo.getColumnIndex( CNoteDBCtrl.KEY_isremind );
-	        	    	int isRemind = curExtraMemo.getInt(index);
-	        	    	
-	        	    	 //编辑便签 需要显示旧文字内容在edittext上
-	        	    	if ( isRemind == CMemoInfo.IsRemind_Yes )
-	        	    	{
-	        	    		//显示提醒时间 
-	        	    		UpdateStatusOfMemoInfo( strDetail,true );   
-	        	    	}
-	        	    	else
-	        	    	{
-	        	    		//不显示提醒时间
-	        	    		UpdateStatusOfMemoInfo( strDetail,false );
-	        	    	}
+	        	    	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
+	            		clCRemindOperator.getRemindInfo(curExtraMemo, m_clCRemindInfo);
 			        }
 			    }
-			    else
-			    {
-			        UpdateStatusOfMemoInfo("",false);
-			    }
+			    curExtraMemo.close();
 			}
-			else
-			{
-				UpdateStatusOfMemoInfo("",false);
-			}
-		}
-		else
+			updateTime(m_clCRemindInfo);
+			updateDetail(strDetail);
+			updateVoice();
+			
+		}else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New )
 		{
-       		UpdateStatusOfMemoInfo("",false);
-		}
+			//将时间设置为空
+			updateTime(null);
+			//将文本设置为空
+			updateDetail(null);
+			//将语音设置为空
+			updateVoice();
+		}else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Update )
+		{
+			CRemindInfo temp =	( CRemindInfo )iExtraData.getSerializableExtra( ExtraData_RemindSetting );
+			m_clCRemindInfo = temp;
+			updateTime(temp);
+		}	
 	}
-    
-    //设置主画页中EditText的内容
-    private void UpdateStatusOfMemoInfo( String detail, boolean bIsDisplayRemind )
-    {
-    	EditText etDetail = (EditText)findViewById(R.id.ET_main_Memo);
-    	etDetail.setText( detail );
+    private void updateVoice(){
     	
-    	if ( bIsDisplayRemind )
-    	{
-    		//显示提醒的时间和类型 - zhu.t
-    		if ( m_ExtraData_EditNoteID	!= CMemoInfo.Id_Invalid )
-    		{
-        		EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
-        		CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-        		clCRemindOperator.getRemindInfo(m_ExtraData_EditNoteID, m_clCRemindInfo);
-        		EtOnce.setText( m_clCRemindInfo.getRemindInfoString());
-    		}
+    }
+    private void updateTime(CRemindInfo clRemindInfo){
+    	EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
+    	if(clRemindInfo!=null){
+    		EtOnce.setText( clRemindInfo.getRemindInfoString());
+    	}else{
+    		EtOnce.setText( "" );
     	}
     }
+    private void updateDetail(String strDetail){
+    	EditText EtOnce = (EditText) findViewById(R.id.ET_main_Memo);
+    	if(strDetail!=null){
+    		EtOnce.setText( strDetail );
+    	}else{
+    		EtOnce.setText( "" );
+    	}
+    }
+    
+    //设置主画页中EditText的内容
+//    private void UpdateStatusOfMemoInfo( String detail, boolean bIsDisplayRemind )
+//    {
+//    	EditText etDetail = (EditText)findViewById(R.id.ET_main_Memo);
+//    	etDetail.setText( detail );
+//    	
+//    	if ( bIsDisplayRemind )
+//    	{
+//    		//显示提醒的时间和类型 - zhu.t
+//    		if ( m_ExtraData_EditNoteID	!= CMemoInfo.Id_Invalid )
+//    		{
+//        		EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
+//        		
+//    		}
+//    	}
+//    }
 
     private void SaveEditData(String strMemoText)
     {
     	/*
-    	 1、先判断MemoID是否有效
-    	  	有效
-    	  		再判断MemoID对应的记录是Folder还是Memo
-    	  			Folder
-    	  				判断Folder的是不是提醒
-    	  					是
-    	  						将新记录强制修改为提醒
-    	  					否
-    	  						将当前记录追加到MemoID对应的Folder下
-    	  			Memo
-    	  				更新当前MemoID对应的记录
-    	  	无效
-    	  		将当前记录追加到Root下
-    	  
+    	 如果时间有效
+    	 	保存时间
+    	 如果语音有效
+    	 	保存语音
+    	 如果文本有效
+    	 	保存文本
     	*/
     	CMemoInfo		clCMemoInfo	=	new	CMemoInfo();
     	
@@ -333,12 +310,12 @@ public class NoteWithYourMind extends Activity
 				m_clCNoteDBCtrl.Update(m_ExtraData_EditNoteID,clCMemoInfo );
 				//判断是否需要更新提醒信息 - zhu.t
 				CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-				clCRemindOperator.getRemindInfo(m_ExtraData_EditNoteID, m_clCRemindInfo);
-				if ( m_clCRemindInfo.m_bType != -1 )
-				{
-					EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
-		    		EtOnce.setText( m_clCRemindInfo.getRemindInfoString());
-				}
+//				clCRemindOperator.getRemindInfo(m_ExtraData_EditNoteID, m_clCRemindInfo);
+//				if ( m_clCRemindInfo.m_bType != -1 )
+//				{
+//					EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
+//		    		EtOnce.setText( m_clCRemindInfo.getRemindInfoString());
+//				}
 			}
 			else
 			{

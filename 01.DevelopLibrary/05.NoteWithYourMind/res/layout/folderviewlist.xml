@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/folderviewlist"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:background="@drawable/background">
+	<LinearLayout
+	android:id="@+id/folderviewlist_toolbar"
+	android:orientation="horizontal"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_alignParentBottom="true"
+	android:background="@drawable/background_toolbar">
+		<ImageButton
+			android:id="@+id/folderviewlist_toolbar_newnote"
+			style="@style/ToolBarButton"
+			android:src="@drawable/toolbar_newnote"/>
+		<ImageButton
+			android:id="@+id/toolbar_delete"
+			style="@style/ToolBarButton"
+			android:src="@drawable/toolbar_delete"
+			/>
+		<ImageButton
+			android:id="@+id/toolbar_move"
+			style="@style/ToolBarButton"
+			android:src="@drawable/toolbar_move"
+			/>
+		<ImageButton
+			android:id="@+id/toolbar_cancel"
+			style="@style/ToolBarButton"
+			android:src="@drawable/toolbar_cancel"
+			android:visibility="gone"/>
+	</LinearLayout>
+	<ListView 
+		android:id = "@+id/folderviewlist_list"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_above="@id/folderviewlist_toolbar"
+	/>
+</RelativeLayout>

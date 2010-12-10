@@ -49,7 +49,9 @@ public class RootViewList extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		//创建DB操作类
-        CommonDefine.m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
+		if(CommonDefine.m_clCNoteDBCtrl==null){
+			CommonDefine.m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
+		}
         m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
 //    	Cursor	curPassWord	=	m_clCNoteDBCtrl.getPassWord();
 //        curPassWord.moveToFirst();

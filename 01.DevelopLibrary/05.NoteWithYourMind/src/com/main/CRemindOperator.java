@@ -71,7 +71,7 @@ public final class CRemindOperator
     	//由于提醒不能转为Memo，所以该方法对删除和设置为Disable都好用
     }
     
-    public	void	getRemindInfo( long _id, CRemindInfo _clCRemindInfo )
+    public	void	getRemindInfo( Cursor cur, CRemindInfo _clCRemindInfo )
     {
     	//根据ID从DB中取得提醒信息
     }

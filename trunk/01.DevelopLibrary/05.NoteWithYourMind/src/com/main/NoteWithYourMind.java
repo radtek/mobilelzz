@@ -151,7 +151,7 @@ public class NoteWithYourMind extends Activity
 			{
 				Intent intent = new Intent();
 				intent.setClass(NoteWithYourMind.this, RemindSettingActivity.class);
-				if( m_clCRemindInfo.m_bType != -1 )
+				if( (m_clCRemindInfo!=null)&&(m_clCRemindInfo.m_bType != -1) )
 				{
 					intent.putExtra( ExtraData_RemindSetting, m_clCRemindInfo ); 
 				}
@@ -275,7 +275,7 @@ public class NoteWithYourMind extends Activity
 		clCMemoInfo.dLastModifyTime =	clCalendar.getTimeInMillis();
 		clCMemoInfo.strDetail		=	strMemoText;
 		
-    	if ( -1 != m_clCRemindInfo.m_bType )
+    	if ( (m_clCRemindInfo!=null) && (-1 != m_clCRemindInfo.m_bType) )
     	{
     		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
     		clCMemoInfo.iIsRemindAble	=	1;
@@ -297,8 +297,9 @@ public class NoteWithYourMind extends Activity
         	
         	//保存提醒信息 - zhu.t
         	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-        	clCRemindOperator.addRemind( this, _id, m_clCRemindInfo);
-
+        	if(m_clCRemindInfo!=null){
+        		clCRemindOperator.addRemind( this, _id, m_clCRemindInfo);	
+        	}
 		}
 		else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Edit )
 

@@ -1,6 +1,12 @@
 package com.main;
 
 class CommonDefine{
+	public	enum	ToolbarStatusEnum
+	{
+		ToolbarStatus_Normal,
+		ToolbarStatus_Delete,
+		ToolbarStatus_Move
+	}
 	public static int g_int_Invalid_ID = -1;
 	public static int g_int_ListItemHeight = 65;
 	public static String g_str_PassWord = "";

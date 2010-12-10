@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityGroup;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap.CompressFormat;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -24,7 +25,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-public class FolderViewList extends Activity
+public class FolderViewList extends Activity implements ListActivityCtrl
 {
 	public static String ExtraData_FolderDBID = "com.main.ExtraData_DBID";	
 
@@ -34,6 +35,7 @@ public class FolderViewList extends Activity
 	private int m_iFolder_DBID = CommonDefine.g_int_Invalid_ID;
 	private CNoteDBCtrl m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
 	private NoteListUICtrl m_NoteListUICtrl;
+	private View m_toolBarLayout;
 	/** Called when the activity is first created. */
 	
 	public void onCreate(Bundle savedInstanceState)
@@ -47,8 +49,8 @@ public class FolderViewList extends Activity
 		Intent iExtraData = this.getIntent();
 		m_iFolder_DBID = iExtraData.getIntExtra(ExtraData_FolderDBID, CMemoInfo.Id_Invalid);
 		ListView list = (ListView) findViewById(R.id.folderviewlist_list);
-        View toolbar = findViewById(R.id.folderviewlist_toolbar);
-        m_NoteListUICtrl = new NoteListUICtrl(this, list, m_iFolder_DBID, toolbar);
+		m_toolBarLayout = findViewById(R.id.folderviewlist_toolbar);
+        m_NoteListUICtrl = new NoteListUICtrl(this, list, m_iFolder_DBID, m_toolBarLayout);
         m_NoteListUICtrl.initializeSource();
         ImageButton clBTMemoNewNote = (ImageButton) findViewById(R.id.folderviewlist_toolbar_newnote);
         clBTMemoNewNote.setOnClickListener(new Button.OnClickListener(){
@@ -73,6 +75,21 @@ public class FolderViewList extends Activity
 	public void onDestroy()
 	{
 		super.onDestroy();
+	}
+	
+	public void updateToolbar(CommonDefine.ToolbarStatusEnum enStatus){
+		ImageButton btNewNote = (ImageButton)m_toolBarLayout.findViewById(R.id.folderviewlist_toolbar_newnote);
+		if(enStatus == CommonDefine.ToolbarStatusEnum.ToolbarStatus_Normal){
+			ImageButton btDelete = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_delete);
+			ImageButton btCancel = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_cancel);
+			ImageButton btMove = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_move);
+			btNewNote.setVisibility(View.VISIBLE);
+			btDelete.setVisibility(View.VISIBLE);
+			btMove.setVisibility(View.VISIBLE);
+			btCancel.setVisibility(View.GONE);
+		}else{
+			btNewNote.setVisibility(View.GONE);
+		}
 	}
 	
 //	private void BindListViewData(View vParent, Integer bIsRemind){

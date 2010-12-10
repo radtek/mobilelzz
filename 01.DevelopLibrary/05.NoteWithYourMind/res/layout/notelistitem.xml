@@ -4,25 +4,66 @@
     android:layout_height="50dp"
     android:background="#A0b9b9b9"
     >
-     <TextView
-      android:id="@+id/noteitem_notedate"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerVertical="true"
-      android:layout_alignParentRight = "true"
+	<CheckBox
+	android:id="@+id/notelistitem_noteselect"
+	android:focusable="false"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_alignParentRight = "true"
+	android:layout_centerVertical="true"
+	android:visibility="gone"
     >
-    </TextView>
+    </CheckBox>
     <TextView
-      android:id="@+id/noteitem_notetext"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:layout_centerVertical="true"
-      android:layout_toLeftOf="@id/noteitem_notedate"
-      android:singleLine = "true"
-      android:ellipsize = "end"
-      android:gravity="center|left"
-      android:textSize="20sp"
-      android:textColor="#000000"
+	android:id="@+id/notelistitem_notedate"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_toLeftOf="@id/notelistitem_noteselect"
+	android:layout_centerVertical="true"
+	android:layout_alignParentRight = "true"
     >
     </TextView>
+	<LinearLayout
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:layout_toLeftOf="@id/notelistitem_notedate"
+	android:orientation="vertical"
+	>
+		<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_weight="1"
+		>
+			<ImageButton
+			android:id="@+id/notelistitem_icon1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:src="@drawable/notelistitem_icon_text"/>
+			<ImageButton
+			android:id="@+id/notelistitem_icon2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:src="@drawable/notelistitem_icon_alarm"/>
+			<ImageButton
+			android:id="@+id/notelistitem_icon3"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:src="@drawable/notelistitem_icon_voice"/>
+		</LinearLayout>
+		<TextView
+		android:id="@+id/notelistitem_notetext"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_centerVertical="true"
+		android:layout_toLeftOf="@id/notelistitem_notedate"
+		android:singleLine = "true"
+		android:ellipsize = "end"
+		android:gravity="center|left"
+		android:textSize="20sp"
+		android:textColor="#000000"
+		android:layout_weight="1"
+		>
+		</TextView>
+	</LinearLayout>
 </RelativeLayout>

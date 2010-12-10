@@ -68,27 +68,34 @@ class NoteListUICtrl{
 		m_targetList.setOnItemClickListener(new OnItemClickListener(){
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
-				NoteListCursorAdapter LA = (NoteListCursorAdapter)arg0.getAdapter();
-				Cursor cur = LA.getCursor();
-				cur.moveToPosition(arg2);
-				int iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_type);
-				int iValue = cur.getInt(iIndex);
-				iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_id);
-				int iIDValue = cur.getInt(iIndex);
-				if(iValue == CMemoInfo.Type_Folder){
-					Intent intent = new Intent();
-					intent.setClass(m_sourceManager, FolderViewList.class);							
-					intent.putExtra(FolderViewList.ExtraData_FolderDBID, iIDValue);
-					m_sourceManager.startActivity(intent);
-				}else if(iValue == CMemoInfo.Type_Memo){
-					Intent toNew = new Intent();
-	        		toNew.setClass(m_sourceManager, NoteWithYourMind.class);
-	        		toNew.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Edit);
-	        		toNew.putExtra(NoteWithYourMind.ExtraData_EditNoteID, iIDValue);
-	        			        		
-	        		m_sourceManager.startActivity(toNew);
+				if(m_bIsDelete||m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
+					CheckBox cb = (CheckBox) arg1.findViewById(R.id.noteitem_noteselect);
+					if((cb!=null)&&(cb.getVisibility()==View.VISIBLE)){
+						((View)cb).performClick();
+					}
 				}else{
-					
+					NoteListCursorAdapter LA = (NoteListCursorAdapter)arg0.getAdapter();
+					Cursor cur = LA.getCursor();
+					cur.moveToPosition(arg2);
+					int iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_type);
+					int iValue = cur.getInt(iIndex);
+					iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_id);
+					int iIDValue = cur.getInt(iIndex);
+					if(iValue == CMemoInfo.Type_Folder){
+						Intent intent = new Intent();
+						intent.setClass(m_sourceManager, FolderViewList.class);							
+						intent.putExtra(FolderViewList.ExtraData_FolderDBID, iIDValue);
+						m_sourceManager.startActivity(intent);
+					}else if(iValue == CMemoInfo.Type_Memo){
+						Intent toNew = new Intent();
+		        		toNew.setClass(m_sourceManager, NoteWithYourMind.class);
+		        		toNew.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Edit);
+		        		toNew.putExtra(NoteWithYourMind.ExtraData_EditNoteID, iIDValue);
+		        			        		
+		        		m_sourceManager.startActivity(toNew);
+					}else{
+						
+					}
 				}
 			}
 		});
@@ -101,9 +108,6 @@ class NoteListUICtrl{
         			m_bIsDelete = true;
         			updateToolBar();
         			updateListData(CommonDefine.g_int_Invalid_ID);
-        			if(m_myAdapter!=null){
-            			m_myAdapter.setSelectableStyle(true);
-            		}
         		}	
         		else
         		{
@@ -130,10 +134,6 @@ class NoteListUICtrl{
         			//update toolbar
         			updateToolBar();
         			updateListData(CommonDefine.g_int_Invalid_ID);
-            		if(m_myAdapter!=null){
-            			m_myAdapter.setSelectableStyle(true);
-            			m_myAdapter.setFolderSelectable(false);
-            		}
         		}	
         		else if(m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem)
         		{
@@ -228,23 +228,21 @@ class NoteListUICtrl{
 	}
 	
 	private void updateToolBar(){
-		Button btDelete = (Button)m_toolBarLayout.findViewById(R.id.toolbar_delete);
-		Button btCancel = (Button)m_toolBarLayout.findViewById(R.id.toolbar_cancel);
-		Button btMove = (Button)m_toolBarLayout.findViewById(R.id.toolbar_move);
+		ImageButton btDelete = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_delete);
+		ImageButton btCancel = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_cancel);
+		ImageButton btMove = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_move);
 		if(m_bIsDelete){		
 			btMove.setVisibility(View.GONE);
-			btDelete.setBackgroundResource(R.drawable.buttonshape);
+			//btDelete.setBackgroundResource(R.drawable.buttonshape);
 			btCancel.setVisibility(View.VISIBLE);
+			((ListActivityCtrl)m_sourceManager).updateToolbar(CommonDefine.ToolbarStatusEnum.ToolbarStatus_Delete);
 		}else if(m_MoveIn_State==MoveIn_State.MoveIn_SelectMoveItem){		
 			btDelete.setVisibility(View.GONE);	
-			btMove.setBackgroundResource(R.drawable.buttonshape);
+			//btMove.setBackgroundResource(R.drawable.buttonshape);
 			btCancel.setVisibility(View.VISIBLE);
+			((ListActivityCtrl)m_sourceManager).updateToolbar(CommonDefine.ToolbarStatusEnum.ToolbarStatus_Move);
 		}else{
-			btMove.setBackgroundResource(android.R.drawable.btn_default);
-			btMove.setVisibility(View.VISIBLE);
-			btDelete.setBackgroundResource(android.R.drawable.btn_default);
-			btDelete.setVisibility(View.VISIBLE);	
-			btCancel.setVisibility(View.GONE);
+			((ListActivityCtrl)m_sourceManager).updateToolbar(CommonDefine.ToolbarStatusEnum.ToolbarStatus_Normal);
 		}
 	}
 	
@@ -255,6 +253,12 @@ class NoteListUICtrl{
 			m_myAdapter = new NoteListCursorAdapter(m_sourceManager, cursor);
 			m_targetList.setAdapter(m_myAdapter);
 		}else{
+			if(m_bIsDelete || m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
+    			m_myAdapter.setSelectableStyle(true);
+			}
+			if(m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
+				m_myAdapter.setFolderSelectable(false);
+			}
 			m_myAdapter.updateCursor();
 			m_myAdapter.notifyDataSetChanged();
 		}

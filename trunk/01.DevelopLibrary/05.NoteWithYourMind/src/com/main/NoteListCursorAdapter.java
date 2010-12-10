@@ -92,9 +92,22 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
  
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
+		/*
+		 * 如果是选择状态
+		 * 		如果记录是便签
+		 * 			将日期控件隐藏，将CheckBox显示
+		 * 		如果记录是文件夹
+		 * 			如果文件夹是可选择状态
+		 * 				将日期控件隐藏，将CheckBox显示
+		 * 如果是正常状态
+		 * 		将CheckBox隐藏，将日期控件显示
+		 */
 		ItemDetail itemdetail = new ItemDetail();
 		itemdetail.vView = view;
-		CheckBox cbView = (CheckBox) view.findViewById(R.id.noteitem_noteselect);
+		
+		//update CheckBox Status-begin
+		//根据保存的当前记录的选择状态，更新CheckBox
+		CheckBox cbView = (CheckBox) view.findViewById(R.id.notelistitem_noteselect);
 		int iIDIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_id);
 		int iIDValue = cursor.getInt(iIDIndex);
 		itemdetail.iDBRecID = iIDValue;
@@ -102,6 +115,9 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		if(result!=null){
 			cbView.setChecked(result.bIsSelected);
 		}		
+		//update CheckBox Status-end
+		
+		//建立CheckBox和DBID的对应关系
 		CheckBoxMapItem mapItem = new CheckBoxMapItem();
 		mapItem.checkBox = cbView;
 		mapItem.iDBRecID = iIDValue;
@@ -111,8 +127,7 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		int iTypeValue = cursor.getInt(iTypeIndex);
 		int iDetailIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_detail);
 		String sDetail = cursor.getString(iDetailIndex);
-		TextView tV = (TextView)view.findViewById(R.id.noteitem_notetext);
-		tV.setCompoundDrawablePadding(15);
+		TextView tV = (TextView)view.findViewById(R.id.notelistitem_notetext);
 		if(iTypeValue==CMemoInfo.Type_Folder){
 			itemdetail.bIsFolder = true;
 			if(m_isFolderSelectable){
@@ -148,210 +163,34 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 			int isRemindIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isremind);
 			m_isRemind = cursor.getInt(isRemindIndex);
 		}
+		//建立Item控件和对应的DB记录信息的对应关系
 		m_ListItemDetail.put(view, itemdetail);
 	}
  
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		View v = null;
-		if(m_isSelectableStyle)
-		{
-			v = m_inflater.inflate(R.layout.notelistitemselect, parent, false);
-			CheckBox cbView = (CheckBox) v.findViewById(R.id.noteitem_noteselect);
-			cbView.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-	        	{
-	        		if(isChecked)
-	        		{
-	        			CheckBoxMapItem mapItem = m_ListCheckBoxMapItem.get(buttonView);
-	        			ItemSelectResult result = new ItemSelectResult();
-	        			result.bIsSelected = true;
-	        			result.iDBRecID = mapItem.iDBRecID;
-	        			if(mapItem!=null){
-	        				m_ListItemSelectResult.put(String.valueOf(mapItem.iDBRecID), result);
-	        			}	        			
-	        		}else{
-	        			CheckBoxMapItem mapItem = m_ListCheckBoxMapItem.get(buttonView);
-	        			ItemSelectResult result = new ItemSelectResult();
-	        			result.bIsSelected = false;
-	        			result.iDBRecID = mapItem.iDBRecID;
-	        			if(mapItem!=null){
-	        				m_ListItemSelectResult.put(String.valueOf(mapItem.iDBRecID), result);
-	        			}	        
-	        		}
-	        	}
-			});
-		}
-		else{
-			v = m_inflater.inflate(R.layout.notelistitem, parent, false);
-		}	
-		
+		v = m_inflater.inflate(R.layout.notelistitem, parent, false);
+		CheckBox cbView = (CheckBox) v.findViewById(R.id.noteitem_noteselect);
+		cbView.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+        	{
+				ItemSelectResult result = new ItemSelectResult();
+        		if(isChecked)
+        		{
+        			result.bIsSelected = true;        			
+        		}else{
+        			result.bIsSelected = false;        
+        		}
+        		//根据CheckBox和DBID的对应关系，更新DBID的选择状态
+    			CheckBoxMapItem mapItem = m_ListCheckBoxMapItem.get(buttonView);
+    			if(mapItem!=null){
+    				result.iDBRecID = mapItem.iDBRecID;
+    				m_ListItemSelectResult.put(String.valueOf(mapItem.iDBRecID), result);
+    			}	        
+        	}
+		});
 		return v;
-/*		Button clBTFolder=null;
-		Button  clBTLockIf=null;		
-		if(iTypeValue == CMemoInfo.Type_Folder){
-			clBTFolder = (Button) v.findViewById(R.id.B_FolderItem_FolderIcon);
-			//clBTFolder.setBackgroundColor(Color.argb(0, 0, 0, 0));
-	        clBTFolder.setOnClickListener(new Button.OnClickListener(){
-	        	public void onClick(View v)
-	        	{		
-	        		m_DBId2BeEdited = findDBIdByFolderButton(v);
-	        		m_DialogView = m_inflater.inflate(R.layout.dialognewfolder, null);
-					AlertDialog clDlgNewFolder = new AlertDialog.Builder(m_context)	
-						.setIcon(R.drawable.clock)
-						.setTitle("请编辑文件夹名称")
-						.setView(m_DialogView)
-						.setPositiveButton("确定",new DialogInterface.OnClickListener(){
-							public void onClick(DialogInterface dialog, int i)
-							{
-								EditText FolderNameText = (EditText) m_DialogView.findViewById(R.id.foldername_edit);
-				        		String strFolderNameText = FolderNameText.getText().toString();
-				        		if(strFolderNameText.length()>0){
-				        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-		 						    m_c = Calendar.getInstance();
-									clCMemoInfo.dLastModifyTime = m_c.getTimeInMillis();							
-				            		clCMemoInfo.strDetail	=	strFolderNameText;
-				            		m_clCNoteDBCtrl.Update(m_DBId2BeEdited,clCMemoInfo); 
-//				            		m_NoteListUICtrl.updateListData();
-				            		m_DBId2BeEdited = CommonDefine.g_int_Invalid_ID;
-				            		FolderNameText.setText("");
-
-				            		Toast toast = Toast.makeText(m_context, "保存成功", Toast.LENGTH_SHORT);
-				            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-				            		toast.show();
-				        		}else{
-				        			Toast toast = Toast.makeText(m_context, "请输入文件夹名称", Toast.LENGTH_SHORT);
-				            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-				            		toast.show();
-				        		}
-								dialog.cancel();
-							}
-						})
-						.setNegativeButton("取消",new DialogInterface.OnClickListener(){
-							public void onClick(DialogInterface dialog, int i)
-							{
-								dialog.cancel();
-							}
-						})
-						.create();
-						clDlgNewFolder.show();      			
-	        	}   
-			});
-
-			int Index = cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
-			int iEncodeValue = cursor.getInt(Index);
-			if(iEncodeValue == CMemoInfo.IsEncode_Yes){
-				clBTLockIf = (Button)  v.findViewById(R.id.B_FolderItem_LockIcon);
-				clBTLockIf.setBackgroundResource(R.drawable.itemicon_lock);
-			}else{
-				clBTLockIf = (Button)  v.findViewById(R.id.B_FolderItem_LockIcon);
-				clBTLockIf.setBackgroundResource(R.drawable.itemicon_unlock);
-			}	
-			//clBTLockIf.setBackgroundColor(Color.argb(0, 0, 0, 0));
-	        clBTLockIf.setOnClickListener(new Button.OnClickListener(){
-        		public void onClick(View v)
-	        	{
-        			m_DBId2BeEdited = findDBIdByEncodeButton(v);
-        			int iEncodeValue=CMemoInfo.IsEncode_Invalid;
-        			Cursor cur = m_clCNoteDBCtrl.getMemoRec(m_DBId2BeEdited);
-        			if(cur!=null){
-        				cur.moveToFirst();
-        				int Index = cur.getColumnIndex(CNoteDBCtrl.KEY_isencode);
-    					iEncodeValue = cur.getInt(Index);
-        			}
-        			cur = null;
-					if(iEncodeValue == CMemoInfo.IsEncode_Yes){
-	
-						m_DialogView = m_inflater.inflate(R.layout.dialog_encodesetting, null);
-						
-						AlertDialog clDlgNewFolder = new AlertDialog.Builder(m_context)	
-							.setIcon(R.drawable.clock)
-							.setTitle("取消加密请输入密码")
-							.setView(m_DialogView)
-							.setPositiveButton("确定",new DialogInterface.OnClickListener(){
-								public void onClick(DialogInterface dialog, int i)
-								{
-					        		EditText PassWord = (EditText) m_DialogView.findViewById(R.id.ET_encodesetting);
-					        		String strPassWord = PassWord.getText().toString();
-					        		if(strPassWord.length()>0){
-										if(strPassWord.equals(CommonDefine.g_str_PassWord)){
-											CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-				 						    m_c = Calendar.getInstance();
-											clCMemoInfo.dLastModifyTime = m_c.getTimeInMillis();							
-						            		clCMemoInfo.iIsEncode	=	CMemoInfo.IsEncode_No;
-						            		m_clCNoteDBCtrl.Update(m_DBId2BeEdited,clCMemoInfo);     		
-						            		m_DBId2BeEdited = CommonDefine.g_int_Invalid_ID;
-//						            		m_NoteListUICtrl.updateListData();
-						            		Toast toast = Toast.makeText(m_context, "加密已取消", Toast.LENGTH_SHORT);
-						            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-						            		toast.show();
-										}else{
-						        			Toast toast = Toast.makeText(m_context, "密码错误!请重新输入", Toast.LENGTH_SHORT);
-						            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-						            		toast.show();
-										}
-					        		}else{
-					        			Toast toast = Toast.makeText(m_context, "请输入私人密码", Toast.LENGTH_SHORT);
-					            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-					            		toast.show();
-					        		}
-									dialog.cancel();
-								}
-							})
-							.setNegativeButton("取消",new DialogInterface.OnClickListener(){
-								public void onClick(DialogInterface dialog, int i)
-								{
-									dialog.cancel();
-								}
-							})					
-							.create();
-						clDlgNewFolder.show();      							       
-					}else{
-						AlertDialog clDlgNewFolder = new AlertDialog.Builder(m_context)	
-							.setIcon(R.drawable.clock)
-							.setTitle("设置为加密文件夹")
-							.setPositiveButton("确定",new DialogInterface.OnClickListener(){
-								public void onClick(DialogInterface dialog, int i)
-								{
-				        			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-		 						    m_c = Calendar.getInstance();
-									clCMemoInfo.dLastModifyTime = m_c.getTimeInMillis();							
-				            		clCMemoInfo.iIsEncode	=	CMemoInfo.IsEncode_Yes;
-				            		m_clCNoteDBCtrl.Update(m_DBId2BeEdited,clCMemoInfo);     		
-				            		m_DBId2BeEdited = CommonDefine.g_int_Invalid_ID;
-//				            		m_NoteListUICtrl.updateListData();
-				            		Toast toast = Toast.makeText(m_context, "已设置为加密文件夹", Toast.LENGTH_SHORT);
-				            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-				            		toast.show();
-
-									dialog.cancel();
-								}
-							})
-							.setNegativeButton("取消",new DialogInterface.OnClickListener(){
-								public void onClick(DialogInterface dialog, int i)
-								{
-									dialog.cancel();
-								}
-							})		
-							.create();
-						clDlgNewFolder.show();     
-					}						
-	        	}
-		    });
-		}else if(iTypeValue == CMemoInfo.Type_Memo){
-			
-		}else{	
-			
-		}
-		CursorDataHolder clHolder = new CursorDataHolder();
-		clHolder.btFolder = (View)clBTFolder;
-		clHolder.btEncode = (View)clBTLockIf;
-		int iIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_id);
-		int iValue = cursor.getInt(iIndex);
-		clHolder.iDBID = iValue;
-		m_CursorDataHolder.add(clHolder);
-		*/
-		
 	}
 	public void updateCursor(){
 		m_cursor.deactivate();

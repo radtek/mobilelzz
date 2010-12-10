@@ -68,6 +68,7 @@ public class RootViewList extends Activity
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
         
         ListView list = (ListView) findViewById(R.id.rootviewlist_list);
+        registerForContextMenu(list);
         View toolbar = findViewById(R.id.rootviewlist_toolbar);
         m_NoteListUICtrl = new NoteListUICtrl(this, list, CMemoInfo.PreId_Root, toolbar);
         m_NoteListUICtrl.initializeSource();

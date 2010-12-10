@@ -3,11 +3,11 @@
 	xmlns:android="http://schemas.android.com/apk/res/android">
 	<item
 		android:id="@+id/menu_delete" 	
-		android:icon="@drawable/menu_delete"
+		android:icon="@drawable/toolbar_delete"
 		android:title="删除"/>
 	<item
 		android:id="@+id/menu_move" 	
-		android:icon="@drawable/menu_move"
+		android:icon="@drawable/toolbar_move"
 		android:title="移动"/>
 </menu>
 

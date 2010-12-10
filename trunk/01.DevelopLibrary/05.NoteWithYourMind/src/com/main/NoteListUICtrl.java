@@ -78,7 +78,7 @@ class NoteListUICtrl{
 				if(iValue == CMemoInfo.Type_Folder){
 					Intent intent = new Intent();
 					intent.setClass(m_sourceManager, FolderViewList.class);							
-//					intent.putExtra(FolderViewList.ExtraData_FolderID, iIDValue);
+					intent.putExtra(FolderViewList.ExtraData_FolderDBID, iIDValue);
 					m_sourceManager.startActivity(intent);
 				}else if(iValue == CMemoInfo.Type_Memo){
 					Intent toNew = new Intent();

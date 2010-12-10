@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	android:id="@+id/main"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+			
+	<EditText 
+		android:id="@+id/CB_main_IsWarning"
+		android:text="点击设定提醒时间" 
+		android:background="@drawable/qq_edit_login" 
+		android:paddingLeft="45.0sp"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:layout_marginLeft="5.0dip"
+		android:layout_marginTop="5.0dip" 
+		android:layout_marginRight="5.0dip"
+		android:layout_marginBottom="5.0px" 
+		android:editable="false"
+		android:imeOptions="actionGo"
+		android:layout_alignParentTop="true"  />
+	<LinearLayout
+	android:id="@+id/editnote_toolbar"
+	android:orientation="horizontal"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:layout_alignParentBottom="true"
+	android:background="@drawable/background_toolbar">
+		<ImageButton
+			android:id="@+id/editnote_toolbar_recvoice"
+			style="@style/ToolBarButton"
+			android:src="@drawable/toolbar_recvoice"/>
+		<ImageButton
+			android:id="@+id/editnote_toolbar_setremind"
+			style="@style/ToolBarButton"
+			android:src="@drawable/toolbar_setremind"
+			/>
+		<ImageButton
+			android:id="@+id/editnote_toolbar_save"
+			style="@style/ToolBarButton"
+			android:src="@drawable/toolbar_save"
+			/>
+		<ImageButton
+			android:id="@+id/editnote_toolbar_saveas"
+			style="@style/ToolBarButton"
+			android:src="@drawable/toolbar_saveas"
+			/>
+	</LinearLayout>
+	<EditText
+		android:id="@+id/ET_main_Memo"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:textSize="22sp"
+		android:gravity = "top"
+		android:layout_above="@id/editnote_toolbar"
+		android:layout_below="@id/CB_main_IsWarning"
+		android:layout_marginLeft="3dip"
+		android:layout_marginRight="3dip"
+		android:layout_marginTop="5dip"
+	>
+	</EditText>
+</RelativeLayout>
+

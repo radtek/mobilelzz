@@ -31,7 +31,7 @@ public class FolderViewList extends Activity
 	private String m_strFolderName = "";
 	private Integer m_iEncodeFlag = CMemoInfo.IsEncode_Invalid;
 	private Integer m_iRemindFlag = CMemoInfo.IsRemind_Invalid;
-	
+	private int m_iFolder_DBID = CommonDefine.g_int_Invalid_ID;
 	private CNoteDBCtrl m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
 	private NoteListUICtrl m_NoteListUICtrl;
 	/** Called when the activity is first created. */
@@ -45,12 +45,21 @@ public class FolderViewList extends Activity
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
         
 		Intent iExtraData = this.getIntent();
-		int iFolder_DBID = iExtraData.getIntExtra(ExtraData_FolderDBID, CMemoInfo.Id_Invalid);
+		m_iFolder_DBID = iExtraData.getIntExtra(ExtraData_FolderDBID, CMemoInfo.Id_Invalid);
 		ListView list = (ListView) findViewById(R.id.folderviewlist_list);
         View toolbar = findViewById(R.id.folderviewlist_toolbar);
-        m_NoteListUICtrl = new NoteListUICtrl(this, list, iFolder_DBID, toolbar);
+        m_NoteListUICtrl = new NoteListUICtrl(this, list, m_iFolder_DBID, toolbar);
         m_NoteListUICtrl.initializeSource();
-		
+        ImageButton clBTMemoNewNote = (ImageButton) findViewById(R.id.folderviewlist_toolbar_newnote);
+        clBTMemoNewNote.setOnClickListener(new Button.OnClickListener(){
+        	public void onClick(View v)
+        	{  			
+        		Intent intent = new Intent(FolderViewList.this, NoteWithYourMind.class);
+        		intent.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_New);
+        		intent.putExtra(NoteWithYourMind.ExtraData_OperationPreID, m_iFolder_DBID);
+        		startActivity(intent);
+        	}
+        });
 	}
 
 	public void onStop()

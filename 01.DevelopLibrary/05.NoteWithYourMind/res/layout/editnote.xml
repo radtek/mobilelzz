@@ -46,6 +46,46 @@
 			android:src="@drawable/toolbar_saveas"
 			/>
 	</LinearLayout>
+
+	<ImageButton 
+	  android:id="@+id/IMG_B_REC" 
+	  android:layout_width="wrap_content" 
+	  android:layout_height="wrap_content" 
+	  android:layout_below ="@id/CB_main_IsWarning"
+	  android:visibility = "gone"
+	  android:src="@drawable/record">
+	  </ImageButton>
+	  
+	  <ImageButton 
+	  android:id="@+id/IMG_B_STOP" 
+	  android:layout_width="wrap_content" 
+	  android:layout_height="wrap_content" 
+	  android:layout_toRightOf ="@id/IMG_B_REC"
+	  android:layout_below ="@id/CB_main_IsWarning"
+	  android:visibility = "gone"
+	  android:src="@drawable/stop">
+	  </ImageButton>
+	  
+	 <ImageButton 
+	  android:id="@+id/IMG_B_PLAY" 
+	  android:layout_width="wrap_content" 
+	  android:layout_height="wrap_content" 
+	  android:layout_toRightOf ="@id/IMG_B_STOP"
+	  android:layout_below ="@id/CB_main_IsWarning"
+	  android:visibility = "gone"
+	  android:src="@drawable/play">
+	  </ImageButton>
+	  
+	 <ImageButton 
+	  android:id="@+id/IMG_B_DELETE" 
+	  android:layout_width="wrap_content" 
+	  android:layout_height="wrap_content" 
+	  android:layout_toRightOf="@id/IMG_B_PLAY"
+	  android:layout_below ="@id/CB_main_IsWarning"
+	  android:visibility = "gone"
+	  android:src="@drawable/delete">
+	  </ImageButton>	
+	  
 	<EditText
 		android:id="@+id/ET_main_Memo"
 		android:layout_width="fill_parent"
@@ -53,10 +93,11 @@
 		android:textSize="22sp"
 		android:gravity = "top"
 		android:layout_above="@id/editnote_toolbar"
-		android:layout_below="@id/CB_main_IsWarning"
+		android:layout_below="@+id/IMG_B_PLAY"
 		android:layout_marginLeft="3dip"
 		android:layout_marginRight="3dip"
 		android:layout_marginTop="5dip"
+		android:background="@null"
 	>
 	</EditText>
 </RelativeLayout>

@@ -33,13 +33,13 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.Toast;
 import android.widget.TimePicker;
 import android.widget.DatePicker;
-public class RootViewList extends Activity
+public class RootViewList extends Activity implements ListActivityCtrl
 {
 	public static String ExtraData_initListItemDBID		=	"com.main.ExtraData_RootList_initListItemDBID";
 	private NoteListUICtrl m_NoteListUICtrl;
 	private Calendar c;
 	private CNoteDBCtrl		m_clCNoteDBCtrl;
-	
+	private View m_toolBarLayout;
 	private int m_iContextMenu_DBID = CommonDefine.g_int_Invalid_ID;
 //	public void onNewIntent(Intent intent){
 //		setIntent(intent);
@@ -69,8 +69,8 @@ public class RootViewList extends Activity
         
         ListView list = (ListView) findViewById(R.id.rootviewlist_list);
         registerForContextMenu(list);
-        View toolbar = findViewById(R.id.rootviewlist_toolbar);
-        m_NoteListUICtrl = new NoteListUICtrl(this, list, CMemoInfo.PreId_Root, toolbar);
+        View m_toolBarLayout = findViewById(R.id.rootviewlist_toolbar);
+        m_NoteListUICtrl = new NoteListUICtrl(this, list, CMemoInfo.PreId_Root, m_toolBarLayout);
         m_NoteListUICtrl.initializeSource();
         
         ImageButton clBTMemoNewFolder = (ImageButton) findViewById(R.id.rootviewlist_toolbar_newfolder);
@@ -117,28 +117,30 @@ public class RootViewList extends Activity
 		super.onDestroy();
 	}
 	
-//	private void BindListViewData(View vParent, Integer bIsRemind){
-//		if(bIsRemind==CMemoInfo.IsRemind_Yes){
-//			Cursor rootRemindListCursor = m_clCNoteDBCtrl.getRemindsByID(CMemoInfo.PreId_Root);
-//			if(rootRemindListCursor!=null){
-//				startManagingCursor(rootRemindListCursor);
-//			}
-//			ListView remindlist = (ListView) vParent.findViewById(R.id.RootViewListContent_List);
-//			registerForContextMenu(remindlist); 
-//			m_remindListAdapter = new NoteListCursorAdapter(RootViewList.this, rootRemindListCursor);
-//			remindlist.setAdapter(m_remindListAdapter);
-//		}else{
-//			Cursor rootMemoListCursor = m_clCNoteDBCtrl.getMemosByID(CMemoInfo.PreId_Root);
-//			if(rootMemoListCursor!=null){
-//				startManagingCursor(rootMemoListCursor);
-//			}
-//			ListView memolist = (ListView) vParent.findViewById(R.id.RootViewListContent_List);
-//			registerForContextMenu(memolist); 
-//			m_memoListAdapter = new NoteListCursorAdapter(RootViewList.this, rootMemoListCursor);
-//			memolist.setAdapter(m_memoListAdapter);
-//		}
-//	}
-//	
+	public void updateToolbar(CommonDefine.ToolbarStatusEnum enStatus){
+		ImageButton btNewFolder = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_newfolder);
+		ImageButton btNewNote = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_newnote);
+		ImageButton btSearch = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_search);
+		ImageButton btMore = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_more);
+		if(enStatus == CommonDefine.ToolbarStatusEnum.ToolbarStatus_Normal){
+			ImageButton btDelete = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_delete);
+			ImageButton btCancel = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_cancel);
+			ImageButton btMove = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_move);
+			btNewNote.setVisibility(View.VISIBLE);
+			btSearch.setVisibility(View.VISIBLE);
+			btNewFolder.setVisibility(View.VISIBLE);
+			btMore.setVisibility(View.VISIBLE);
+			btDelete.setVisibility(View.GONE);
+			btMove.setVisibility(View.GONE);
+			btCancel.setVisibility(View.GONE);
+		}else{
+			btNewNote.setVisibility(View.GONE);
+			btSearch.setVisibility(View.GONE);
+			btNewFolder.setVisibility(View.GONE);
+			btMore.setVisibility(View.GONE);
+		}
+	}
+
 //	private View composeLayout(String s, int i){
 //		LayoutInflater factory = LayoutInflater.from(this);
 //		LinearLayout layout = (LinearLayout)factory.inflate(R.layout.tabwidgetview, null, false); 

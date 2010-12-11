@@ -266,7 +266,7 @@ public class NoteWithYourMind extends Activity
     	 * 		根据用户在提醒时间设定画页设置的提醒信息，更新便签中的时间
     	 */
     	Intent iExtraData = getIntent();
-    	m_ExtraData_PreID = iExtraData.getIntExtra(ExtraData_OperationPreID, CommonDefine.g_int_Invalid_ID);
+ //   	m_ExtraData_PreID = iExtraData.getIntExtra(ExtraData_OperationPreID, CommonDefine.g_int_Invalid_ID);
 		m_ExtraData_OperationNoteKind	=	(OperationNoteKindEnum)iExtraData.getSerializableExtra(ExtraData_OperationNoteKind);
 		if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Edit )
 		{
@@ -381,9 +381,12 @@ public class NoteWithYourMind extends Activity
     		clCMemoInfo.iIsRemindAble	=	0;
     	}
 		
-
-		if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New )
+    	
+//		if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New )
+    	if ( m_ExtraData_PreID != CMemoInfo.Id_Invalid )
 		{
+    		Intent iExtraData = getIntent();
+    		m_ExtraData_PreID = iExtraData.getIntExtra(ExtraData_OperationPreID, CommonDefine.g_int_Invalid_ID);
     		clCMemoInfo.iType			=	CMemoInfo.Type_Memo;
         	clCMemoInfo.iPreId			=	m_ExtraData_PreID;
         	clCMemoInfo.dCreateTime		=	System.currentTimeMillis();
@@ -399,26 +402,22 @@ public class NoteWithYourMind extends Activity
 				}				
         	}
 		}
-		else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Edit )
-
+	//	else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Edit )
+    	else if ( m_ExtraData_EditNoteID != CMemoInfo.Id_Invalid )
 		{
 			//编辑Memo
-			if( m_ExtraData_EditNoteID != CMemoInfo.Id_Invalid )
-			{
-				m_clCNoteDBCtrl.Update(m_ExtraData_EditNoteID,clCMemoInfo );
-				//判断是否需要更新提醒信息 - zhu.t
-				CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
+    		Intent iExtraData = getIntent();
+    		m_ExtraData_PreID = iExtraData.getIntExtra(ExtraData_OperationPreID, CommonDefine.g_int_Invalid_ID);
+			m_clCNoteDBCtrl.Update(m_ExtraData_EditNoteID,clCMemoInfo );
+			//判断是否需要更新提醒信息 - zhu.t
+			CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
 //				clCRemindOperator.getRemindInfo(m_ExtraData_EditNoteID, m_clCRemindInfo);
 //				if ( m_clCRemindInfo.m_bType != -1 )
 //				{
 //					EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
 //		    		EtOnce.setText( m_clCRemindInfo.getRemindInfoString());
 //				}
-			}
-			else
-			{
-				//Error
-			}
+
         }
     }
 

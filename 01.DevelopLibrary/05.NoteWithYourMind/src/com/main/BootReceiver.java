@@ -13,20 +13,6 @@ import android.database.Cursor;
 
 public class BootReceiver extends BroadcastReceiver { 
 
-	public	class	CWeekInfo
-	{
-		CWeekInfo()
-		{
-			m_bWeekNo	=	-1;
-			m_IsAble	=	-1;
-			m_Time		=	-1;
-		}
-		
-		byte	m_bWeekNo;
-		byte	m_IsAble;
-		long	m_Time;
-	}
-	
     public void onReceive(Context ctx, Intent intent) 
     {
     	
@@ -37,25 +23,16 @@ public class BootReceiver extends BroadcastReceiver {
 		Cursor clCursor	=	clCNoteDBCtrl.getRemindInfo();
 		if ( clCursor.getCount() > 0 )
 		{
-			CWeekInfo	clCurrent	=	new		CWeekInfo();
 			clCalendar.setTimeInMillis(System.currentTimeMillis());
-			int		iID		=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_id );
-			long	lID		=	clCursor.getLong( iID );
+			int		iColumn		=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_id );
+			int	lID		=	clCursor.getInt( iColumn );
 				
 			clCursor.moveToFirst();
 			do
 			{
-				int		iType		=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_remindtype );
-				long	lType		=	clCursor.getLong( iType );
-				if( 1 == lType )						// 间隔:1,
-				{
-					
-				}
-				else if ( 2 == lType )					// 循环:2
-				{
-					clCurrent.m_bWeekNo		=	(byte)clCalendar.get( Calendar.DAY_OF_WEEK );
-				}
-				else if ( 3 == lType )					// 单次:3
+				iColumn		=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_remindtype );
+				int	lType		=	clCursor.getInt( iColumn );
+				if( 1 == lType || 3 == lType )						// 间隔:1,单次:3
 				{
 					int 	TimeIndex	=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_remindtime );
 					long	lDbTime		=	clCursor.getLong( TimeIndex );
@@ -65,22 +42,27 @@ public class BootReceiver extends BroadcastReceiver {
 			    	MyIntent.putExtra( "id", lID );
 			    	
 			    	
-			    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(ctx, (int)lID,MyIntent, 0);
-			    	alarmManager.set( AlarmManager.RTC_WAKEUP, lDbTime, pendingIntent );
+			    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(ctx, lID,MyIntent, 0);
+			    	alarmManager.set( AlarmManager.RTC_WAKEUP, lDbTime, pendingIntent );				
 				}
+				else if ( 2 == lType )					// 循环:2
+				{
+					CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
+					CRemindInfo clCRemindInfo	=	new	CRemindInfo( (byte)-1 );
+					clCRemindOperator.getRemindInfo( ctx, lID, clCRemindInfo);
+					
+					long	lTime	=	clCRemindInfo.getFirstCycelRemindTime();
+					
+					AlarmManager	alarmManager	=	(AlarmManager)ctx.getSystemService( Context.ALARM_SERVICE );
+			    	Intent 			MyIntent		=	new Intent( ctx, AlarmReceiver.class );
+			    	MyIntent.putExtra( "id", lID );
+			    	
+			    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(ctx, lID, MyIntent, 0);
+			    	alarmManager.set( AlarmManager.RTC_WAKEUP, lTime, pendingIntent );	
+				}
+
 					
 			}while( clCursor.moveToNext() );
 		}
-		
-        //start activity    
-//    	Toast toast = Toast.makeText(null, "收到启动通知", Toast.LENGTH_LONG);
-//		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-//		toast.show();
-//    	AlarmManager	alarmManager	=	(AlarmManager)ctx.getSystemService( Context.ALARM_SERVICE );
-//    	Intent 			MyIntent		=	new Intent( ctx, AlarmReceiver.class );
-//    	
-//    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(ctx, 0,MyIntent, 0);
-//    	alarmManager.setRepeating( AlarmManager.RTC, 0, 60 * 1000, pendingIntent );
-//    	CommonDefine.g_test = 2;
     }    
 } 

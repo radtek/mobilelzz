@@ -1,17 +1,10 @@
 package com.main;
 
 
-import java.util.Calendar;
-
-import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.widget.Toast;
 
 
 
@@ -23,6 +16,7 @@ public class AlarmReceiver extends BroadcastReceiver
 	public void onReceive(Context context, Intent intent)
 	{
 //temp
+//		intent.getExtra("id", defaultValue);
 	    Intent i = new Intent(context, AlarmAlert.class);
 	    
 //	    CNoteDBCtrl	clCNoteDBCtrl	=	new	CNoteDBCtrl( context );
@@ -30,7 +24,7 @@ public class AlarmReceiver extends BroadcastReceiver
 //	    Cursor clCursor	=	clCNoteDBCtrl.getRemindInfo();
         
 	    Bundle bundleRet = new Bundle();
-	    bundleRet.putString("STR_CALLER", "");
+//	    bundleRet.putInt("id", value)("STR_CALLER", "");
 	    i.putExtras(bundleRet);
 	    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	    context.startActivity(i);

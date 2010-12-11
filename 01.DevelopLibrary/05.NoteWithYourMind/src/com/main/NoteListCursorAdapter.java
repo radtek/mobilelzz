@@ -171,7 +171,7 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
 		View v = null;
 		v = m_inflater.inflate(R.layout.notelistitem, parent, false);
-		CheckBox cbView = (CheckBox) v.findViewById(R.id.noteitem_noteselect);
+		CheckBox cbView = (CheckBox) v.findViewById(R.id.notelistitem_noteselect);
 		cbView.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
         	{

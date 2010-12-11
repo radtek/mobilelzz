@@ -1,41 +1,22 @@
 package com.main;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.text.TextPaint;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TabHost;
-import android.widget.TabWidget;
-import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.TabHost.OnTabChangeListener;
-import android.widget.TabHost.TabSpec;
-import android.view.Window;
-import android.widget.Button;
-import android.app.AlertDialog;
-import android.widget.EditText;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
+import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.widget.Toast;
+import android.view.View;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 
 public class ListItemEdit extends Activity
@@ -110,6 +91,8 @@ public class ListItemEdit extends Activity
     			if(alIDs.size()>0){
     				Integer[] needDeleteIDs = (Integer[])alIDs.toArray(new Integer[0]);
         			m_clCNoteDBCtrl.Delete(needDeleteIDs);
+					CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
+					clCRemindOperator.disableRemind( ListItemEdit.this, needDeleteIDs );
         			m_sourceListAdapter.updateCursor();
     			}
     			ListItemEdit.this.finish();

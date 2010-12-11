@@ -118,6 +118,8 @@ class NoteListUICtrl{
         			if(alIDs.size()>0){
         				Integer[] needDeleteIDs = (Integer[])alIDs.toArray(new Integer[0]);
             			m_clCNoteDBCtrl.Delete(needDeleteIDs);
+						CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
+						clCRemindOperator.disableRemind( m_sourceManager, needDeleteIDs );
         			}
         			Return2TargetList();
         			updateListData(CommonDefine.g_int_Invalid_ID);

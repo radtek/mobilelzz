@@ -106,6 +106,27 @@ implements ListActivityCtrl, View.OnClickListener
         });
         Button clBTMemoMore_delete = (Button) findViewById(R.id.toolbar_more_dlg_delete);
         clBTMemoMore_delete.setOnClickListener(this);
+        
+        ImageButton clBTMemoSearch = (ImageButton) findViewById(R.id.rootviewlist_toolbar_search);
+        clBTMemoSearch.setOnClickListener(new Button.OnClickListener(){
+        	public void onClick(View v)
+        	{  			
+				View vdlgback  = RootViewList.this.findViewById(R.id.toolbar_search_dlg);
+				if(!m_bIsCommnetOut){
+					m_bIsCommnetOut = true;
+					vdlgback.setVisibility(View.VISIBLE);
+					Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commentdisplay_left_bottom);
+					vdlgback.startAnimation(anim);
+				}else{
+					m_bIsCommnetOut=false;
+					Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commenthide_left_bottom);
+					vdlgback.startAnimation(anim);
+					vdlgback.setVisibility(View.GONE);
+				}
+        	}
+        });
+        Button clBTMemoSearch_remind = (Button) findViewById(R.id.toolbar_search_dlg_remind);
+        clBTMemoSearch_remind.setOnClickListener(this);
 	}
 	
 	public void onStop()
@@ -142,6 +163,13 @@ implements ListActivityCtrl, View.OnClickListener
 	        vdlgback.setVisibility(View.GONE);
 		    break;
 		case R.id.toolbar_more_dlg_move:
+			break;
+		case R.id.toolbar_search_dlg_remind:
+			m_bIsCommnetOut=false;
+			View vdlgback1  = RootViewList.this.findViewById(R.id.toolbar_search_dlg);
+	        Animation anim1 = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commenthide_left_bottom);
+	        vdlgback1.startAnimation(anim1);
+	        vdlgback1.setVisibility(View.GONE);
 			break;
 		default:
 		}

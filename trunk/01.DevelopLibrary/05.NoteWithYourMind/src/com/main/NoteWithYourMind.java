@@ -393,7 +393,10 @@ public class NoteWithYourMind extends Activity
         	//保存提醒信息 - zhu.t
         	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
         	if(m_clCRemindInfo!=null){
-        		clCRemindOperator.addRemind( this, _id, m_clCRemindInfo);	
+        		if ( -1 == clCRemindOperator.addRemind( this, _id, m_clCRemindInfo) )
+				{
+					//设置提醒失败
+				}				
         	}
 		}
 		else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Edit )

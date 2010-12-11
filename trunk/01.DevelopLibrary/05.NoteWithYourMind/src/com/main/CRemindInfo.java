@@ -3,8 +3,6 @@ package com.main;
 import java.io.Serializable;
 import java.util.Calendar;
 
-import android.view.Menu;
-
 public class CRemindInfo implements Serializable
 {
 
@@ -21,6 +19,7 @@ public class CRemindInfo implements Serializable
 	Byte		m_bType;	//间隔:1,循环:2,单次:3,无效:-1
 	long		lTime;		//如果单次提醒表示日期年月日
 							//如果是循环提醒则高4为表示小时，低位表示分钟
+	byte		bRemindAble;
 	
 	public	void	setTime( long lhour, long lminute )
 	{
@@ -156,6 +155,8 @@ public class CRemindInfo implements Serializable
 		
 		m_bType			=	bType;
 		lTime			=	0;
+		
+		bRemindAble		=	1;
 	}
 	
 }

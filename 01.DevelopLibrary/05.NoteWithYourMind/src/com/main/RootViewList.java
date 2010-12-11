@@ -36,7 +36,8 @@ implements ListActivityCtrl, View.OnClickListener
 	private CNoteDBCtrl		m_clCNoteDBCtrl;
 	private View m_toolBarLayout;
 	private int m_iContextMenu_DBID = CommonDefine.g_int_Invalid_ID;
-	private boolean m_bIsCommnetOut = false;
+	private boolean m_bIsCommnetDisplay_more = false;
+	private boolean m_bIsCommnetDisplay_search = false;
 //	public void onNewIntent(Intent intent){
 //		setIntent(intent);
 //	}
@@ -91,13 +92,13 @@ implements ListActivityCtrl, View.OnClickListener
         	public void onClick(View v)
         	{  			
 				View vdlgback  = RootViewList.this.findViewById(R.id.toolbar_more_dlg);
-				if(!m_bIsCommnetOut){
-					m_bIsCommnetOut = true;
+				if(!m_bIsCommnetDisplay_more){
+					m_bIsCommnetDisplay_more = true;
 					vdlgback.setVisibility(View.VISIBLE);
 					Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commentout);
 					vdlgback.startAnimation(anim);
 				}else{
-					m_bIsCommnetOut=false;
+					m_bIsCommnetDisplay_more=false;
 					Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commenthide);
 					vdlgback.startAnimation(anim);
 					vdlgback.setVisibility(View.GONE);
@@ -112,13 +113,13 @@ implements ListActivityCtrl, View.OnClickListener
         	public void onClick(View v)
         	{  			
 				View vdlgback  = RootViewList.this.findViewById(R.id.toolbar_search_dlg);
-				if(!m_bIsCommnetOut){
-					m_bIsCommnetOut = true;
+				if(!m_bIsCommnetDisplay_search){
+					m_bIsCommnetDisplay_search = true;
 					vdlgback.setVisibility(View.VISIBLE);
 					Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commentdisplay_left_bottom);
 					vdlgback.startAnimation(anim);
 				}else{
-					m_bIsCommnetOut=false;
+					m_bIsCommnetDisplay_search=false;
 					Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commenthide_left_bottom);
 					vdlgback.startAnimation(anim);
 					vdlgback.setVisibility(View.GONE);
@@ -156,7 +157,7 @@ implements ListActivityCtrl, View.OnClickListener
 	public void onClick(View view){
 		switch(view.getId()){
 		case R.id.toolbar_more_dlg_delete:
-			m_bIsCommnetOut=false;
+			m_bIsCommnetDisplay_more=false;
 			View vdlgback  = RootViewList.this.findViewById(R.id.toolbar_more_dlg);
 	        Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commenthide);
 	        vdlgback.startAnimation(anim);
@@ -165,7 +166,7 @@ implements ListActivityCtrl, View.OnClickListener
 		case R.id.toolbar_more_dlg_move:
 			break;
 		case R.id.toolbar_search_dlg_remind:
-			m_bIsCommnetOut=false;
+			m_bIsCommnetDisplay_search=false;
 			View vdlgback1  = RootViewList.this.findViewById(R.id.toolbar_search_dlg);
 	        Animation anim1 = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commenthide_left_bottom);
 	        vdlgback1.startAnimation(anim1);

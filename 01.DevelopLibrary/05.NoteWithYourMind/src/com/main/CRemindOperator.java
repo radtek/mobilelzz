@@ -59,7 +59,7 @@ public final class CRemindOperator
 			AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
 	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
 	    	MyIntent.putExtra( "id", _id );
-	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, 0);
+	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
 	    	alarmManager.set(AlarmManager.RTC_WAKEUP, _clCRemindInfo.lTime, pendingIntent);
     	}
     	else if ( 2 == _clCRemindInfo.m_bType )
@@ -76,7 +76,7 @@ public final class CRemindOperator
 			AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
 	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
 	    	MyIntent.putExtra( "id", _id );
-	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, 0);
+	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 	    	alarmManager.set(AlarmManager.RTC_WAKEUP, firtTime, pendingIntent);
     		
     	}
@@ -95,7 +95,7 @@ public final class CRemindOperator
 	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
 	    	MyIntent.putExtra( "id", _id );
 	    	
-	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, 0);
+	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 	    	alarmManager.set(AlarmManager.RTC_WAKEUP, _clCRemindInfo.lTime, pendingIntent);
 	    	
 	    	CMemoInfo		clCMemoInfo	=	new	CMemoInfo();
@@ -178,7 +178,7 @@ public final class CRemindOperator
     public	void	getRemindInfo( Cursor cur, CRemindInfo _clCRemindInfo )
     {
     	//根据ID从DB中取得提醒信息
-    	
+    	cur.moveToFirst();
         int	index		=	cur.getColumnIndex( CNoteDBCtrl.KEY_isremind );
         int isRemind	=	cur.getInt( index );
         _clCRemindInfo.bRemindAble	=	(byte)isRemind;

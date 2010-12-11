@@ -129,7 +129,7 @@ public class CRemindInfo implements Serializable
 			clCalendar.setTimeInMillis(lTime);
 			
 			strInfo	= 	clCalendar.get(Calendar.YEAR) +"/" 
-						+ clCalendar.get(Calendar.MONTH) 
+						+ clCalendar.get(Calendar.MONTH) + 1
 						+"/"+clCalendar.get(Calendar.HOUR_OF_DAY) + " " 
 						+ clCalendar.get(Calendar.HOUR_OF_DAY) + ":"
 						+clCalendar.get(Calendar.MINUTE);

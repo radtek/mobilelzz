@@ -117,12 +117,14 @@ public class NoteWithYourMind extends Activity
         		if( strMemoText.length()>0 )
         		{
         			//保存用户设定的Memo和提醒信息
-        			SaveEditData( strMemoText );       				     		
- //       			UpdateViewStatus();
-            		Toast toast = Toast.makeText(NoteWithYourMind.this, "保存成功", Toast.LENGTH_SHORT);
-            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-            		toast.show();
-            		NoteWithYourMind.this.finish();
+        			if ( 0 == SaveEditData( strMemoText ) )
+        			{
+	 //       			UpdateViewStatus();
+	            		Toast toast = Toast.makeText(NoteWithYourMind.this, "保存成功", Toast.LENGTH_SHORT);
+	            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+	            		toast.show();
+	            		NoteWithYourMind.this.finish();
+        			}
             		
         		}
         		//无输入信息
@@ -355,7 +357,7 @@ public class NoteWithYourMind extends Activity
 //    	}
 //    }
 
-    private void SaveEditData(String strMemoText)
+    private int SaveEditData(String strMemoText)
     {
     	/*
     	 如果时间有效
@@ -398,6 +400,7 @@ public class NoteWithYourMind extends Activity
         		if ( -1 == clCRemindOperator.addRemind( this, _id, m_clCRemindInfo) )
 				{
 					//设置提醒失败
+        			return	-1;
 				}				
         	}
 		}
@@ -416,6 +419,8 @@ public class NoteWithYourMind extends Activity
 //				}
 
         }
+    	
+    	return 0;
     }
 
     private void EncodeSettingDlg()

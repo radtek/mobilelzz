@@ -116,7 +116,7 @@ public class RemindActivity extends Activity
 			clCRemindInfo.m_bType	=	3;
 			Calendar	clCalendar	=	Calendar.getInstance();
 			clCalendar.set(Calendar.YEAR, year);
-			clCalendar.set(Calendar.MONTH, monthOfYear);
+			clCalendar.set(Calendar.MONTH, monthOfYear );
 			clCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 			clCalendar.set(Calendar.HOUR_OF_DAY, 0);
 			clCalendar.set(Calendar.MINUTE, 0);

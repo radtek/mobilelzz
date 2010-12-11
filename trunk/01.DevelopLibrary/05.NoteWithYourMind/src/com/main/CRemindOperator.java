@@ -26,7 +26,7 @@ public final class CRemindOperator
         return _INSTANCE;  
     }  
     
-    public	long	addRemind( Context context, long _id, CRemindInfo _clCRemindInfo )
+    public	int	addRemind( Context context, long _id, CRemindInfo _clCRemindInfo )
     {
     	//外面使用时需要先将该条提醒Insert到DB中，然后再调用该方法
     	//Insert时和提醒相关的属性可以设置为无效，这里会进行Update
@@ -90,7 +90,7 @@ public final class CRemindOperator
         		
         		return	-1;
     		}
-    		
+    				
     		AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
 	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
 	    	MyIntent.putExtra( "id", _id );
@@ -115,16 +115,36 @@ public final class CRemindOperator
     	//一个提醒的时刻到来时调用该方法，设定新的提醒
     	//如果是循环提醒则不做处理
     	
+    	if( null == m_clCNoteDBCtrl )
+    	{
+    		m_clCNoteDBCtrl	=	new	CNoteDBCtrl( context );
+    	}
+    	
     	CRemindInfo		clCRemindInfo	=	new	CRemindInfo( (byte)-1 );
     	getRemindInfo( context, _id, clCRemindInfo );
-    	long	lTime	=	clCRemindInfo.getFirstCycelRemindTime();
-    	
-		AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
-    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
-    	MyIntent.putExtra( "id", _id );
-    	
-    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, 0);
-    	alarmManager.set(AlarmManager.RTC_WAKEUP, lTime, pendingIntent);
+ 	
+	    if ( 1 == clCRemindInfo.m_bType || 3 == clCRemindInfo.m_bType )
+	    {
+	    	CMemoInfo	clCMemoInfo	=	new	CMemoInfo();
+	    	clCMemoInfo.iIsRemindAble	=	-1;
+	    	m_clCNoteDBCtrl.Update(_id, clCMemoInfo );
+	    }
+	    else if( 2 == clCRemindInfo.m_bType )		//循环提醒
+	    {
+	    	long	lTime	=	clCRemindInfo.getFirstCycelRemindTime();
+	    	
+			AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
+	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
+	    	MyIntent.putExtra( "id", _id );
+	    	
+	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, 0);
+	    	alarmManager.set(AlarmManager.RTC_WAKEUP, lTime, pendingIntent);
+	    }
+	    else
+	    {
+	    	//Error
+	    }	
+    		
     }
     
     public	void	editRemind( Context context, long _id, CRemindInfo _clCRemindInfo )

@@ -1,39 +1,34 @@
 package com.main;
 
+import java.util.Calendar;
+
 import android.app.Activity;
-import android.app.ActivityGroup;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TabHost;
-import android.widget.TabWidget;
-import android.widget.TextView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.TabHost.OnTabChangeListener;
-import android.widget.TabHost.TabSpec;
 import android.view.Window;
-import android.widget.Button;
-import android.app.AlertDialog;
-import android.widget.EditText;
-import java.util.Calendar;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.Cursor;
-import android.view.LayoutInflater;
+import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.TimePicker;
-import android.widget.DatePicker;
-public class RootViewList extends Activity implements ListActivityCtrl
+import android.widget.AdapterView.AdapterContextMenuInfo;
+public class RootViewList extends Activity 
+implements ListActivityCtrl, View.OnClickListener
 {
 	public static String ExtraData_initListItemDBID		=	"com.main.ExtraData_RootList_initListItemDBID";
 	private NoteListUICtrl m_NoteListUICtrl;
@@ -41,6 +36,7 @@ public class RootViewList extends Activity implements ListActivityCtrl
 	private CNoteDBCtrl		m_clCNoteDBCtrl;
 	private View m_toolBarLayout;
 	private int m_iContextMenu_DBID = CommonDefine.g_int_Invalid_ID;
+	private boolean m_bIsCommnetOut = false;
 //	public void onNewIntent(Intent intent){
 //		setIntent(intent);
 //	}
@@ -90,7 +86,24 @@ public class RootViewList extends Activity implements ListActivityCtrl
         		startActivity(intent);
         	}
         });
-
+        ImageButton clBTMemoMore = (ImageButton) findViewById(R.id.rootviewlist_toolbar_more);
+        clBTMemoMore.setOnClickListener(new Button.OnClickListener(){
+        	public void onClick(View v)
+        	{  			
+				View vdlgback  = RootViewList.this.findViewById(R.id.toolbar_more_dlg);
+				if(m_bIsCommnetOut){
+					vdlgback.setVisibility(View.VISIBLE);
+					Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commentout);
+					vdlgback.startAnimation(anim);
+				}else{
+					Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commenthide);
+					vdlgback.startAnimation(anim);
+					vdlgback.setVisibility(View.GONE);
+				}
+        	}
+        });
+        Button clBTMemoMore_delete = (Button) findViewById(R.id.toolbar_more_dlg_delete);
+        clBTMemoMore_delete.setOnClickListener(this);
 	}
 	
 	public void onStop()
@@ -115,6 +128,20 @@ public class RootViewList extends Activity implements ListActivityCtrl
 	public void onDestroy()
 	{
 		super.onDestroy();
+	}
+	
+	public void onClick(View view){
+		switch(view.getId()){
+		case R.id.toolbar_more_dlg_delete:
+			View vdlgback  = RootViewList.this.findViewById(R.id.toolbar_more_dlg);
+	        Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commenthide);
+	        vdlgback.startAnimation(anim);
+	        vdlgback.setVisibility(View.GONE);
+		    break;
+		case R.id.toolbar_more_dlg_move:
+			break;
+		default:
+		}
 	}
 	
 	public void updateToolbar(CommonDefine.ToolbarStatusEnum enStatus){

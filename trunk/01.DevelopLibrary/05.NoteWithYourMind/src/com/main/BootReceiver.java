@@ -42,7 +42,7 @@ public class BootReceiver extends BroadcastReceiver {
 			    	MyIntent.putExtra( "id", lID );
 			    	
 			    	
-			    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(ctx, lID,MyIntent, 0);
+			    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(ctx, lID,MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
 			    	alarmManager.set( AlarmManager.RTC_WAKEUP, lDbTime, pendingIntent );				
 				}
 				else if ( 2 == lType )					// Ñ­»·:2
@@ -57,7 +57,7 @@ public class BootReceiver extends BroadcastReceiver {
 			    	Intent 			MyIntent		=	new Intent( ctx, AlarmReceiver.class );
 			    	MyIntent.putExtra( "id", lID );
 			    	
-			    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(ctx, lID, MyIntent, 0);
+			    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(ctx, lID, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 			    	alarmManager.set( AlarmManager.RTC_WAKEUP, lTime, pendingIntent );	
 				}
 

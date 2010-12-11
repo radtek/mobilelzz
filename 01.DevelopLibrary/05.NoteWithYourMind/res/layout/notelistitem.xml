@@ -35,21 +35,27 @@
 		android:orientation="horizontal"
 		android:layout_weight="1"
 		>
-			<ImageButton
+			<Button
 			android:id="@+id/notelistitem_icon1"
-			android:layout_width="wrap_content"
+			android:layout_width="16dp"
 			android:layout_height="wrap_content"
-			android:src="@drawable/notelistitem_icon_text"/>
-			<ImageButton
+			android:background="@drawable/notelistitem_icon_text"
+			android:focusable="false"
+			android:clickable="false"/>
+			<Button
 			android:id="@+id/notelistitem_icon2"
-			android:layout_width="wrap_content"
+			android:layout_width="16dp"
 			android:layout_height="wrap_content"
-			android:src="@drawable/notelistitem_icon_alarm"/>
-			<ImageButton
+			android:background="@drawable/notelistitem_icon_alarm"
+			android:focusable="false"
+			android:clickable="false"/>
+			<Button
 			android:id="@+id/notelistitem_icon3"
-			android:layout_width="wrap_content"
+			android:layout_width="16dp"
 			android:layout_height="wrap_content"
-			android:src="@drawable/notelistitem_icon_voice"/>
+			android:background="@drawable/notelistitem_icon_voice"
+			android:focusable="false"
+			android:clickable="false"/>
 		</LinearLayout>
 		<TextView
 		android:id="@+id/notelistitem_notetext"

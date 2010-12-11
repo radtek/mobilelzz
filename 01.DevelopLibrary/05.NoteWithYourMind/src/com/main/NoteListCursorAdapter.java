@@ -140,11 +140,11 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 			int iEncodeFlag = cursor.getInt(iEncodeIndex);
 			if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
 				//tV.setCompoundDrawables(NoteWithYourMind.g_drawable_FolderLocked, null, null, null);
-				tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.folderlocked, 0, 0, 0);
+				//tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.folderlocked, 0, 0, 0);
 				itemdetail.bIsEncode = true;
 			}else{
 				//tV.setCompoundDrawables(NoteWithYourMind.g_drawable_Folder, null, null, null);
-				tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.folder, 0, 0, 0);
+				//tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.folder, 0, 0, 0);
 				itemdetail.bIsEncode = false;
 			}
 		}else{
@@ -152,7 +152,7 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 				cbView.setVisibility(View.VISIBLE);
 			}
 			//tV.setCompoundDrawables(NoteWithYourMind.g_drawable_Memo, null, null, null);
-			tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.memo, 0, 0, 0);
+			//tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.memo, 0, 0, 0);
 		}
 		tV.setText(sDetail);
 		if(m_listPreDBID == CommonDefine.g_int_Invalid_ID){

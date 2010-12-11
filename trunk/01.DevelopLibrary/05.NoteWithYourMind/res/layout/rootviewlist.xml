@@ -63,19 +63,36 @@
 	android:orientation="horizontal"
 	android:background="@drawable/toolbar_more_dlg"
 	android:layout_gravity="right|bottom"
+	android:layout_marginBottom="52dp"
+	android:layout_marginRight="5dp"
 	android:visibility="gone"
 	>
 		<Button
 		  android:id="@+id/toolbar_more_dlg_delete"
 		  android:layout_width="wrap_content"
 		  android:layout_height="wrap_content"
-		  android:text="删除"
+		  android:layout_marginLeft="5dp"
+		  android:layout_marginRight="5dp"
+		  android:layout_marginTop="5dp"
+		  android:background="@drawable/toolbar_more_delete"
 		/>
 		<Button
 		  android:id="@+id/toolbar_more_dlg_move"
 		  android:layout_width="wrap_content"
 		  android:layout_height="wrap_content"
-		  android:text="移动"
+		  android:layout_marginLeft="5dp"
+		  android:layout_marginRight="5dp"
+		  android:layout_marginTop="5dp"
+		  android:background="@drawable/toolbar_more_move"
+		/>
+		<Button
+		  android:id="@+id/toolbar_more_dlg_move"
+		  android:layout_width="wrap_content"
+		  android:layout_height="wrap_content"
+		  android:layout_marginLeft="5dp"
+		  android:layout_marginRight="5dp"
+		  android:layout_marginTop="5dp"
+		  android:background="@drawable/toolbar_more_lock"
 		/>
 
 	</LinearLayout>

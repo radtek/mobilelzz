@@ -91,11 +91,13 @@ implements ListActivityCtrl, View.OnClickListener
         	public void onClick(View v)
         	{  			
 				View vdlgback  = RootViewList.this.findViewById(R.id.toolbar_more_dlg);
-				if(m_bIsCommnetOut){
+				if(!m_bIsCommnetOut){
+					m_bIsCommnetOut = true;
 					vdlgback.setVisibility(View.VISIBLE);
 					Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commentout);
 					vdlgback.startAnimation(anim);
 				}else{
+					m_bIsCommnetOut=false;
 					Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commenthide);
 					vdlgback.startAnimation(anim);
 					vdlgback.setVisibility(View.GONE);
@@ -133,6 +135,7 @@ implements ListActivityCtrl, View.OnClickListener
 	public void onClick(View view){
 		switch(view.getId()){
 		case R.id.toolbar_more_dlg_delete:
+			m_bIsCommnetOut=false;
 			View vdlgback  = RootViewList.this.findViewById(R.id.toolbar_more_dlg);
 	        Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commenthide);
 	        vdlgback.startAnimation(anim);

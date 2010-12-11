@@ -32,6 +32,9 @@
       android:label="@string/app_name"
       android:launchMode = "singleTask">
     </activity>
+    <activity android:name=".RemindActivity"
+      android:label="@string/app_name">
+    </activity>
     <activity android:name=".AlarmAlert"
       android:label="@string/app_name">
 		</activity>

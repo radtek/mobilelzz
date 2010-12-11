@@ -2,26 +2,25 @@ package com.main;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-import android.view.View;
-import android.app.AlertDialog;
-import android.content.Intent;
-import android.database.Cursor;
-import android.widget.Button;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.content.DialogInterface;
-import android.media.MediaRecorder;
-import android.os.Environment;
 
 
 public class NoteWithYourMind extends Activity
@@ -54,7 +53,7 @@ public class NoteWithYourMind extends Activity
 	private int 			m_ExtraData_PreID 		=	CMemoInfo.Id_Invalid;
 	private OperationNoteKindEnum m_ExtraData_OperationNoteKind = null;
 	
-	CRemindInfo									m_clCRemindInfo	=	null;
+	CRemindInfo									m_clCRemindInfo	=	new	CRemindInfo( (byte) -1 );
 	private boolean 							sdCardExit;
 	private File 								myRecAudioFile;
 	private File 								myRecAudioDir;
@@ -123,7 +122,6 @@ public class NoteWithYourMind extends Activity
             		Toast toast = Toast.makeText(NoteWithYourMind.this, "保存成功", Toast.LENGTH_SHORT);
             		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
             		toast.show();
-            		//迁移画页- zhu.t	-	未实现
             		NoteWithYourMind.this.finish();
             		
         		}
@@ -247,7 +245,7 @@ public class NoteWithYourMind extends Activity
 			public void onClick(View v) 
 			{
 				Intent intent = new Intent();
-				intent.setClass(NoteWithYourMind.this, RemindSettingActivity.class);
+				intent.setClass(NoteWithYourMind.this, RemindActivity.class);
 				if( (m_clCRemindInfo!=null)&&(m_clCRemindInfo.m_bType != -1) )
 				{
 					intent.putExtra( ExtraData_RemindSetting, m_clCRemindInfo ); 

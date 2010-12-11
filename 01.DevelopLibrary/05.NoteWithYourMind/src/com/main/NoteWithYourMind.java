@@ -22,7 +22,9 @@ Memo
 更新加密、detail
 保存加密、detail*/
 
-
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import android.app.Activity;
 import android.os.Bundle;
@@ -40,7 +42,8 @@ import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.DialogInterface;
-
+import android.media.MediaRecorder;
+import android.os.Environment;
 
 
 public class NoteWithYourMind extends Activity
@@ -73,7 +76,20 @@ public class NoteWithYourMind extends Activity
 	private int 			m_ExtraData_PreID 		=	CMemoInfo.Id_Invalid;
 	private OperationNoteKindEnum m_ExtraData_OperationNoteKind = null;
 	
-	CRemindInfo					m_clCRemindInfo	=	null;
+	CRemindInfo									m_clCRemindInfo	=	null;
+	private boolean 							sdCardExit;
+	private File 								myRecAudioFile;
+	private File 								myRecAudioDir;
+	private MediaRecorder 						mMediaRecorder01;
+	private String 								strTempFile = "ex07_11_";
+	private boolean 							isStopRecord;
+
+	  
+    ImageButton									clBTPlayRecord;
+    ImageButton									clBTDeleteRecord;
+    ImageButton									clBTRecord;
+    ImageButton									clBTStartRecord;
+    ImageButton									clBTStopRecord ;
 	///////////////////////onStart////////////////////////////////////////////////
 //	public void onNewIntent(Intent intent)
 //	{
@@ -100,7 +116,7 @@ public class NoteWithYourMind extends Activity
 	////////////////////////////////////////////////////////////////////
     /** Called when the activity is first created. */
 	///////////////////////////////onCreateStart///////////////////////////////////////////////////////////////////
-    @Override
+
     public void onCreate( Bundle savedInstanceState )
     {
     	super.onCreate(savedInstanceState);
@@ -142,11 +158,114 @@ public class NoteWithYourMind extends Activity
         		}
         	}
         });
+        
+        //录制语音Button
+        clBTRecord	=	(ImageButton) findViewById(R.id.editnote_toolbar_recvoice);
+        clBTRecord.setOnClickListener(new Button.OnClickListener()
+        {
+        	public void onClick(View v)
+        	{	
+        		clBTStartRecord.setVisibility(View.VISIBLE);
+        		clBTStopRecord.setVisibility(View.VISIBLE);
+        		clBTPlayRecord.setVisibility(View.VISIBLE);
+        		clBTDeleteRecord.setVisibility(View.VISIBLE);	
+        	}
+        });
+        
+        //开始录制语音
+        clBTStartRecord	=	(ImageButton) findViewById(R.id.IMG_B_REC);
+        clBTStartRecord.setOnClickListener(new Button.OnClickListener()
+        {
+        	public void onClick(View v)
+        	{
+        		try
+                {
+                  if (!sdCardExit)
+                  {
+                    Toast.makeText(NoteWithYourMind.this, "没有SDCard",Toast.LENGTH_LONG).show();
+                    return;
+                  }
+
+                  myRecAudioFile = File.createTempFile(strTempFile, ".amr", myRecAudioDir);
+
+                  mMediaRecorder01 = new MediaRecorder();
+                  mMediaRecorder01.setAudioSource(MediaRecorder.AudioSource.MIC);
+                  mMediaRecorder01.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+                  mMediaRecorder01.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+                      
+                  mMediaRecorder01.setOutputFile(myRecAudioFile.getAbsolutePath());
+                  mMediaRecorder01.prepare();
+                  mMediaRecorder01.start();
+
+                  clBTStopRecord.setEnabled(true);
+                  clBTPlayRecord.setEnabled(false);
+                  clBTDeleteRecord.setEnabled(false);
+
+                  isStopRecord = false;
+
+                } catch (IOException e)
+                {
+                  e.printStackTrace();
+                }
+        	}
+        });
+        
+        //停止录制语音
+        clBTStopRecord =	(ImageButton) findViewById(R.id.IMG_B_STOP);
+        clBTStopRecord.setOnClickListener(new Button.OnClickListener()
+        {
+        	public void onClick(View v)
+        	{
+        		if (myRecAudioFile != null)
+                {  
+                  mMediaRecorder01.stop();
+                  mMediaRecorder01.release();
+                  mMediaRecorder01 = null;
+                 
+                  clBTStopRecord.setEnabled(false);
+
+                  isStopRecord = true;
+                }
+        	}
+        });
+
+        //播放录制语音
+        clBTPlayRecord	=	(ImageButton) findViewById(R.id.IMG_B_PLAY);
+        clBTPlayRecord.setOnClickListener(new Button.OnClickListener()
+        {
+        	public void onClick(View v)
+        	{
+                //if (myPlayFile != null && myPlayFile.exists())
+                //{
+                //  openFile(myPlayFile);
+               // }       		
+        	}
+        });
+        
+        //删除录制语音
+        clBTDeleteRecord	=	(ImageButton) findViewById(R.id.IMG_B_DELETE);
+        clBTDeleteRecord.setOnClickListener(new Button.OnClickListener()
+        {
+        	public void onClick(View v)
+        	{
+        		//if (myPlayFile != null)
+                //{
+                 // adapter.remove(myPlayFile.getName());
+                 
+                 // if (myPlayFile.exists())
+                  //  myPlayFile.delete();
+                  //myTextView1.setText("ЧΘ埃");
+                //}
+        		
+        	}
+        });
+
+        
 
         //点击提醒设置Edit迁移至提醒设置画页Activity - zhu.t
         ((EditText)findViewById(R.id.CB_main_IsWarning)).setOnClickListener(new View.OnClickListener()
         {			
-			@Override
+			
 			public void onClick(View v) 
 			{
 				Intent intent = new Intent();

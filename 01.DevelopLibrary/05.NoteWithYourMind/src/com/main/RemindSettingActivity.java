@@ -53,7 +53,6 @@ public class RemindSettingActivity extends Activity
         Button clTimeFix = (Button) findViewById(R.id.TimeFix);
         clTimeFix.setOnClickListener(new Button.OnClickListener()
         {
-			@Override
 			public void onClick(View v)
 			{
 				// TODO Auto-generated method stub
@@ -77,7 +76,6 @@ public class RemindSettingActivity extends Activity
         Button clTimeCancel = (Button) findViewById(R.id.TimeCancel);
         clTimeCancel.setOnClickListener(new Button.OnClickListener()
         {
-			@Override
 			public void onClick(View v)
 			{
 				// TODO Auto-generated method stub
@@ -95,7 +93,6 @@ public class RemindSettingActivity extends Activity
         clCycelFix.setOnClickListener(new Button.OnClickListener()
         {
 
-			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 		    	CheckBox	checkBox1	=	( CheckBox )findViewById( R.id.C1);
@@ -176,7 +173,6 @@ public class RemindSettingActivity extends Activity
         Button clCycelCancel = (Button) findViewById(R.id.CycelCancel);
         clCycelCancel.setOnClickListener(new Button.OnClickListener()
         {
-			@Override
 			public void onClick(View v)
 			{
 				// TODO Auto-generated method stub
@@ -195,7 +191,6 @@ public class RemindSettingActivity extends Activity
         clDateandTimeFix.setOnClickListener(new Button.OnClickListener()
         {
 
-			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				TimePicker clTimePicker = (TimePicker)findViewById(R.id.TimePicker01);
@@ -237,7 +232,7 @@ public class RemindSettingActivity extends Activity
         Button clDateandTimeCancel = (Button) findViewById(R.id.DateandTimeCancel);
         clDateandTimeCancel.setOnClickListener(new Button.OnClickListener()
         {
-			@Override
+
 			public void onClick(View v)
 			{
 				// TODO Auto-generated method stub
@@ -251,7 +246,6 @@ public class RemindSettingActivity extends Activity
         Button clSelect = (Button) findViewById(R.id.remind_select);
         clSelect.setOnClickListener(new ImageButton.OnClickListener(){
 
-			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if ( bIsSelect )

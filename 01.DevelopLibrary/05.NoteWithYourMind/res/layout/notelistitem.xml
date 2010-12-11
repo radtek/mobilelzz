@@ -37,25 +37,19 @@
 		>
 			<Button
 			android:id="@+id/notelistitem_icon1"
-			android:layout_width="16dp"
-			android:layout_height="wrap_content"
+			style = "@style/ListItem_Little_IconButton"
 			android:background="@drawable/notelistitem_icon_text"
-			android:focusable="false"
-			android:clickable="false"/>
+			/>
 			<Button
 			android:id="@+id/notelistitem_icon2"
-			android:layout_width="16dp"
-			android:layout_height="wrap_content"
+			style = "@style/ListItem_Little_IconButton"
 			android:background="@drawable/notelistitem_icon_alarm"
-			android:focusable="false"
-			android:clickable="false"/>
+			/>
 			<Button
 			android:id="@+id/notelistitem_icon3"
-			android:layout_width="16dp"
-			android:layout_height="wrap_content"
+			style = "@style/ListItem_Little_IconButton"
 			android:background="@drawable/notelistitem_icon_voice"
-			android:focusable="false"
-			android:clickable="false"/>
+			/>
 		</LinearLayout>
 		<TextView
 		android:id="@+id/notelistitem_notetext"

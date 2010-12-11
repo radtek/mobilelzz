@@ -92,7 +92,23 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
  
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-		/*
+		CheckBox cbView = (CheckBox) view.findViewById(R.id.notelistitem_noteselect);
+		TextView tV = (TextView)view.findViewById(R.id.notelistitem_notetext);
+		TextView tvDate = (TextView)view.findViewById(R.id.notelistitem_notedate);
+		
+		int iTypeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_type);
+		int iTypeValue = cursor.getInt(iTypeIndex);
+		int iDetailIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_detail);
+		String sDetail = cursor.getString(iDetailIndex);
+		tV.setText(sDetail);
+		
+		ItemDetail itemdetail = new ItemDetail();
+		itemdetail.vView = view;
+		int iIDIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_id);
+		int iIDValue = cursor.getInt(iIDIndex);
+		itemdetail.iDBRecID = iIDValue;
+
+		/*step1更新CheckBox的状态
 		 * 如果是选择状态
 		 * 		如果记录是便签
 		 * 			将日期控件隐藏，将CheckBox显示
@@ -102,67 +118,92 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		 * 如果是正常状态
 		 * 		将CheckBox隐藏，将日期控件显示
 		 */
-		ItemDetail itemdetail = new ItemDetail();
-		itemdetail.vView = view;
-		
-		//update CheckBox Status-begin
-		//根据保存的当前记录的选择状态，更新CheckBox
-		CheckBox cbView = (CheckBox) view.findViewById(R.id.notelistitem_noteselect);
-		int iIDIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_id);
-		int iIDValue = cursor.getInt(iIDIndex);
-		itemdetail.iDBRecID = iIDValue;
-		ItemSelectResult result = m_ListItemSelectResult.get(String.valueOf(iIDValue));
-		if(result!=null){
-			cbView.setChecked(result.bIsSelected);
-		}		
-		//update CheckBox Status-end
+		if(m_isSelectableStyle){
+			boolean bDisplay = true;
+			if(iTypeValue==CMemoInfo.Type_Folder){
+				if(m_isFolderSelectable){
+				}else{
+					bDisplay = false;
+				}
+			}else{
+			}
+			if(bDisplay){
+				cbView.setVisibility(View.VISIBLE);
+				tvDate.setVisibility(View.GONE);
+				//update CheckBox Status-begin
+				//根据保存的当前记录的选择状态，更新CheckBox
+				ItemSelectResult result = m_ListItemSelectResult.get(String.valueOf(iIDValue));
+				if(result!=null){
+					cbView.setChecked(result.bIsSelected);
+				}		
+				//update CheckBox Status-end
+			}else{
+				cbView.setVisibility(View.GONE);
+				tvDate.setVisibility(View.VISIBLE);
+			}
+		}else{
+			cbView.setVisibility(View.GONE);
+			tvDate.setVisibility(View.VISIBLE);
+		}
+		/*step2更新LittleIcon
+		 * 如果是文件夹
+		 * 		位置1放文件夹Icon
+		 * 		如果设置了查看锁
+		 * 			位置2放锁头Icon
+		 * 如果是便签
+		 * 		有文本内容，位置1放文本Icon
+		 * 		有提醒时间，位置2放提醒Icon
+		 * 		有语音内容，位置3放语音Icon
+		 */
+		Button icon1 = (Button) view.findViewById(R.id.notelistitem_icon1);
+		Button icon2 = (Button) view.findViewById(R.id.notelistitem_icon2);
+		Button icon3 = (Button) view.findViewById(R.id.notelistitem_icon3);
+		if(iTypeValue==CMemoInfo.Type_Folder){
+			itemdetail.bIsFolder = true;
+			icon1.setBackgroundResource(R.drawable.notelistitem_icon_folder);
+			int iEncodeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
+			int iEncodeFlag = cursor.getInt(iEncodeIndex);
+			if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
+				icon2.setBackgroundResource(R.drawable.notelistitem_icon_lock);
+				icon3.setBackgroundDrawable(null);
+				itemdetail.bIsEncode = true;
+			}else{
+				icon2.setBackgroundDrawable(null);
+				icon3.setBackgroundDrawable(null);
+				itemdetail.bIsEncode = false;
+			}
+		}else{
+			icon1.setBackgroundResource(R.drawable.notelistitem_icon_text);
+			int isRemindIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isremind);
+			int isRemindValue = cursor.getInt(isRemindIndex);
+			if(isRemindValue == CMemoInfo.IsRemind_Yes){
+				itemdetail.bIsRemind = true;
+				icon2.setBackgroundResource(R.drawable.notelistitem_icon_alarm);
+				if(false){//for voice
+				}else{
+					icon3.setBackgroundDrawable(null);
+				}
+			}else{
+				if(false){//for voice
+				}else{
+					icon2.setBackgroundDrawable(null);
+					icon3.setBackgroundDrawable(null);
+				}
+			}
+		}
+		/*step3更新存储数据
+		 * 更新m_ListItemDetail
+		 * 		DBID、Item控件、是否是文件夹、是否是提醒、是否设置查看锁
+		 * 更新m_ListCheckBoxMapItem
+		 * 		DBID、CheckBox控件
+		 */
 		
 		//建立CheckBox和DBID的对应关系
 		CheckBoxMapItem mapItem = new CheckBoxMapItem();
 		mapItem.checkBox = cbView;
 		mapItem.iDBRecID = iIDValue;
 		m_ListCheckBoxMapItem.put(cbView, mapItem);
-		
-		int iTypeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_type);
-		int iTypeValue = cursor.getInt(iTypeIndex);
-		int iDetailIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_detail);
-		String sDetail = cursor.getString(iDetailIndex);
-		TextView tV = (TextView)view.findViewById(R.id.notelistitem_notetext);
-		if(iTypeValue==CMemoInfo.Type_Folder){
-			itemdetail.bIsFolder = true;
-			if(m_isFolderSelectable){
-			}else{
-				if(cbView!=null){
-					cbView.setVisibility(View.GONE);
-				}
-			}
-			int iEncodeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
-			int iEncodeFlag = cursor.getInt(iEncodeIndex);
-			if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
-				//tV.setCompoundDrawables(NoteWithYourMind.g_drawable_FolderLocked, null, null, null);
-				//tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.folderlocked, 0, 0, 0);
-				itemdetail.bIsEncode = true;
-			}else{
-				//tV.setCompoundDrawables(NoteWithYourMind.g_drawable_Folder, null, null, null);
-				//tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.folder, 0, 0, 0);
-				itemdetail.bIsEncode = false;
-			}
-		}else{
-			if(cbView!=null){
-				cbView.setVisibility(View.VISIBLE);
-			}
-			//tV.setCompoundDrawables(NoteWithYourMind.g_drawable_Memo, null, null, null);
-			//tV.setCompoundDrawablesWithIntrinsicBounds(R.drawable.memo, 0, 0, 0);
-		}
-		tV.setText(sDetail);
-		if(m_listPreDBID == CommonDefine.g_int_Invalid_ID){
-			int iPreIDIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_preid);
-			m_listPreDBID = cursor.getInt(iPreIDIndex);
-		}
-		if(m_isRemind == CommonDefine.g_int_Invalid_ID){
-			int isRemindIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isremind);
-			m_isRemind = cursor.getInt(isRemindIndex);
-		}
+
 		//建立Item控件和对应的DB记录信息的对应关系
 		m_ListItemDetail.put(view, itemdetail);
 	}
@@ -225,12 +266,12 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		ItemDetail detail = m_ListItemDetail.get(view);
 		return detail.bIsFolder;
 	}
-	public int getListPreDBID(){
-		return m_listPreDBID;
-	}
-	public int getIsRemind(){
-		return m_isRemind;
-	}
+//	public int getListPreDBID(){
+//		return m_listPreDBID;
+//	}
+//	public int getIsRemind(){
+//		return m_isRemind;
+//	}
 
 	public int getListDBID(View view){
 		ItemDetail detail = m_ListItemDetail.get(view);

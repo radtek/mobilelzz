@@ -68,10 +68,10 @@ public class NoteWithYourMind extends Activity
     ImageButton									clBTStartRecord;
     ImageButton									clBTStopRecord ;
 	///////////////////////onStart////////////////////////////////////////////////
-//	public void onNewIntent(Intent intent)
-//	{
-//		setIntent(intent);
-//	}
+	public void onNewIntent(Intent intent)
+	{
+		setIntent(intent);
+	}
 	
 //	public void onDestroy()
 //	{

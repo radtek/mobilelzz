@@ -15,6 +15,8 @@ public class AlarmAlert extends Activity
   {
     super.onCreate(savedInstanceState);
     /* 跳出的闹铃警示  */
+    
+    
     new AlertDialog.Builder(AlarmAlert.this)
         .setIcon(R.drawable.clock)
         .setTitle("闹钟响了!!")

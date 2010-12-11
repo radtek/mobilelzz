@@ -11,4 +11,10 @@
 		 <item name="android:gravity">center</item>
 		 <item name="android:background">@drawable/btn_toolbar</item>
 	</style> 
+	<style name="ListItem_Little_IconButton">
+	     <item name="android:layout_width">20dp</item>
+		 <item name="android:layout_height">wrap_content</item>
+		 <item name="android:focusable">false</item>
+		 <item name="android:clickable">false</item>
+	</style> 
 </resources>

@@ -65,6 +65,7 @@ class NoteListUICtrl{
 	
 	public void initializeSource(){
 		updateListData(CommonDefine.g_int_Invalid_ID);
+		m_targetList.setDividerHeight(3);
 		m_targetList.setOnItemClickListener(new OnItemClickListener(){
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {

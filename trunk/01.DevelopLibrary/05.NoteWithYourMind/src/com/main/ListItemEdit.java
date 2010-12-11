@@ -157,40 +157,40 @@ public class ListItemEdit extends Activity
         				})
         				.create();
         			ListView folderList = (ListView) DialogView.findViewById(R.id.folderlist_view);
-        			if(m_ListAdapter.getListPreDBID()!=CMemoInfo.PreId_Root){
-        				TextView tvRootFolder = new TextView(ListItemEdit.this);
-        				tvRootFolder.setText("根目录");
-        				tvRootFolder.setPadding(2, 0, 0, 0);
-        				tvRootFolder.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
-        				tvRootFolder.setHeight(CommonDefine.g_int_ListItemHeight);
-        				tvRootFolder.setTextColor(Color.WHITE);       				
-        				TextPaint tp = tvRootFolder.getPaint(); 
-        				tp.setFakeBoldText(true); 
-        				folderList.addHeaderView(tvRootFolder);
-        			}
-        			Cursor cursorFolderList = null;
-        			if(m_ListAdapter.getIsRemind()==CMemoInfo.IsRemind_Yes){        				
-        				cursorFolderList = m_clCNoteDBCtrl.getRemindFolderInRoot();
-        			}else{
-        				cursorFolderList = m_clCNoteDBCtrl.getMemoFolderInRoot();
-        			}
-        			ListItemEdit.this.startManagingCursor(cursorFolderList);
-        			if(cursorFolderList.getCount()>0){
-            			if(cursorFolderList!=null){
-            				ListAdapter LA_FolderList = new SimpleCursorAdapter(
-            						ListItemEdit.this,
-            						android.R.layout.simple_list_item_1,
-            						cursorFolderList,
-            						new String[]{CNoteDBCtrl.KEY_detail},
-            						new int[]{android.R.id.text1}
-            						);
-            				folderList.setAdapter(LA_FolderList);
-            			} 
-        			}else{
-        				Toast toast = Toast.makeText(ListItemEdit.this, "当前没有可以移动到的文件夹\n请先建立文件夹", Toast.LENGTH_LONG);
-	            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-	            		toast.show();
-        			}
+//        			if(m_ListAdapter.getListPreDBID()!=CMemoInfo.PreId_Root){
+//        				TextView tvRootFolder = new TextView(ListItemEdit.this);
+//        				tvRootFolder.setText("根目录");
+//        				tvRootFolder.setPadding(2, 0, 0, 0);
+//        				tvRootFolder.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
+//        				tvRootFolder.setHeight(CommonDefine.g_int_ListItemHeight);
+//        				tvRootFolder.setTextColor(Color.WHITE);       				
+//        				TextPaint tp = tvRootFolder.getPaint(); 
+//        				tp.setFakeBoldText(true); 
+//        				folderList.addHeaderView(tvRootFolder);
+//        			}
+//        			Cursor cursorFolderList = null;
+//        			if(m_ListAdapter.getIsRemind()==CMemoInfo.IsRemind_Yes){        				
+//        				cursorFolderList = m_clCNoteDBCtrl.getRemindFolderInRoot();
+//        			}else{
+//        				cursorFolderList = m_clCNoteDBCtrl.getMemoFolderInRoot();
+//        			}
+//        			ListItemEdit.this.startManagingCursor(cursorFolderList);
+//        			if(cursorFolderList.getCount()>0){
+//            			if(cursorFolderList!=null){
+//            				ListAdapter LA_FolderList = new SimpleCursorAdapter(
+//            						ListItemEdit.this,
+//            						android.R.layout.simple_list_item_1,
+//            						cursorFolderList,
+//            						new String[]{CNoteDBCtrl.KEY_detail},
+//            						new int[]{android.R.id.text1}
+//            						);
+//            				folderList.setAdapter(LA_FolderList);
+//            			} 
+//        			}else{
+//        				Toast toast = Toast.makeText(ListItemEdit.this, "当前没有可以移动到的文件夹\n请先建立文件夹", Toast.LENGTH_LONG);
+//	            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+//	            		toast.show();
+//        			}
         			
         			folderList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
         				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3){

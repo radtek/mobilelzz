@@ -70,7 +70,7 @@ class NoteListUICtrl{
 			public void onItemClick(AdapterView<?> arg0, View arg1,
 					int arg2, long arg3) {
 				if(m_bIsDelete||m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
-					CheckBox cb = (CheckBox) arg1.findViewById(R.id.noteitem_noteselect);
+					CheckBox cb = (CheckBox) arg1.findViewById(R.id.notelistitem_noteselect);
 					if((cb!=null)&&(cb.getVisibility()==View.VISIBLE)){
 						((View)cb).performClick();
 					}
@@ -143,8 +143,8 @@ class NoteListUICtrl{
         			findSelectItemDBID(alIDs);
         			if(alIDs.size()<=0){
         				m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
+        				Return2TargetList();
         				updateListData(CommonDefine.g_int_Invalid_ID);
-                		Return2TargetList();
                 		return;
         			}
         			//show folder to select rec--->
@@ -204,8 +204,8 @@ class NoteListUICtrl{
         					findSelectItemDBID(alIDs);
         					Move2Folder(alIDs, (int)id);
                     		m_dlgFolderList.cancel();
-                    		updateListData(CommonDefine.g_int_Invalid_ID);
                     		Return2TargetList();
+                    		updateListData(CommonDefine.g_int_Invalid_ID);
         				}
         			});
         			m_dlgFolderList.show();      			
@@ -218,11 +218,8 @@ class NoteListUICtrl{
 		clBTMemoCancel.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
         	{
-        		updateListData(CommonDefine.g_int_Invalid_ID);
-        		if(m_myAdapter!=null){
-        			m_myAdapter.setSelectableStyle(false);
-        		}
         		Return2TargetList();
+        		updateListData(CommonDefine.g_int_Invalid_ID);
          	}
         });
 
@@ -256,6 +253,8 @@ class NoteListUICtrl{
 		}else{
 			if(m_bIsDelete || m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
     			m_myAdapter.setSelectableStyle(true);
+			}else{
+				m_myAdapter.setSelectableStyle(false);
 			}
 			if(m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
 				m_myAdapter.setFolderSelectable(false);
@@ -287,7 +286,7 @@ class NoteListUICtrl{
 	{
 		m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
 		m_bIsDelete = false;
-
+		m_myAdapter.clearSelectResult();
 		//update toolbar
 		updateToolBar();
 	}
@@ -296,7 +295,7 @@ class NoteListUICtrl{
 		int count = m_myAdapter.getCount();
 		for(int i = 0; i < count; i++)
 		{
-			final CheckBox cb = (CheckBox)m_targetList.getChildAt(i).findViewById(R.id.memoitem_memoselect);
+			final CheckBox cb = (CheckBox)m_targetList.getChildAt(i).findViewById(R.id.notelistitem_noteselect);
 			if(cb!=null){
 				boolean b = cb.isChecked();
 				if(b==true){

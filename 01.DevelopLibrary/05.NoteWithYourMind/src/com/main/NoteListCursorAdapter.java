@@ -135,7 +135,9 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 				ItemSelectResult result = m_ListItemSelectResult.get(String.valueOf(iIDValue));
 				if(result!=null){
 					cbView.setChecked(result.bIsSelected);
-				}		
+				}else{
+					cbView.setChecked(false);
+				}
 				//update CheckBox Status-end
 			}else{
 				cbView.setVisibility(View.GONE);
@@ -232,6 +234,9 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
         	}
 		});
 		return v;
+	}
+	public void clearSelectResult(){
+		m_ListItemSelectResult.clear();
 	}
 	public void updateCursor(){
 		m_cursor.deactivate();

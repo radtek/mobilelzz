@@ -2,6 +2,8 @@ package com.main;
 
 import java.util.Calendar;
 
+import com.main.NoteWithYourMind.OperationNoteKindEnum;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -9,6 +11,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -27,13 +30,52 @@ public class RemindActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remindsetting2);
 
+        Intent iExtraData = getIntent();
+        CRemindInfo	clTemp	=	(CRemindInfo)iExtraData.getSerializableExtra(NoteWithYourMind.ExtraData_RemindSetting);
+        if ( null != clTemp )
+        {
+        	clCRemindInfo	=	clTemp;
+        }
+        else
+        {
+        	
+        }
         //设定星期
         settingWeek();
         //设定确定
         settingCheck();
         //设定日期
         settingDate();
+        //停止启动
+        settingAble();
+        
+        EditText xiaoshi = (EditText) findViewById(R.id.xiaoshi); 
+        xiaoshi.setInputType(InputType.TYPE_DATETIME_VARIATION_TIME ); 
+ //       xiaoshi.setText(String.valueOf(value));
+        
+        EditText fenzhong1 = (EditText) findViewById(R.id.fenzhong1); 
+        fenzhong1.setInputType(InputType.TYPE_DATETIME_VARIATION_TIME ); 
+        
+        EditText xiaoshi2 = (EditText) findViewById(R.id.xiaoshi2); 
+        xiaoshi2.setInputType(InputType.TYPE_DATETIME_VARIATION_TIME ); 
+        
+        EditText fenzhong2 = (EditText) findViewById(R.id.fenzhong2); 
+        fenzhong2.setInputType(InputType.TYPE_DATETIME_VARIATION_TIME ); 
 
+    }
+    
+    void	settingAble()
+    {
+    	Button	BtAble	=	(Button) findViewById(R.id.RemindAble);
+    	BtAble.setOnClickListener(new Button.OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+			}
+    		
+    	});
     }
 
     void	settingDate()

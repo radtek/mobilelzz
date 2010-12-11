@@ -32,6 +32,11 @@ public final class CRemindOperator
     	//Insert时和提醒相关的属性可以设置为无效，这里会进行Update
 		Calendar clCalendar	=	Calendar.getInstance();
 		clCalendar.setTimeInMillis(System.currentTimeMillis());
+		if( null == m_clCNoteDBCtrl )
+    	{
+    		m_clCNoteDBCtrl	=	new	CNoteDBCtrl( context );
+    	}
+		
     	if ( 1 == _clCRemindInfo.m_bType )
     	{
     		if ( clCalendar.getTimeInMillis() > _clCRemindInfo.lTime )
@@ -111,7 +116,7 @@ public final class CRemindOperator
     	//如果是循环提醒则不做处理
     	
     	CRemindInfo		clCRemindInfo	=	new	CRemindInfo( (byte)-1 );
-    	getRemindInfo( _id, clCRemindInfo );
+    	getRemindInfo( context, _id, clCRemindInfo );
     	long	lTime	=	clCRemindInfo.getFirstCycelRemindTime();
     	
 		AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
@@ -196,8 +201,12 @@ public final class CRemindOperator
         
     }
     
-    public	void	getRemindInfo( int id, CRemindInfo _clCRemindInfo )
+    public	void	getRemindInfo( Context context, int id, CRemindInfo _clCRemindInfo )
     {
+    	if( null == m_clCNoteDBCtrl )
+    	{
+    		m_clCNoteDBCtrl	=	new	CNoteDBCtrl( context );
+    	}
     	Cursor cur	=	m_clCNoteDBCtrl.getRemindByID(id);
     	
     	getRemindInfo( cur, _clCRemindInfo );

@@ -1,5 +1,8 @@
 package com.main;
 
+import java.text.SimpleDateFormat;
+import java.util.*; 
+import java.util.Date;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
@@ -11,6 +14,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +24,22 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
+import android.view.View;
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.database.Cursor;
+import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.content.DialogInterface;
+import android.media.MediaRecorder;
+import android.os.Environment;
+import android.widget.Chronometer;
+import android.widget.TextView;
+import android.widget.Chronometer.OnChronometerTickListener;
+import android.util.*;
+import android.net.Uri;
+import android.content.Intent;
 
 public class NoteWithYourMind extends Activity implements View.OnClickListener
 {
@@ -145,6 +164,40 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 
         //点击提醒设置Edit迁移至提醒设置画页Activity - zhu.t
         //((EditText)findViewById(R.id.CB_main_IsWarning)).setOnClickListener(this);
+    }
+   private String getMIMEType(File f)
+    {
+      String end = f
+       	  .getName()
+          .substring(f.getName().lastIndexOf(".") + 1,
+              f.getName().length()).toLowerCase();
+      String type = "";
+      if (end.equals("mp3") || end.equals("aac") || end.equals("aac")
+          || end.equals("amr") || end.equals("mpeg")
+          || end.equals("mp4"))
+      {
+        type = "audio";
+      } else if (end.equals("jpg") || end.equals("gif")
+          || end.equals("png") || end.equals("jpeg"))
+      {
+        type = "image";
+      } else
+      {
+        type = "*";
+      }
+      type += "/*";
+      return type;
+    }
+    
+    private void openFile(File f)
+    {
+      Intent intent = new Intent();
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      intent.setAction(android.content.Intent.ACTION_VIEW);
+
+      String type = getMIMEType(f);
+      intent.setDataAndType(Uri.fromFile(f), type);
+      startActivity(intent);
     }
     ///////////////////////////////onCreateEnd/////////////////////////////////////////////////////////
     private void UpdateViewData()
@@ -299,25 +352,25 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	
 	private void processRecClick(View view){
 		try
-    { 
-  		 if (!sdCardExit)
+		{ 
+	  		if (!sdCardExit)
             {
               Toast.makeText(NoteWithYourMind.this, "没有SDCard",Toast.LENGTH_LONG).show();
               return;
             }
-  		 
-        String AudioDir = SdCardDir.toString() + "//note//record";   
-        myRecAudioDir = new File(AudioDir);
-        if(!myRecAudioDir.exists())
-        {
-        	myRecAudioDir.mkdir();
-        }
+	  		 
+	        String AudioDir = SdCardDir.toString() + "//note//record";   
+	        myRecAudioDir = new File(AudioDir);
+	        if(!myRecAudioDir.exists())
+	        {
+	        	myRecAudioDir.mkdir();
+	        }
   	        
- 	        Date d = new Date();
-        d.toString();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddkkmmss");
-        String filename = sdf.format(d);    	        
-       // Log.d("zds", filename);    	        
+	 	    Date d = new Date();
+	        d.toString();
+	        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddkkmmss");
+	        String filename = sdf.format(d);    	        
+	       // Log.d("zds", filename);    	        
 
             myRecAudioFile = File.createTempFile(filename, ".amr", myRecAudioDir);
   		 	        		 
@@ -341,11 +394,11 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 
             isStopRecord = false;
 
-          } catch (IOException e)
+          }catch (IOException e)
           {
             e.printStackTrace();
           }
-  	}
+  		
 	}
 	
 	private void processRevoiceClick(View view){

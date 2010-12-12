@@ -69,7 +69,6 @@ public class RemindActivity extends Activity
     	Button	BtAble	=	(Button) findViewById(R.id.RemindAble);
     	BtAble.setOnClickListener(new Button.OnClickListener(){
 
-			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				
@@ -83,7 +82,7 @@ public class RemindActivity extends Activity
     	ImageButton	clWeekSetting	=	(ImageButton) findViewById(R.id.OnceRemindImg);
     	clWeekSetting.setOnClickListener(new Button.OnClickListener(){
 
-			@Override
+
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Calendar	clCalendar	=	Calendar.getInstance();
@@ -110,7 +109,7 @@ public class RemindActivity extends Activity
     }
     private DatePickerDialog.OnDateSetListener mDateSetListener	=	new	DatePickerDialog.OnDateSetListener() {
 
-		@Override
+
 		public void onDateSet(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
 			// TODO Auto-generated method stub
 			clCRemindInfo.m_bType	=	3;
@@ -167,7 +166,6 @@ public class RemindActivity extends Activity
     	Button	clCheck	=	(Button) findViewById(R.id.FixBtn);
     	clCheck.setOnClickListener( new Button.OnClickListener(){
 
-			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if( 2 == clCRemindInfo.m_bType )		//—≠ª∑Ã·–—
@@ -231,7 +229,7 @@ public class RemindActivity extends Activity
 		ImageButton	clWeekSetting	=	(ImageButton) findViewById(R.id.EveryWeekImg);
         clWeekSetting.setOnClickListener(new Button.OnClickListener()
         {
-			@Override
+
 			public void onClick(View arg0)
 			{
 				// TODO Auto-generated method stub
@@ -249,7 +247,6 @@ public class RemindActivity extends Activity
 			    		 		}, null, new DialogInterface.OnMultiChoiceClickListener()
 			     				{
 
-									@Override
 									public void onClick(DialogInterface dialog, int which, boolean isChecked)
 									{
 										// TODO Auto-generated method stub

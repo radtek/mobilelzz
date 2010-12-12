@@ -31,40 +31,42 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		OperationNoteKind_Edit,
 		OperationNoteKind_Update
 	}
-	public static String ExtraData_EditNoteID		=	"com.main.ExtraData_EditNoteID";
-	public static String ExtraData_OperationNoteKind	=	"com.main.ExtraData_OperationNoteKind";
-	public static String ExtraData_OperationPreID	=	"com.main.ExtraData_OperationPreID";
+	public static String 								ExtraData_EditNoteID		=	"com.main.ExtraData_EditNoteID";
+	public static String 								ExtraData_OperationNoteKind	=	"com.main.ExtraData_OperationNoteKind";
+	public static String 								ExtraData_OperationPreID	=	"com.main.ExtraData_OperationPreID";
 	
-	public static String ExtraData_RemindSetting	=	"com.main.ExtraData_RemindSetting";
+	public static String 								ExtraData_RemindSetting	=	"com.main.ExtraData_RemindSetting";
 	
 	//皮肤设定和加密设定的Menu
-	public static final int ITEM0	=	Menu.FIRST;
-	public static final int ITEM1	=	Menu.FIRST + 1;
+	public static final int 						ITEM0	=	Menu.FIRST;
+	public static final int 						ITEM1	=	Menu.FIRST + 1;
 	
 	//进行DB操作的类
-	private CNoteDBCtrl m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
+	private CNoteDBCtrl 								m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
 	
 	//进行时间操作的类
 //	private Calendar clCalendar	=	Calendar.getInstance();
 
-	private int 			m_ExtraData_EditNoteID 		=	CMemoInfo.Id_Invalid;
-	private int 			m_ExtraData_PreID 		=	CMemoInfo.Id_Invalid;
-	private OperationNoteKindEnum m_ExtraData_OperationNoteKind = null;
+	private int 												m_ExtraData_EditNoteID 		=	CMemoInfo.Id_Invalid;
+	private int 												m_ExtraData_PreID 		=	CMemoInfo.Id_Invalid;
+	private OperationNoteKindEnum 			m_ExtraData_OperationNoteKind = null;
 	
-	CRemindInfo									m_clCRemindInfo	=	new	CRemindInfo( (byte) -1 );
-	private boolean 							sdCardExit;
-	private File 								myRecAudioFile;
-	private File 								myRecAudioDir;
-	private MediaRecorder 						mMediaRecorder01;
-	private String 								strTempFile = "ex07_11_";
-	private boolean 							isStopRecord;
+	CRemindInfo													m_clCRemindInfo	=	new	CRemindInfo( (byte) -1 );
+	private boolean 										sdCardExit;
+	private File 												myRecAudioFile;
+	private File 												myRecAudioDir;
+	private File												SdCardDir;
+	private MediaRecorder 							mMediaRecorder01;
+	private boolean 										isStopRecord;
 
-	  
-    ImageButton									clBTPlayRecord;
-    ImageButton									clBTDeleteRecord;
-    ImageButton									clBTRecord;
-    ImageButton									clBTStartRecord;
-    ImageButton									clBTStopRecord ;
+	ImageButton													clBT_Rec_BackGroud;  
+  ImageButton													clBTPlayRecord;
+  ImageButton													clBTDeleteRecord;
+  ImageButton													clBTRecord;
+  ImageButton													clBTStartRecord;
+  ImageButton													clBTStopRecord ;
+    
+  private Chronometer 								chronometer;
 	///////////////////////onStart////////////////////////////////////////////////
 	public void onNewIntent(Intent intent)
 	{
@@ -127,6 +129,19 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
       //设置提醒
         ImageButton clBTSetRemind	=	(ImageButton) findViewById(R.id.editnote_toolbar_setremind);
         clBTSetRemind.setOnClickListener(this);
+        
+        
+      //计时器
+			chronometer = (Chronometer) findViewById(R.id.rec_time);
+			//chronometer.setOnChronometerTickListener(this);
+			//chronometer.setFormat("%s","MM:SS");
+			
+			//检查是否存在SD卡		
+	    sdCardExit = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);   
+      if (sdCardExit)
+      {
+      	SdCardDir = Environment.getExternalStorageDirectory();
+      }
 
         //点击提醒设置Edit迁移至提醒设置画页Activity - zhu.t
         //((EditText)findViewById(R.id.CB_main_IsWarning)).setOnClickListener(this);
@@ -253,66 +268,84 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	}
 	
 	private void processDeleteClick(View view){
-		//if (myPlayFile != null)
-        //{
-         // adapter.remove(myPlayFile.getName());
-         
-         // if (myPlayFile.exists())
-          //  myPlayFile.delete();
-          //myTextView1.setText("ЧΘ埃");
-        //}
+  		if (myRecAudioFile != null)
+      {
+        if (myRecAudioFile.exists())
+          myRecAudioFile.delete();       
+      }
 	}
 	
 	private void processPlayClick(View view){
-        //if (myPlayFile != null && myPlayFile.exists())
-        //{
-        //  openFile(myPlayFile);
-       // }  
+		 if (myRecAudioFile != null && myRecAudioFile.exists())
+     {
+      openFile(myRecAudioFile);
+     }       		
 	}
 	
 	private void processStopClick(View view){
 		if (myRecAudioFile != null)
-        {  
-          mMediaRecorder01.stop();
-          mMediaRecorder01.release();
-          mMediaRecorder01 = null;
-         
-          clBTStopRecord.setEnabled(false);
+    {  
+      mMediaRecorder01.stop();
+      mMediaRecorder01.release();
+      mMediaRecorder01 = null;
+     
+      clBTStopRecord.setEnabled(false);
 
-          isStopRecord = true;
-        }
+      isStopRecord = true;
+      
+    }
+    chronometer.stop();
 	}
 	
 	private void processRecClick(View view){
 		try
+    { 
+  		 if (!sdCardExit)
+            {
+              Toast.makeText(NoteWithYourMind.this, "没有SDCard",Toast.LENGTH_LONG).show();
+              return;
+            }
+  		 
+        String AudioDir = SdCardDir.toString() + "//note//record";   
+        myRecAudioDir = new File(AudioDir);
+        if(!myRecAudioDir.exists())
         {
-          if (!sdCardExit)
-          {
-            Toast.makeText(NoteWithYourMind.this, "没有SDCard",Toast.LENGTH_LONG).show();
-            return;
-          }
-
-          myRecAudioFile = File.createTempFile(strTempFile, ".amr", myRecAudioDir);
-
-          mMediaRecorder01 = new MediaRecorder();
-          mMediaRecorder01.setAudioSource(MediaRecorder.AudioSource.MIC);
-          mMediaRecorder01.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-          mMediaRecorder01.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-              
-          mMediaRecorder01.setOutputFile(myRecAudioFile.getAbsolutePath());
-          mMediaRecorder01.prepare();
-          mMediaRecorder01.start();
-
-          clBTStopRecord.setEnabled(true);
-          clBTPlayRecord.setEnabled(false);
-          clBTDeleteRecord.setEnabled(false);
-
-          isStopRecord = false;
-
-        } catch (IOException e)
-        {
-          e.printStackTrace();
+        	myRecAudioDir.mkdir();
         }
+  	        
+ 	        Date d = new Date();
+        d.toString();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddkkmmss");
+        String filename = sdf.format(d);    	        
+       // Log.d("zds", filename);    	        
+
+            myRecAudioFile = File.createTempFile(filename, ".amr", myRecAudioDir);
+  		 	        		 
+            mMediaRecorder01 = new MediaRecorder();
+            mMediaRecorder01.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mMediaRecorder01.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+            mMediaRecorder01.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+                
+            mMediaRecorder01.setOutputFile(myRecAudioFile.getAbsolutePath());
+            mMediaRecorder01.prepare();
+            mMediaRecorder01.start();
+            
+  
+            chronometer.setBase(SystemClock.elapsedRealtime());
+            chronometer.start();
+
+
+            clBTStopRecord.setEnabled(true);
+            clBTPlayRecord.setEnabled(false);
+            clBTDeleteRecord.setEnabled(false);
+
+            isStopRecord = false;
+
+          } catch (IOException e)
+          {
+            e.printStackTrace();
+          }
+  	}
 	}
 	
 	private void processRevoiceClick(View view){

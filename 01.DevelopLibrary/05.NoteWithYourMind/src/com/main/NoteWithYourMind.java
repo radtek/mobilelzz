@@ -17,13 +17,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 
-public class NoteWithYourMind extends Activity
+public class NoteWithYourMind extends Activity implements View.OnClickListener
 {
 	//前一个Activity的类型
 	public	enum	OperationNoteKindEnum
@@ -32,7 +34,6 @@ public class NoteWithYourMind extends Activity
 		OperationNoteKind_Edit,
 		OperationNoteKind_Update
 	}
-	
 	public static String ExtraData_EditNoteID		=	"com.main.ExtraData_EditNoteID";
 	public static String ExtraData_OperationNoteKind	=	"com.main.ExtraData_OperationNoteKind";
 	public static String ExtraData_OperationPreID	=	"com.main.ExtraData_OperationPreID";
@@ -104,157 +105,34 @@ public class NoteWithYourMind extends Activity
 		}
     	//点击保存Button，进行新增或更新操作
         ImageButton	clBTSave	=	(ImageButton) findViewById(R.id.editnote_toolbar_save);
-        clBTSave.setOnClickListener(new Button.OnClickListener()
-        {
-        	public void onClick(View v)
-        	{
-        		//取得Memo信息
-        		EditText memotext = (EditText) findViewById(R.id.ET_main_Memo);
-        		String strMemoText = memotext.getText().toString();
-        		
-        		//取得提醒信息 - zhu.t : 提醒信息已经保存在 m_clCRemindInfo中
-        		     		
-        		if( strMemoText.length()>0 )
-        		{
-        			//保存用户设定的Memo和提醒信息
-        			if ( 0 == SaveEditData( strMemoText ) )
-        			{
-	 //       			UpdateViewStatus();
-	            		Toast toast = Toast.makeText(NoteWithYourMind.this, "保存成功", Toast.LENGTH_SHORT);
-	            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-	            		toast.show();
-	            		NoteWithYourMind.this.finish();
-        			}
-            		
-        		}
-        		//无输入信息
-        		else
-        		{
-        			Toast toast = Toast.makeText(NoteWithYourMind.this, "请输入内容", Toast.LENGTH_SHORT);
-            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-            		toast.show();
-        		}
-        	}
-        });
+        clBTSave.setOnClickListener(this);
         
         //录制语音Button
         clBTRecord	=	(ImageButton) findViewById(R.id.editnote_toolbar_recvoice);
-        clBTRecord.setOnClickListener(new Button.OnClickListener()
-        {
-        	public void onClick(View v)
-        	{	
-        		clBTStartRecord.setVisibility(View.VISIBLE);
-        		clBTStopRecord.setVisibility(View.VISIBLE);
-        		clBTPlayRecord.setVisibility(View.VISIBLE);
-        		clBTDeleteRecord.setVisibility(View.VISIBLE);	
-        	}
-        });
+        clBTRecord.setOnClickListener(this);
         
         //开始录制语音
         clBTStartRecord	=	(ImageButton) findViewById(R.id.IMG_B_REC);
-        clBTStartRecord.setOnClickListener(new Button.OnClickListener()
-        {
-        	public void onClick(View v)
-        	{
-        		try
-                {
-                  if (!sdCardExit)
-                  {
-                    Toast.makeText(NoteWithYourMind.this, "没有SDCard",Toast.LENGTH_LONG).show();
-                    return;
-                  }
-
-                  myRecAudioFile = File.createTempFile(strTempFile, ".amr", myRecAudioDir);
-
-                  mMediaRecorder01 = new MediaRecorder();
-                  mMediaRecorder01.setAudioSource(MediaRecorder.AudioSource.MIC);
-                  mMediaRecorder01.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-                  mMediaRecorder01.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-                      
-                  mMediaRecorder01.setOutputFile(myRecAudioFile.getAbsolutePath());
-                  mMediaRecorder01.prepare();
-                  mMediaRecorder01.start();
-
-                  clBTStopRecord.setEnabled(true);
-                  clBTPlayRecord.setEnabled(false);
-                  clBTDeleteRecord.setEnabled(false);
-
-                  isStopRecord = false;
-
-                } catch (IOException e)
-                {
-                  e.printStackTrace();
-                }
-        	}
-        });
+        clBTStartRecord.setOnClickListener(this);
         
         //停止录制语音
         clBTStopRecord =	(ImageButton) findViewById(R.id.IMG_B_STOP);
-        clBTStopRecord.setOnClickListener(new Button.OnClickListener()
-        {
-        	public void onClick(View v)
-        	{
-        		if (myRecAudioFile != null)
-                {  
-                  mMediaRecorder01.stop();
-                  mMediaRecorder01.release();
-                  mMediaRecorder01 = null;
-                 
-                  clBTStopRecord.setEnabled(false);
-
-                  isStopRecord = true;
-                }
-        	}
-        });
+        clBTStopRecord.setOnClickListener(this);
 
         //播放录制语音
         clBTPlayRecord	=	(ImageButton) findViewById(R.id.IMG_B_PLAY);
-        clBTPlayRecord.setOnClickListener(new Button.OnClickListener()
-        {
-        	public void onClick(View v)
-        	{
-                //if (myPlayFile != null && myPlayFile.exists())
-                //{
-                //  openFile(myPlayFile);
-               // }       		
-        	}
-        });
+        clBTPlayRecord.setOnClickListener(this);
         
         //删除录制语音
         clBTDeleteRecord	=	(ImageButton) findViewById(R.id.IMG_B_DELETE);
-        clBTDeleteRecord.setOnClickListener(new Button.OnClickListener()
-        {
-        	public void onClick(View v)
-        	{
-        		//if (myPlayFile != null)
-                //{
-                 // adapter.remove(myPlayFile.getName());
-                 
-                 // if (myPlayFile.exists())
-                  //  myPlayFile.delete();
-                  //myTextView1.setText("ЧΘ埃");
-                //}
-        		
-        	}
-        });
-
+        clBTDeleteRecord.setOnClickListener(this);
         
+      //设置提醒
+        ImageButton clBTSetRemind	=	(ImageButton) findViewById(R.id.editnote_toolbar_setremind);
+        clBTSetRemind.setOnClickListener(this);
 
         //点击提醒设置Edit迁移至提醒设置画页Activity - zhu.t
-        ((EditText)findViewById(R.id.CB_main_IsWarning)).setOnClickListener(new View.OnClickListener()
-        {			
-			
-			public void onClick(View v) 
-			{
-				Intent intent = new Intent();
-				intent.setClass(NoteWithYourMind.this, RemindActivity.class);
-				if( (m_clCRemindInfo!=null)&&(m_clCRemindInfo.m_bType != -1) )
-				{
-					intent.putExtra( ExtraData_RemindSetting, m_clCRemindInfo ); 
-				}
-				startActivity(intent);
-			}
-        });
+        //((EditText)findViewById(R.id.CB_main_IsWarning)).setOnClickListener(this);
     }
     ///////////////////////////////onCreateEnd/////////////////////////////////////////////////////////
     private void UpdateViewData()
@@ -339,6 +217,142 @@ public class NoteWithYourMind extends Activity
     		EtOnce.setText( "" );
     	}
     }
+    
+	public void onClick(View view){
+		switch(view.getId()){
+		case R.id.editnote_toolbar_save:
+			processSaveClick(view);
+		    break;
+		case R.id.editnote_toolbar_recvoice:
+			processRevoiceClick(view);
+			break;
+		case R.id.IMG_B_REC:
+			processRecClick(view);
+			break;
+		case R.id.IMG_B_STOP:
+			processStopClick(view);
+			break;
+		case R.id.IMG_B_PLAY:
+			processPlayClick(view);
+			break;
+		case R.id.IMG_B_DELETE:
+			processDeleteClick(view);
+			break;
+		case R.id.editnote_toolbar_setremind:
+			processSetRemindClick(view);
+			break;
+		default:
+		}
+	}
+	
+	private void processSetRemindClick(View view){
+		Intent intent = new Intent();
+		intent.setClass(NoteWithYourMind.this, RemindActivity.class);
+		if( (m_clCRemindInfo!=null)&&(m_clCRemindInfo.m_bType != -1) )
+		{
+			intent.putExtra( ExtraData_RemindSetting, m_clCRemindInfo ); 
+		}
+		startActivity(intent);
+	}
+	
+	private void processDeleteClick(View view){
+		//if (myPlayFile != null)
+        //{
+         // adapter.remove(myPlayFile.getName());
+         
+         // if (myPlayFile.exists())
+          //  myPlayFile.delete();
+          //myTextView1.setText("ЧΘ埃");
+        //}
+	}
+	
+	private void processPlayClick(View view){
+        //if (myPlayFile != null && myPlayFile.exists())
+        //{
+        //  openFile(myPlayFile);
+       // }  
+	}
+	
+	private void processStopClick(View view){
+		if (myRecAudioFile != null)
+        {  
+          mMediaRecorder01.stop();
+          mMediaRecorder01.release();
+          mMediaRecorder01 = null;
+         
+          clBTStopRecord.setEnabled(false);
+
+          isStopRecord = true;
+        }
+	}
+	
+	private void processRecClick(View view){
+		try
+        {
+          if (!sdCardExit)
+          {
+            Toast.makeText(NoteWithYourMind.this, "没有SDCard",Toast.LENGTH_LONG).show();
+            return;
+          }
+
+          myRecAudioFile = File.createTempFile(strTempFile, ".amr", myRecAudioDir);
+
+          mMediaRecorder01 = new MediaRecorder();
+          mMediaRecorder01.setAudioSource(MediaRecorder.AudioSource.MIC);
+          mMediaRecorder01.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+          mMediaRecorder01.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+              
+          mMediaRecorder01.setOutputFile(myRecAudioFile.getAbsolutePath());
+          mMediaRecorder01.prepare();
+          mMediaRecorder01.start();
+
+          clBTStopRecord.setEnabled(true);
+          clBTPlayRecord.setEnabled(false);
+          clBTDeleteRecord.setEnabled(false);
+
+          isStopRecord = false;
+
+        } catch (IOException e)
+        {
+          e.printStackTrace();
+        }
+	}
+	
+	private void processRevoiceClick(View view){
+		clBTStartRecord.setVisibility(View.VISIBLE);
+		clBTStopRecord.setVisibility(View.VISIBLE);
+		clBTPlayRecord.setVisibility(View.VISIBLE);
+		clBTDeleteRecord.setVisibility(View.VISIBLE);	
+	}
+	
+	private void processSaveClick(View view){
+		//取得Memo信息
+		EditText memotext = (EditText) findViewById(R.id.ET_main_Memo);
+		String strMemoText = memotext.getText().toString();
+		
+		//取得提醒信息 - zhu.t : 提醒信息已经保存在 m_clCRemindInfo中
+		     		
+		if( strMemoText.length()>0 )
+		{
+			//保存用户设定的Memo和提醒信息
+			if ( 0 == SaveEditData( strMemoText ) )
+			{
+//       			UpdateViewStatus();
+        		Toast toast = Toast.makeText(NoteWithYourMind.this, "保存成功", Toast.LENGTH_SHORT);
+        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+        		toast.show();
+        		NoteWithYourMind.this.finish();
+			}
+    		
+		}
+		//无输入信息
+		else
+		{
+			Toast toast = Toast.makeText(NoteWithYourMind.this, "请输入内容", Toast.LENGTH_SHORT);
+    		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+    		toast.show();
+		}
+	}
     
     //设置主画页中EditText的内容
 //    private void UpdateStatusOfMemoInfo( String detail, boolean bIsDisplayRemind )

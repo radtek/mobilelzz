@@ -47,11 +47,49 @@
 			/>
 	</LinearLayout>
 
+	<ImageView 
+	  android:id="@+id/IMG_B_BackGroud" 
+	  android:layout_width="fill_parent" 
+	  android:layout_height="wrap_content" 
+	  android:layout_below ="@id/CB_main_IsWarning"
+	  android:scaleType="fitXY" 
+	  android:src="@drawable/btn_back"/>
+	   
+	<Chronometer  android:id="@+id/rec_time"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below ="@id/CB_main_IsWarning"
+	    android:background = "@drawable/image_chrono" >
+	    </Chronometer>
+	    
+	<ProgressBar android:id="@+id/progress_horizontal"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf = "@id/rec_time"
+        android:layout_below = "@id/CB_main_IsWarning"
+        android:max="100"
+        android:progress="50"
+        android:secondaryProgress="75" />
+	 
+	<EditText
+		android:id="@+id/ET_main_Memo"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:textSize="22sp"
+		android:gravity = "top"
+		android:layout_above="@id/editnote_toolbar"
+		android:layout_below ="@id/IMG_B_BackGroud"
+		android:layout_marginLeft="3dip"
+		android:layout_marginRight="3dip"
+		android:layout_marginTop="5dip">
+	</EditText>
+	
 	<ImageButton 
 	  android:id="@+id/IMG_B_REC" 
 	  android:layout_width="wrap_content" 
 	  android:layout_height="wrap_content" 
-	  android:layout_below ="@id/CB_main_IsWarning"
+	  android:layout_above = "@id/ET_main_Memo"
 	  android:visibility = "gone"
 	  android:src="@drawable/record">
 	  </ImageButton>
@@ -60,9 +98,9 @@
 	  android:id="@+id/IMG_B_STOP" 
 	  android:layout_width="wrap_content" 
 	  android:layout_height="wrap_content" 
-	  android:layout_toRightOf ="@id/IMG_B_REC"
-	  android:layout_below ="@id/CB_main_IsWarning"
 	  android:visibility = "gone"
+	  android:layout_toRightOf ="@id/IMG_B_REC"
+	  android:layout_above = "@id/ET_main_Memo"
 	  android:src="@drawable/stop">
 	  </ImageButton>
 	  
@@ -71,8 +109,8 @@
 	  android:layout_width="wrap_content" 
 	  android:layout_height="wrap_content" 
 	  android:layout_toRightOf ="@id/IMG_B_STOP"
-	  android:layout_below ="@id/CB_main_IsWarning"
 	  android:visibility = "gone"
+	  android:layout_above = "@id/ET_main_Memo"
 	  android:src="@drawable/play">
 	  </ImageButton>
 	  
@@ -80,9 +118,9 @@
 	  android:id="@+id/IMG_B_DELETE" 
 	  android:layout_width="wrap_content" 
 	  android:layout_height="wrap_content" 
-	  android:layout_toRightOf="@id/IMG_B_PLAY"
-	  android:layout_below ="@id/CB_main_IsWarning"
 	  android:visibility = "gone"
+	  android:layout_toRightOf="@id/IMG_B_PLAY"
+	  android:layout_above = "@id/ET_main_Memo"
 	  android:src="@drawable/delete">
 	  </ImageButton>	
 	  

@@ -17,3 +17,13 @@ class CommonDefine{
 	public static int g_test = -1;
 	public static	CNoteDBCtrl		m_clCNoteDBCtrl = null;
 }
+
+class CommonContainer{
+	private boolean b1 = false;
+	public boolean getBOOL(){
+		return b1;
+	}
+	public void setBOOL(boolean b){
+		b1 = b;
+	}
+}

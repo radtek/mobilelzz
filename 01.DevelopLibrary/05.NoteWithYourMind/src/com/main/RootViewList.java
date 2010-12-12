@@ -16,7 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -36,8 +35,11 @@ implements ListActivityCtrl, View.OnClickListener
 	private CNoteDBCtrl		m_clCNoteDBCtrl;
 	private View m_toolBarLayout;
 	private int m_iContextMenu_DBID = CommonDefine.g_int_Invalid_ID;
-	private boolean m_bIsCommnetDisplay_more = false;
-	private boolean m_bIsCommnetDisplay_search = false;
+	private CommonContainer m_bIsCommnetDisplay_more;
+	private CommonContainer m_bIsCommnetDisplay_search;
+	
+	private View m_vSearchAnim = null;
+	private View m_vMoreAnim = null;
 //	public void onNewIntent(Intent intent){
 //		setIntent(intent);
 //	}
@@ -64,6 +66,13 @@ implements ListActivityCtrl, View.OnClickListener
 		setContentView(R.layout.rootviewlist);	
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
         
+        m_bIsCommnetDisplay_more = new CommonContainer();
+        m_bIsCommnetDisplay_more.setBOOL(false);
+        m_bIsCommnetDisplay_search = new CommonContainer();
+        m_bIsCommnetDisplay_search.setBOOL(false);
+        m_vSearchAnim  = RootViewList.this.findViewById(R.id.toolbar_search_dlg);
+        m_vMoreAnim  = RootViewList.this.findViewById(R.id.toolbar_more_dlg);
+        
         ListView list = (ListView) findViewById(R.id.rootviewlist_list);
         registerForContextMenu(list);
         View m_toolBarLayout = findViewById(R.id.rootviewlist_toolbar);
@@ -71,61 +80,18 @@ implements ListActivityCtrl, View.OnClickListener
         m_NoteListUICtrl.initializeSource();
         
         ImageButton clBTMemoNewFolder = (ImageButton) findViewById(R.id.rootviewlist_toolbar_newfolder);
-		clBTMemoNewFolder.setOnClickListener(new Button.OnClickListener(){
-        	public void onClick(View v)
-        	{  			
-        		PopUpNewFolderDlg(); 			
-        	}
-        });
+		clBTMemoNewFolder.setOnClickListener(this);
+		
 		ImageButton clBTMemoNewNote = (ImageButton) findViewById(R.id.rootviewlist_toolbar_newnote);
-        clBTMemoNewNote.setOnClickListener(new Button.OnClickListener(){
-        	public void onClick(View v)
-        	{  			
-        		Intent intent = new Intent(RootViewList.this, NoteWithYourMind.class);
-        		intent.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_New);
-        		intent.putExtra(NoteWithYourMind.ExtraData_OperationPreID, CMemoInfo.PreId_Root);
-        		startActivity(intent);
-        	}
-        });
+        clBTMemoNewNote.setOnClickListener(this);
+        
         ImageButton clBTMemoMore = (ImageButton) findViewById(R.id.rootviewlist_toolbar_more);
-        clBTMemoMore.setOnClickListener(new Button.OnClickListener(){
-        	public void onClick(View v)
-        	{  			
-				View vdlgback  = RootViewList.this.findViewById(R.id.toolbar_more_dlg);
-				if(!m_bIsCommnetDisplay_more){
-					m_bIsCommnetDisplay_more = true;
-					vdlgback.setVisibility(View.VISIBLE);
-					Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commentout);
-					vdlgback.startAnimation(anim);
-				}else{
-					m_bIsCommnetDisplay_more=false;
-					Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commenthide);
-					vdlgback.startAnimation(anim);
-					vdlgback.setVisibility(View.GONE);
-				}
-        	}
-        });
+        clBTMemoMore.setOnClickListener(this);
         Button clBTMemoMore_delete = (Button) findViewById(R.id.toolbar_more_dlg_delete);
         clBTMemoMore_delete.setOnClickListener(this);
         
         ImageButton clBTMemoSearch = (ImageButton) findViewById(R.id.rootviewlist_toolbar_search);
-        clBTMemoSearch.setOnClickListener(new Button.OnClickListener(){
-        	public void onClick(View v)
-        	{  			
-				View vdlgback  = RootViewList.this.findViewById(R.id.toolbar_search_dlg);
-				if(!m_bIsCommnetDisplay_search){
-					m_bIsCommnetDisplay_search = true;
-					vdlgback.setVisibility(View.VISIBLE);
-					Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commentdisplay_left_bottom);
-					vdlgback.startAnimation(anim);
-				}else{
-					m_bIsCommnetDisplay_search=false;
-					Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commenthide_left_bottom);
-					vdlgback.startAnimation(anim);
-					vdlgback.setVisibility(View.GONE);
-				}
-        	}
-        });
+        clBTMemoSearch.setOnClickListener(this);
         Button clBTMemoSearch_remind = (Button) findViewById(R.id.toolbar_search_dlg_remind);
         clBTMemoSearch_remind.setOnClickListener(this);
 	}
@@ -157,23 +123,60 @@ implements ListActivityCtrl, View.OnClickListener
 	public void onClick(View view){
 		switch(view.getId()){
 		case R.id.toolbar_more_dlg_delete:
-			m_bIsCommnetDisplay_more=false;
-			View vdlgback  = RootViewList.this.findViewById(R.id.toolbar_more_dlg);
-	        Animation anim = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commenthide);
-	        vdlgback.startAnimation(anim);
-	        vdlgback.setVisibility(View.GONE);
+			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
 		    break;
 		case R.id.toolbar_more_dlg_move:
 			break;
 		case R.id.toolbar_search_dlg_remind:
-			m_bIsCommnetDisplay_search=false;
-			View vdlgback1  = RootViewList.this.findViewById(R.id.toolbar_search_dlg);
-	        Animation anim1 = AnimationUtils.loadAnimation(RootViewList.this, R.anim.commenthide_left_bottom);
-	        vdlgback1.startAnimation(anim1);
-	        vdlgback1.setVisibility(View.GONE);
+			executeAnimation(m_vSearchAnim, R.anim.commentdisplay_left_bottom, R.anim.commenthide_left_bottom, m_bIsCommnetDisplay_search);
+			break;
+		case R.id.rootviewlist_toolbar_newfolder:
+			processNewFolderClick(view);
+			break;
+		case R.id.rootviewlist_toolbar_newnote:
+			processNewNoteClick(view);
+			break;
+		case R.id.rootviewlist_toolbar_more:
+			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
+			break;
+		case R.id.rootviewlist_toolbar_search:
+			executeAnimation(m_vSearchAnim, R.anim.commentdisplay_left_bottom, R.anim.commenthide_left_bottom, m_bIsCommnetDisplay_search);
 			break;
 		default:
 		}
+	}
+
+	private void executeAnimation(View view2BeExe, int iDisplayAnimID, int iHideAnimID, CommonContainer bIsAnimExecuting ){
+		if(!bIsAnimExecuting.getBOOL()){
+			bIsAnimExecuting.setBOOL(true);
+			view2BeExe.setVisibility(View.VISIBLE);
+			Animation anim = AnimationUtils.loadAnimation(RootViewList.this, iDisplayAnimID);
+			view2BeExe.startAnimation(anim);
+		}else{
+			bIsAnimExecuting.setBOOL(false);
+			Animation anim = AnimationUtils.loadAnimation(RootViewList.this, iHideAnimID);
+			view2BeExe.startAnimation(anim);
+			view2BeExe.setVisibility(View.GONE);
+		}
+	}
+	
+	private void processSearchClick(View view){
+
+	}
+	
+	private void processMoreClick(View view){
+
+	}
+	
+	private void processNewNoteClick(View view){
+		Intent intent = new Intent(RootViewList.this, NoteWithYourMind.class);
+		intent.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_New);
+		intent.putExtra(NoteWithYourMind.ExtraData_OperationPreID, CMemoInfo.PreId_Root);
+		startActivity(intent);
+	}
+	
+	private void processNewFolderClick(View view){
+		PopUpNewFolderDlg();
 	}
 	
 	public void updateToolbar(CommonDefine.ToolbarStatusEnum enStatus){

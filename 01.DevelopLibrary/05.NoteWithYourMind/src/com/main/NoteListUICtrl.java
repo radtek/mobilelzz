@@ -2,6 +2,7 @@
 package com.main;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import com.main.NoteListCursorAdapter.ItemDetail;
 
@@ -11,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.opengl.Visibility;
 import android.text.TextPaint;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -27,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-class NoteListUICtrl{
+class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickListener{
 	private enum MoveIn_State{
 		MoveIn_Invalid,
 		MoveIn_SelectMoveItem,
@@ -63,167 +66,190 @@ class NoteListUICtrl{
 		m_dlgFolderList = null;
 	}
 	
+	public void onClick(View view){
+		switch(view.getId()){
+		case R.id.toolbar_delete:
+			processDeleteClick(view);
+		    break;
+		case R.id.toolbar_move:
+			processMoveClick(view);
+			break;
+		case R.id.toolbar_cancel:
+			processCancelClick(view);
+			break;
+		default:
+		}
+	}
+	
+	public void processDeleteClick(View view){
+		if(!m_bIsDelete)
+		{
+			m_bIsDelete = true;
+			updateToolBar();
+			updateListData(CommonDefine.g_int_Invalid_ID);
+		}	
+		else
+		{
+			//delete rec--->
+			ArrayList<Integer> alIDs = new ArrayList<Integer>();
+			findSelectItemDBID(alIDs);
+			if(alIDs.size()>0){
+				Integer[] needDeleteIDs = (Integer[])alIDs.toArray(new Integer[0]);
+    			m_clCNoteDBCtrl.Delete(needDeleteIDs);
+				CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
+				clCRemindOperator.disableRemind( m_sourceManager, needDeleteIDs );
+			}
+			Return2TargetList();
+			updateListData(CommonDefine.g_int_Invalid_ID);
+		}
+	}
+	
+	public void processMoveClick(View view){
+		if(m_MoveIn_State == MoveIn_State.MoveIn_Invalid)
+		{
+			m_MoveIn_State = MoveIn_State.MoveIn_SelectMoveItem;
+			//update toolbar
+			updateToolBar();
+			updateListData(CommonDefine.g_int_Invalid_ID);
+		}	
+		else if(m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem)
+		{
+			m_MoveIn_State = MoveIn_State.MoveIn_SelectFolder;
+			ArrayList<Integer> alIDs = new ArrayList<Integer>();
+			findSelectItemDBID(alIDs);
+			if(alIDs.size()<=0){
+				m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
+				Return2TargetList();
+				updateListData(CommonDefine.g_int_Invalid_ID);
+        		return;
+			}
+			//show folder to select rec--->
+			LayoutInflater factory = LayoutInflater.from(m_sourceManager);
+			final View DialogView = factory.inflate(R.layout.folderlist, null);
+			
+			m_dlgFolderList = new AlertDialog.Builder(m_sourceManager)
+				.setTitle("请选择文件夹")
+				.setView(DialogView)
+				.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int i)
+					{
+						m_MoveIn_State = MoveIn_State.MoveIn_SelectMoveItem;
+						dialog.cancel();
+					}
+				})
+				.create();
+			ListView folderList = (ListView) DialogView.findViewById(R.id.folderlist_view);
+			if(m_iPreID!=CMemoInfo.PreId_Root){
+				TextView tvRootFolder = new TextView(m_sourceManager);
+				tvRootFolder.setText("根目录");
+				tvRootFolder.setPadding(2, 0, 0, 0);
+				tvRootFolder.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
+				tvRootFolder.setHeight(CommonDefine.g_int_ListItemHeight);
+				tvRootFolder.setTextColor(Color.WHITE);       				
+				TextPaint tp = tvRootFolder.getPaint(); 
+				tp.setFakeBoldText(true); 
+				folderList.addHeaderView(tvRootFolder);
+			}
+			Cursor cursorFolderList	=	m_clCNoteDBCtrl.getMemoFolderInRoot();
+			m_sourceManager.startManagingCursor(cursorFolderList);
+			if(cursorFolderList.getCount()>0){
+    			if(cursorFolderList!=null){
+    				ListAdapter LA_FolderList = new SimpleCursorAdapter(
+    						m_sourceManager,
+    						android.R.layout.simple_list_item_1,
+    						cursorFolderList,
+    						new String[]{CNoteDBCtrl.KEY_detail},
+    						new int[]{android.R.id.text1}
+    						);
+    				folderList.setAdapter(LA_FolderList);
+    			} 
+			}else{
+				Toast toast = Toast.makeText(m_sourceManager, "当前没有可以移动到的文件夹\n请先建立文件夹", Toast.LENGTH_LONG);
+        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+        		toast.show();
+			}
+			
+			folderList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3){
+					ListAdapter LA = (ListAdapter)arg0.getAdapter();
+					long id = LA.getItemId(arg2);
+					if(id<0){
+						id = 0;
+					}
+					ArrayList<Integer> alIDs = new ArrayList<Integer>();
+					findSelectItemDBID(alIDs);
+					Move2Folder(alIDs, (int)id);
+            		m_dlgFolderList.cancel();
+            		Return2TargetList();
+            		updateListData(CommonDefine.g_int_Invalid_ID);
+				}
+			});
+			m_dlgFolderList.show();      			
+		}else{
+			
+		}
+	}
+	
+	private void processCancelClick(View view){
+		Return2TargetList();
+		updateListData(CommonDefine.g_int_Invalid_ID);
+	}
+	
+	public void onItemClick(AdapterView<?> arg0, View arg1,
+			int arg2, long arg3){
+		if(m_bIsDelete||m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
+			CheckBox cb = (CheckBox) arg1.findViewById(R.id.notelistitem_noteselect);
+			if((cb!=null)&&(cb.getVisibility()==View.VISIBLE)){
+				((View)cb).performClick();
+			}
+		}else{
+			NoteListCursorAdapter LA = (NoteListCursorAdapter)arg0.getAdapter();
+			Cursor cur = LA.getCursor();
+			cur.moveToPosition(arg2);
+			int iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_type);
+			int iValue = cur.getInt(iIndex);
+			iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_id);
+			int iIDValue = cur.getInt(iIndex);
+			if(iValue == CMemoInfo.Type_Folder){
+				boolean bIntent = true;
+				int iEncodeIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_isencode);
+				int iEncodeValue = cur.getInt(iEncodeIndex);
+				if(iEncodeValue==CMemoInfo.IsEncode_Yes){
+					if(!CommonDefine.g_bool_IsPassWordChecked){
+						confirmPassword(iIDValue);
+						bIntent = false;
+					}
+				}else{
+				}
+				if(bIntent){
+					Intent intent = new Intent();
+					intent.setClass(m_sourceManager, FolderViewList.class);							
+					intent.putExtra(FolderViewList.ExtraData_FolderDBID, iIDValue);
+					m_sourceManager.startActivity(intent);
+				}
+			}else if(iValue == CMemoInfo.Type_Memo){
+				Intent toNew = new Intent();
+        		toNew.setClass(m_sourceManager, NoteWithYourMind.class);
+        		toNew.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Edit);
+        		toNew.putExtra(NoteWithYourMind.ExtraData_EditNoteID, iIDValue);
+        			        		
+        		m_sourceManager.startActivity(toNew);
+			}else{
+				
+			}
+		}
+	}
 	public void initializeSource(){
 		updateListData(CommonDefine.g_int_Invalid_ID);
 		m_targetList.setDividerHeight(3);
-		m_targetList.setOnItemClickListener(new OnItemClickListener(){
-			public void onItemClick(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				if(m_bIsDelete||m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
-					CheckBox cb = (CheckBox) arg1.findViewById(R.id.notelistitem_noteselect);
-					if((cb!=null)&&(cb.getVisibility()==View.VISIBLE)){
-						((View)cb).performClick();
-					}
-				}else{
-					NoteListCursorAdapter LA = (NoteListCursorAdapter)arg0.getAdapter();
-					Cursor cur = LA.getCursor();
-					cur.moveToPosition(arg2);
-					int iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_type);
-					int iValue = cur.getInt(iIndex);
-					iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_id);
-					int iIDValue = cur.getInt(iIndex);
-					if(iValue == CMemoInfo.Type_Folder){
-						Intent intent = new Intent();
-						intent.setClass(m_sourceManager, FolderViewList.class);							
-						intent.putExtra(FolderViewList.ExtraData_FolderDBID, iIDValue);
-						m_sourceManager.startActivity(intent);
-					}else if(iValue == CMemoInfo.Type_Memo){
-						Intent toNew = new Intent();
-		        		toNew.setClass(m_sourceManager, NoteWithYourMind.class);
-		        		toNew.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Edit);
-		        		toNew.putExtra(NoteWithYourMind.ExtraData_EditNoteID, iIDValue);
-		        			        		
-		        		m_sourceManager.startActivity(toNew);
-					}else{
-						
-					}
-				}
-			}
-		});
+		m_targetList.setOnItemClickListener(this);
 		ImageButton clBTMemoDelete = (ImageButton) m_toolBarLayout.findViewById(R.id.toolbar_delete);
-		clBTMemoDelete.setOnClickListener(new Button.OnClickListener(){
-        	public void onClick(View v)
-        	{
-        		if(!m_bIsDelete)
-        		{
-        			m_bIsDelete = true;
-        			updateToolBar();
-        			updateListData(CommonDefine.g_int_Invalid_ID);
-        		}	
-        		else
-        		{
-        			//delete rec--->
-        			ArrayList<Integer> alIDs = new ArrayList<Integer>();
-        			findSelectItemDBID(alIDs);
-        			if(alIDs.size()>0){
-        				Integer[] needDeleteIDs = (Integer[])alIDs.toArray(new Integer[0]);
-            			m_clCNoteDBCtrl.Delete(needDeleteIDs);
-						CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-						clCRemindOperator.disableRemind( m_sourceManager, needDeleteIDs );
-        			}
-        			Return2TargetList();
-        			updateListData(CommonDefine.g_int_Invalid_ID);
-        		}
-        	}
-        });
+		clBTMemoDelete.setOnClickListener(this);
 		
 		ImageButton clBTMemoMoveIn = (ImageButton) m_toolBarLayout.findViewById(R.id.toolbar_move);
-		clBTMemoMoveIn.setOnClickListener(new Button.OnClickListener(){
-        	public void onClick(View v)
-        	{
-        		if(m_MoveIn_State == MoveIn_State.MoveIn_Invalid)
-        		{
-        			m_MoveIn_State = MoveIn_State.MoveIn_SelectMoveItem;
-        			//update toolbar
-        			updateToolBar();
-        			updateListData(CommonDefine.g_int_Invalid_ID);
-        		}	
-        		else if(m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem)
-        		{
-        			m_MoveIn_State = MoveIn_State.MoveIn_SelectFolder;
-        			ArrayList<Integer> alIDs = new ArrayList<Integer>();
-        			findSelectItemDBID(alIDs);
-        			if(alIDs.size()<=0){
-        				m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
-        				Return2TargetList();
-        				updateListData(CommonDefine.g_int_Invalid_ID);
-                		return;
-        			}
-        			//show folder to select rec--->
-        			LayoutInflater factory = LayoutInflater.from(m_sourceManager);
-        			final View DialogView = factory.inflate(R.layout.folderlist, null);
-        			
-        			m_dlgFolderList = new AlertDialog.Builder(m_sourceManager)
-        				.setTitle("请选择文件夹")
-        				.setView(DialogView)
-        				.setNegativeButton("取消",new DialogInterface.OnClickListener(){
-        					public void onClick(DialogInterface dialog, int i)
-        					{
-        						m_MoveIn_State = MoveIn_State.MoveIn_SelectMoveItem;
-        						dialog.cancel();
-        					}
-        				})
-        				.create();
-        			ListView folderList = (ListView) DialogView.findViewById(R.id.folderlist_view);
-        			if(m_iPreID!=CMemoInfo.PreId_Root){
-        				TextView tvRootFolder = new TextView(m_sourceManager);
-        				tvRootFolder.setText("根目录");
-        				tvRootFolder.setPadding(2, 0, 0, 0);
-        				tvRootFolder.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
-        				tvRootFolder.setHeight(CommonDefine.g_int_ListItemHeight);
-        				tvRootFolder.setTextColor(Color.WHITE);       				
-        				TextPaint tp = tvRootFolder.getPaint(); 
-        				tp.setFakeBoldText(true); 
-        				folderList.addHeaderView(tvRootFolder);
-        			}
-        			Cursor cursorFolderList	=	m_clCNoteDBCtrl.getMemoFolderInRoot();
-        			m_sourceManager.startManagingCursor(cursorFolderList);
-        			if(cursorFolderList.getCount()>0){
-            			if(cursorFolderList!=null){
-            				ListAdapter LA_FolderList = new SimpleCursorAdapter(
-            						m_sourceManager,
-            						android.R.layout.simple_list_item_1,
-            						cursorFolderList,
-            						new String[]{CNoteDBCtrl.KEY_detail},
-            						new int[]{android.R.id.text1}
-            						);
-            				folderList.setAdapter(LA_FolderList);
-            			} 
-        			}else{
-        				Toast toast = Toast.makeText(m_sourceManager, "当前没有可以移动到的文件夹\n请先建立文件夹", Toast.LENGTH_LONG);
-	            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-	            		toast.show();
-        			}
-        			
-        			folderList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-        				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3){
-        					ListAdapter LA = (ListAdapter)arg0.getAdapter();
-        					long id = LA.getItemId(arg2);
-        					if(id<0){
-        						id = 0;
-        					}
-        					ArrayList<Integer> alIDs = new ArrayList<Integer>();
-        					findSelectItemDBID(alIDs);
-        					Move2Folder(alIDs, (int)id);
-                    		m_dlgFolderList.cancel();
-                    		Return2TargetList();
-                    		updateListData(CommonDefine.g_int_Invalid_ID);
-        				}
-        			});
-        			m_dlgFolderList.show();      			
-        		}else{
-        			
-        		}
-        	}
-        });
+		clBTMemoMoveIn.setOnClickListener(this);
 		ImageButton clBTMemoCancel = (ImageButton) m_toolBarLayout.findViewById(R.id.toolbar_cancel);
-		clBTMemoCancel.setOnClickListener(new Button.OnClickListener(){
-        	public void onClick(View v)
-        	{
-        		Return2TargetList();
-        		updateListData(CommonDefine.g_int_Invalid_ID);
-         	}
-        });
+		clBTMemoCancel.setOnClickListener(this);
 
 	}
 	
@@ -232,11 +258,13 @@ class NoteListUICtrl{
 		ImageButton btCancel = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_cancel);
 		ImageButton btMove = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_move);
 		if(m_bIsDelete){		
+			btDelete.setVisibility(View.VISIBLE);
 			btMove.setVisibility(View.GONE);
 			//btDelete.setBackgroundResource(R.drawable.buttonshape);
 			btCancel.setVisibility(View.VISIBLE);
 			((ListActivityCtrl)m_sourceManager).updateToolbar(CommonDefine.ToolbarStatusEnum.ToolbarStatus_Delete);
-		}else if(m_MoveIn_State==MoveIn_State.MoveIn_SelectMoveItem){		
+		}else if(m_MoveIn_State==MoveIn_State.MoveIn_SelectMoveItem){	
+			btMove.setVisibility(View.VISIBLE);
 			btDelete.setVisibility(View.GONE);	
 			//btMove.setBackgroundResource(R.drawable.buttonshape);
 			btCancel.setVisibility(View.VISIBLE);
@@ -260,6 +288,8 @@ class NoteListUICtrl{
 			}
 			if(m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
 				m_myAdapter.setFolderSelectable(false);
+			}else{
+				m_myAdapter.setFolderSelectable(true);
 			}
 			m_myAdapter.updateCursor();
 			m_myAdapter.notifyDataSetChanged();
@@ -318,5 +348,46 @@ class NoteListUICtrl{
 			m_clCNoteDBCtrl.Update(iId, clRec);
 		}
 	}
-	
+	private void confirmPassword(int iDBRecID){
+		final int DBID = iDBRecID;
+		LayoutInflater factory = LayoutInflater.from(m_sourceManager);
+		final View DialogView = factory.inflate(R.layout.dialog_encodesetting, null);
+
+		AlertDialog clDlgChangeFolder = new AlertDialog.Builder(m_sourceManager)	
+				.setTitle("请输入确认密码")
+				.setView(DialogView)
+				.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int i)
+					{
+						EditText PassWord = (EditText) DialogView.findViewById(R.id.ET_encodesetting);
+						String strNewPassWord = PassWord.getText().toString();
+		        		if(strNewPassWord.length()>0){
+							if(strNewPassWord.equals(CommonDefine.g_str_PassWord)){
+								CommonDefine.g_bool_IsPassWordChecked = true; 
+								Intent intent = new Intent();
+								intent.setClass(m_sourceManager, FolderViewList.class);							
+								intent.putExtra(FolderViewList.ExtraData_FolderDBID, DBID);
+								m_sourceManager.startActivity(intent);	
+								dialog.cancel();
+							}else{
+			        			Toast toast = Toast.makeText(m_sourceManager, "密码错误!请重新输入", Toast.LENGTH_SHORT);
+			            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+			            		toast.show();
+							}
+		        		}else{
+		        			Toast toast = Toast.makeText(m_sourceManager, "请输入确认密码", Toast.LENGTH_SHORT);
+		            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+		            		toast.show();
+		        		}
+					}
+				})
+				.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int i)
+					{
+						dialog.cancel();
+					}
+				})
+				.create();
+			clDlgChangeFolder.show();
+	}
 }

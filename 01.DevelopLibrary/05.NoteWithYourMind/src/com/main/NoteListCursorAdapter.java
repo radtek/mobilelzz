@@ -118,10 +118,16 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		 * 如果是正常状态
 		 * 		将CheckBox隐藏，将日期控件显示
 		 */
+		int iEncodeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
+		int iEncodeFlag = cursor.getInt(iEncodeIndex);
 		if(m_isSelectableStyle){
 			boolean bDisplay = true;
 			if(iTypeValue==CMemoInfo.Type_Folder){
 				if(m_isFolderSelectable){
+					if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
+						bDisplay=false;
+					}else{
+					}
 				}else{
 					bDisplay = false;
 				}
@@ -163,8 +169,6 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		if(iTypeValue==CMemoInfo.Type_Folder){
 			itemdetail.bIsFolder = true;
 			icon1.setBackgroundResource(R.drawable.notelistitem_icon_folder);
-			int iEncodeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
-			int iEncodeFlag = cursor.getInt(iEncodeIndex);
 			if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
 				icon2.setBackgroundResource(R.drawable.notelistitem_icon_lock);
 				icon3.setBackgroundDrawable(null);

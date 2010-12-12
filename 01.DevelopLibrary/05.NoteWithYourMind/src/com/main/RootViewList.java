@@ -125,10 +125,15 @@ implements ListActivityCtrl, View.OnClickListener
 		super.onDestroy();
 	}
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && (CommonDefine.m_iBackCount == 0)) { 
-        	CommonDefine.m_iBackCount++;
-        	m_NoteListUICtrl.processCancelClick(null);
-            return true; 
+		if ((keyCode == KeyEvent.KEYCODE_BACK) && (CommonDefine.m_iBackCount == 0)) { 
+        	if(CommonDefine.g_enToolbarStatus!=CommonDefine.ToolbarStatusEnum.ToolbarStatus_Normal){
+        		CommonDefine.m_iBackCount++;
+            	m_NoteListUICtrl.processCancelClick(null);
+                return true;	
+        	}else{
+        		CommonDefine.m_iBackCount=0;
+        		return super.onKeyDown(keyCode, event); 
+        	}
         } 
     	CommonDefine.m_iBackCount=0;
         return super.onKeyDown(keyCode, event); 

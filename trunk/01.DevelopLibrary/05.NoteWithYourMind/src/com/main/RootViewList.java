@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -123,7 +124,15 @@ implements ListActivityCtrl, View.OnClickListener
 	{
 		super.onDestroy();
 	}
-	
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && (CommonDefine.m_iBackCount == 0)) { 
+        	CommonDefine.m_iBackCount++;
+        	m_NoteListUICtrl.processCancelClick(null);
+            return true; 
+        } 
+    	CommonDefine.m_iBackCount=0;
+        return super.onKeyDown(keyCode, event); 
+    }
 	public void onClick(View view){
 		switch(view.getId()){
 		case R.id.toolbar_more_dlg_delete:

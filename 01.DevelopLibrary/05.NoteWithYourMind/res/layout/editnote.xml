@@ -18,7 +18,8 @@
 		android:layout_marginBottom="5.0px" 
 		android:editable="false"
 		android:imeOptions="actionGo"
-		android:layout_alignParentTop="true"  />
+		android:layout_alignParentTop="true">
+		</EditText>
 	<LinearLayout
 	android:id="@+id/editnote_toolbar"
 	android:orientation="horizontal"
@@ -124,19 +125,6 @@
 	  android:src="@drawable/delete">
 	  </ImageButton>	
 	  
-	<EditText
-		android:id="@+id/ET_main_Memo"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:textSize="22sp"
-		android:gravity = "top"
-		android:layout_above="@id/editnote_toolbar"
-		android:layout_below="@+id/IMG_B_PLAY"
-		android:layout_marginLeft="3dip"
-		android:layout_marginRight="3dip"
-		android:layout_marginTop="5dip"
-		android:background="@null"
-	>
-	</EditText>
+
 </RelativeLayout>
 

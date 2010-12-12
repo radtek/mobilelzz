@@ -100,7 +100,6 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		int iTypeValue = cursor.getInt(iTypeIndex);
 		int iDetailIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_detail);
 		String sDetail = cursor.getString(iDetailIndex);
-		tV.setText(sDetail);
 		
 		ItemDetail itemdetail = new ItemDetail();
 		itemdetail.vView = view;
@@ -135,7 +134,7 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 			}
 			if(bDisplay){
 				cbView.setVisibility(View.VISIBLE);
-				tvDate.setVisibility(View.GONE);
+				//tvDate.setVisibility(View.GONE);
 				//update CheckBox Status-begin
 				//根据保存的当前记录的选择状态，更新CheckBox
 				ItemSelectResult result = m_ListItemSelectResult.get(String.valueOf(iIDValue));
@@ -147,11 +146,10 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 				//update CheckBox Status-end
 			}else{
 				cbView.setVisibility(View.GONE);
-				tvDate.setVisibility(View.VISIBLE);
 			}
 		}else{
 			cbView.setVisibility(View.GONE);
-			tvDate.setVisibility(View.VISIBLE);
+			//tvDate.setVisibility(View.VISIBLE);
 		}
 		/*step2更新LittleIcon
 		 * 如果是文件夹
@@ -167,6 +165,10 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		Button icon2 = (Button) view.findViewById(R.id.notelistitem_icon2);
 		Button icon3 = (Button) view.findViewById(R.id.notelistitem_icon3);
 		if(iTypeValue==CMemoInfo.Type_Folder){
+			long Count = CommonDefine.m_clCNoteDBCtrl.getRecCountInFolder(iIDValue);
+			String strCount = "("+String.valueOf(Count)+")";
+			tvDate.setText(strCount);
+
 			itemdetail.bIsFolder = true;
 			icon1.setBackgroundResource(R.drawable.notelistitem_icon_folder);
 			if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
@@ -179,6 +181,7 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 				itemdetail.bIsEncode = false;
 			}
 		}else{
+			tvDate.setText("");
 			icon1.setBackgroundResource(R.drawable.notelistitem_icon_text);
 			int isRemindIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isremind);
 			int isRemindValue = cursor.getInt(isRemindIndex);
@@ -212,6 +215,8 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 
 		//建立Item控件和对应的DB记录信息的对应关系
 		m_ListItemDetail.put(view, itemdetail);
+		
+		tV.setText(sDetail);
 	}
  
 	@Override

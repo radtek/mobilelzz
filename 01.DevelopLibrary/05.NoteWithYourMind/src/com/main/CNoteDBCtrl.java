@@ -29,6 +29,8 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	public static final String	KEY_friday				= "friday";
 	public static final String	KEY_staturday			= "staturday";
 	public static final String	KEY_sunday				= "sunday";
+	
+	public static final String	KEY_rec_count_in_folder = "reccountinfolder";
 	// 数据库名称为data
 	private static final String	DB_NAME			= "NoteWithYourMind.db";
 	
@@ -98,6 +100,16 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 //	{
 //		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? order by "+KEY_type+" asc", new String[]{String.valueOf(0)});
 //	}
+	public long getRecCountInFolder(int iFolderDBID){
+		long iCount = 0;
+		Cursor cur = m_db.rawQuery("select count(*) AS "+KEY_rec_count_in_folder+" from "+DB_TABLE+" where "+KEY_preid+"=?", 
+				new String[]{String.valueOf(iFolderDBID)});
+		cur.moveToFirst();
+		int iIndex = cur.getColumnIndex(KEY_rec_count_in_folder);
+		iCount = cur.getLong(iIndex);
+		cur.close();
+		return iCount;
+	}
 	
 	public	Cursor	getMemoFolderInRoot()
 	{

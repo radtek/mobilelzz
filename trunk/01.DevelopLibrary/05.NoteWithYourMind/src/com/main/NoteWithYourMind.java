@@ -343,7 +343,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
       mMediaRecorder01 = null;
      
       clBTStopRecord.setEnabled(false);
-
+      clBTPlayRecord.setEnabled(true);
       isStopRecord = true;
       
     }
@@ -359,41 +359,40 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
               return;
             }
 	  		 
-	        String AudioDir = SdCardDir.toString() + "//note//record";   
+	        String AudioDir = SdCardDir.toString() + "//note";   
 	        myRecAudioDir = new File(AudioDir);
 	        if(!myRecAudioDir.exists())
 	        {
+//	        	Toast.makeText(NoteWithYourMind.this, "目录不存在",Toast.LENGTH_SHORT).show();
 	        	myRecAudioDir.mkdir();
 	        }
-  	        
+//	        Toast.makeText(NoteWithYourMind.this, "目录存在",Toast.LENGTH_SHORT).show();
 	 	    Date d = new Date();
 	        d.toString();
 	        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddkkmmss");
 	        String filename = sdf.format(d);    	        
 	       // Log.d("zds", filename);    	        
-
+//	        Toast.makeText(NoteWithYourMind.this, filename,Toast.LENGTH_SHORT).show();
             myRecAudioFile = File.createTempFile(filename, ".amr", myRecAudioDir);
-  		 	        		 
+//          Toast.makeText(NoteWithYourMind.this, "createTempFile",Toast.LENGTH_SHORT).show();
             mMediaRecorder01 = new MediaRecorder();
             mMediaRecorder01.setAudioSource(MediaRecorder.AudioSource.MIC);
             mMediaRecorder01.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
             mMediaRecorder01.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
                 
             mMediaRecorder01.setOutputFile(myRecAudioFile.getAbsolutePath());
+            Toast.makeText(NoteWithYourMind.this, "setOutputFile",Toast.LENGTH_SHORT).show();
             mMediaRecorder01.prepare();
             mMediaRecorder01.start();
             
-  
+            Toast.makeText(NoteWithYourMind.this, "start",Toast.LENGTH_SHORT).show();
             chronometer.setBase(SystemClock.elapsedRealtime());
             chronometer.start();
-
-
+            Toast.makeText(NoteWithYourMind.this, "chronometer--start",Toast.LENGTH_SHORT).show();
             clBTStopRecord.setEnabled(true);
             clBTPlayRecord.setEnabled(false);
             clBTDeleteRecord.setEnabled(false);
-
             isStopRecord = false;
-
           }catch (IOException e)
           {
             e.printStackTrace();

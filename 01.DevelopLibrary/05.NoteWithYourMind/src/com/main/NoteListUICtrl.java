@@ -190,7 +190,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		}
 	}
 	
-	private void processCancelClick(View view){
+	public void processCancelClick(View view){
 		Return2TargetList();
 		updateListData(CommonDefine.g_int_Invalid_ID);
 	}

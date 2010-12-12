@@ -7,6 +7,7 @@ class CommonDefine{
 		ToolbarStatus_Delete,
 		ToolbarStatus_Move
 	}
+	public static ToolbarStatusEnum g_enToolbarStatus = ToolbarStatusEnum.ToolbarStatus_Normal;
 	public static int g_int_Invalid_ID = -1;
 	public static int g_int_ListItemHeight = 65;
 	public static String g_str_PassWord = "";
@@ -17,6 +18,7 @@ class CommonDefine{
 	public static boolean g_bIsRemind = false;
 	public static int g_test = -1;
 	public static	CNoteDBCtrl		m_clCNoteDBCtrl = null;
+	public static int m_iBackCount = 0;
 }
 
 class CommonContainer{

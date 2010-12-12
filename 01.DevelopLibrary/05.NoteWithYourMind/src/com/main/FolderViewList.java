@@ -21,6 +21,7 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -68,6 +69,15 @@ public class FolderViewList extends Activity implements ListActivityCtrl
 	{
 		super.onStop();
 	}
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && (CommonDefine.m_iBackCount == 0)) { 
+        	CommonDefine.m_iBackCount++;
+        	m_NoteListUICtrl.processCancelClick(null);
+            return true; 
+        } 
+    	CommonDefine.m_iBackCount=0;
+        return super.onKeyDown(keyCode, event); 
+    }
 	public void onResume()
 	{
 		super.onResume();
@@ -79,6 +89,7 @@ public class FolderViewList extends Activity implements ListActivityCtrl
 	
 	public void updateToolbar(CommonDefine.ToolbarStatusEnum enStatus){
 		ImageButton btNewNote = (ImageButton)m_toolBarLayout.findViewById(R.id.folderviewlist_toolbar_newnote);
+		CommonDefine.g_enToolbarStatus = enStatus;
 		if(enStatus == CommonDefine.ToolbarStatusEnum.ToolbarStatus_Normal){
 			ImageButton btDelete = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_delete);
 			ImageButton btCancel = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_cancel);

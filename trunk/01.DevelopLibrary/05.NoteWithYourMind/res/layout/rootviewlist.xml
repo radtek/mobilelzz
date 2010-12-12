@@ -35,17 +35,17 @@
 			<ImageButton
 				android:id="@+id/toolbar_delete"
 				style="@style/ToolBarButton"
-				android:text="删除"
+				android:src="@drawable/toolbar_delete"
 				android:visibility="gone"/>
 			<ImageButton
 				android:id="@+id/toolbar_move"
 				style="@style/ToolBarButton"
-				android:text="移动"
+				android:src="@drawable/toolbar_move"
 				android:visibility="gone"/>
 			<ImageButton
 				android:id="@+id/toolbar_cancel"
 				style="@style/ToolBarButton"
-				android:text="取消"
+				android:src="@drawable/toolbar_cancel"
 				android:visibility="gone"/>
 		</LinearLayout>
 		<ListView 
@@ -86,7 +86,7 @@
 		  android:background="@drawable/toolbar_more_move"
 		/>
 		<Button
-		  android:id="@+id/toolbar_more_dlg_move"
+		  android:id="@+id/toolbar_more_dlg_setpassword"
 		  android:layout_width="wrap_content"
 		  android:layout_height="wrap_content"
 		  android:layout_marginLeft="5dp"

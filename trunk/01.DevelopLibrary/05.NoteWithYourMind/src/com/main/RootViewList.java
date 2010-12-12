@@ -52,15 +52,15 @@ implements ListActivityCtrl, View.OnClickListener
 			CommonDefine.m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
 		}
         m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
-//    	Cursor	curPassWord	=	m_clCNoteDBCtrl.getPassWord();
-//        curPassWord.moveToFirst();
-//		int count = curPassWord.getCount();
-//    	if ( count > 0 )
-//    	{	
-//			int index = curPassWord.getColumnIndex(CNoteDBCtrl.KEY_password);
-//			CommonDefine.g_str_PassWord = curPassWord.getString(index);					
-//		}
-//    	curPassWord.close();
+    	Cursor	curPassWord	=	m_clCNoteDBCtrl.getPassWord();
+        curPassWord.moveToFirst();
+		int count = curPassWord.getCount();
+    	if ( count > 0 )
+    	{	
+			int index = curPassWord.getColumnIndex(CNoteDBCtrl.KEY_password);
+			CommonDefine.g_str_PassWord = curPassWord.getString(index);					
+		}
+    	curPassWord.close();
         
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.rootviewlist);	
@@ -75,7 +75,7 @@ implements ListActivityCtrl, View.OnClickListener
         
         ListView list = (ListView) findViewById(R.id.rootviewlist_list);
         registerForContextMenu(list);
-        View m_toolBarLayout = findViewById(R.id.rootviewlist_toolbar);
+        m_toolBarLayout = findViewById(R.id.rootviewlist_toolbar);
         m_NoteListUICtrl = new NoteListUICtrl(this, list, CMemoInfo.PreId_Root, m_toolBarLayout);
         m_NoteListUICtrl.initializeSource();
         
@@ -89,6 +89,10 @@ implements ListActivityCtrl, View.OnClickListener
         clBTMemoMore.setOnClickListener(this);
         Button clBTMemoMore_delete = (Button) findViewById(R.id.toolbar_more_dlg_delete);
         clBTMemoMore_delete.setOnClickListener(this);
+        Button clBTMemoMore_move = (Button) findViewById(R.id.toolbar_more_dlg_move);
+        clBTMemoMore_move.setOnClickListener(this);
+        Button clBTMemoMore_SetPassword = (Button) findViewById(R.id.toolbar_more_dlg_setpassword);
+        clBTMemoMore_SetPassword.setOnClickListener(this);
         
         ImageButton clBTMemoSearch = (ImageButton) findViewById(R.id.rootviewlist_toolbar_search);
         clBTMemoSearch.setOnClickListener(this);
@@ -124,8 +128,11 @@ implements ListActivityCtrl, View.OnClickListener
 		switch(view.getId()){
 		case R.id.toolbar_more_dlg_delete:
 			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
+			m_NoteListUICtrl.processDeleteClick(view);
 		    break;
 		case R.id.toolbar_more_dlg_move:
+			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
+			m_NoteListUICtrl.processMoveClick(view);
 			break;
 		case R.id.toolbar_search_dlg_remind:
 			executeAnimation(m_vSearchAnim, R.anim.commentdisplay_left_bottom, R.anim.commenthide_left_bottom, m_bIsCommnetDisplay_search);
@@ -141,6 +148,10 @@ implements ListActivityCtrl, View.OnClickListener
 			break;
 		case R.id.rootviewlist_toolbar_search:
 			executeAnimation(m_vSearchAnim, R.anim.commentdisplay_left_bottom, R.anim.commenthide_left_bottom, m_bIsCommnetDisplay_search);
+			break;
+		case R.id.toolbar_more_dlg_setpassword:
+			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
+			EncodeSettingDlg();
 			break;
 		default:
 		}
@@ -184,10 +195,10 @@ implements ListActivityCtrl, View.OnClickListener
 		ImageButton btNewNote = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_newnote);
 		ImageButton btSearch = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_search);
 		ImageButton btMore = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_more);
+		ImageButton btDelete = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_delete);
+		ImageButton btCancel = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_cancel);
+		ImageButton btMove = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_move);
 		if(enStatus == CommonDefine.ToolbarStatusEnum.ToolbarStatus_Normal){
-			ImageButton btDelete = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_delete);
-			ImageButton btCancel = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_cancel);
-			ImageButton btMove = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_move);
 			btNewNote.setVisibility(View.VISIBLE);
 			btSearch.setVisibility(View.VISIBLE);
 			btNewFolder.setVisibility(View.VISIBLE);
@@ -196,6 +207,9 @@ implements ListActivityCtrl, View.OnClickListener
 			btMove.setVisibility(View.GONE);
 			btCancel.setVisibility(View.GONE);
 		}else{
+//			btDelete.setVisibility(View.VISIBLE);
+//			btMove.setVisibility(View.VISIBLE);
+//			btCancel.setVisibility(View.VISIBLE);
 			btNewNote.setVisibility(View.GONE);
 			btSearch.setVisibility(View.GONE);
 			btNewFolder.setVisibility(View.GONE);
@@ -427,7 +441,7 @@ implements ListActivityCtrl, View.OnClickListener
 	private void PopUpSetFolderEncodeDlg(){
 		AlertDialog clDlgChangeFolder = new AlertDialog.Builder(RootViewList.this)	
 				.setIcon(R.drawable.clock)
-				.setTitle("设置查看锁后需输入密码方可查看")
+				.setTitle("设置查看锁后需输入密码才能查看")
 				.setPositiveButton("确定",new DialogInterface.OnClickListener(){
 					public void onClick(DialogInterface dialog, int i)
 					{
@@ -459,7 +473,6 @@ implements ListActivityCtrl, View.OnClickListener
 		final View DialogView = factory.inflate(R.layout.dialog_encodesetting, null);
 
 		AlertDialog clDlgChangeFolder = new AlertDialog.Builder(RootViewList.this)	
-				.setIcon(R.drawable.clock)
 				.setTitle("取消查看锁请输入密码")
 				.setView(DialogView)
 				.setPositiveButton("确定",new DialogInterface.OnClickListener(){
@@ -499,6 +512,100 @@ implements ListActivityCtrl, View.OnClickListener
 				})
 				.create();
 			clDlgChangeFolder.show();
+	}
+	
+	private void EncodeSettingDlg()
+	{
+		if(CommonDefine.g_str_PassWord.equals(new String(""))){
+		
+			LayoutInflater factory = LayoutInflater.from(this);
+			final View DialogView = factory.inflate(R.layout.dialog_passwordsetting, null);
+			
+			AlertDialog clDlgNewFolder = new AlertDialog.Builder(this)	
+				.setIcon(R.drawable.clock)
+				.setTitle("请设置您的私人密码")
+				.setView(DialogView)
+				.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int i)
+					{
+		        		EditText PassWord = (EditText) DialogView.findViewById(R.id.ET_passwordsetting);
+		        		String strPassWord = PassWord.getText().toString();
+		        		if(strPassWord.length()>0){
+		            		m_clCNoteDBCtrl.setPassWord(strPassWord);
+		            		CommonDefine.g_str_PassWord = strPassWord;
+		            		PassWord.setText("");
+		            		Toast toast = Toast.makeText(RootViewList.this, "私人密码已设置", Toast.LENGTH_SHORT);
+		            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+		            		toast.show();
+		        		}else{
+		        			Toast toast = Toast.makeText(RootViewList.this, "请输入私人密码", Toast.LENGTH_SHORT);
+		            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+		            		toast.show();
+		        		}
+						dialog.cancel();
+					}
+				})
+				.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int i)
+					{
+						dialog.cancel();
+					}
+				})
+				.create();
+			clDlgNewFolder.show(); 
+		}else{
+			LayoutInflater factory = LayoutInflater.from(this);
+			final View DialogView = factory.inflate(R.layout.dialog_passwordchang, null);				
+			AlertDialog clDlgNewFolder = new AlertDialog.Builder(this)	
+				.setIcon(R.drawable.clock)
+				.setView(DialogView)
+				.setPositiveButton("确定",new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int i)
+					{
+		        		EditText PassWord_old = (EditText) DialogView.findViewById(R.id.ET_password_old);
+		        		String strPassWord_old = PassWord_old.getText().toString();
+		        		EditText PassWord_new = (EditText) DialogView.findViewById(R.id.ET_password_new);
+		        		String strPassWord_new = PassWord_new.getText().toString();
+		        		EditText PassWord_new2 = (EditText) DialogView.findViewById(R.id.ET_password_new2);
+		        		String strPassWord_new2 = PassWord_new2.getText().toString();
+		        		if(strPassWord_old == CommonDefine.g_str_PassWord){
+							if(strPassWord_new.equals(strPassWord_new2)){	            		
+			            		m_clCNoteDBCtrl.setPassWord(strPassWord_new);
+			            		CommonDefine.g_str_PassWord = strPassWord_new;
+								PassWord_old.setText("");
+								PassWord_new.setText("");
+								PassWord_new2.setText("");
+								Toast toast = Toast.makeText(RootViewList.this, "新密码已设置", Toast.LENGTH_SHORT);
+			            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+			            		toast.show();
+								dialog.cancel();
+							}else{
+			        			Toast toast = Toast.makeText(RootViewList.this, "新密码不一致!请重新输入", Toast.LENGTH_SHORT);
+			            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+								PassWord_new.setText("");
+								PassWord_new2.setText("");
+			            		toast.show();
+							}									
+		        		}else{
+		        			PassWord_old.setText("");
+							PassWord_new.setText("");
+							PassWord_new2.setText("");
+		        			Toast toast = Toast.makeText(RootViewList.this, "密码错误!请重新输入", Toast.LENGTH_SHORT);
+		            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+		            		toast.show();
+		        		}
+	
+					}
+				})
+				.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+						public void onClick(DialogInterface dialog, int i)
+						{
+							dialog.cancel();
+						}
+					})
+					.create();
+				clDlgNewFolder.show(); 
+		}
 	}
 //
 //	private void ChangeMemoToRemind(AdapterContextMenuInfo info){

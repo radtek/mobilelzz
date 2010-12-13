@@ -14,6 +14,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.view.View;
 import android.app.AlertDialog;
@@ -57,8 +60,10 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	public static String 								ExtraData_RemindSetting	=	"com.main.ExtraData_RemindSetting";
 	
 	//皮肤设定和加密设定的Menu
-	public static final int 						ITEM0	=	Menu.FIRST;
-	public static final int 						ITEM1	=	Menu.FIRST + 1;
+	public static final int 							ITEM0	=	Menu.FIRST;
+	public static final int 							ITEM1	=	Menu.FIRST + 1;
+	
+	public static final int								mMaxTime = 120;
 	
 	//进行DB操作的类
 	private CNoteDBCtrl 								m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
@@ -68,24 +73,30 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 
 	private int 												m_ExtraData_EditNoteID 		=	CMemoInfo.Id_Invalid;
 	private int 												m_ExtraData_PreID 		=	CMemoInfo.Id_Invalid;
-	private OperationNoteKindEnum 			m_ExtraData_OperationNoteKind = null;
+	private OperationNoteKindEnum 								m_ExtraData_OperationNoteKind = null;
 	
 	CRemindInfo													m_clCRemindInfo	=	new	CRemindInfo( (byte) -1 );
-	private boolean 										sdCardExit;
+	private boolean 											sdCardExit;
 	private File 												myRecAudioFile;
 	private File 												myRecAudioDir;
 	private File												SdCardDir;
-	private MediaRecorder 							mMediaRecorder01;
-	private boolean 										isStopRecord;
+	private MediaRecorder 										mMediaRecorder01;
+	private boolean 											isStopRecord;
 
 	ImageButton													clBT_Rec_BackGroud;  
-  ImageButton													clBTPlayRecord;
-  ImageButton													clBTDeleteRecord;
-  ImageButton													clBTRecord;
-  ImageButton													clBTStartRecord;
-  ImageButton													clBTStopRecord ;
+	ImageButton													clBTPlayRecord;
+	ImageButton													clBTDeleteRecord;
+	ImageButton													clBTRecord;
+	ImageButton													clBTStartRecord;
+	ImageButton													clBTStopRecord ;
     
-  private Chronometer 								chronometer;
+	private Chronometer 										chronometer;
+	protected static final int 									GUI_STOP_NOTIFIER = 0x108;
+	protected static final int 									GUI_THREADING_NOTIFIER = 0x109;
+	private ProgressBar 										mProgressBar01;
+	public int 													intCounter=0;
+	
+	private  Thread												nThread;
 	///////////////////////onStart////////////////////////////////////////////////
 	public void onNewIntent(Intent intent)
 	{
@@ -150,18 +161,24 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         clBTSetRemind.setOnClickListener(this);
         
         
-      //计时器
-			chronometer = (Chronometer) findViewById(R.id.rec_time);
-			//chronometer.setOnChronometerTickListener(this);
-			//chronometer.setFormat("%s","MM:SS");
+        //计时器
+		chronometer = (Chronometer) findViewById(R.id.rec_time);
+		//chronometer.setOnChronometerTickListener(this);
+		//chronometer.setFormat("%s","MM:SS");
 			
-			//检查是否存在SD卡		
+		//检查是否存在SD卡		
 	    sdCardExit = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);   
-      if (sdCardExit)
-      {
-      	SdCardDir = Environment.getExternalStorageDirectory();
-      }
-
+	    if (sdCardExit)
+	    {
+	    	SdCardDir = Environment.getExternalStorageDirectory();
+	    }
+	    
+	    //进度条
+	    mProgressBar01 = (ProgressBar)findViewById(R.id.progress_horizontal);
+	    mProgressBar01.setIndeterminate(false);
+        mProgressBar01.setMax(mMaxTime);
+        mProgressBar01.setProgress(0);
+	    
         //点击提醒设置Edit迁移至提醒设置画页Activity - zhu.t
         //((EditText)findViewById(R.id.CB_main_IsWarning)).setOnClickListener(this);
     }
@@ -343,11 +360,10 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
       mMediaRecorder01 = null;
      
       clBTStopRecord.setEnabled(false);
-      clBTPlayRecord.setEnabled(true);
-      isStopRecord = true;
-      
+   
     }
     chronometer.stop();
+    isStopRecord = true;
 	}
 	
 	private void processRecClick(View view){
@@ -359,7 +375,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
               return;
             }
 	  		 
-	        String AudioDir = SdCardDir.toString() + "//note";   
+            
+	        String AudioDir = SdCardDir.toString() + "//note//record";   
 	        myRecAudioDir = new File(AudioDir);
 	        if(!myRecAudioDir.exists())
 	        {
@@ -393,12 +410,83 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
             clBTPlayRecord.setEnabled(false);
             clBTDeleteRecord.setEnabled(false);
             isStopRecord = false;
+            chronometer.setBase(SystemClock.elapsedRealtime());
+            chronometer.start();
+            
+            nThread = new Thread(new Runnable()
+            {
+              public void run()
+              {
+                for (int i=0;i<mMaxTime+1;i++)
+                {
+                  try
+                  {
+                    intCounter = i;
+                    Thread.sleep(1000);
+                    if(i==(mMaxTime) || isStopRecord)
+                    {
+                      Message m = new Message();
+                      m.what = NoteWithYourMind.GUI_STOP_NOTIFIER;
+                      NoteWithYourMind.this.myMessageHandler.sendMessage(m);
+                      break;
+                    }
+                    else
+                    {
+                      Message m = new Message();
+                      m.what = NoteWithYourMind.GUI_THREADING_NOTIFIER;
+                      NoteWithYourMind.this.myMessageHandler.sendMessage(m); 
+                    }
+                  }
+                  catch(Exception e)
+                  {
+                    e.printStackTrace();
+                  }
+                }
+              }
+            });
+            nThread.start();
+
           }catch (IOException e)
           {
             e.printStackTrace();
           }
   		
 	}
+	
+	  Handler myMessageHandler = new Handler()
+	  {
+	    // @Override 
+	    public void handleMessage(Message msg)
+	    { 
+	      switch (msg.what)
+	      { 
+	        case NoteWithYourMind.GUI_STOP_NOTIFIER:
+	          Thread.currentThread().interrupt();
+	         
+	          if (myRecAudioFile != null)
+	           {  
+	              mMediaRecorder01.stop();
+	              mMediaRecorder01.release();
+	              mMediaRecorder01 = null;
+	             
+	              clBTStopRecord.setEnabled(false);
+	
+	              isStopRecord = true;
+	              
+	           }
+	           chronometer.stop();
+	          break;
+	         
+	        case NoteWithYourMind.GUI_THREADING_NOTIFIER:
+	        	if(!Thread.currentThread().isInterrupted() && !isStopRecord )
+		         {
+		            mProgressBar01.setProgress(intCounter);
+		         }
+	          break;
+	      } 
+	      super.handleMessage(msg); 
+	    }
+	  };
 	
 	private void processRevoiceClick(View view){
 		clBTStartRecord.setVisibility(View.VISIBLE);

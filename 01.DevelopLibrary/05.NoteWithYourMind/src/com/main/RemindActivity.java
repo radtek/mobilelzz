@@ -2,66 +2,91 @@ package com.main;
 
 import java.util.Calendar;
 
-import com.main.NoteWithYourMind.OperationNoteKindEnum;
-
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 public class RemindActivity extends Activity
 {
 	
-	CRemindInfo	clCRemindInfo	=	new	CRemindInfo ( (byte)-1 );
-	
+	CRemindInfo	m_clCRemindInfo	=	new	CRemindInfo ( (byte)-1 );
+	private		CDateDlg		m_clCDateDlg	=	new		CDateDlg( RemindActivity.this );
+	private		CWeekDlg		m_clCWeekDlg	=	new		CWeekDlg( RemindActivity.this );
+	private		CTimeDlg		m_clCTimeDlg	=	new		CTimeDlg( RemindActivity.this );
 	
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remindsetting2);
+        
+        RadioGroup rg	=	(RadioGroup)findViewById(R.id.timeRadioButton); 
+        
+        RadioButton rbTime		=	(RadioButton)findViewById(R.id.TimeSetting); 
+        RadioButton rbCountdown	=	(RadioButton)findViewById(R.id.daojishi); 
 
         Intent iExtraData = getIntent();
         CRemindInfo	clTemp	=	(CRemindInfo)iExtraData.getSerializableExtra(NoteWithYourMind.ExtraData_RemindSetting);
         if ( null != clTemp )
         {
-        	clCRemindInfo	=	clTemp;
+        	m_clCRemindInfo	=	clTemp;
+        	if( 1 == m_clCRemindInfo.m_bType )
+        	{
+        		rbCountdown.setChecked(true); 
+        		
+        		int	iHour	=	0;
+        		int	iMinute	=	0;
+        		m_clCRemindInfo.getCutDownTime(iHour, iMinute);
+        		
+        		
+        	}
+        	else if( 2 == m_clCRemindInfo.m_bType )
+        	{       		
+        		rbTime.setChecked(true);
+           		int	iHour	=	0;
+        		int	iMinute	=	0;
+        		byte	week[]	=	new	byte[ 7 ];
+        		m_clCRemindInfo.getWeekTime(iHour, iMinute, week );
+        		m_clCTimeDlg.bHour		=	(byte)iHour;
+        		m_clCTimeDlg.bMinute	=	(byte)iMinute;
+        		
+        		int iLength	=	week.length;
+        		for( int i = 0; i < iLength; ++i )
+        		{
+        			m_clCWeekDlg.Week[ i ]	=	week[ i ];
+        		}
+        		     		     		
+        	}
+        	else if( 3 == m_clCRemindInfo.m_bType )
+        	{
+        		rbTime.setChecked(true);
+        		int	iHour	=	0;
+        		int	iMinute	=	0;
+        		int	iYear	=	0;
+        		int	iMonth	=	0;
+        		int	iDay	=	0;
+        		m_clCRemindInfo.getNormalTime(iHour, iMinute, iYear, iMonth, iDay);
+        		m_clCTimeDlg.bHour		=	(byte)iHour;
+        		m_clCTimeDlg.bMinute	=	(byte)iMinute;
+        		
+        		m_clCDateDlg.iYear	=	iYear;
+        		m_clCDateDlg.bMonth	=	(byte) iDay;
+        		m_clCDateDlg.bDay	=	(byte) iMonth;
+        	}
         }
         else
         {
         	
         }
-        //设定星期
-        settingWeek();
+
         //设定确定
         settingCheck();
-        //设定日期
-        settingDate();
         //停止启动
         settingAble();
-        
-        EditText xiaoshi = (EditText) findViewById(R.id.xiaoshi); 
-        xiaoshi.setInputType(InputType.TYPE_DATETIME_VARIATION_TIME ); 
- //       xiaoshi.setText(String.valueOf(value));
-        
-        EditText fenzhong1 = (EditText) findViewById(R.id.fenzhong1); 
-        fenzhong1.setInputType(InputType.TYPE_DATETIME_VARIATION_TIME ); 
-        
-        EditText xiaoshi2 = (EditText) findViewById(R.id.xiaoshi2); 
-        xiaoshi2.setInputType(InputType.TYPE_DATETIME_VARIATION_TIME ); 
-        
-        EditText fenzhong2 = (EditText) findViewById(R.id.fenzhong2); 
-        fenzhong2.setInputType(InputType.TYPE_DATETIME_VARIATION_TIME ); 
-
+ 
     }
     
     void	settingAble()
@@ -76,59 +101,6 @@ public class RemindActivity extends Activity
     		
     	});
     }
-
-    void	settingDate()
-    {
-    	ImageButton	clWeekSetting	=	(ImageButton) findViewById(R.id.OnceRemindImg);
-    	clWeekSetting.setOnClickListener(new Button.OnClickListener(){
-
-
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Calendar	clCalendar	=	Calendar.getInstance();
-
-				clCalendar.setTimeInMillis(clCRemindInfo.lTime);
-				
-				if ( 1970 == clCalendar.get(Calendar.YEAR))
-				{
-					clCalendar.setTimeInMillis(System.currentTimeMillis());
-				}
-
-
-				int	year	=	clCalendar.get(Calendar.YEAR); 
-				int month	=	clCalendar.get(Calendar.MONTH); 
-				int day		=	clCalendar.get(Calendar.DAY_OF_MONTH); 
-				//获得日历中的 year month day 
-				DatePickerDialog dlg	=	new DatePickerDialog( RemindActivity.this,mDateSetListener,year,month,day); 
-				dlg.show(); 
-			}
-    		
-    	});
-    	
-
-    }
-    private DatePickerDialog.OnDateSetListener mDateSetListener	=	new	DatePickerDialog.OnDateSetListener() {
-
-
-		public void onDateSet(DatePicker view, int year, int monthOfYear,int dayOfMonth) {
-			// TODO Auto-generated method stub
-			clCRemindInfo.m_bType	=	3;
-			Calendar	clCalendar	=	Calendar.getInstance();
-			clCalendar.set(Calendar.YEAR, year);
-			clCalendar.set(Calendar.MONTH, monthOfYear );
-			clCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-			clCalendar.set(Calendar.HOUR_OF_DAY, 0);
-			clCalendar.set(Calendar.MINUTE, 0);
-			clCalendar.set(Calendar.SECOND, 0);
-			clCalendar.set(Calendar.MILLISECOND, 0);
-			clCRemindInfo.lTime	=	clCalendar.getTimeInMillis();
-			String	strWeek	=	getDayofWeek( clCalendar );
-			TextView	clTextView	=	(TextView) findViewById(R.id.OnceText);
-			clTextView.setText( String.valueOf(year)+ "年" + String.valueOf(monthOfYear+1) + "月" + String.valueOf(dayOfMonth) + "日" 
-								+ "星期" + strWeek );
-		}
-    	
-    };
     
     String	getDayofWeek( Calendar	clCalendar )
     {
@@ -168,54 +140,37 @@ public class RemindActivity extends Activity
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if( 2 == clCRemindInfo.m_bType )		//循环提醒
-				{
-					EditText Xiaoshi	=	(EditText) findViewById(R.id.xiaoshi);
-					EditText Fenzhong	=	(EditText) findViewById(R.id.fenzhong1);
-					
-					String	strhour		=		Xiaoshi.getText().toString();
-					String	strminute	=		Fenzhong.getText().toString();
-					
-					clCRemindInfo.setTime( Long.valueOf(strhour) , Long.valueOf(strminute));		
+				if( 2 == m_clCRemindInfo.m_bType )		//循环提醒
+				{				
+					m_clCRemindInfo.setWeekTime( m_clCTimeDlg.bHour , m_clCTimeDlg.bMinute, m_clCWeekDlg.Week );		
 				}
-				else if( 1 == clCRemindInfo.m_bType )	//倒计时提醒
+				else if( 1 == m_clCRemindInfo.m_bType )	//倒计时提醒
 				{
-					Calendar clCalendar	=	Calendar.getInstance();
-					
-					EditText Xiaoshi	=	(EditText) findViewById(R.id.xiaoshi2);
-					EditText Fenzhong	=	(EditText) findViewById(R.id.fenzhong2);
-					
-					long	lhour		=	Long.valueOf( Xiaoshi.getText().toString() );
-					long	lminute		=	Long.valueOf( Fenzhong.getText().toString() );
-					
-					clCalendar.setTimeInMillis(System.currentTimeMillis());
-					clCalendar.set(Calendar.SECOND, 0 );
-					clCalendar.set(Calendar.MILLISECOND, 0 );
-					
-					long	lTime	=	clCalendar.getTimeInMillis();
-					lTime	+=	( lhour * 60 + lminute ) *1000;
-					
-					clCRemindInfo.lTime		=	lTime;				
+//					Calendar clCalendar	=	Calendar.getInstance();
+//					
+//					EditText Xiaoshi	=	(EditText) findViewById(R.id.xiaoshi2);
+//					EditText Fenzhong	=	(EditText) findViewById(R.id.fenzhong2);
+//					
+//					long	lhour		=	Long.valueOf( Xiaoshi.getText().toString() );
+//					long	lminute		=	Long.valueOf( Fenzhong.getText().toString() );
+//					
+//					clCalendar.setTimeInMillis(System.currentTimeMillis());
+//					clCalendar.set(Calendar.SECOND, 0 );
+//					clCalendar.set(Calendar.MILLISECOND, 0 );
+//					
+//					long	lTime	=	clCalendar.getTimeInMillis();
+//					lTime	+=	( lhour * 60 + lminute ) *1000;
+//					
+//					m_clCRemindInfo.lTime		=	lTime;				
 				}
-				else if( 3 == clCRemindInfo.m_bType )
-				{
-					Calendar clCalendar	=	Calendar.getInstance();
-					clCalendar.setTimeInMillis( clCRemindInfo.lTime );
-					EditText Xiaoshi	=	(EditText) findViewById(R.id.xiaoshi);
-					EditText Fenzhong	=	(EditText) findViewById(R.id.fenzhong1);
-					
-					int	lhour		=	Integer.valueOf( Xiaoshi.getText().toString() );
-					int	lminute		=	Integer.valueOf( Fenzhong.getText().toString() );
-					
-					clCalendar.set(Calendar.HOUR_OF_DAY, lhour );
-					clCalendar.set(Calendar.MINUTE, lminute );
-					
-					clCRemindInfo.lTime	=	clCalendar.getTimeInMillis();
+				else if( 3 == m_clCRemindInfo.m_bType )
+				{	
+					m_clCRemindInfo.setNormalTime( m_clCTimeDlg.bHour, m_clCTimeDlg.bMinute, m_clCDateDlg.iYear, m_clCDateDlg.bMonth, m_clCDateDlg.bDay );
 				}
 				
 				Intent intent = new Intent(RemindActivity.this, NoteWithYourMind.class);  
 //				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
-				intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, clCRemindInfo );
+				intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, m_clCRemindInfo );
 				intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
 				
 				startActivity(intent);	
@@ -223,59 +178,4 @@ public class RemindActivity extends Activity
     		
     	});
     }
-	
-	void settingWeek()
-	{
-		ImageButton	clWeekSetting	=	(ImageButton) findViewById(R.id.EveryWeekImg);
-        clWeekSetting.setOnClickListener(new Button.OnClickListener()
-        {
-
-			public void onClick(View arg0)
-			{
-				// TODO Auto-generated method stub
-	        	final Byte	bCheck[]	=	new Byte[ 7 ];
-	        	for ( int i = 0; i < 7 ; ++i )
-	        	{
-	        		bCheck[ i ]	=	-1;
-	        	}
-				Dialog dialog	=	new AlertDialog.Builder( RemindActivity.this).setTitle("选择星期").setMultiChoiceItems(
-			     new String[] {
-			    		 		"星期一", "星期二",
-			    		 		"星期三", "星期四",
-			    		 		"星期五", "星期六",
-			    		 		"星期日"
-			    		 		}, null, new DialogInterface.OnMultiChoiceClickListener()
-			     				{
-
-									public void onClick(DialogInterface dialog, int which, boolean isChecked)
-									{
-										// TODO Auto-generated method stub
-										if( isChecked )
-										{
-											bCheck[ which ]	=	1;
-										}
-										else
-										{
-											bCheck[ which ]	=	-1;
-										}
-										
-									}
-
-								} )
-			     .setPositiveButton("确定", new DialogInterface.OnClickListener()
-			     {
-			    	 public void onClick(DialogInterface dialog, int whichButton)
-	                 {
-	                        /* User clicked OK so do some stuff */
-			    		 clCRemindInfo.m_bType	=	2;
-			    		 clCRemindInfo.m_Week	=	bCheck;			    		 
-	                 }
-	             })
-			     .setNegativeButton("取消", null).create();
-
-				dialog.show();
-			}
-
-        });
-	}
 }

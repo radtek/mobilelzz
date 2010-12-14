@@ -21,12 +21,75 @@ public class CRemindInfo implements Serializable
 							//如果是循环提醒则高4为表示小时，低位表示分钟
 	byte		bRemindAble;
 	
-	public	void	setTime( long lhour, long lminute )
+	public	void	setWeekTime( int iHour, int iMinute, byte week[] )
 	{
-		lhour	<<=	16;
-		lhour	+=	lminute;
+		iHour	<<=	16;
+		iHour	+=	iMinute;
 		
-		lTime	=	lhour;
+		lTime	=	iHour;
+		
+		int iLength	=	m_Week.length;
+		for( int i = 0; i < iLength; ++i )
+		{
+			m_Week[ i ]	=	week[ i ];
+		}
+	}
+	
+	public	void	getWeekTime( int iHour, int iMinute, byte week[] )
+	{
+		iHour	=	(int) (lTime >> 16);
+		iMinute	=	(int)lTime & 0x0000ffff;
+		
+		int iLength	=	m_Week.length;
+		for( int i = 0; i < iLength; ++i )
+		{
+			week[ i ]	=	m_Week[ i ];
+		}
+	}
+	
+	public	void	setCutDownTime( int iHour, int iMinute )
+	{
+		Calendar clCalendar	=	Calendar.getInstance();
+		clCalendar.setTimeInMillis(System.currentTimeMillis());
+		clCalendar.set(Calendar.SECOND, 0 );
+		clCalendar.set(Calendar.MILLISECOND, 0 );
+		
+		lTime	=	clCalendar.getTimeInMillis();
+		
+		lTime	+=	( iHour * 60 + iMinute ) * 1000;
+	}
+	
+	public	void	getCutDownTime( Integer iHour, Integer iMinute )
+	{
+		
+	}
+	
+	public	void	setNormalTime( int iHour, int iMinute, int iYear, int iMonth, int iDay )
+	{
+		Calendar clCalendar	=	Calendar.getInstance();
+		clCalendar.setTimeInMillis(System.currentTimeMillis());
+		clCalendar.set(Calendar.SECOND, 0 );
+		clCalendar.set(Calendar.MILLISECOND, 0 );
+		
+		clCalendar.set(Calendar.YEAR, iYear );
+		clCalendar.set(Calendar.MONTH, iMonth );
+		clCalendar.set(Calendar.DAY_OF_MONTH, iDay );
+		clCalendar.set(Calendar.HOUR_OF_DAY, iHour );
+		clCalendar.set(Calendar.MINUTE, iMinute );
+		
+		lTime	=	clCalendar.getTimeInMillis();
+	}
+	
+	public	void	getNormalTime( Integer iHour, Integer iMinute, Integer iYear, Integer iMonth, Integer iDay )
+	{
+		Calendar clCalendar	=	Calendar.getInstance();
+		clCalendar.setTimeInMillis( lTime );
+		
+		iYear	=	clCalendar.get(Calendar.YEAR);
+		iMonth	=	clCalendar.get(Calendar.MONTH);
+		iDay	=	clCalendar.get(Calendar.DAY_OF_MONTH);
+		iHour	=	clCalendar.get(Calendar.HOUR_OF_DAY);
+		iMinute	=	clCalendar.get(Calendar.MINUTE);
 	}
 	
 	//根据当前系统时间，计算取得循环提醒 的第一次要提醒的时间

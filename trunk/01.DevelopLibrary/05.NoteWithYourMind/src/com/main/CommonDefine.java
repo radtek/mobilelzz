@@ -30,3 +30,21 @@ class CommonContainer{
 		b1 = b;
 	}
 }
+
+class ListUICtrlParam{
+
+
+	public	enum	ListTypeEnum
+	{
+		ListType_NormalList,          //通过指定PreID，来提供PreID对应的子List
+		ListType_SearchResultList,   //通过设定检索条件，来提供检索结果List
+	}
+	public static ListTypeEnum g_enListType = ListTypeEnum.ListType_NormalList;
+	
+	public static int g_int_PreID = -1;
+	
+	public static boolean g_bool_IsRemindSearch = false;
+	public static boolean g_bool_IsVoiceSearch = false;
+	public static boolean g_bool_IsTextSearch = false;	
+	public static String g_str_SearchKey = "";
+}

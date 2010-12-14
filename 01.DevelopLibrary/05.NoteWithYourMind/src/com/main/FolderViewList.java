@@ -37,6 +37,9 @@ public class FolderViewList extends Activity implements ListActivityCtrl
 	private CNoteDBCtrl m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
 	private NoteListUICtrl m_NoteListUICtrl;
 	private View m_toolBarLayout;
+
+	private ListUICtrlParam  UICtrlParam;
+	
 	/** Called when the activity is first created. */
 	
 	public void onCreate(Bundle savedInstanceState)
@@ -51,7 +54,12 @@ public class FolderViewList extends Activity implements ListActivityCtrl
 		m_iFolder_DBID = iExtraData.getIntExtra(ExtraData_FolderDBID, CMemoInfo.Id_Invalid);
 		ListView list = (ListView) findViewById(R.id.folderviewlist_list);
 		m_toolBarLayout = findViewById(R.id.folderviewlist_toolbar);
-        m_NoteListUICtrl = new NoteListUICtrl(this, list, m_iFolder_DBID, m_toolBarLayout);
+
+
+		UICtrlParam.g_enListType = ListUICtrlParam.ListTypeEnum.ListType_NormalList;
+		UICtrlParam.g_int_PreID= m_iFolder_DBID;
+		
+        m_NoteListUICtrl = new NoteListUICtrl(this, list, m_toolBarLayout,UICtrlParam );
         m_NoteListUICtrl.initializeSource();
         ImageButton clBTMemoNewNote = (ImageButton) findViewById(R.id.folderviewlist_toolbar_newnote);
         clBTMemoNewNote.setOnClickListener(new Button.OnClickListener(){

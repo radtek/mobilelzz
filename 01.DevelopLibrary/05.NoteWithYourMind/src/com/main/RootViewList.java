@@ -41,6 +41,8 @@ implements ListActivityCtrl, View.OnClickListener
 	
 	private View m_vSearchAnim = null;
 	private View m_vMoreAnim = null;
+	private ListUICtrlParam  UICtrlParam;
+	
 //	public void onNewIntent(Intent intent){
 //		setIntent(intent);
 //	}
@@ -77,7 +79,11 @@ implements ListActivityCtrl, View.OnClickListener
         ListView list = (ListView) findViewById(R.id.rootviewlist_list);
         registerForContextMenu(list);
         m_toolBarLayout = findViewById(R.id.rootviewlist_toolbar);
-        m_NoteListUICtrl = new NoteListUICtrl(this, list, CMemoInfo.PreId_Root, m_toolBarLayout);
+
+		UICtrlParam.g_enListType = ListUICtrlParam.ListTypeEnum.ListType_NormalList;
+		UICtrlParam.g_int_PreID= CMemoInfo.PreId_Root;
+		
+        m_NoteListUICtrl = new NoteListUICtrl(this, list, m_toolBarLayout,UICtrlParam );
         m_NoteListUICtrl.initializeSource();
         
         ImageButton clBTMemoNewFolder = (ImageButton) findViewById(R.id.rootviewlist_toolbar_newfolder);
@@ -150,6 +156,7 @@ implements ListActivityCtrl, View.OnClickListener
 			break;
 		case R.id.toolbar_search_dlg_remind:
 			executeAnimation(m_vSearchAnim, R.anim.commentdisplay_left_bottom, R.anim.commenthide_left_bottom, m_bIsCommnetDisplay_search);
+			processSearchClick(view);
 			break;
 		case R.id.rootviewlist_toolbar_newfolder:
 			processNewFolderClick(view);
@@ -186,7 +193,16 @@ implements ListActivityCtrl, View.OnClickListener
 	}
 	
 	private void processSearchClick(View view){
+		Intent intent = new Intent(RootViewList.this, SearchResultViewList.class);
 
+		switch(view.getId()){
+		case R.id.toolbar_search_dlg_remind:
+			intent.putExtra(SearchResultViewList.ExtraData_SearchKind, SearchResultViewList.SearchKindEnum.SearchKind_Remind);					
+		    break;
+		default:
+		}
+
+		startActivity(intent);
 	}
 	
 	private void processMoreClick(View view){

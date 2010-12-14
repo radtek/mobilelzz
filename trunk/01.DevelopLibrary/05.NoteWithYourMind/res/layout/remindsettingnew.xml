@@ -21,9 +21,6 @@ android:layout_height="fill_parent">
 		android:layout_height="fill_parent"
 		android:layout_above="@android:id/tabs"
 		>
-			<include android:id="@+id/remindonce" layout="@layout/dateandtime"/>
-			<include android:id="@+id/remindcycel" layout="@layout/remindsetting"/>
-			<include android:id="@+id/remindinterval" layout="@layout/timeonly"/>
 		</FrameLayout>
 	</RelativeLayout>
 </TabHost>

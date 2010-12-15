@@ -12,17 +12,19 @@ import android.widget.RadioGroup;
 
 public class RemindActivity extends Activity
 {
-	
-	CRemindInfo	m_clCRemindInfo	=	new	CRemindInfo ( (byte)-1 );
-	private		CDateDlg		m_clCDateDlg	=	new		CDateDlg( RemindActivity.this );
-	private		CWeekDlg		m_clCWeekDlg	=	new		CWeekDlg( RemindActivity.this );
-	private		CTimeDlg		m_clCTimeDlg	=	new		CTimeDlg( RemindActivity.this );
+	CRemindInfo	m_clCRemindInfo	= null;
+	private		CDateDlg		m_clCDateDlg = null;
+	private		CWeekDlg		m_clCWeekDlg = null;
+	private		CTimeDlg		m_clCTimeDlg = null;
 	
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remindsetting2);
-        
+        m_clCRemindInfo	=	new	CRemindInfo ( (byte)-1 );
+    	m_clCDateDlg	=	new		CDateDlg( RemindActivity.this );
+    	m_clCWeekDlg	=	new		CWeekDlg( RemindActivity.this );
+    	m_clCTimeDlg	=	new		CTimeDlg( RemindActivity.this );
         RadioGroup rg	=	(RadioGroup)findViewById(R.id.timeRadioButton); 
         
         RadioButton rbTime		=	(RadioButton)findViewById(R.id.TimeSetting); 

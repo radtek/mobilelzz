@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -43,8 +44,15 @@ implements ListActivityCtrl, View.OnClickListener
 	private View m_vMoreAnim = null;
 	private ListUICtrlParam  UICtrlParam;
 	
-//	public void onNewIntent(Intent intent){
-//		setIntent(intent);
+	public void onNewIntent(Intent intent){
+		setIntent(intent);
+	}
+//	public boolean onTouchEvent(MotionEvent me){
+//		if(m_bIsCommnetDisplay_more.getBOOL() || m_bIsCommnetDisplay_search.getBOOL()){
+//			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);	
+//		}
+//		super.onTouchEvent(me);
+//		return false;
 //	}
 	/** Called when the activity is first created. */
 	public void onCreate(Bundle savedInstanceState)
@@ -131,17 +139,26 @@ implements ListActivityCtrl, View.OnClickListener
 		super.onDestroy();
 	}
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if ((keyCode == KeyEvent.KEYCODE_BACK) && (CommonDefine.m_iBackCount == 0)) { 
+		boolean bRet = false;
+		if ((keyCode == KeyEvent.KEYCODE_BACK)) { 
         	if(CommonDefine.g_enToolbarStatus!=CommonDefine.ToolbarStatusEnum.ToolbarStatus_Normal){
-        		CommonDefine.m_iBackCount++;
             	m_NoteListUICtrl.processCancelClick(null);
-                return true;	
+                bRet = true;	
         	}else{
-        		CommonDefine.m_iBackCount=0;
-        		return super.onKeyDown(keyCode, event); 
+        	}
+        	if(m_bIsCommnetDisplay_more.getBOOL()){
+    			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
+    			bRet = true;
+    		}
+        	if(m_bIsCommnetDisplay_search.getBOOL()){
+        		executeAnimation(m_vSearchAnim, R.anim.commentdisplay_left_bottom, R.anim.commenthide_left_bottom, m_bIsCommnetDisplay_search);
+        		bRet = true;
+    		}
+        	if(bRet){
+        		return true;
+        		
         	}
         } 
-    	CommonDefine.m_iBackCount=0;
         return super.onKeyDown(keyCode, event); 
     }
 	public void onClick(View view){
@@ -221,6 +238,7 @@ implements ListActivityCtrl, View.OnClickListener
 	}
 	
 	public void updateToolbar(CommonDefine.ToolbarStatusEnum enStatus){
+		CommonDefine.g_enToolbarStatus = enStatus;
 		ImageButton btNewFolder = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_newfolder);
 		ImageButton btNewNote = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_newnote);
 		ImageButton btSearch = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_search);
@@ -261,7 +279,7 @@ implements ListActivityCtrl, View.OnClickListener
 		LayoutInflater factory = LayoutInflater.from(RootViewList.this);
 		final View DialogView = factory.inflate(R.layout.dialognewfolder, null);
 		AlertDialog clDlgNewFolder = new AlertDialog.Builder(RootViewList.this)	
-			.setIcon(R.drawable.clock)
+			//.setIcon(R.drawable.clock)
 			.setTitle("请输入文件夹名称")
 			.setView(DialogView)
 			.setPositiveButton("确定",new DialogInterface.OnClickListener(){
@@ -407,7 +425,7 @@ implements ListActivityCtrl, View.OnClickListener
 		// 弹出dialog
 
 		AlertDialog clDlgChangeFolder = new AlertDialog.Builder(RootViewList.this)	
-			.setIcon(R.drawable.clock)
+			//.setIcon(R.drawable.clock)
 			.setTitle("请输入新文件夹名称")
 			.setView(DialogView)
 			.setPositiveButton("确定",new DialogInterface.OnClickListener(){
@@ -470,7 +488,7 @@ implements ListActivityCtrl, View.OnClickListener
 	}
 	private void PopUpSetFolderEncodeDlg(){
 		AlertDialog clDlgChangeFolder = new AlertDialog.Builder(RootViewList.this)	
-				.setIcon(R.drawable.clock)
+				//.setIcon(R.drawable.clock)
 				.setTitle("设置查看锁后需输入密码才能查看")
 				.setPositiveButton("确定",new DialogInterface.OnClickListener(){
 					public void onClick(DialogInterface dialog, int i)
@@ -552,7 +570,7 @@ implements ListActivityCtrl, View.OnClickListener
 			final View DialogView = factory.inflate(R.layout.dialog_passwordsetting, null);
 			
 			AlertDialog clDlgNewFolder = new AlertDialog.Builder(this)	
-				.setIcon(R.drawable.clock)
+				//.setIcon(R.drawable.clock)
 				.setTitle("请设置您的私人密码")
 				.setView(DialogView)
 				.setPositiveButton("确定",new DialogInterface.OnClickListener(){
@@ -587,7 +605,6 @@ implements ListActivityCtrl, View.OnClickListener
 			LayoutInflater factory = LayoutInflater.from(this);
 			final View DialogView = factory.inflate(R.layout.dialog_passwordchang, null);				
 			AlertDialog clDlgNewFolder = new AlertDialog.Builder(this)	
-				.setIcon(R.drawable.clock)
 				.setView(DialogView)
 				.setPositiveButton("确定",new DialogInterface.OnClickListener(){
 					public void onClick(DialogInterface dialog, int i)

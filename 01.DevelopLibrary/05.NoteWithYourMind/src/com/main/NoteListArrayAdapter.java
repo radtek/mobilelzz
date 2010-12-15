@@ -84,7 +84,14 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
     public NoteListArrayAdapter(Context context, List<CMemoInfo> items) {
         super(context, mResource, items);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
+
+		m_ListItemSelectResult = new HashMap<String,ItemSelectResult>();
+		m_ListCheckBoxMapItem = new HashMap<CheckBox,CheckBoxMapItem>();
+		m_ListItemDetail = new HashMap<View,ItemDetail>();
+		m_listPreDBID = CommonDefine.g_int_Invalid_ID;
+		m_isRemind = CommonDefine.g_int_Invalid_ID;
+		
+	}
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

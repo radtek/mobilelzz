@@ -207,40 +207,61 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 				((View)cb).performClick();
 			}
 		}else{
-			NoteListCursorAdapter LA = (NoteListCursorAdapter)arg0.getAdapter();
-			Cursor cur = LA.getCursor();
-			cur.moveToPosition(arg2);
-			int iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_type);
-			int iValue = cur.getInt(iIndex);
-			iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_id);
-			int iIDValue = cur.getInt(iIndex);
-			if(iValue == CMemoInfo.Type_Folder){
-				boolean bIntent = true;
-				int iEncodeIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_isencode);
-				int iEncodeValue = cur.getInt(iEncodeIndex);
-				if(iEncodeValue==CMemoInfo.IsEncode_Yes){
-					if(!CommonDefine.g_bool_IsPassWordChecked){
-						confirmPassword(iIDValue);
-						bIntent = false;
+
+			if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_NormalList){
+				
+				NoteListCursorAdapter LA = (NoteListCursorAdapter)arg0.getAdapter();
+				Cursor cur = LA.getCursor();
+				cur.moveToPosition(arg2);
+				int iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_type);
+				int iValue = cur.getInt(iIndex);
+				iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_id);
+				int iIDValue = cur.getInt(iIndex);
+				if(iValue == CMemoInfo.Type_Folder){
+					boolean bIntent = true;
+					int iEncodeIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_isencode);
+					int iEncodeValue = cur.getInt(iEncodeIndex);
+					if(iEncodeValue==CMemoInfo.IsEncode_Yes){
+						if(!CommonDefine.g_bool_IsPassWordChecked){
+							confirmPassword(iIDValue);
+							bIntent = false;
+						}
+					}else{
 					}
+					if(bIntent){
+						Intent intent = new Intent();
+						intent.setClass(m_sourceManager, FolderViewList.class);							
+						intent.putExtra(FolderViewList.ExtraData_FolderDBID, iIDValue);
+						m_sourceManager.startActivity(intent);
+					}
+				}else if(iValue == CMemoInfo.Type_Memo){
+					Intent toNew = new Intent();
+	        		toNew.setClass(m_sourceManager, NoteWithYourMind.class);
+	        		toNew.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Edit);
+	        		toNew.putExtra(NoteWithYourMind.ExtraData_EditNoteID, iIDValue);
+	        			        		
+	        		m_sourceManager.startActivity(toNew);
 				}else{
+					
 				}
-				if(bIntent){
-					Intent intent = new Intent();
-					intent.setClass(m_sourceManager, FolderViewList.class);							
-					intent.putExtra(FolderViewList.ExtraData_FolderDBID, iIDValue);
-					m_sourceManager.startActivity(intent);
-				}
-			}else if(iValue == CMemoInfo.Type_Memo){
+
+			}
+			else if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_SearchResultList){
+
+				NoteListArrayAdapter LA = (NoteListArrayAdapter)arg0.getAdapter();
+
+				CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+				clCMemoInfo = LA.getItem(arg2);
+			
 				Intent toNew = new Intent();
         		toNew.setClass(m_sourceManager, NoteWithYourMind.class);
         		toNew.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Edit);
-        		toNew.putExtra(NoteWithYourMind.ExtraData_EditNoteID, iIDValue);
-        			        		
+        		toNew.putExtra(NoteWithYourMind.ExtraData_EditNoteID, clCMemoInfo.iId );	        			        		
         		m_sourceManager.startActivity(toNew);
-			}else{
-				
+
 			}
+
+
 		}
 	}
 	public void initializeSource(){
@@ -469,94 +490,82 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 	{
 		if ( cursor.getCount() > 0 )
 		{			
-			cursor.moveToFirst();
-
-			CMemoInfo clCMemoInfoFirst	=	new	CMemoInfo();
-			
-			PraseOneDBRecord(cursor,clCMemoInfoFirst);
-			Items.add(clCMemoInfoFirst);				
+			cursor.moveToFirst();			
 			do
 			{
 				CMemoInfo clCMemoInfo	=	new	CMemoInfo();
 			
-				PraseOneDBRecord(cursor,clCMemoInfo);
+				int		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_id );
+				clCMemoInfo.iId=	cursor.getInt( iColumn );
+				
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_preid );
+				clCMemoInfo.iPreId =	cursor.getInt( iColumn );
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_type );
+				clCMemoInfo.iType =	cursor.getInt( iColumn );
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_isremind );
+				clCMemoInfo.iIsRemind =	cursor.getInt( iColumn );
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_remindtime );
+				clCMemoInfo.dRemindTime =	cursor.getLong( iColumn );
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_isremindable );
+				clCMemoInfo.iIsRemindAble =	cursor.getInt( iColumn );
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_remindtype );
+				clCMemoInfo.RemindType =	cursor.getInt( iColumn );
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_createtime );
+				clCMemoInfo.dCreateTime =	cursor.getLong( iColumn );
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_lastmodifytime );
+				clCMemoInfo.dLastModifyTime =	cursor.getLong( iColumn );
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_iseditenable );
+				clCMemoInfo.iIsEditEnable =	cursor.getInt( iColumn );
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_detail );
+				clCMemoInfo.strDetail =	cursor.getString( iColumn );
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_password );
+				clCMemoInfo.strPassword=	cursor.getString( iColumn );			
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_isencode );
+				clCMemoInfo.iIsEncode =	cursor.getInt( iColumn );
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_monday );
+				int iMonday =	cursor.getInt( iColumn );
+				clCMemoInfo.m_Week[ 0 ]	=	(byte)iMonday;
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_tuesday );
+				int iTuesday =	cursor.getInt( iColumn );
+				clCMemoInfo.m_Week[ 1 ]	=	(byte)iTuesday;
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_wednesday );
+				int iWednesday =	cursor.getInt( iColumn );
+				clCMemoInfo.m_Week[ 2 ]	=	(byte)iWednesday;
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_thursday );
+				int iThursday =	cursor.getInt( iColumn );
+				clCMemoInfo.m_Week[ 3 ]	=	(byte)iThursday;
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_friday );
+				int iFriday =	cursor.getInt( iColumn );
+				clCMemoInfo.m_Week[ 4 ]	=	(byte)iFriday;
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_staturday );
+				int iStaturday =	cursor.getInt( iColumn );
+				clCMemoInfo.m_Week[ 5 ]	=	(byte)iStaturday;
+
+				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_sunday );
+				int iSunday =	cursor.getInt( iColumn );
+				clCMemoInfo.m_Week[ 6 ]	=	(byte)iSunday;	
 
 				Items.add(clCMemoInfo);	
 					
 			}while( cursor.moveToNext() );			
 		}
-
-	}
-
-	private void PraseOneDBRecord( Cursor cursor,CMemoInfo clCMemoInfo )
-	{
-			
-		int		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_id );
-		clCMemoInfo.iId=	cursor.getInt( iColumn );
-		
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_preid );
-		clCMemoInfo.iPreId =	cursor.getInt( iColumn );
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_type );
-		clCMemoInfo.iType =	cursor.getInt( iColumn );
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_isremind );
-		clCMemoInfo.iIsRemind =	cursor.getInt( iColumn );
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_remindtime );
-		clCMemoInfo.dRemindTime =	cursor.getLong( iColumn );
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_isremindable );
-		clCMemoInfo.iIsRemindAble =	cursor.getInt( iColumn );
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_remindtype );
-		clCMemoInfo.RemindType =	cursor.getInt( iColumn );
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_createtime );
-		clCMemoInfo.dCreateTime =	cursor.getLong( iColumn );
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_lastmodifytime );
-		clCMemoInfo.dLastModifyTime =	cursor.getLong( iColumn );
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_iseditenable );
-		clCMemoInfo.iIsEditEnable =	cursor.getInt( iColumn );
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_detail );
-		clCMemoInfo.strDetail =	cursor.getString( iColumn );
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_password );
-		clCMemoInfo.strPassword=	cursor.getString( iColumn );			
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_isencode );
-		clCMemoInfo.iIsEncode =	cursor.getInt( iColumn );
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_monday );
-		int iMonday =	cursor.getInt( iColumn );
-		clCMemoInfo.m_Week[ 0 ]	=	(byte)iMonday;
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_tuesday );
-		int iTuesday =	cursor.getInt( iColumn );
-		clCMemoInfo.m_Week[ 1 ]	=	(byte)iTuesday;
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_wednesday );
-		int iWednesday =	cursor.getInt( iColumn );
-		clCMemoInfo.m_Week[ 2 ]	=	(byte)iWednesday;
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_thursday );
-		int iThursday =	cursor.getInt( iColumn );
-		clCMemoInfo.m_Week[ 3 ]	=	(byte)iThursday;
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_friday );
-		int iFriday =	cursor.getInt( iColumn );
-		clCMemoInfo.m_Week[ 4 ]	=	(byte)iFriday;
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_staturday );
-		int iStaturday =	cursor.getInt( iColumn );
-		clCMemoInfo.m_Week[ 5 ]	=	(byte)iStaturday;
-
-		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_sunday );
-		int iSunday =	cursor.getInt( iColumn );
-		clCMemoInfo.m_Week[ 6 ]	=	(byte)iSunday;	
 
 	}
 

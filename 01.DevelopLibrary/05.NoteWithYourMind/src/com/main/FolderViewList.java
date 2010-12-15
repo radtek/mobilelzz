@@ -1,30 +1,14 @@
 package com.main;
 
 import android.app.Activity;
-import android.app.ActivityGroup;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap.CompressFormat;
 import android.os.Bundle;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-//import android.widget.TableLayout;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.view.LayoutInflater;
-import android.widget.TabHost;
-import android.widget.TabWidget;
-import android.widget.TabHost.OnTabChangeListener;
-import android.widget.TabHost.TabSpec;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.widget.ImageButton;
+import android.widget.ListView;
 
 public class FolderViewList extends Activity implements ListActivityCtrl
 {
@@ -78,17 +62,14 @@ public class FolderViewList extends Activity implements ListActivityCtrl
 		super.onStop();
 	}
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && (CommonDefine.m_iBackCount == 0)) { 
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) { 
         	if(CommonDefine.g_enToolbarStatus!=CommonDefine.ToolbarStatusEnum.ToolbarStatus_Normal){
-        		CommonDefine.m_iBackCount++;
             	m_NoteListUICtrl.processCancelClick(null);
                 return true;	
         	}else{
-        		CommonDefine.m_iBackCount=0;
         		return super.onKeyDown(keyCode, event); 
         	}
         } 
-    	CommonDefine.m_iBackCount=0;
         return super.onKeyDown(keyCode, event); 
     }
 	public void onResume()

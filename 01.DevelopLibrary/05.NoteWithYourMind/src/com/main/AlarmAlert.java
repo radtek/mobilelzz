@@ -18,7 +18,7 @@ public class AlarmAlert extends Activity
     
     
     new AlertDialog.Builder(AlarmAlert.this)
-        .setIcon(R.drawable.clock)
+        //.setIcon(R.drawable.clock)
         .setTitle("闹钟响了!!")
         .setMessage("赶快起床吧!!!")
         .setPositiveButton("关掉他",

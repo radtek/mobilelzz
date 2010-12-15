@@ -128,17 +128,14 @@ implements ListActivityCtrl, View.OnClickListener
 		super.onDestroy();
 	}
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if ((keyCode == KeyEvent.KEYCODE_BACK) && (CommonDefine.m_iBackCount == 0)) { 
+		if ((keyCode == KeyEvent.KEYCODE_BACK)) { 
         	if(CommonDefine.g_enToolbarStatus!=CommonDefine.ToolbarStatusEnum.ToolbarStatus_Normal){
-        		CommonDefine.m_iBackCount++;
             	m_NoteListUICtrl.processCancelClick(null);
                 return true;	
         	}else{
-        		CommonDefine.m_iBackCount=0;
         		return super.onKeyDown(keyCode, event); 
         	}
         } 
-    	CommonDefine.m_iBackCount=0;
         return super.onKeyDown(keyCode, event); 
     }
 	public void onClick(View view){
@@ -213,6 +210,7 @@ implements ListActivityCtrl, View.OnClickListener
 	}
 	
 	public void updateToolbar(CommonDefine.ToolbarStatusEnum enStatus){
+		CommonDefine.g_enToolbarStatus = enStatus;
 		ImageButton btNewFolder = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_newfolder);
 		ImageButton btNewNote = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_newnote);
 		ImageButton btSearch = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_search);
@@ -244,7 +242,7 @@ implements ListActivityCtrl, View.OnClickListener
 		LayoutInflater factory = LayoutInflater.from(SearchResultViewList.this);
 		final View DialogView = factory.inflate(R.layout.dialognewfolder, null);
 		AlertDialog clDlgNewFolder = new AlertDialog.Builder(SearchResultViewList.this)	
-			.setIcon(R.drawable.clock)
+			//.setIcon(R.drawable.clock)
 			.setTitle("请输入文件夹名称")
 			.setView(DialogView)
 			.setPositiveButton("确定",new DialogInterface.OnClickListener(){

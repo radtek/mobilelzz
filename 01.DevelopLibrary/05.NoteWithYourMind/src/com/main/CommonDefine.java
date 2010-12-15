@@ -18,7 +18,6 @@ class CommonDefine{
 	public static boolean g_bIsRemind = false;
 	public static int g_test = -1;
 	public static	CNoteDBCtrl		m_clCNoteDBCtrl = null;
-	public static int m_iBackCount = 0;
 }
 
 class CommonContainer{

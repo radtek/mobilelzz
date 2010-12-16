@@ -375,7 +375,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			
 		}
 		
-		if(mMediaPlayer.isPlaying())
+		if(mMediaPlayer != null && mMediaPlayer.isPlaying())
 		{
 			mMediaPlayer.pause();
 		}
@@ -464,7 +464,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	//Í£Ö¹Â¼Òô/ÔÝÍ£²¥·Å
 	private void processStopClick(View view)
 	{
-		if(mMediaPlayer.isPlaying())
+		if(mMediaPlayer != null && mMediaPlayer.isPlaying())
 		{
 			//²¥·Å×´Ì¬
 			mMediaPlayer.pause();
@@ -494,7 +494,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	{
 	 	try
 		{
-			if( mMediaPlayer.isPlaying() )
+			if(mMediaPlayer != null &&  mMediaPlayer.isPlaying() )
 			{
 				mMediaPlayer.start();			
 			}
@@ -525,7 +525,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	//É¾³ýÂ¼ÒôÎÄ¼þ
 	private void processDeleteClick(View view)
 	{
-		if(mMediaPlayer.isPlaying())
+		if(mMediaPlayer != null && mMediaPlayer.isPlaying())
 		{
 			mMediaPlayer.stop();			
 		}

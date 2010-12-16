@@ -88,6 +88,7 @@ implements ListActivityCtrl, View.OnClickListener
         registerForContextMenu(list);
         m_toolBarLayout = findViewById(R.id.rootviewlist_toolbar);
 
+        UICtrlParam = new ListUICtrlParam();
 		UICtrlParam.g_enListType = ListUICtrlParam.ListTypeEnum.ListType_NormalList;
 		UICtrlParam.g_int_PreID= CMemoInfo.PreId_Root;
 		

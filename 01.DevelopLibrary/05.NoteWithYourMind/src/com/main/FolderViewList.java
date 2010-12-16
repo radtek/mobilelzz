@@ -39,7 +39,7 @@ public class FolderViewList extends Activity implements ListActivityCtrl
 		ListView list = (ListView) findViewById(R.id.folderviewlist_list);
 		m_toolBarLayout = findViewById(R.id.folderviewlist_toolbar);
 
-
+		UICtrlParam = new ListUICtrlParam();
 		UICtrlParam.g_enListType = ListUICtrlParam.ListTypeEnum.ListType_NormalList;
 		UICtrlParam.g_int_PreID= m_iFolder_DBID;
 		

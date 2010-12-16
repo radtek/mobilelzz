@@ -75,6 +75,7 @@ implements ListActivityCtrl, View.OnClickListener
         
     	Intent iExtraData = getIntent();
     	SearchKindEnum SearchKind =	(SearchKindEnum)iExtraData.getSerializableExtra(ExtraData_SearchKind);
+    	m_ExtraData_SearchParam = new ListUICtrlParam();
    		m_ExtraData_SearchParam.g_enListType = ListUICtrlParam.ListTypeEnum.ListType_SearchResultList;
     	m_ExtraData_SearchParam.g_bool_IsRemindSearch = true;
 		

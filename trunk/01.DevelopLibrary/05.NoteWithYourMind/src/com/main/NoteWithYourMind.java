@@ -441,7 +441,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 				{
 					e.printStackTrace();
 				}
-                if(i==(mMaxTime) || !mIsRecordSound)
+                if( i==mMaxTime )
                 {
                   Message m = new Message();
                   m.what = NoteWithYourMind.GUI_STOP_NOTIFIER;

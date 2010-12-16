@@ -161,10 +161,12 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		 * 		有提醒时间，位置2放提醒Icon
 		 * 		有语音内容，位置3放语音Icon
 		 */
+		Button icon0 = (Button) view.findViewById(R.id.notelistitem_icon0);
 		Button icon1 = (Button) view.findViewById(R.id.notelistitem_icon1);
 		Button icon2 = (Button) view.findViewById(R.id.notelistitem_icon2);
 		Button icon3 = (Button) view.findViewById(R.id.notelistitem_icon3);
 		if(iTypeValue==CMemoInfo.Type_Folder){
+			icon0.setBackgroundResource(R.drawable.notelistitem_bigicon_folder);
 			long Count = CommonDefine.m_clCNoteDBCtrl.getRecCountInFolder(iIDValue);
 			String strCount = "("+String.valueOf(Count)+")";
 			tvDate.setText(strCount);
@@ -174,13 +176,17 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 			if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
 				icon2.setBackgroundResource(R.drawable.notelistitem_icon_lock);
 				icon3.setBackgroundDrawable(null);
+				icon3.setVisibility(View.GONE);
 				itemdetail.bIsEncode = true;
 			}else{
 				icon2.setBackgroundDrawable(null);
 				icon3.setBackgroundDrawable(null);
+				icon2.setVisibility(View.GONE);
+				icon3.setVisibility(View.GONE);
 				itemdetail.bIsEncode = false;
 			}
 		}else{
+			icon0.setBackgroundResource(R.drawable.notelistitem_bigicon_text);
 			tvDate.setText("");
 			icon1.setBackgroundResource(R.drawable.notelistitem_icon_text);
 			int isRemindIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isremind);
@@ -191,12 +197,15 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 				if(false){//for voice
 				}else{
 					icon3.setBackgroundDrawable(null);
+					icon3.setVisibility(View.GONE);
 				}
 			}else{
 				if(false){//for voice
 				}else{
 					icon2.setBackgroundDrawable(null);
 					icon3.setBackgroundDrawable(null);
+					icon2.setVisibility(View.GONE);
+					icon3.setVisibility(View.GONE);
 				}
 			}
 		}

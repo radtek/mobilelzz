@@ -30,6 +30,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
+
 
 class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickListener{
 	private enum MoveIn_State{
@@ -349,7 +352,13 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 						//cursor转化为ArrayList
 
 						List<CMemoInfo> Items = new ArrayList<CMemoInfo>();
-						ChangeCursorToArrayList( cursor ,Items);						
+						ChangeCursorToArrayList( cursor ,Items);
+						
+						//对搜索结果的List进行排序
+		                Collections.sort(Items, new SortByRemindFirst());
+		                Collections.sort(Items, new SortByVoiceFirst());
+		                Collections.sort(Items, new SortByRemindTime());
+		                Collections.sort(Items, new SortByLastModifyTime());				
 
 						m_myArrayListAdapter = new NoteListArrayAdapter( m_sourceManager,  Items);
 

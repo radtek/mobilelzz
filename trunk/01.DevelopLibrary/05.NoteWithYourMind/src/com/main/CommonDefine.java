@@ -1,5 +1,7 @@
 package com.main;
 
+import java.util.Comparator;
+
 class CommonDefine{
 	public	enum	ToolbarStatusEnum
 	{
@@ -49,4 +51,77 @@ class ListUICtrlParam{
 	public boolean g_bool_IsVoiceSearch;
 	public boolean g_bool_IsTextSearch;	
 	public String g_str_SearchKey;
+}
+
+
+// 通过是否是提醒排序，提醒最优，排在最上面
+class SortByRemindFirst implements  Comparator<CMemoInfo> {
+
+	public int  compare(CMemoInfo object1, CMemoInfo object2) {
+		return ( object1.iIsRemind - object2.iIsRemind );	
+	}
+}
+
+//通过提醒时间排序，最近的提醒时间最优，排在最上面!!!!!!!!!!???????
+class SortByRemindTime implements  Comparator<CMemoInfo> {
+
+	public int  compare(CMemoInfo object1, CMemoInfo object2) {
+		return 0;	
+	}
+}
+
+//通过便签创建时间排序，最新的创建的，排在最上面
+class SortByCreateTime implements  Comparator<CMemoInfo> {
+
+	public int  compare(CMemoInfo object1, CMemoInfo object2) {
+		long temp = object1.dCreateTime - object2.dCreateTime;
+		if( temp < 0){
+			return 1;			
+		}else if( temp > 0){
+			return -1;			
+		}else {
+			return 0;			
+		}
+	}
+}
+
+//通过便签修改时间排序，最新的修改的，排在最上面
+class SortByLastModifyTime implements  Comparator<CMemoInfo> {
+
+	public int  compare(CMemoInfo object1, CMemoInfo object2) {
+		long temp = object1.dLastModifyTime - object2.dLastModifyTime;
+		if( temp < 0){
+			return 1;			
+		}else if( temp > 0){
+			return -1;			
+		}else {
+			return 0;			
+		}
+	}
+}
+
+//通过提醒类型排序，循环提醒最优，排在最上面   功能暂时不启用
+class SortByRemindType implements  Comparator<CMemoInfo> {
+
+	public int  compare(CMemoInfo object1, CMemoInfo object2) {
+		return 0;	
+	}
+}
+
+
+//通过是否是加密排序，加密最优，排在最上面
+class SortByEncodeFirst implements  Comparator<CMemoInfo> {
+
+	public int  compare(CMemoInfo object1, CMemoInfo object2) {
+		return ( object1.iIsEncode - object2.iIsEncode );	
+	}
+}
+
+
+//通过是否有语音排序，带语音最优，排在最上面 ？？？
+class SortByVoiceFirst implements  Comparator<CMemoInfo> {
+
+	public int  compare(CMemoInfo object1, CMemoInfo object2) {
+		return 0;	
+	}
 }

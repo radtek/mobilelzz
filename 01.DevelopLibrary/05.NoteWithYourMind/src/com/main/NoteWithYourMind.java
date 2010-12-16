@@ -503,7 +503,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 				/* 重置MediaPlayer */
 				mMediaPlayer.reset();
 				/* 设置要播放的文件的路径 */
-				mMediaPlayer.setDataSource(myRecAudioFile.getPath());
+				mMediaPlayer.setDataSource(myRecAudioFile.getAbsolutePath());
 				/* 准备播放 */
 				mMediaPlayer.prepare();
 				/* 开始播放 */

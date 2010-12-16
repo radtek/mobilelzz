@@ -12,11 +12,7 @@ class CommonDefine{
 	public static int g_int_ListItemHeight = 65;
 	public static String g_str_PassWord = "";
 	public static boolean g_bool_IsPassWordChecked = false;
-	
-	public static NoteListCursorAdapter g_listAdapter = null;
-	public static int g_preID = -1;
-	public static boolean g_bIsRemind = false;
-	public static int g_test = -1;
+
 	public static	CNoteDBCtrl		m_clCNoteDBCtrl = null;
 }
 

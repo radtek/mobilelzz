@@ -32,18 +32,25 @@ class CommonContainer{
 
 class ListUICtrlParam{
 
-
+	ListUICtrlParam(){
+		g_bool_IsRemindSearch = false;
+		g_bool_IsVoiceSearch = false;
+		g_bool_IsTextSearch = false;
+		g_str_SearchKey = "";
+		g_int_PreID = -1;
+		g_enListType = ListTypeEnum.ListType_NormalList;
+	}
 	public	enum	ListTypeEnum
 	{
 		ListType_NormalList,          //通过指定PreID，来提供PreID对应的子List
 		ListType_SearchResultList,   //通过设定检索条件，来提供检索结果List
 	}
-	public static ListTypeEnum g_enListType = ListTypeEnum.ListType_NormalList;
+	public ListTypeEnum g_enListType;
 	
-	public static int g_int_PreID = -1;
+	public int g_int_PreID;
 	
-	public static boolean g_bool_IsRemindSearch = false;
-	public static boolean g_bool_IsVoiceSearch = false;
-	public static boolean g_bool_IsTextSearch = false;	
-	public static String g_str_SearchKey = "";
+	public boolean g_bool_IsRemindSearch;
+	public boolean g_bool_IsVoiceSearch;
+	public boolean g_bool_IsTextSearch;	
+	public String g_str_SearchKey;
 }

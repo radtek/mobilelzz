@@ -259,7 +259,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	            		
 	            		index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_audioDataName);
 	            		String temp = curExtraMemo.getString(index);
-	            		if(!temp.equals("")){
+	            		if((temp!=null) && (!temp.equals(""))){
 	            			strAudioFileName = temp;
 	            		}
 			        }

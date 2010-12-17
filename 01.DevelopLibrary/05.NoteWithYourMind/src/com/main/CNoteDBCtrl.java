@@ -41,7 +41,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	private static final String	DB_TABLE				= "Notes";
 	private static final String	DB_TABLE_PassWord		= "PassWord";
 	// Êý¾Ý¿â°æ±¾
-	private static final int	DB_VERSION		= 2;
+	private static final int	DB_VERSION		= 1;
 	
 	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" 
 												+ KEY_id 				+ " INTEGER PRIMARY KEY AUTOINCREMENT," 
@@ -63,8 +63,8 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 												+ KEY_thursday 			+ " INTERGER,"
 												+ KEY_friday 			+ " INTERGER,"
 												+ KEY_staturday 		+ " INTERGER,"
-												+ KEY_sunday 			+ " INTERGER"
-												+ KEY_isHaveAudioData	+ " INTERGER"
+												+ KEY_sunday 			+ " INTERGER,"
+												+ KEY_isHaveAudioData	+ " INTERGER,"
 												+ KEY_audioDataName		+ " TEXT"
 												+ ")";
 

@@ -30,6 +30,9 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	public static final String	KEY_staturday			= "staturday";
 	public static final String	KEY_sunday				= "sunday";
 	
+	public static final String	KEY_isHaveAudioData		= "ishavevoice";
+	public static final String	KEY_audioDataName		= "audiodataname";
+	
 	public static final String	KEY_rec_count_in_folder = "reccountinfolder";
 	// 数据库名称为data
 	private static final String	DB_NAME			= "NoteWithYourMind.db";
@@ -61,6 +64,8 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 												+ KEY_friday 			+ " INTERGER,"
 												+ KEY_staturday 		+ " INTERGER,"
 												+ KEY_sunday 			+ " INTERGER"
+												+ KEY_isHaveAudioData	+ " INTERGER"
+												+ KEY_audioDataName		+ " TEXT"
 												+ ")";
 
 	private static final String	Trigger_CREATE	=	"create trigger delete_sub_rec before delete on " + DB_TABLE +" for each row " +

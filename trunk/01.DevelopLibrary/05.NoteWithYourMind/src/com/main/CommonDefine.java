@@ -16,6 +16,8 @@ class CommonDefine{
 	public static boolean g_bool_IsPassWordChecked = false;
 
 	public static	CNoteDBCtrl		m_clCNoteDBCtrl = null;
+	
+	public static String g_strAudioFilePath = "/note/record";
 }
 
 class CommonContainer{

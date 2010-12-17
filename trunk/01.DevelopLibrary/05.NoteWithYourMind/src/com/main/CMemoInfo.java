@@ -22,6 +22,9 @@ public class CMemoInfo {
 	public final static Integer IsEncode_Yes = 0;
 	public final static Integer IsEncode_No = 1;
 	
+	public final static Integer IsHaveAudioData_No = 0;
+	public final static Integer IsHaveAudioData_Yes = 1;
+	
 	Integer		iId;
 	Integer		iPreId;
 	Integer		iType;
@@ -36,6 +39,9 @@ public class CMemoInfo {
 	String		strPassword;
 	Integer		iIsEncode;	
 	Byte		m_Week[]	=	new Byte[7];
+	
+	Integer		iIsHaveAudioData;
+	String		strAudioFileName;
 	CMemoInfo()
 	{
 		iId				=	-1;
@@ -56,6 +62,8 @@ public class CMemoInfo {
 		{
 			m_Week[ i ]	=	-1;
 		}
+		iIsHaveAudioData = IsHaveAudioData_No;
+		strAudioFileName = null;
 	}
 	
 }

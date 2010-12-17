@@ -3,6 +3,7 @@ package com.main;
 import java.text.SimpleDateFormat;
 import java.util.*; 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Calendar;
 
@@ -81,8 +82,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	
 	CRemindInfo													m_clCRemindInfo	=	new	CRemindInfo( (byte) -1 );
 	private boolean 											sdCardExit;
-	private File 												myRecAudioFile;
-	private File 												myRecAudioDir;
+	private File 												myRecAudioFile = null;
+	private File 												myRecAudioDir = null;
 	private File												SdCardDir;
 	private MediaRecorder 										mMediaRecorder01;
 	
@@ -183,6 +184,12 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	    if (sdCardExit)
 	    {
 	    	SdCardDir = Environment.getExternalStorageDirectory();
+	    	String AudioDir = SdCardDir.toString() + CommonDefine.g_strAudioFilePath;   
+	        myRecAudioDir = new File(AudioDir);
+	        if(!myRecAudioDir.exists())
+	        {
+	        	myRecAudioDir.mkdir();
+	        } 
 	    }
 		
 		//如果存在录音文件 打开录音面板
@@ -203,7 +210,6 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         
 		/* 构建MediaPlayer对象 */
 		mMediaPlayer		= new MediaPlayer();
-	    
     }
     
     
@@ -220,11 +226,14 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     	 */
     	Intent iExtraData = getIntent();
 		m_ExtraData_OperationNoteKind	=	(OperationNoteKindEnum)iExtraData.getSerializableExtra(ExtraData_OperationNoteKind);
+		
+		String strDetail = null;
+		String strAudioFileName = null;
 		if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Edit )
 		{
 			m_ExtraData_PreID = iExtraData.getIntExtra(ExtraData_OperationPreID, CommonDefine.g_int_Invalid_ID);
 			m_ExtraData_EditNoteID		=	iExtraData.getIntExtra(ExtraData_EditNoteID, CMemoInfo.Id_Invalid );
-			String strDetail = null;
+			
 			if( m_ExtraData_EditNoteID != CMemoInfo.Id_Invalid )
 			{
 			   //根据ID取得该条记录的Cursor
@@ -247,13 +256,19 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	        	    	
 	        	    	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
 	            		clCRemindOperator.getRemindInfo(curExtraMemo, m_clCRemindInfo);
+	            		
+	            		index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_audioDataName);
+	            		String temp = curExtraMemo.getString(index);
+	            		if(!temp.equals("")){
+	            			strAudioFileName = temp;
+	            		}
 			        }
 			    }
 			    curExtraMemo.close();
 			}
 			updateTime(m_clCRemindInfo);
 			updateDetail(strDetail);
-			updateVoice();
+			updateVoice(strAudioFileName);
 			
 		}else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New )
 		{
@@ -263,7 +278,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			//将文本设置为空
 			updateDetail(null);
 			//将语音设置为空
-			updateVoice();
+			updateVoice(null);
 		}else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Update )
 		{
 			CRemindInfo temp =	( CRemindInfo )iExtraData.getSerializableExtra( ExtraData_RemindSetting );
@@ -271,7 +286,13 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			updateTime(temp);
 		}	
 	}
-    private void updateVoice(){
+    private void updateVoice(String strAudioFileName){
+    	if(strAudioFileName!=null){
+    			myRecAudioFile = new File(myRecAudioDir, strAudioFileName);
+    			openVoicePanel();
+    	}else{
+    		
+    	}
     	
     }
     private void updateTime(CRemindInfo clRemindInfo){
@@ -348,15 +369,19 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		}
 		else
 		{	
-			//打开录音面板
-			clBTStartRecord.setVisibility(View.VISIBLE);
-			clBTStopRecord.setVisibility(View.VISIBLE);
-			clBTPlayRecord.setVisibility(View.VISIBLE);
-			clBTDeleteRecord.setVisibility(View.VISIBLE);
-			mIsOpenRecordPanel = true;
+			openVoicePanel();
 		}
 		
 			
+	}
+	private void openVoicePanel(){
+		//打开录音面板
+		clBTStartRecord.setVisibility(View.VISIBLE);
+		clBTStopRecord.setVisibility(View.VISIBLE);
+		clBTStopRecord.setEnabled(false);
+		clBTPlayRecord.setVisibility(View.VISIBLE);
+		clBTDeleteRecord.setVisibility(View.VISIBLE);
+		mIsOpenRecordPanel = true;
 	}
 	
 	//开始录音
@@ -387,14 +412,6 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		clBTDeleteRecord.setEnabled(false);
 		
 		mIsRecordSound = true;
-
-        
-        String AudioDir = SdCardDir.toString() + "//note//record";   
-        myRecAudioDir = new File(AudioDir);
-        if(!myRecAudioDir.exists())
-        {
-        	myRecAudioDir.mkdir();
-        }
 
  	    Date d = new Date();
         d.toString();
@@ -496,13 +513,16 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		{
 			if(mMediaPlayer != null &&  mMediaPlayer.isPlaying() )
 			{
+				Toast.makeText(NoteWithYourMind.this, "isPlaying",Toast.LENGTH_SHORT).show();
 				mMediaPlayer.start();			
 			}
 			else
 			{
+				Toast.makeText(NoteWithYourMind.this, "will Playing",Toast.LENGTH_SHORT).show();
 				/* 重置MediaPlayer */
-				mMediaPlayer.reset();
+//				mMediaPlayer.reset();
 				/* 设置要播放的文件的路径 */
+				Toast.makeText(NoteWithYourMind.this, myRecAudioFile.getAbsolutePath(),Toast.LENGTH_SHORT).show();
 				mMediaPlayer.setDataSource(myRecAudioFile.getAbsolutePath());
 				/* 准备播放 */
 				mMediaPlayer.prepare();
@@ -657,7 +677,10 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_No;
     		clCMemoInfo.iIsRemindAble	=	0;
     	}
-		
+		if((myRecAudioFile!=null) && (myRecAudioFile.isFile())){
+			clCMemoInfo.iIsHaveAudioData = CMemoInfo.IsHaveAudioData_Yes;
+			clCMemoInfo.strAudioFileName = myRecAudioFile.getName();
+		}
     	
 //		if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New )
     	if ( m_ExtraData_PreID != CMemoInfo.Id_Invalid )

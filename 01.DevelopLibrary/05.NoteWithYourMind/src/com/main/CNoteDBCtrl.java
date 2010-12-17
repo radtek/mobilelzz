@@ -214,6 +214,8 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		initialValues.put(KEY_friday, clCMemoInfo.m_Week[4]);
 		initialValues.put(KEY_staturday, clCMemoInfo.m_Week[5]);
 		initialValues.put(KEY_sunday, clCMemoInfo.m_Week[6]);
+		initialValues.put(KEY_isHaveAudioData, clCMemoInfo.iIsHaveAudioData);
+		initialValues.put(KEY_audioDataName, clCMemoInfo.strAudioFileName);
 
 		return	m_db.insert(DB_TABLE, KEY_id, initialValues);
 	}
@@ -326,6 +328,14 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		if ( -1 != clCMemoInfo.m_Week[6])
 		{
 			cv.put(KEY_sunday, clCMemoInfo.m_Week[6].toString());
+		}
+		if ( -1 != clCMemoInfo.iIsHaveAudioData)
+		{
+			cv.put(KEY_isHaveAudioData, clCMemoInfo.iIsHaveAudioData);
+		}
+		if ( null != clCMemoInfo.strAudioFileName)
+		{
+			cv.put(KEY_audioDataName, clCMemoInfo.strAudioFileName);
 		}
 		
 		String[] whereValue={ Integer.toString(id)};

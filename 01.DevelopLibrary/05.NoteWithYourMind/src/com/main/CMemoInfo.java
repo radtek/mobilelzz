@@ -22,6 +22,7 @@ public class CMemoInfo {
 	public final static Integer IsEncode_Yes = 0;
 	public final static Integer IsEncode_No = 1;
 	
+	public final static Integer IsHaveAudioData_Invalid = -1;
 	public final static Integer IsHaveAudioData_No = 0;
 	public final static Integer IsHaveAudioData_Yes = 1;
 	

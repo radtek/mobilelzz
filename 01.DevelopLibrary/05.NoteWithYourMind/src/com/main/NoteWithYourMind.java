@@ -288,8 +288,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	}
     private void updateVoice(String strAudioFileName){
     	if(strAudioFileName!=null){
-    			myRecAudioFile = new File(myRecAudioDir, strAudioFileName);
-    			openVoicePanel();
+    		myRecAudioFile = new File(myRecAudioDir, strAudioFileName);
+    		openVoicePanel();
     	}else{
     		
     	}
@@ -520,9 +520,9 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			{
 				Toast.makeText(NoteWithYourMind.this, "will Playing",Toast.LENGTH_SHORT).show();
 				/* 重置MediaPlayer */
-//				mMediaPlayer.reset();
+				mMediaPlayer.reset();
 				/* 设置要播放的文件的路径 */
-				Toast.makeText(NoteWithYourMind.this, myRecAudioFile.getAbsolutePath(),Toast.LENGTH_SHORT).show();
+				Toast.makeText(NoteWithYourMind.this, myRecAudioFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
 				mMediaPlayer.setDataSource(myRecAudioFile.getAbsolutePath());
 				/* 准备播放 */
 				mMediaPlayer.prepare();
@@ -617,7 +617,6 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			//保存用户设定的Memo和提醒信息
 			if ( 0 == SaveEditData( strMemoText ) )
 			{
-//       			UpdateViewStatus();
         		Toast toast = Toast.makeText(NoteWithYourMind.this, "保存成功", Toast.LENGTH_SHORT);
         		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
         		toast.show();
@@ -677,6 +676,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_No;
     		clCMemoInfo.iIsRemindAble	=	0;
     	}
+
 		if((myRecAudioFile!=null) && (myRecAudioFile.isFile())){
 			clCMemoInfo.iIsHaveAudioData = CMemoInfo.IsHaveAudioData_Yes;
 			clCMemoInfo.strAudioFileName = myRecAudioFile.getName();

@@ -200,7 +200,12 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 					icon3.setVisibility(View.GONE);
 				}
 			}else{
-				if(false){//for voice
+				int iVoiceFlagIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isHaveAudioData);
+				int iVoiceFlag = cursor.getInt(iVoiceFlagIndex);
+				if(iVoiceFlag == CMemoInfo.IsHaveAudioData_Yes){//for voice
+					icon2.setBackgroundResource(R.drawable.notelistitem_icon_voice);
+					icon3.setBackgroundDrawable(null);
+					icon3.setVisibility(View.GONE);
 				}else{
 					icon2.setBackgroundDrawable(null);
 					icon3.setBackgroundDrawable(null);

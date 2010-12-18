@@ -7,31 +7,52 @@ import android.content.Context;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.TextView;
 
 public class CDateDlg extends CommentOutDlg implements View.OnClickListener
 {
-	private	Context	m_context;
 	public	int		iYear;
 	public	int		iMonth;
 	public	int		iDay;
 	
+	private	DatePicker	dp	=	null;
 	
-	public CDateDlg(Context context)
+	TextView	m_Date		=	null;
+	
+	public	void	Initialize( Byte type )
 	{
-		super(context);
-		m_context	=	context;
 		iYear		=	-1;
 		iMonth		=	-1;
 		iDay		=	-1;
+		m_bType		=	type;	
 	}
 	
-	public void setDisplay()
+	public CDateDlg(Context context )
+	{
+		super(context);
+		m_context	=	context;
+	}
+	
+	public void setDisplay( TextView TimeTxt )
 	{
         setContentView(R.layout.date);
-        DatePicker	dp	=	(DatePicker)findViewById(R.id.DatePicker01);
+        dp	=	(DatePicker)findViewById(R.id.DatePicker01);
         setProperty();
         setTitle("日期设定");
+        
+        m_Date	=	TimeTxt;
+        
+        if( -1 != iYear && -1 != iMonth && -1 != iDay )
+        {
+        	dp.updateDate( iYear, iMonth, iDay );
+        }
+        
+        Button	btCancel	=	(Button)findViewById(R.id.DateCancel);
+        btCancel.setOnClickListener(this);
+        Button	btOK		=	(Button)findViewById(R.id.DateOK);
+        btOK.setOnClickListener(this);
         show(); 
     }
     private void setProperty()
@@ -46,16 +67,27 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
    }
 	public void onClick(View view)
 	{
-//        switch(view.getId()){
-//        case R.id.mouse_button1:
-//            dismiss();
-//            break;
-//        case R.id.mouse_button2:
-//        case R.id.mouse_button3:
-//            dismiss();
-//            new MyDialog(getContext()).setDisplay();
-//            break;
-//        default:
-//        }
+        switch(view.getId()){
+        case R.id.DateCancel:
+        	cancel();
+            break;
+        case R.id.DateOK:
+        	saveData();
+        	cancel();
+            break;
+        default:
+        }
     }
+	
+	private	void	saveData()
+	{
+		iYear	=	dp.getYear();
+		iMonth	=	dp.getMonth();
+		iDay	=	dp.getDayOfMonth();
+		if ( m_Date != null )
+		{
+			m_Date.setText(Integer.toString(iYear) + "年" + Integer.toString( iMonth+1 ) + "月" + Integer.toString(iDay) + "日" );
+		}
+		m_bType	=	3;
+	}
 }

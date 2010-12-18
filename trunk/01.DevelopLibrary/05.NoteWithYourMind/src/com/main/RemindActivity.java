@@ -9,17 +9,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 public class RemindActivity extends Activity	implements View.OnClickListener
 {
-	CRemindInfo	m_clCRemindInfo	= null;
+	CRemindInfo	m_clCRemindInfo					=	null;
 	private		CDateDlg		m_clCDateDlg	=	null;
 	private		CWeekDlg		m_clCWeekDlg	=	null;
 	private		CTimeDlg		m_clCTimeDlg	=	null;
+	private		CCountdownDlg	m_clCCountdownDlg	=	null;
+	
 	
 	private		boolean			m_IsEnable		=	true;
 	private 	RadioGroup 		m_RadioGroupTime;
+	private 	RadioGroup 		m_RadioGroupDate;
 	private 	RadioButton 	rbTime,rbCountdown; 
+	private		Byte			m_bType;
 	
 	//btn
 	Button	btCountdown	=	null;
@@ -28,21 +33,45 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 	Button	btWeek		=	null;
 	Button	btMonth		=	null;
 	
+	TextView	TimeTxt	=	null;
+	TextView	CountDownTxt	=	null;
+	TextView	DateTxt	=	null;
+	
+	TextView	WeekTxt[]	=	new	TextView[7];;
+	
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remindsetting2);
         m_clCRemindInfo		=	new		CRemindInfo ( (byte)-1 );
     	m_clCDateDlg		=	new		CDateDlg( RemindActivity.this );
+    	m_clCDateDlg.Initialize(m_bType);
     	m_clCWeekDlg		=	new		CWeekDlg( RemindActivity.this );
-    	m_clCTimeDlg		=	new		CTimeDlg( RemindActivity.this );
+    	m_clCWeekDlg.Initialize(m_bType);
+    	m_clCTimeDlg		=	new		CTimeDlg( RemindActivity.this);
+    	m_clCTimeDlg.Initialize(m_bType);
+    	m_clCCountdownDlg	=	new		CCountdownDlg( RemindActivity.this );
+    	m_clCCountdownDlg.Initialize(m_bType);
+   // 	WeekTxt				=	new	TextView[7];
     	m_RadioGroupTime	=	(RadioGroup)findViewById(R.id.timeRadioButton); 
+    	m_RadioGroupDate	=	(RadioGroup)findViewById(R.id.dateRadioButton); 
         
-        
+    	TimeTxt				=	(TextView)findViewById(R.id.Time_txt);
+    	DateTxt				=	(TextView)findViewById(R.id.OnceText);
+    	CountDownTxt		=	(TextView)findViewById(R.id.daojishiTxt);
+    	WeekTxt[0]			=	(TextView)findViewById(R.id.MonTxt);
+    	WeekTxt[1]			=	(TextView)findViewById(R.id.TusTxt);
+    	WeekTxt[2]			=	(TextView)findViewById(R.id.WedTxt);
+    	WeekTxt[3]			=	(TextView)findViewById(R.id.ThrTxt);
+    	WeekTxt[4]			=	(TextView)findViewById(R.id.FriTxt);
+    	WeekTxt[5]			=	(TextView)findViewById(R.id.SatTxt);
+    	WeekTxt[6]			=	(TextView)findViewById(R.id.SunTxt);
+    	
         rbTime		=	(RadioButton)findViewById(R.id.TimeSetting); 
         rbCountdown	=	(RadioButton)findViewById(R.id.daojishi); 
         
-        m_RadioGroupTime.setOnCheckedChangeListener(mChangeRadio); 
+        m_RadioGroupTime.setOnCheckedChangeListener(mChangeRadioTime);
+        m_RadioGroupDate.setOnCheckedChangeListener(mChangeRadioDate);
         
         btTime	=	(Button) findViewById(R.id.TimeSettingBtnImg);
         btTime.setOnClickListener(this);
@@ -56,8 +85,6 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         btWeek		=	(Button) findViewById(R.id.EveryWeekImg);
         btWeek.setOnClickListener(this);
         
-        btMonth		=	(Button) findViewById(R.id.MonthSetting);
-        btMonth.setOnClickListener(this);
 
         //根据从编辑画页传入的数据设置当前Activity的状态
         setInput();
@@ -82,9 +109,6 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     		case R.id.EveryWeekImg:
     			processWeek(view);
     			break;
-    		case R.id.MonthSetting:
-    			processMonth(view);
-    			break;
     		default:
     			break;
     	}
@@ -93,29 +117,25 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     //响应按下的处理
     private void processSaveTime(View view)
     {
-    	m_clCTimeDlg.setDisplay( rbTime );
+    	m_clCTimeDlg.setDisplay( TimeTxt );
  
     }
     
     private void processCountdown(View view)
     {
-    	
+    	m_clCCountdownDlg.setDisplay(CountDownTxt);
     }
     
     private void processOnceDate(View view)
     {
-    	m_clCDateDlg.setDisplay();
+    	m_clCDateDlg.setDisplay( DateTxt );
     }
     
     private void processWeek(View view)
     {
-    	m_clCWeekDlg.setDisplay();
+    	m_clCWeekDlg.setDisplay( WeekTxt );
     }
     
-    private void processMonth(View view)
-    {
-    	
-    }
     //end
     
     private	void	setInput()
@@ -175,23 +195,43 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       }
     }
     
-    private RadioGroup.OnCheckedChangeListener mChangeRadio = new RadioGroup.OnCheckedChangeListener()
+    private RadioGroup.OnCheckedChangeListener mChangeRadioTime = new RadioGroup.OnCheckedChangeListener()
     {
         public void onCheckedChanged(RadioGroup group, int checkedId)
         { 
-        	if(checkedId == m_RadioGroupTime.getId())
+        	if(checkedId == R.id.TimeSetting)
         	{
-        		m_clCTimeDlg.setDisplay( rbTime );
+        		m_clCTimeDlg.setDisplay( TimeTxt );
         		btTime.setVisibility(View.VISIBLE);
         		btCountdown.setVisibility(View.GONE);
         	}
-        	else if(checkedId==m_RadioGroupTime.getId())
+        	else if(checkedId==R.id.daojishi)
         	{
-        		
+        		m_clCCountdownDlg.setDisplay(CountDownTxt);
+        		btTime.setVisibility(View.GONE);
+        		btCountdown.setVisibility(View.VISIBLE);
         	}
         }
     };
     
+    private RadioGroup.OnCheckedChangeListener mChangeRadioDate = new RadioGroup.OnCheckedChangeListener()
+    {
+        public void onCheckedChanged(RadioGroup group, int checkedId)
+        { 
+        	if(checkedId == R.id.OnceRemind)
+        	{
+        		m_clCDateDlg.setDisplay(DateTxt);
+        		btOnceDate.setVisibility(View.VISIBLE);
+        		btWeek.setVisibility(View.GONE);
+        	}
+        	else if(checkedId==R.id.EveryWeek)
+        	{
+        		m_clCWeekDlg.setDisplay( WeekTxt );
+        		btWeek.setVisibility(View.VISIBLE);
+        		btOnceDate.setVisibility(View.GONE);
+        	}
+        }
+    };
     
     String	getDayofWeek( Calendar	clCalendar )
     {

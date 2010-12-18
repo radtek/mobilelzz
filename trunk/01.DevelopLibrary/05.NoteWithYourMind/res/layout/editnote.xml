@@ -32,8 +32,10 @@
 			/>
 	</LinearLayout>
 	<ScrollView
+		android:id="@+id/editnote_noteinfo_scroll"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
+		android:scrollbars="vertical"
 		android:layout_above="@id/editnote_toolbar"
 		>
 	<LinearLayout
@@ -200,22 +202,19 @@
 				</Chronometer>
 			</LinearLayout>
 		</LinearLayout>
-
 		<EditText
 			android:id="@+id/ET_main_Memo"
 			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_weight="12"
+			android:layout_height="fill_parent"
+			android:layout_weight="10"
 			android:textSize="22sp"
 			android:gravity = "top"
 			android:layout_marginLeft="3dip"
 			android:layout_marginRight="3dip"
 			android:layout_marginTop="5dip"
-			android:scrollbars="vertical"
-			android:scrollbarStyle="insideOverlay"
-			android:scrollbarSize="4dp">
+			android:singleLine="false"
+			>
 		</EditText>
-		
 	</LinearLayout>
 	</ScrollView>
 </RelativeLayout>

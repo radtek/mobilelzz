@@ -161,56 +161,58 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		 * 		有提醒时间，位置2放提醒Icon
 		 * 		有语音内容，位置3放语音Icon
 		 */
-		Button icon0 = (Button) view.findViewById(R.id.notelistitem_icon0);
+		Button bigIcon = (Button) view.findViewById(R.id.notelistitem_bigicon);
+		TextView countTV = (TextView) view.findViewById(R.id.notelistitem_count);
 		Button icon1 = (Button) view.findViewById(R.id.notelistitem_icon1);
 		Button icon2 = (Button) view.findViewById(R.id.notelistitem_icon2);
-		Button icon3 = (Button) view.findViewById(R.id.notelistitem_icon3);
 		if(iTypeValue==CMemoInfo.Type_Folder){
-			icon0.setBackgroundResource(R.drawable.notelistitem_bigicon_folder);
+			bigIcon.setBackgroundResource(R.drawable.notelistitem_bigicon_folder);
 			long Count = CommonDefine.m_clCNoteDBCtrl.getRecCountInFolder(iIDValue);
 			String strCount = "("+String.valueOf(Count)+")";
-			tvDate.setText(strCount);
-
+			countTV.setText(strCount);
 			itemdetail.bIsFolder = true;
-			icon1.setBackgroundResource(R.drawable.notelistitem_icon_folder);
 			if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
-				icon2.setBackgroundResource(R.drawable.notelistitem_icon_lock);
-				icon3.setBackgroundDrawable(null);
-				icon3.setVisibility(View.GONE);
+				icon1.setBackgroundResource(R.drawable.notelistitem_icon_lock);
+				icon1.setVisibility(View.VISIBLE);
+				icon2.setBackgroundDrawable(null);
+				icon2.setVisibility(View.GONE);
 				itemdetail.bIsEncode = true;
 			}else{
+				icon1.setBackgroundDrawable(null);
 				icon2.setBackgroundDrawable(null);
-				icon3.setBackgroundDrawable(null);
+				icon1.setVisibility(View.GONE);
 				icon2.setVisibility(View.GONE);
-				icon3.setVisibility(View.GONE);
 				itemdetail.bIsEncode = false;
 			}
 		}else{
-			icon0.setBackgroundResource(R.drawable.notelistitem_bigicon_text);
-			tvDate.setText("");
-			icon1.setBackgroundResource(R.drawable.notelistitem_icon_text);
+			countTV.setText("");
+			bigIcon.setBackgroundResource(R.drawable.notelistitem_bigicon_text);
 			int isRemindIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isremind);
 			int isRemindValue = cursor.getInt(isRemindIndex);
+			int iVoiceFlagIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isHaveAudioData);
+			int iVoiceFlag = cursor.getInt(iVoiceFlagIndex);
 			if(isRemindValue == CMemoInfo.IsRemind_Yes){
 				itemdetail.bIsRemind = true;
-				icon2.setBackgroundResource(R.drawable.notelistitem_icon_alarm);
-				if(false){//for voice
-				}else{
-					icon3.setBackgroundDrawable(null);
-					icon3.setVisibility(View.GONE);
-				}
-			}else{
-				int iVoiceFlagIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isHaveAudioData);
-				int iVoiceFlag = cursor.getInt(iVoiceFlagIndex);
+				icon1.setBackgroundResource(R.drawable.notelistitem_icon_alarm);
+				icon1.setVisibility(View.VISIBLE);
 				if(iVoiceFlag == CMemoInfo.IsHaveAudioData_Yes){//for voice
 					icon2.setBackgroundResource(R.drawable.notelistitem_icon_voice);
-					icon3.setBackgroundDrawable(null);
-					icon3.setVisibility(View.GONE);
+					icon2.setVisibility(View.VISIBLE);
 				}else{
 					icon2.setBackgroundDrawable(null);
-					icon3.setBackgroundDrawable(null);
 					icon2.setVisibility(View.GONE);
-					icon3.setVisibility(View.GONE);
+				}
+			}else{
+				if(iVoiceFlag == CMemoInfo.IsHaveAudioData_Yes){//for voice
+					icon1.setBackgroundResource(R.drawable.notelistitem_icon_voice);
+					icon1.setVisibility(View.VISIBLE);
+					icon2.setBackgroundDrawable(null);
+					icon2.setVisibility(View.GONE);
+				}else{
+					icon1.setBackgroundDrawable(null);
+					icon2.setBackgroundDrawable(null);
+					icon1.setVisibility(View.GONE);
+					icon2.setVisibility(View.GONE);
 				}
 			}
 		}

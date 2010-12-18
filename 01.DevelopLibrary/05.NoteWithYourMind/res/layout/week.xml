@@ -17,6 +17,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_height="wrap_content"
 		android:text="星期一"
 		android:layout_weight="6"
+		android:layout_marginLeft="20px"
 		>
 		</TextView>
 		<CheckBox
@@ -38,6 +39,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_height="wrap_content"
 		android:text="星期二"
 		android:layout_weight="6"
+		android:layout_marginLeft="20px"
 		>
 		</TextView>
 		<CheckBox
@@ -59,6 +61,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_height="wrap_content"
 		android:text="星期三"
 		android:layout_weight="6"
+		android:layout_marginLeft="20px"
 		>
 		</TextView>
 		<CheckBox
@@ -80,6 +83,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_height="wrap_content"
 		android:text="星期四"
 		android:layout_weight="6"
+		android:layout_marginLeft="20px"
 		>
 		</TextView>
 		<CheckBox
@@ -101,6 +105,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_height="wrap_content"
 		android:text="星期五"
 		android:layout_weight="6"
+		android:layout_marginLeft="20px"
 		>
 		</TextView>
 		<CheckBox
@@ -122,6 +127,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_height="wrap_content"
 		android:text="星期六"
 		android:layout_weight="6"
+		android:layout_marginLeft="20px"
 		>
 		</TextView>
 		<CheckBox
@@ -144,6 +150,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_height="wrap_content"
 		android:text="星期日"
 		android:layout_weight="6"
+		android:layout_marginLeft="20px"
 		>
 		</TextView>
 		<CheckBox

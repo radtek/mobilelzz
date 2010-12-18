@@ -9,29 +9,34 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 public class CTimeDlg extends CommentOutDlg implements View.OnClickListener
 {
-	private	Context	m_context;
 	public 	int		iHour;
 	public	int		iMinute;
 	TimePicker		Tp		=	null;
-	RadioButton 	m_Time	=	null;
+	TextView	 	m_Time	=	null;
+	Byte			m_bType	=	-1;
 	
+	public	void	Initialize( Byte type )
+	{
+		iHour		=	-1;
+		iMinute		=	-1;
+		m_bType		=	type;	
+	}
 	
-	public CTimeDlg(Context context)
+	public CTimeDlg(Context context )
 	{
 		super(context);
 		m_context	=	context;
-		iHour		=	-1;
-		iMinute		=	-1;
 	}
 	
-	public void setDisplay( RadioButton rbTime )
+	public void setDisplay( TextView TimeTxt )
 	{
         setContentView(R.layout.time);
-        m_Time	=	rbTime;
+        m_Time	=	TimeTxt;
         Tp	=	(TimePicker)findViewById(R.id.TimePicker01);
         Tp.setIs24HourView( true );
         if( iHour != -1 && iMinute != -1 )
@@ -81,4 +86,5 @@ public class CTimeDlg extends CommentOutDlg implements View.OnClickListener
 			m_Time.setText(Integer.toString(iHour) + "–° ±"+ Integer.toString(iMinute)+"∑÷÷”" );
 		}
 	}
+
 }

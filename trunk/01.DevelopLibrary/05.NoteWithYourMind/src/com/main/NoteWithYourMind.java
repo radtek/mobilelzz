@@ -359,13 +359,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		//已经打开，那么关闭录音面板
 		if( mIsOpenRecordPanel )
 		{
-			clBTStartRecord.setVisibility(View.GONE);
-			clBTStopRecord.setVisibility(View.GONE);
-			clBTPlayRecord.setVisibility(View.GONE);
-			clBTDeleteRecord.setVisibility(View.GONE);
-			mIsOpenRecordPanel = false;
-			
-
+			hideVoicePanel();
 		}
 		else
 		{	
@@ -374,13 +368,25 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		
 			
 	}
+	private void hideVoicePanel(){
+		clBTStartRecord.setVisibility(View.GONE);
+		clBTStopRecord.setVisibility(View.GONE);
+		clBTPlayRecord.setVisibility(View.GONE);
+		clBTDeleteRecord.setVisibility(View.GONE);
+		mIsOpenRecordPanel = false;
+	}
 	private void openVoicePanel(){
 		//打开录音面板
 		clBTStartRecord.setVisibility(View.VISIBLE);
 		clBTStopRecord.setVisibility(View.VISIBLE);
-		clBTStopRecord.setEnabled(false);
 		clBTPlayRecord.setVisibility(View.VISIBLE);
 		clBTDeleteRecord.setVisibility(View.VISIBLE);
+		
+		clBTStopRecord.setEnabled(false);
+		clBTStartRecord.setEnabled(true);
+		clBTPlayRecord.setEnabled(true);
+		clBTDeleteRecord.setEnabled(true);
+
 		mIsOpenRecordPanel = true;
 	}
 	
@@ -397,12 +403,15 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		if(myRecAudioFile != null)
 		{
 			//提示用户删除原有录音文件
-			
+			Toast.makeText(NoteWithYourMind.this, "删除旧文件",Toast.LENGTH_LONG).show();
+			Toast.makeText(NoteWithYourMind.this, myRecAudioFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
+			myRecAudioFile.delete();
 		}
 		
 		if(mMediaPlayer != null && mMediaPlayer.isPlaying())
 		{
-			mMediaPlayer.pause();
+			mMediaPlayer.stop();
+//			mMediaPlayer.release();
 		}
 		
 		//录音时只有暂停按钮可控制
@@ -419,7 +428,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         String filename = sdf.format(d);    	        
 
         try {
-			myRecAudioFile = File.createTempFile(filename, ".amr", myRecAudioDir);
+			myRecAudioFile = File.createTempFile(filename, ".3gp", myRecAudioDir);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -484,26 +493,21 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		if(mMediaPlayer != null && mMediaPlayer.isPlaying())
 		{
 			//播放状态
-			mMediaPlayer.pause();
+			mMediaPlayer.stop();
 		}
-		else
-		{
-			//录音状态
-			if (myRecAudioFile != null && mIsRecordSound )
-			{  
-				mMediaRecorder01.stop();
-				mMediaRecorder01.release();
-				mMediaRecorder01 = null;
-				chronometer.stop();
-				mIsRecordSound = false;			
-			}		
-		}
-		
+		//录音状态
+		if (myRecAudioFile != null && mIsRecordSound )
+		{  
+			mMediaRecorder01.stop();
+			mMediaRecorder01.release();
+			mMediaRecorder01 = null;
+			chronometer.stop();
+			mIsRecordSound = false;			
+		}		
 		clBTStartRecord.setEnabled(true);
 		clBTStopRecord.setEnabled(false);
 		clBTPlayRecord.setEnabled(true);
 		clBTDeleteRecord.setEnabled(true);
-			
 	}
 	
 	//播放录音文件
@@ -514,6 +518,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			if(mMediaPlayer != null &&  mMediaPlayer.isPlaying() )
 			{
 				Toast.makeText(NoteWithYourMind.this, "isPlaying",Toast.LENGTH_SHORT).show();
+				mMediaPlayer.seekTo(0);
 				mMediaPlayer.start();			
 			}
 			else
@@ -522,20 +527,20 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 				/* 重置MediaPlayer */
 				mMediaPlayer.reset();
 				/* 设置要播放的文件的路径 */
-				Toast.makeText(NoteWithYourMind.this, myRecAudioFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
-				mMediaPlayer.setDataSource(myRecAudioFile.getAbsolutePath());
-				/* 准备播放 */
-				mMediaPlayer.prepare();
-				/* 开始播放 */
-				mMediaPlayer.start();
+				if(myRecAudioFile!=null && myRecAudioFile.exists()){
+					Toast.makeText(NoteWithYourMind.this, myRecAudioFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
+					mMediaPlayer.setDataSource(myRecAudioFile.getAbsolutePath());
+					/* 准备播放 */
+					mMediaPlayer.prepare();
+					/* 开始播放 */
+					mMediaPlayer.start();	
+				}
 			}
 				
 			clBTStartRecord.setEnabled(false);
 			clBTStopRecord.setEnabled(true);
 			clBTPlayRecord.setEnabled(false);
 			clBTDeleteRecord.setEnabled(false);
-			
-			
 		}catch (IOException e)
 		{
 			
@@ -557,11 +562,11 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			
 			myRecAudioFile = null;
 		}
-		clBTStartRecord.setEnabled(true);
-		clBTStopRecord.setEnabled(false);
-		clBTPlayRecord.setEnabled(false);
-		clBTDeleteRecord.setEnabled(false);
-		
+  		hideVoicePanel();
+//		clBTStartRecord.setEnabled(true);
+//		clBTStopRecord.setEnabled(false);
+//		clBTPlayRecord.setEnabled(false);
+//		clBTDeleteRecord.setEnabled(false);
 	}
 	
 

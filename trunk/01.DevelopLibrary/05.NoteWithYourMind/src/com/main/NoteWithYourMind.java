@@ -296,12 +296,13 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     	
     }
     private void updateTime(CRemindInfo clRemindInfo){
-    	EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
-    	if(clRemindInfo!=null){
-    		EtOnce.setText( clRemindInfo.getRemindInfoString());
-    	}else{
-    		EtOnce.setText( "" );
-    	}
+//    	EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
+//    	if(clRemindInfo!=null){
+//    		EtOnce.setText( clRemindInfo.getRemindInfoString());
+//    	}else{
+//    		EtOnce.setText( "" );
+//    	}
+    	
     }
     private void updateDetail(String strDetail){
     	EditText EtOnce = (EditText) findViewById(R.id.ET_main_Memo);
@@ -369,19 +370,14 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			
 	}
 	private void hideVoicePanel(){
-		clBTStartRecord.setVisibility(View.GONE);
-		clBTStopRecord.setVisibility(View.GONE);
-		clBTPlayRecord.setVisibility(View.GONE);
-		clBTDeleteRecord.setVisibility(View.GONE);
+		View vVoicePanel = findViewById(R.id.editnote_voiceinfo); 
+		vVoicePanel.setVisibility(View.GONE);
 		mIsOpenRecordPanel = false;
 	}
 	private void openVoicePanel(){
 		//´ò¿ªÂ¼ÒôÃæ°å
-		clBTStartRecord.setVisibility(View.VISIBLE);
-		clBTStopRecord.setVisibility(View.VISIBLE);
-		clBTPlayRecord.setVisibility(View.VISIBLE);
-		clBTDeleteRecord.setVisibility(View.VISIBLE);
-		
+		View vVoicePanel = findViewById(R.id.editnote_voiceinfo); 
+		vVoicePanel.setVisibility(View.VISIBLE);
 		clBTStopRecord.setEnabled(false);
 		clBTStartRecord.setEnabled(true);
 		clBTPlayRecord.setEnabled(true);

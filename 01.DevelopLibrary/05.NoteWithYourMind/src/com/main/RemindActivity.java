@@ -19,7 +19,7 @@ public class RemindActivity extends Activity
 	private		CTimeDlg		m_clCTimeDlg	=	null;
 	
 	private		boolean			m_IsEnable		=	true;
-	private 	RadioGroup 		m_RadioGroupTime	=	null;
+	private 	RadioGroup 		m_RadioGroupTime;
 	private 	RadioButton 	rbTime,rbCountdown; 
     public void onCreate(Bundle savedInstanceState)
     {

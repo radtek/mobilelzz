@@ -1,25 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-	android:id="@+id/main"
+	android:id="@+id/editnote"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	xmlns:android="http://schemas.android.com/apk/res/android">
-			
-	<EditText 
-		android:id="@+id/CB_main_IsWarning"
-		android:text="点击设定提醒时间" 
-		android:background="@drawable/qq_edit_login" 
-		android:paddingLeft="45.0sp"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content" 
-		android:layout_marginLeft="5.0dip"
-		android:layout_marginTop="5.0dip" 
-		android:layout_marginRight="5.0dip"
-		android:layout_marginBottom="5.0px" 
-		android:editable="false"
-		android:imeOptions="actionGo"
-		android:layout_alignParentTop="true">
-		</EditText>
 	<LinearLayout
 	android:id="@+id/editnote_toolbar"
 	android:orientation="horizontal"
@@ -47,82 +31,179 @@
 			android:src="@drawable/toolbar_saveas"
 			/>
 	</LinearLayout>
-
-	<ImageView 
-	  android:id="@+id/IMG_B_BackGroud" 
-	  android:layout_width="fill_parent" 
-	  android:layout_height="wrap_content" 
-	  android:layout_below ="@id/CB_main_IsWarning"
-	  android:scaleType="fitXY" 
-	  android:src="@drawable/btn_back"/>
-	   
-	<Chronometer  android:id="@+id/rec_time"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below ="@id/CB_main_IsWarning"
-	    android:background = "@drawable/image_chrono" >
-	    </Chronometer>
-	    
-	<ProgressBar android:id="@+id/progress_horizontal"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf = "@id/rec_time"
-        android:layout_below = "@id/CB_main_IsWarning"
-    />
-	 
-	<EditText
-		android:id="@+id/ET_main_Memo"
+	<LinearLayout
+	android:id="@+id/editnote_noteinfo"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:layout_above="@id/editnote_toolbar">
+		<LinearLayout
+		android:id="@+id/editnote_remindinfo"
 		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:textSize="22sp"
-		android:gravity = "top"
-		android:layout_above="@id/editnote_toolbar"
-		android:layout_below ="@id/IMG_B_BackGroud"
-		android:layout_marginLeft="3dip"
-		android:layout_marginRight="3dip"
-		android:layout_marginTop="5dip">
-	</EditText>
-	
-	<ImageButton 
-	  android:id="@+id/IMG_B_REC" 
-	  android:layout_width="wrap_content" 
-	  android:layout_height="wrap_content" 
-	  android:layout_above = "@id/ET_main_Memo"
-	  android:visibility = "gone"
-	  android:src="@drawable/record">
-	  </ImageButton>
-	  
-	  <ImageButton 
-	  android:id="@+id/IMG_B_STOP" 
-	  android:layout_width="wrap_content" 
-	  android:layout_height="wrap_content" 
-	  android:visibility = "gone"
-	  android:layout_toRightOf ="@id/IMG_B_REC"
-	  android:layout_above = "@id/ET_main_Memo"
-	  android:src="@drawable/stop">
-	  </ImageButton>
-	  
-	 <ImageButton 
-	  android:id="@+id/IMG_B_PLAY" 
-	  android:layout_width="wrap_content" 
-	  android:layout_height="wrap_content" 
-	  android:layout_toRightOf ="@id/IMG_B_STOP"
-	  android:visibility = "gone"
-	  android:layout_above = "@id/ET_main_Memo"
-	  android:src="@drawable/play">
-	  </ImageButton>
-	  
-	 <ImageButton 
-	  android:id="@+id/IMG_B_DELETE" 
-	  android:layout_width="wrap_content" 
-	  android:layout_height="wrap_content" 
-	  android:visibility = "gone"
-	  android:layout_toRightOf="@id/IMG_B_PLAY"
-	  android:layout_above = "@id/ET_main_Memo"
-	  android:src="@drawable/delete">
-	  </ImageButton>	
-	  
-
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:orientation="horizontal"
+		>
+			<ImageButton
+			android:id="@+id/editnote_remindinfo_alarmIcon"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:background="@drawable/editnote_alarmicon"
+			/>
+			<LinearLayout
+			android:id="@+id/editnote_remindinfo"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:layout_gravity="center_vertical">
+				<LinearLayout
+				android:id="@+id/editnote_remindinfo_remindsettingdata"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal">
+					<TextView
+					android:id="@+id/editnote_remindinfo_remindsettingdata_tx1"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="一"
+					/>
+					<TextView
+					android:id="@+id/editnote_remindinfo_remindsettingdata_tx2"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="二"
+					/>
+					<TextView
+					android:id="@+id/editnote_remindinfo_remindsettingdata_tx3"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="三"
+					/>
+					<TextView
+					android:id="@+id/editnote_remindinfo_remindsettingdata_tx4"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="四"
+					/>
+					<TextView
+					android:id="@+id/editnote_remindinfo_remindsettingdata_tx5"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="五"
+					/>
+					<TextView
+					android:id="@+id/editnote_remindinfo_remindsettingdata_tx6"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="六"
+					/>
+					<TextView
+					android:id="@+id/editnote_remindinfo_remindsettingdata_tx7"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="日"
+					/>
+				</LinearLayout>
+				<TextView
+				android:id="@+id/editnote_remindinfo_nextremind"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="下次提醒：2天3小时后"
+				/>
+				<TextView
+				android:id="@+id/editnote_remindinfo_status"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="启用"
+				/>
+			</LinearLayout>
+		</LinearLayout>
+		<LinearLayout
+		android:id="@+id/editnote_voiceinfo"
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="2"
+		android:visibility="gone"
+		>
+			<LinearLayout
+			android:id="@+id/editnote_voiceinfo_operationpanel"
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="2"
+			>
+				<ImageButton 
+				android:id="@+id/IMG_B_REC" 
+				android:layout_width="wrap_content" 
+				android:layout_height="fill_parent" 
+				android:layout_weight="1"
+				android:src="@drawable/record">
+				</ImageButton>
+				<ImageButton 
+				android:id="@+id/IMG_B_STOP" 
+				android:layout_width="wrap_content" 
+				android:layout_height="fill_parent" 
+				android:layout_weight="1"
+				android:src="@drawable/stop">
+				</ImageButton>
+				<ImageButton 
+				android:id="@+id/IMG_B_PLAY" 
+				android:layout_width="wrap_content" 
+				android:layout_height="fill_parent" 
+				android:layout_weight="1"
+				android:src="@drawable/play">
+				</ImageButton>
+				<ImageButton 
+				android:id="@+id/IMG_B_DELETE" 
+				android:layout_width="wrap_content" 
+				android:layout_height="fill_parent" 
+				android:layout_weight="1"
+				android:src="@drawable/delete">
+				</ImageButton>
+			</LinearLayout>
+			<LinearLayout
+			android:id="@+id/editnote_voiceinfo_statuspanel"
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			>
+				<ProgressBar 
+				android:id="@+id/progress_horizontal"
+				style="?android:attr/progressBarStyleHorizontal"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="3"
+				android:layout_gravity="center_vertical"
+				/>
+				<Chronometer  android:id="@+id/rec_time"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:layout_gravity="center_vertical"
+				>
+				</Chronometer>
+			</LinearLayout>
+		</LinearLayout>
+		<EditText
+			android:id="@+id/ET_main_Memo"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="12"
+			android:textSize="22sp"
+			android:gravity = "top"
+			android:layout_marginLeft="3dip"
+			android:layout_marginRight="3dip"
+			android:layout_marginTop="5dip">
+		</EditText>
+	</LinearLayout>
 </RelativeLayout>
-

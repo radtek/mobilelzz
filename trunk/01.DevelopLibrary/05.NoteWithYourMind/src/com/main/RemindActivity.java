@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -13,29 +14,35 @@ import android.widget.RadioGroup;
 public class RemindActivity extends Activity
 {
 	CRemindInfo	m_clCRemindInfo	= null;
-	private		CDateDlg		m_clCDateDlg = null;
-	private		CWeekDlg		m_clCWeekDlg = null;
-	private		CTimeDlg		m_clCTimeDlg = null;
+	private		CDateDlg		m_clCDateDlg	=	null;
+	private		CWeekDlg		m_clCWeekDlg	=	null;
+	private		CTimeDlg		m_clCTimeDlg	=	null;
 	
+	private		boolean			m_IsEnable		=	true;
+	private 	RadioGroup 		m_RadioGroupTime	=	null;
+	private 	RadioButton 	rbTime,rbCountdown; 
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remindsetting2);
-        m_clCRemindInfo	=	new	CRemindInfo ( (byte)-1 );
+        m_clCRemindInfo	=	new		CRemindInfo ( (byte)-1 );
     	m_clCDateDlg	=	new		CDateDlg( RemindActivity.this );
     	m_clCWeekDlg	=	new		CWeekDlg( RemindActivity.this );
     	m_clCTimeDlg	=	new		CTimeDlg( RemindActivity.this );
-        RadioGroup rg	=	(RadioGroup)findViewById(R.id.timeRadioButton); 
+    	m_RadioGroupTime	=	(RadioGroup)findViewById(R.id.timeRadioButton); 
         
-        RadioButton rbTime		=	(RadioButton)findViewById(R.id.TimeSetting); 
-        RadioButton rbCountdown	=	(RadioButton)findViewById(R.id.daojishi); 
+        
+        rbTime		=	(RadioButton)findViewById(R.id.TimeSetting); 
+        rbCountdown	=	(RadioButton)findViewById(R.id.daojishi); 
+        
+        m_RadioGroupTime.setOnCheckedChangeListener(mChangeRadio); 
 
         Intent iExtraData = getIntent();
         CRemindInfo	clTemp	=	(CRemindInfo)iExtraData.getSerializableExtra(NoteWithYourMind.ExtraData_RemindSetting);
-        if ( null != clTemp )
+        if ( null != clTemp )		//	取得传入数据非空
         {
         	m_clCRemindInfo	=	clTemp;
-        	if( 1 == m_clCRemindInfo.m_bType )
+        	if( 1 == m_clCRemindInfo.m_bType )					//倒计时提醒
         	{
         		rbCountdown.setChecked(true); 
         		
@@ -45,7 +52,7 @@ public class RemindActivity extends Activity
         		
         		
         	}
-        	else if( 2 == m_clCRemindInfo.m_bType )
+        	else if( 2 == m_clCRemindInfo.m_bType )				//循环提醒
         	{       		
         		rbTime.setChecked(true);
            		int	iHour	=	0;
@@ -62,7 +69,7 @@ public class RemindActivity extends Activity
         		}
         		     		     		
         	}
-        	else if( 3 == m_clCRemindInfo.m_bType )
+        	else if( 3 == m_clCRemindInfo.m_bType )				//单次提醒
         	{
         		rbTime.setChecked(true);
         		int	iHour	=	0;
@@ -91,17 +98,32 @@ public class RemindActivity extends Activity
  
     }
     
+    private RadioGroup.OnCheckedChangeListener mChangeRadio = new RadioGroup.OnCheckedChangeListener()
+    {
+        public void onCheckedChanged(RadioGroup group, int checkedId)
+        { 
+        	if(checkedId == m_RadioGroupTime.getId())
+        	{
+        		
+        	}
+        	else if(checkedId==m_RadioGroupTime.getId())
+        	{
+        		
+        	}
+        }
+    };
+    
     void	settingAble()
     {
-    	Button	BtAble	=	(Button) findViewById(R.id.RemindAble);
-    	BtAble.setOnClickListener(new Button.OnClickListener(){
-
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-			}
-    		
-    	});
+//    	Button	BtAble	=	(Button) findViewById(R.id.RemindAble);
+//    	BtAble.setOnClickListener(new Button.OnClickListener(){
+//
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//    		
+//    	});
     }
     
     String	getDayofWeek( Calendar	clCalendar )

@@ -33,6 +33,9 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 	Button	btWeek		=	null;
 	Button	btMonth		=	null;
 	
+	Button	btCancel	=	null;
+	Button	btOK		=	null;	
+	
 	TextView	TimeTxt	=	null;
 	TextView	CountDownTxt	=	null;
 	TextView	DateTxt	=	null;
@@ -85,12 +88,16 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         btWeek		=	(Button) findViewById(R.id.EveryWeekImg);
         btWeek.setOnClickListener(this);
         
+        btCancel	=	(Button) findViewById(R.id.CancelBtn);
+        btCancel.setOnClickListener(this);
+        
+        btOK		=	(Button) findViewById(R.id.OKBtn);
+        btOK.setOnClickListener(this);
+        
 
         //根据从编辑画页传入的数据设置当前Activity的状态
         setInput();
-        //设定确定
-        settingCheck();
- 
+
     }
     
     public void onClick(View view)
@@ -109,6 +116,12 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     		case R.id.EveryWeekImg:
     			processWeek(view);
     			break;
+    		case R.id.CancelBtn:
+    			
+    			break;
+       		case R.id.OKBtn:	
+       			processOK();
+    			break;   			
     		default:
     			break;
     	}
@@ -134,6 +147,29 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     private void processWeek(View view)
     {
     	m_clCWeekDlg.setDisplay( WeekTxt );
+    }
+    private	void	processOK()
+    {
+    	m_clCRemindInfo.m_bType	=	m_bType;
+    	
+    	if( 2 == m_bType )		//循环提醒
+		{				
+			m_clCRemindInfo.setWeekTime( m_clCTimeDlg.iHour , m_clCTimeDlg.iMinute, m_clCWeekDlg.Week );	
+		}
+		else if( 1 == m_bType )	//倒计时提醒
+		{
+			m_clCRemindInfo.setCutDownTime( m_clCCountdownDlg.iHour, m_clCCountdownDlg.iMinute );
+		}
+		else if( 3 == m_bType )
+		{	
+			m_clCRemindInfo.setNormalTime( m_clCTimeDlg.iHour, m_clCTimeDlg.iMinute, m_clCDateDlg.iYear, m_clCDateDlg.iMonth, m_clCDateDlg.iDay );
+		}
+		
+		Intent intent = new Intent(RemindActivity.this, NoteWithYourMind.class);  
+		intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, m_clCRemindInfo );
+		intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
+		
+		startActivity(intent);	
     }
     
     //end
@@ -262,51 +298,5 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     	}
     	
     	return	strTemp;
-    }
-    
-    void	settingCheck()
-    {
-    	Button	clCheck	=	(Button) findViewById(R.id.FixBtn);
-    	clCheck.setOnClickListener( new Button.OnClickListener(){
-
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if( 2 == m_clCRemindInfo.m_bType )		//循环提醒
-				{				
-					m_clCRemindInfo.setWeekTime( m_clCTimeDlg.iHour , m_clCTimeDlg.iMinute, m_clCWeekDlg.Week );		
-				}
-				else if( 1 == m_clCRemindInfo.m_bType )	//倒计时提醒
-				{
-//					Calendar clCalendar	=	Calendar.getInstance();
-//					
-//					EditText Xiaoshi	=	(EditText) findViewById(R.id.xiaoshi2);
-//					EditText Fenzhong	=	(EditText) findViewById(R.id.fenzhong2);
-//					
-//					long	lhour		=	Long.valueOf( Xiaoshi.getText().toString() );
-//					long	lminute		=	Long.valueOf( Fenzhong.getText().toString() );
-//					
-//					clCalendar.setTimeInMillis(System.currentTimeMillis());
-//					clCalendar.set(Calendar.SECOND, 0 );
-//					clCalendar.set(Calendar.MILLISECOND, 0 );
-//					
-//					long	lTime	=	clCalendar.getTimeInMillis();
-//					lTime	+=	( lhour * 60 + lminute ) *1000;
-//					
-//					m_clCRemindInfo.lTime		=	lTime;				
-				}
-				else if( 3 == m_clCRemindInfo.m_bType )
-				{	
-					m_clCRemindInfo.setNormalTime( m_clCTimeDlg.iHour, m_clCTimeDlg.iMinute, m_clCDateDlg.iYear, m_clCDateDlg.iMonth, m_clCDateDlg.iDay );
-				}
-				
-				Intent intent = new Intent(RemindActivity.this, NoteWithYourMind.class);  
-//				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); 
-				intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, m_clCRemindInfo );
-				intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
-				
-				startActivity(intent);	
-			}
-    		
-    	});
     }
 }

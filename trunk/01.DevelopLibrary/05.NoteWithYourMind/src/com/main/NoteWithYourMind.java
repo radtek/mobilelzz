@@ -305,6 +305,18 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 //    	}else{
 //    		EtOnce.setText( "" );
 //    	}
+    	if ( 1 == clRemindInfo.m_bType )
+    	{
+    		
+    	}
+    	else if( 2 == clRemindInfo.m_bType )
+    	{
+    		
+    	}
+    	else if ( 3 == clRemindInfo.m_bType )
+    	{
+    		
+    	}
     	
     }
     private void updateDetail(String strDetail){

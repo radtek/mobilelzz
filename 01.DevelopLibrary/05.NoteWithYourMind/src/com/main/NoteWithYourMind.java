@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Toast;
 import android.view.View;
 import android.app.AlertDialog;
@@ -284,7 +285,9 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			CRemindInfo temp =	( CRemindInfo )iExtraData.getSerializableExtra( ExtraData_RemindSetting );
 			m_clCRemindInfo = temp;
 			updateTime(temp);
-		}	
+		}
+		ScrollView etNoteText = (ScrollView)findViewById(R.id.editnote_noteinfo_scroll);
+		etNoteText.scrollBy(0, -100);
 	}
     private void updateVoice(String strAudioFileName){
     	if(strAudioFileName!=null){
@@ -311,6 +314,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     	}else{
     		EtOnce.setText( "" );
     	}
+    	EtOnce.clearFocus();
     }
     
 	public void onClick(View view){

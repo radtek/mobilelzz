@@ -20,6 +20,14 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 	private		boolean			m_IsEnable		=	true;
 	private 	RadioGroup 		m_RadioGroupTime;
 	private 	RadioButton 	rbTime,rbCountdown; 
+	
+	//btn
+	Button	btCountdown	=	null;
+	Button	btTime		=	null;
+	Button	btOnceDate	=	null;
+	Button	btWeek		=	null;
+	Button	btMonth		=	null;
+	
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -36,19 +44,19 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         
         m_RadioGroupTime.setOnCheckedChangeListener(mChangeRadio); 
         
-        Button	btTime	=	(Button) findViewById(R.id.TimeSettingBtnImg);
+        btTime	=	(Button) findViewById(R.id.TimeSettingBtnImg);
         btTime.setOnClickListener(this);
 
-        Button	btCountdown	=	(Button) findViewById(R.id.daojishiBtnImg);
+        btCountdown	=	(Button) findViewById(R.id.daojishiBtnImg);
         btCountdown.setOnClickListener(this);
         
-        Button	btOnceDate	=	(Button) findViewById(R.id.OnceRemindImg);
+        btOnceDate	=	(Button) findViewById(R.id.OnceRemindImg);
         btOnceDate.setOnClickListener(this);
         
-        Button	btWeek		=	(Button) findViewById(R.id.EveryWeekImg);
+        btWeek		=	(Button) findViewById(R.id.EveryWeekImg);
         btWeek.setOnClickListener(this);
         
-        Button	btMonth		=	(Button) findViewById(R.id.MonthSetting);
+        btMonth		=	(Button) findViewById(R.id.MonthSetting);
         btMonth.setOnClickListener(this);
 
         //根据从编辑画页传入的数据设置当前Activity的状态
@@ -86,6 +94,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     private void processSaveTime(View view)
     {
     	m_clCTimeDlg.setDisplay( rbTime );
+ 
     }
     
     private void processCountdown(View view)
@@ -172,7 +181,9 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         { 
         	if(checkedId == m_RadioGroupTime.getId())
         	{
-        		
+        		m_clCTimeDlg.setDisplay( rbTime );
+        		btTime.setVisibility(View.VISIBLE);
+        		btCountdown.setVisibility(View.GONE);
         	}
         	else if(checkedId==m_RadioGroupTime.getId())
         	{

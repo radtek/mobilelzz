@@ -189,7 +189,6 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 		 */
 		Button icon1 = (Button) view.findViewById(R.id.notelistitem_icon1);
 		Button icon2 = (Button) view.findViewById(R.id.notelistitem_icon2);
-		Button icon3 = (Button) view.findViewById(R.id.notelistitem_icon3);
 		if(iTypeValue==CMemoInfo.Type_Folder){
 			long Count = CommonDefine.m_clCNoteDBCtrl.getRecCountInFolder(iIDValue);
 			String strCount = "("+String.valueOf(Count)+")";
@@ -199,11 +198,9 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 			icon1.setBackgroundResource(R.drawable.notelistitem_icon_folder);
 			if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
 				icon2.setBackgroundResource(R.drawable.notelistitem_icon_lock);
-				icon3.setBackgroundDrawable(null);
 				itemdetail.bIsEncode = true;
 			}else{
 				icon2.setBackgroundDrawable(null);
-				icon3.setBackgroundDrawable(null);
 				itemdetail.bIsEncode = false;
 			}
 		}else{
@@ -215,13 +212,11 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 				icon2.setBackgroundResource(R.drawable.notelistitem_icon_alarm);
 				if(false){//for voice
 				}else{
-					icon3.setBackgroundDrawable(null);
 				}
 			}else{
 				if(false){//for voice
 				}else{
 					icon2.setBackgroundDrawable(null);
-					icon3.setBackgroundDrawable(null);
 				}
 			}
 		}

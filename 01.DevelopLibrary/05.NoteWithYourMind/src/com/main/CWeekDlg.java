@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class CWeekDlg extends Dialog implements View.OnClickListener
+public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
 {
 	private	Context	m_context;
 	byte		Week[]	=	new byte[7];	//从周日到周六
@@ -29,16 +29,16 @@ public class CWeekDlg extends Dialog implements View.OnClickListener
 	{
         setContentView(R.layout.week);
         setProperty();
-        setTitle("时间设定");
+        setTitle("星期设定");
         show(); 
     }
     private void setProperty()
     {
         Window		window	=	getWindow();						//得到对话框的窗口．
         WindowManager.LayoutParams	wl	=	window.getAttributes();
-        wl.x	=	1000;											//这两句设置了对话框的位置．
-        wl.y	=	1000;
-        wl.alpha=	0.6f;											//这句设置了对话框的透明度
+        wl.x	=	iPosX;											//这两句设置了对话框的位置．
+        wl.y	=	iPosY;	
+        wl.width	=	300;
         //wl.gravity=Gravity.BOTTOM;         
         window.setAttributes(wl);        
    }

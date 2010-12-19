@@ -2,6 +2,7 @@ package com.main;
 
 //package com.main;n
 /* import相关class */
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -18,9 +19,8 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
 {
 	byte		Week[]	=	new byte[7];	//从周日到周六
 	private		boolean		bIsSelect	=	false;
-	TextView	WeekTxt[];
 
-	public CWeekDlg(Context context )
+	public CWeekDlg( Activity context )
 	{
 		super(context);
 		m_context	=	context;
@@ -32,7 +32,7 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
 		}
 	}
 	
-	public void setDisplay( TextView week[])
+	public void setDisplay()
 	{
         setContentView(R.layout.week);
         setProperty();
@@ -57,8 +57,6 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
         		checkBox[i].setChecked(false);
         	}
         }
-        
-        WeekTxt	=	week;
         
         Button	btCancel	=	(Button)findViewById(R.id.WeekCancel);
         btCancel.setOnClickListener(this);
@@ -138,6 +136,15 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
 		checkBox[5]	=	( CheckBox )findViewById( R.id.C6);
 		checkBox[6]	=	( CheckBox )findViewById( R.id.C7);	
 		
+		TextView	WeekTxt[]	=	new	TextView[ 7 ];
+    	WeekTxt[0]			=	(TextView)m_context.findViewById(R.id.MonTxt);
+    	WeekTxt[1]			=	(TextView)m_context.findViewById(R.id.TusTxt);
+    	WeekTxt[2]			=	(TextView)m_context.findViewById(R.id.WedTxt);
+    	WeekTxt[3]			=	(TextView)m_context.findViewById(R.id.ThrTxt);
+    	WeekTxt[4]			=	(TextView)m_context.findViewById(R.id.FriTxt);
+    	WeekTxt[5]			=	(TextView)m_context.findViewById(R.id.SatTxt);
+    	WeekTxt[6]			=	(TextView)m_context.findViewById(R.id.SunTxt);
+		
 		int iLength	=	week.length;
   		for( int i = 0; i < iLength; ++i )
   		{
@@ -164,6 +171,15 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
 		checkBox[4]	=	( CheckBox )findViewById( R.id.C5);
 		checkBox[5]	=	( CheckBox )findViewById( R.id.C6);
 		checkBox[6]	=	( CheckBox )findViewById( R.id.C7);	
+		
+		TextView	WeekTxt[]	=	new	TextView[ 7 ];
+    	WeekTxt[0]			=	(TextView)m_context.findViewById(R.id.MonTxt);
+    	WeekTxt[1]			=	(TextView)m_context.findViewById(R.id.TusTxt);
+    	WeekTxt[2]			=	(TextView)m_context.findViewById(R.id.WedTxt);
+    	WeekTxt[3]			=	(TextView)m_context.findViewById(R.id.ThrTxt);
+    	WeekTxt[4]			=	(TextView)m_context.findViewById(R.id.FriTxt);
+    	WeekTxt[5]			=	(TextView)m_context.findViewById(R.id.SatTxt);
+    	WeekTxt[6]			=	(TextView)m_context.findViewById(R.id.SunTxt);
 		
 		byte	bCheckFlg		=	0;
     	

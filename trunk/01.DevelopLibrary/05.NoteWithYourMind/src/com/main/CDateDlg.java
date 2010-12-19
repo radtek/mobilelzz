@@ -2,6 +2,7 @@ package com.main;
 
 //package com.main;n
 /* import相关class */
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
@@ -13,35 +14,32 @@ import android.widget.TextView;
 
 public class CDateDlg extends CommentOutDlg implements View.OnClickListener
 {
-	public	int		iYear;
-	public	int		iMonth;
-	public	int		iDay;
+	public	int		m_iYear;
+	public	int		m_iMonth;
+	public	int		m_iDay;
 	
 	private	DatePicker	dp	=	null;
 	
-	TextView	m_Date		=	null;
 	
-	public CDateDlg(Context context)
+	public CDateDlg(Activity context)
 	{
 		super(context);
 		m_context	=	context;
-		iYear		=	-1;
-		iMonth		=	-1;
-		iDay		=	-1;
+		m_iYear		=	-1;
+		m_iMonth		=	-1;
+		m_iDay		=	-1;
 	}
 	
-	public void setDisplay( TextView TimeTxt )
+	public void setDisplay( )
 	{
         setContentView(R.layout.date);
         dp	=	(DatePicker)findViewById(R.id.DatePicker01);
         setProperty();
         setTitle("日期设定");
         
-        m_Date	=	TimeTxt;
-        
-        if( -1 != iYear && -1 != iMonth && -1 != iDay )
+        if( -1 != m_iYear && -1 != m_iMonth && -1 != m_iDay )
         {
-        	dp.updateDate( iYear, iMonth, iDay );
+        	dp.updateDate( m_iYear, m_iMonth, m_iDay );
         }
         
         Button	btCancel	=	(Button)findViewById(R.id.DateCancel);
@@ -67,10 +65,10 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
         	cancel();
             break;
         case R.id.DateOK:
-    		iYear	=	dp.getYear();
-    		iMonth	=	dp.getMonth();
-    		iDay	=	dp.getDayOfMonth();
-        	saveData( iYear, iMonth, iDay );
+        	m_iYear	=	dp.getYear();
+        	m_iDay	=	dp.getMonth();
+        	m_iDay	=	dp.getDayOfMonth();
+        	saveData( m_iYear, m_iMonth, m_iDay );
         	cancel();
             break;
         default:
@@ -79,11 +77,13 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
 	
 	public	void	saveData( int iYear, int iMonth, int iDay )
 	{
+		m_iYear		=	iYear;
+		m_iMonth	=	iMonth;
+		m_iDay		=	iDay;
+		
+		TextView	DateTxt				=	(TextView)m_context.findViewById(R.id.OnceText);
 
-		if ( m_Date != null )
-		{
-			m_Date.setText(Integer.toString(iYear) + "年" + Integer.toString( iMonth+1 ) + "月" + Integer.toString(iDay) + "日" );
-		}
+		DateTxt.setText(Integer.toString(iYear) + "年" + Integer.toString( iMonth+1 ) + "月" + Integer.toString(iDay) + "日" );
 		
 		RemindActivity.m_bType	=	3;
 	}

@@ -404,8 +404,20 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         		//error
         	}
     		
-    		Status.setText("启用");			//	临时对应
-    		CountDownTime.setText(clRemindInfo.getCountDownBySting());
+    		
+    		String	strTemp	=	clRemindInfo.getCountDownBySting();
+    		if ( null == strTemp ) 
+    		{
+    			Status.setText("停用");
+    			CountDownTime.setText( "下次提醒 : 已过期 ");
+    		}
+    		else
+    		{
+    			Status.setText("启用");
+    			CountDownTime.setText( strTemp );
+    			clRemindInfo.bRemindAble	=	0;
+    		}
+    		
     	}
     }
     private void updateDetail(String strDetail){

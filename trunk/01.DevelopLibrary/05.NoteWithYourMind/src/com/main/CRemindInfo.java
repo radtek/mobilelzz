@@ -73,7 +73,7 @@ public class CRemindInfo implements Serializable
 	
 	private	String	SubCountdownByString( long _lTime )
 	{
-		String	strTemp;
+		String	strTemp	=	null;
 		
 		Calendar clCalendar	=	Calendar.getInstance();
 		clCalendar.setTimeInMillis(System.currentTimeMillis());
@@ -82,7 +82,6 @@ public class CRemindInfo implements Serializable
 		long	lTemp	=	_lTime - lCur;
 		if ( 0 > lTemp )
 		{
-			strTemp = "时间错误!";
 			return	strTemp;
 		}	
 		
@@ -110,9 +109,13 @@ public class CRemindInfo implements Serializable
 		{
 			strTemp = "下次提醒 : " + String.valueOf(iHour) + "小时" + String.valueOf(iMinute) + "分钟  后";
 			return	strTemp;
-		}	
+		}
+		else
+		{
+			strTemp = "下次提醒 : 小于 1 分钟";
+		}
 		
-		strTemp = "时间错误!";
+
 		return	strTemp;
 	}
 	

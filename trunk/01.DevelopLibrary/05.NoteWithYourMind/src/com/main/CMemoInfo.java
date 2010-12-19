@@ -63,7 +63,7 @@ public class CMemoInfo {
 		{
 			m_Week[ i ]	=	-1;
 		}
-		iIsHaveAudioData = IsHaveAudioData_No;
+		iIsHaveAudioData = IsHaveAudioData_Invalid;
 		strAudioFileName = null;
 	}
 	

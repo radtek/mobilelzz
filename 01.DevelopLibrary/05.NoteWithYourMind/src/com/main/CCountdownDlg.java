@@ -3,7 +3,6 @@ package com.main;
 //package com.main;n
 /* importœ‡πÿclass */
 import android.app.Activity;
-import android.content.Context;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -34,6 +33,11 @@ public class CCountdownDlg extends CommentOutDlg implements View.OnClickListener
         {
         	Tp.setCurrentHour((int)m_iHour);
         	Tp.setCurrentMinute((int)m_iMinute);
+        }
+        else
+        {
+        	Tp.setCurrentHour(0);
+        	Tp.setCurrentMinute(0);        	
         }
         
         Button	btCancel	=	(Button)findViewById(R.id.TimeCancel);

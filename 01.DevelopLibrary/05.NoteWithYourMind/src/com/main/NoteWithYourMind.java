@@ -832,6 +832,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         		Toast toast = Toast.makeText(NoteWithYourMind.this, "提醒时间设定错误,请重新设定!", Toast.LENGTH_SHORT);
         		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
         		toast.show();
+        		return;
 			}
 		}
 		     		
@@ -856,23 +857,6 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		}
 	}
     
-    //设置主画页中EditText的内容
-//    private void UpdateStatusOfMemoInfo( String detail, boolean bIsDisplayRemind )
-//    {
-//    	EditText etDetail = (EditText)findViewById(R.id.ET_main_Memo);
-//    	etDetail.setText( detail );
-//    	
-//    	if ( bIsDisplayRemind )
-//    	{
-//    		//显示提醒的时间和类型 - zhu.t
-//    		if ( m_ExtraData_EditNoteID	!= CMemoInfo.Id_Invalid )
-//    		{
-//        		EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
-//        		
-//    		}
-//    	}
-//    }
-
     private int SaveEditData(String strMemoText)
     {
     	/*
@@ -905,7 +889,6 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			clCMemoInfo.strAudioFileName = myRecAudioFile.getName();
 		}
     	
-//		if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New )
     	if ( m_ExtraData_PreID != CMemoInfo.Id_Invalid )
 		{
     		clCMemoInfo.iType			=	CMemoInfo.Type_Memo;
@@ -924,20 +907,20 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 				}				
         	}
 		}
-	//	else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Edit )
     	else if ( m_ExtraData_EditNoteID != CMemoInfo.Id_Invalid )
 		{
 			//编辑Memo
 			m_clCNoteDBCtrl.Update(m_ExtraData_EditNoteID,clCMemoInfo );
 			//判断是否需要更新提醒信息 - zhu.t
 			CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-//				clCRemindOperator.getRemindInfo(m_ExtraData_EditNoteID, m_clCRemindInfo);
-//				if ( m_clCRemindInfo.m_bType != -1 )
-//				{
-//					EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
-//		    		EtOnce.setText( m_clCRemindInfo.getRemindInfoString());
-//				}
-
+			if ( m_clCRemindInfo!= null )
+			{
+				if ( -1 == clCRemindOperator.editRemind(this, m_ExtraData_EditNoteID, m_clCRemindInfo ) )
+				{
+					//设置提醒失败
+        			return	-1;				
+				}
+			}
         }
     	
     	return 0;

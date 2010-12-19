@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,10 +21,8 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 	private		CCountdownDlg	m_clCCountdownDlg	=	null;
 	
 	
-	private		boolean			m_IsEnable		=	true;
 	private 	RadioGroup 		m_RadioGroupTime;
 	private 	RadioGroup 		m_RadioGroupDate;
-	private 	RadioButton 	rbTime,rbCountdown; 
 	static		public	Byte			m_bType	=	-1;
 	
 	//btn
@@ -57,10 +54,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
    // 	WeekTxt				=	new	TextView[7];
     	m_RadioGroupTime	=	(RadioGroup)findViewById(R.id.timeRadioButton); 
     	m_RadioGroupDate	=	(RadioGroup)findViewById(R.id.dateRadioButton); 
-    	
-        rbTime		=	(RadioButton)findViewById(R.id.TimeSetting); 
-        rbCountdown	=	(RadioButton)findViewById(R.id.daojishi); 
-        
+    	      
         m_RadioGroupTime.setOnCheckedChangeListener(mChangeRadioTime);
         m_RadioGroupDate.setOnCheckedChangeListener(mChangeRadioDate);
         
@@ -177,13 +171,11 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       if ( null != clTemp )		//	取得传入数据非空
       {
       	m_clCRemindInfo	=	clTemp;
-      	if( m_clCRemindInfo.m_bType == 1 )					//倒计时提醒，暂时未对应
+      	if( m_clCRemindInfo.m_bType == 1 )					//倒计时提醒
       	{
       		CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
       		m_clCRemindInfo.getCutDownTime( clCDateAndTime );
-      		m_clCCountdownDlg.saveData( clCDateAndTime.iHour, clCDateAndTime.iMinute );
-      		
-      		
+      		m_clCCountdownDlg.saveData( clCDateAndTime.iHour, clCDateAndTime.iMinute ); 		
       	}
       	else if( m_clCRemindInfo.m_bType == 2 )				//循环提醒
       	{       		

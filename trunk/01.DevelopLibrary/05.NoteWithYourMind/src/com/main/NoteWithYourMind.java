@@ -336,12 +336,6 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     	
     }
     private void updateTime(CRemindInfo clRemindInfo){
-//    	EditText EtOnce = (EditText) findViewById(R.id.CB_main_IsWarning);
-//    	if(clRemindInfo!=null){
-//    		EtOnce.setText( clRemindInfo.getRemindInfoString());
-//    	}else{
-//    		EtOnce.setText( "" );
-//    	}
     	
     	TextView	Week[]	=	new	TextView[ 7 ];
     	TextView	Time	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx0);

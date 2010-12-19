@@ -96,7 +96,8 @@ public class CRemindInfo implements Serializable
 		iTimeTemp	=	(int)(lTemp /1000 / 60 / 60 / 24 );
 		if ( 0 < iTimeTemp )
 		{
-			strTemp = "下次提醒 : " + String.valueOf(iTimeTemp) +"天  后";
+			int hour	=	(int)(( lTemp /1000 / 60 / 60 )	-	iTimeTemp * 24 );
+			strTemp = "下次提醒 : " + String.valueOf(iTimeTemp) +"天 " +String.valueOf(hour) + "小时后";
 			return	strTemp;
 		}
 		
@@ -185,7 +186,7 @@ public class CRemindInfo implements Serializable
 			
 			for ( int i = 0; i < 7; ++i )
 			{
-				if ( 1 == m_Week[ 1 ] )
+				if ( 1 == m_Week[ i ] )
 				{
 					bflg	=	true;
 					break;
@@ -216,7 +217,8 @@ public class CRemindInfo implements Serializable
 	//当提醒到来时再次调用该方法取得下一个提醒的时间
 	public	long	getFirstCycelRemindTime()	
 	{
-		long	lTime	=	-1;				//返回值
+		long	lTimeInnerMax	=	-1;				//返回值
+		long	lTimeInnerMin	=	-1;				//返回值
 		if ( m_bType == 2 )					//2为循环提醒
 		{
 			//取得当前时间
@@ -231,11 +233,19 @@ public class CRemindInfo implements Serializable
 			long	lMinTime	=	Long.MAX_VALUE;		//差值为正的最小时间为下次提醒时间，初始化为整数最大值
 			long	lMaxTime	=	-1;					//差值为负的最小时间为下周的第一个提醒时间，初始化为负数最大值
 			
+			byte bSun	=	m_Week[6];
+			for( int i = 0; i < 6; ++i )
+			{
+				m_Week[ i + 1 ]	=	m_Week[i];
+			}
+			
+			m_Week[ 0 ]	=	bSun;
+			
 			for	( int i = 0; i < 7; ++i )
 			{
-				 if ( -1 != m_Week[i] )
+				 if ( 1 == m_Week[i] )
 				 {
-					 clCalendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY + i );
+					clCalendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY + i );
 					int	hour	=	(int)lTime >> 16;
 					int	minute	=	(int)lTime & 0x0000ffff;
 					 clCalendar.set( Calendar.HOUR_OF_DAY, hour);
@@ -248,16 +258,16 @@ public class CRemindInfo implements Serializable
 					 {					 
 						 if ( lMinTemp < lMinTime )
 						 {
-							 lMinTime	=	lMinTemp;	//保存最小的值
-							 lTime		=	lTempTime;
+							 lMinTime			=	lMinTemp;	//保存最小的值
+							 lTimeInnerMin		=	lTempTime;
 						 }						 
 					 }
 					 else								//在下星期提醒
 					 {
 						 if ( lMinTemp < lMaxTime )
 						 {
-							 lMaxTime	=	lMinTemp;
-							 lTime		=	lTempTime;
+							 lMaxTime			=	lMinTemp;
+							 lTimeInnerMax		=	lTempTime;
 						 }
 					 }
 				 }
@@ -265,13 +275,19 @@ public class CRemindInfo implements Serializable
 			
 			if ( lMinTime == Long.MAX_VALUE )				//说明提醒在下个星期
 			{
-				lTime	+=	ONE_WEEK_TIME;
+				lTimeInnerMax	+=	ONE_WEEK_TIME;
+				
+				clCalendar.setTimeInMillis( lTimeInnerMax );		
+				return	lTimeInnerMax;
+			}
+			else
+			{
+				clCalendar.setTimeInMillis( lTimeInnerMin );
+				return	lTimeInnerMin;
 			}
 		}
 		
-		
-		
-		return	lTime;
+		return	-1;
 	}
 	
 	public	String	getRemindInfoString()

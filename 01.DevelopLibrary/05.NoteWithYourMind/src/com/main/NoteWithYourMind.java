@@ -28,6 +28,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 import android.view.View;
 import android.app.AlertDialog;
@@ -69,7 +71,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	public static final int 							ITEM0	=	Menu.FIRST;
 	public static final int 							ITEM1	=	Menu.FIRST + 1;
 	
-	public static final int								mMaxTime = 120;
+	public static int								mMaxTime = 120;
 	
 	//进行DB操作的类
 	private CNoteDBCtrl 								m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
@@ -99,10 +101,11 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	private Chronometer 										chronometer;
 	protected static final int 									GUI_STOP_NOTIFIER = 0x108;
 	protected static final int 									GUI_THREADING_NOTIFIER = 0x109;
-	private ProgressBar 										mProgressBar01;
+	private SeekBar		 										mProgressBar01;
 	public int 													intCounter=0;
 	
 	private  Thread												nThread;
+	private  Thread												mPlayThread;
 	
 	/* MediaPlayer对象 */
 	public MediaPlayer											mMediaPlayer		= null;
@@ -178,7 +181,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         //计时器
 		chronometer = (Chronometer) findViewById(R.id.rec_time);
 		//chronometer.setOnChronometerTickListener(this);
-		//chronometer.setFormat("%s","MM:SS");
+		//chronometer.setFormat("MM::SS/05:00");
 			
 		//检查是否存在SD卡		
 	    sdCardExit = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);   
@@ -194,11 +197,31 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	    }
 	    
 	    //进度条
-	    mProgressBar01 = (ProgressBar)findViewById(R.id.progress_horizontal);
+	    mProgressBar01 = (SeekBar)findViewById(R.id.progress_horizontal);
 	    mProgressBar01.setIndeterminate(false);
         mProgressBar01.setMax(mMaxTime);
         mProgressBar01.setProgress(0);
         
+        OnSeekBarChangeListener sbLis=new OnSeekBarChangeListener(){
+        	 
+    		public void onProgressChanged(SeekBar seekBar, int progress,
+    				boolean fromUser) {
+    			// TODO Auto-generated method stub
+    		}
+     
+    		public void onStartTrackingTouch(SeekBar seekBar) {
+    			// TODO Auto-generated method stub
+    		}
+    		public void onStopTrackingTouch(SeekBar seekBar) {
+    			// TODO Auto-generated method stub
+    			//mp.seekTo(sb.getProgress());
+    			 mMediaPlayer.seekTo(mProgressBar01.getProgress());
+    			 //chronometer.setBase(mProgressBar01.getProgress());
+    			//SeekBar确定位置后，跳到指定位置
+    		}
+        };
+        
+        mProgressBar01.setOnSeekBarChangeListener(sbLis);
 		/* 构建MediaPlayer对象 */
 		mMediaPlayer		= new MediaPlayer();
     }
@@ -280,7 +303,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		etNoteText.scrollBy(0, -100);
 	}
     private void updateVoice(String strAudioFileName){
-    	if(strAudioFileName!=null){
+    	if(strAudioFileName!=null && sdCardExit ){
     		myRecAudioFile = new File(myRecAudioDir, strAudioFileName);
     		openVoicePanel();
     	}else{
@@ -406,15 +429,26 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		if(myRecAudioFile != null)
 		{
 			//提示用户删除原有录音文件
-			Toast.makeText(NoteWithYourMind.this, "删除旧文件",Toast.LENGTH_LONG).show();
-			Toast.makeText(NoteWithYourMind.this, myRecAudioFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
-			myRecAudioFile.delete();
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("你想删除原有录音文件吗?")
+			       .setCancelable(false)
+			       .setPositiveButton("是", new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			        	   myRecAudioFile.delete();
+			        	   myRecAudioFile = null;
+			           }
+			       })
+			       .setNegativeButton("否", new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			                dialog.cancel();
+			           }
+			       });
+			AlertDialog alert = builder.create();	
 		}
 		
 		if(mMediaPlayer != null && mMediaPlayer.isPlaying())
 		{
 			mMediaPlayer.stop();
-//			mMediaPlayer.release();
 		}
 		
 		//录音时只有暂停按钮可控制
@@ -455,6 +489,10 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
+        
+	    mProgressBar01.setIndeterminate(false);
+        mProgressBar01.setMax(mMaxTime);
+        mProgressBar01.setProgress(0);
                 
         nThread = new Thread(new Runnable()
         {
@@ -497,6 +535,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		{
 			//播放状态
 			mMediaPlayer.stop();
+			chronometer.stop();
+			mPlayThread.interrupt();
 		}
 		//录音状态
 		if (myRecAudioFile != null && mIsRecordSound )
@@ -505,12 +545,14 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			mMediaRecorder01.release();
 			mMediaRecorder01 = null;
 			chronometer.stop();
-			mIsRecordSound = false;			
+			mIsRecordSound = false;	
+			nThread.interrupt();
 		}		
 		clBTStartRecord.setEnabled(true);
 		clBTStopRecord.setEnabled(false);
 		clBTPlayRecord.setEnabled(true);
 		clBTDeleteRecord.setEnabled(true);
+		  
 	}
 	
 	//播放录音文件
@@ -518,36 +560,84 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	{
 	 	try
 		{
-			if(mMediaPlayer != null &&  mMediaPlayer.isPlaying() )
+			//if(mMediaPlayer != null &&  mMediaPlayer.isPlaying() )
+			//{
+			//	mMediaPlayer.seekTo(0);
+			//	mMediaPlayer.start();	
+			//	clBTStartRecord.setEnabled(false);
+			//	clBTStopRecord.setEnabled(true);
+			//	clBTPlayRecord.setEnabled(false);
+			//	clBTDeleteRecord.setEnabled(false);
+			//}
+			//else
 			{
-				Toast.makeText(NoteWithYourMind.this, "isPlaying",Toast.LENGTH_SHORT).show();
-				mMediaPlayer.seekTo(0);
-				mMediaPlayer.start();			
-			}
-			else
-			{
-				Toast.makeText(NoteWithYourMind.this, "will Playing",Toast.LENGTH_SHORT).show();
+				
 				/* 重置MediaPlayer */
 				mMediaPlayer.reset();
 				/* 设置要播放的文件的路径 */
-				if(myRecAudioFile!=null && myRecAudioFile.exists()){
-					Toast.makeText(NoteWithYourMind.this, myRecAudioFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
-					mMediaPlayer.setDataSource(myRecAudioFile.getAbsolutePath());
+				//if(myRecAudioFile!=null && myRecAudioFile.exists())
+				{
+					//Toast.makeText(NoteWithYourMind.this, myRecAudioFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
+					mMediaPlayer.setDataSource("/sdcard/youchaihua.mp3"); //myRecAudioFile.getAbsolutePath()
 					/* 准备播放 */
 					mMediaPlayer.prepare();
 					/* 开始播放 */
+					mMaxTime = mMediaPlayer.getDuration();
 					mMediaPlayer.start();	
+					clBTStartRecord.setEnabled(false);
+					clBTStopRecord.setEnabled(true);
+					clBTPlayRecord.setEnabled(false);
+					clBTDeleteRecord.setEnabled(false);
+					
+					chronometer.setBase(SystemClock.elapsedRealtime());
+			        chronometer.start();
+			        
+				    mProgressBar01.setIndeterminate(false);
+				    
+				    mProgressBar01.setMax(mMaxTime);
+			        mProgressBar01.setProgress(0);
+			                
+			        mPlayThread = new Thread(new Runnable()
+			        {
+			          public void run()
+			          {
+			            for (int i=0;i<mMaxTime+1;i++)
+			            {
+			                intCounter = i;
+			                try 
+			                {
+								Thread.sleep(1000);
+							} catch (InterruptedException e)
+							{
+								e.printStackTrace();
+							}
+			                if( i==mMaxTime  || !mMediaPlayer.isPlaying())
+			                {
+			                  Message m = new Message();
+			                  m.what = NoteWithYourMind.GUI_STOP_NOTIFIER;
+			                  NoteWithYourMind.this.myMessageHandler.sendMessage(m);
+			                  break;
+			                }
+			                else
+			                {
+			                  Message m = new Message();
+			                  m.what = NoteWithYourMind.GUI_THREADING_NOTIFIER;
+			                  NoteWithYourMind.this.myMessageHandler.sendMessage(m); 
+			                }   
+			            }
+			          }
+			        });
+			        mPlayThread.start();  
 				}
 			}
 				
-			clBTStartRecord.setEnabled(false);
-			clBTStopRecord.setEnabled(true);
-			clBTPlayRecord.setEnabled(false);
-			clBTDeleteRecord.setEnabled(false);
+
 		}catch (IOException e)
 		{
 			
 		}
+		
+
 	}
 	
 	//删除录音文件
@@ -558,7 +648,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			mMediaPlayer.stop();			
 		}
 				
-  		if (myRecAudioFile != null)
+  		if (myRecAudioFile != null && sdCardExit)
   		{
   			if (myRecAudioFile.exists())
   				myRecAudioFile.delete();       
@@ -566,10 +656,6 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			myRecAudioFile = null;
 		}
   		hideVoicePanel();
-//		clBTStartRecord.setEnabled(true);
-//		clBTStopRecord.setEnabled(false);
-//		clBTPlayRecord.setEnabled(false);
-//		clBTDeleteRecord.setEnabled(false);
 	}
 	
 
@@ -595,14 +681,30 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		              mIsRecordSound = false;
 		              
 		           }
+		          else
+		          {
+			      	  clBTStartRecord.setEnabled(true);
+			    	  clBTStopRecord.setEnabled(false);
+			          clBTPlayRecord.setEnabled(true);
+			    	  clBTDeleteRecord.setEnabled(true);  	  
+		          }
 		           chronometer.stop();
 		          break;
 		         
 		        case NoteWithYourMind.GUI_THREADING_NOTIFIER:
-		        	if(!Thread.currentThread().isInterrupted() && mIsRecordSound )
-			         {
+		        	if(!Thread.currentThread().isInterrupted() && mIsRecordSound  )
+			         { 
 			            mProgressBar01.setProgress(intCounter);
 			         }
+		        	 if( mMediaPlayer.isPlaying() )
+		        	 {
+		        		 int a = mMediaPlayer.getCurrentPosition();
+		        		 int b = mMediaPlayer.getDuration();
+		        		 //mProgressBar01.setProgress((a*mMaxTime)/b  );	        		 
+		        		 //mProgressBar01.setProgress(intCounter);
+		        		 mProgressBar01.setProgress(a);
+		        	 }
+		        	
 		          break;
 		      } 
 		      super.handleMessage(msg); 

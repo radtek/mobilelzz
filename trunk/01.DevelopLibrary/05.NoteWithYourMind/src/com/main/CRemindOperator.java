@@ -147,7 +147,7 @@ public final class CRemindOperator
     		
     }
     
-    public	void	editRemind( Context context, long _id, CRemindInfo _clCRemindInfo )
+    public	int	editRemind( Context context, long _id, CRemindInfo _clCRemindInfo )
     {
     	//对一个提醒进行编辑时调用该方法。
     	AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
@@ -156,7 +156,7 @@ public final class CRemindOperator
     	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, 0);
     	alarmManager.cancel(pendingIntent);
     	
-    	addRemind( context, _id, _clCRemindInfo  );
+    	return	addRemind( context, _id, _clCRemindInfo  );
     }
     
    

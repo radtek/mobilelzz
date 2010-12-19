@@ -151,6 +151,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
 			CommonDefine.m_clCNoteDBCtrl = m_clCNoteDBCtrl;
 		}
+		
+		m_clCRemindInfo	=	new	CRemindInfo( (byte) -1 );
     	//点击保存Button，进行新增或更新操作
         ImageButton	clBTSave	=	(ImageButton) findViewById(R.id.editnote_toolbar_save);
         clBTSave.setOnClickListener(this);
@@ -293,7 +295,6 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	        	    	strDetail = curExtraMemo.getString( index );
 	        	    	
 	        	    	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-	        	    	m_clCRemindInfo	=	new	CRemindInfo( (byte) -1 );
 	            		clCRemindOperator.getRemindInfo(curExtraMemo, m_clCRemindInfo);
 	            		
 	            		index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_audioDataName);

@@ -702,6 +702,11 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		        	if(!Thread.currentThread().isInterrupted() && mIsRecordSound  )
 			         { 
 			            mProgressBar01.setProgress(intCounter);
+			            
+		        		 int cur_sec  = intCounter%60;
+		        		 int cur_min  = intCounter/60;
+						 mchronometer.setText(String.format("%02d:%02d/%02d:%02d", cur_min,cur_sec,  3 ,0));
+	
 			         }
 		        	 if( mMediaPlayer.isPlaying() )
 		        	 {

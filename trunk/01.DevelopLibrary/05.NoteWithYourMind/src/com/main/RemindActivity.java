@@ -39,8 +39,6 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 	TextView	CountDownTxt	=	null;
 	TextView	DateTxt	=	null;
 	
-	TextView	WeekTxt[]	=	new	TextView[7];;
-	
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -51,7 +49,6 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     	m_clCTimeDlg		=	new		CTimeDlg( RemindActivity.this);
     	m_clCCountdownDlg	=	new		CCountdownDlg( RemindActivity.this);
 
-   // 	WeekTxt				=	new	TextView[7];
     	m_RadioGroupTime	=	(RadioGroup)findViewById(R.id.timeRadioButton); 
     	m_RadioGroupDate	=	(RadioGroup)findViewById(R.id.dateRadioButton); 
     	      

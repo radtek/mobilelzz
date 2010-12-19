@@ -85,7 +85,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	private int 												m_ExtraData_PreID 		=	CMemoInfo.Id_Invalid;
 	private OperationNoteKindEnum 								m_ExtraData_OperationNoteKind = null;
 	
-	CRemindInfo													m_clCRemindInfo	=	new	CRemindInfo( (byte) -1 );
+	CRemindInfo													m_clCRemindInfo	=	null;
 	private boolean 											sdCardExit;
 	private File 												myRecAudioFile = null;
 	private File 												myRecAudioDir = null;
@@ -293,6 +293,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	        	    	strDetail = curExtraMemo.getString( index );
 	        	    	
 	        	    	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
+	        	    	m_clCRemindInfo	=	new	CRemindInfo( (byte) -1 );
 	            		clCRemindOperator.getRemindInfo(curExtraMemo, m_clCRemindInfo);
 	            		
 	            		index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_audioDataName);
@@ -897,7 +898,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         	
         	//保存提醒信息 - zhu.t
         	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-        	if(m_clCRemindInfo!=null){
+        	if( m_clCRemindInfo != null && -1 != m_clCRemindInfo.m_bType ){
         		if ( -1 == clCRemindOperator.addRemind( this, _id, m_clCRemindInfo) )
 				{
 					//设置提醒失败

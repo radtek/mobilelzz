@@ -102,7 +102,7 @@ public final class CRemindOperator
 	    	
 	    	clCMemoInfo.RemindType		=	3;
 	    	clCMemoInfo.dRemindTime		=	_clCRemindInfo.lTime;
-    		clCMemoInfo.iIsRemind		=	1;
+    		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
     		clCMemoInfo.iIsRemindAble	=	(int)(_clCRemindInfo.bRemindAble);
 	    	m_clCNoteDBCtrl.Update((int)_id, clCMemoInfo);
     	}

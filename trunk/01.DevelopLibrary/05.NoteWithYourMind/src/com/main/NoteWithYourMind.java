@@ -208,12 +208,17 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         	 
     		public void onProgressChanged(SeekBar seekBar, int progress,
     				boolean fromUser) {
-    			// TODO Auto-generated method stub    			
-		   		 int cur_sec  = mMediaPlayer.getCurrentPosition()/1000%60;
-				 int cur_min  = mMediaPlayer.getCurrentPosition()/1000/60;
-				 int total_sec = mMediaPlayer.getDuration()/1000%60;
-				 int total_min = mMediaPlayer.getDuration()/1000/60;
-				 mchronometer.setText(String.format("%02d:%02d/%02d:%02d", cur_min,cur_sec,  total_min ,total_sec));
+    			// TODO Auto-generated method stub  
+    			if(mMediaPlayer != null &&  mMediaPlayer.isPlaying())
+    			{
+	       			 mMediaPlayer.seekTo(mProgressBar01.getProgress());
+			   		 int cur_sec  = mMediaPlayer.getCurrentPosition()/1000%60;
+					 int cur_min  = mMediaPlayer.getCurrentPosition()/1000160;
+					 int total_sec = mMediaPlayer.getDuration()/1000%60;
+					 int total_min = mMediaPlayer.getDuration()/1000/60;
+					 mchronometer.setText(String.format("%02d:%02d/%02d:%02d", cur_min,cur_sec,  total_min ,total_sec));   				
+    				
+    			}
 
     		}
      
@@ -223,12 +228,18 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     		public void onStopTrackingTouch(SeekBar seekBar) {
     			// TODO Auto-generated method stub
     			//mp.seekTo(sb.getProgress());
-    			 mMediaPlayer.seekTo(mProgressBar01.getProgress());
-		   		 int cur_sec  = mMediaPlayer.getCurrentPosition()/1000%60;
-				 int cur_min  = mMediaPlayer.getCurrentPosition()/1000160;
-				 int total_sec = mMediaPlayer.getDuration()/1000%60;
-				 int total_min = mMediaPlayer.getDuration()/1000/60;
-				 mchronometer.setText(String.format("%02d:%02d/%02d:%02d", cur_min,cur_sec,  total_min ,total_sec));
+    			
+    			if(mMediaPlayer != null &&  mMediaPlayer.isPlaying())
+    			{
+	       			 mMediaPlayer.seekTo(mProgressBar01.getProgress());
+			   		 int cur_sec  = mMediaPlayer.getCurrentPosition()/1000%60;
+					 int cur_min  = mMediaPlayer.getCurrentPosition()/1000160;
+					 int total_sec = mMediaPlayer.getDuration()/1000%60;
+					 int total_min = mMediaPlayer.getDuration()/1000/60;
+					 mchronometer.setText(String.format("%02d:%02d/%02d:%02d", cur_min,cur_sec,  total_min ,total_sec));   				
+    				
+    			}
+
     			 //chronometer.setBase(mProgressBar01.getProgress());
     			//SeekBar确定位置后，跳到指定位置
     		}
@@ -640,7 +651,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 				{
 					mProgressBar01.setFocusable(true);
 					//Toast.makeText(NoteWithYourMind.this, myRecAudioFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
-					mMediaPlayer.setDataSource("/sdcard/youchaihua.mp3"); //myRecAudioFile.getAbsolutePath()
+					mMediaPlayer.setDataSource(myRecAudioFile.getAbsolutePath()); //"/sdcard/youchaihua.mp3"
 					/* 准备播放 */
 					mMediaPlayer.prepare();
 					/* 开始播放 */
@@ -730,7 +741,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		        case NoteWithYourMind.GUI_STOP_NOTIFIER:
 		          Thread.currentThread().interrupt();
 		         
-		          if (myRecAudioFile != null)
+		          if (myRecAudioFile != null && mIsRecordSound )
 		           {  
 		              mMediaRecorder01.stop();
 		              mMediaRecorder01.release();

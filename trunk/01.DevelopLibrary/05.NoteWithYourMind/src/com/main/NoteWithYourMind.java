@@ -825,7 +825,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		//取得提醒信息 - zhu.t : 提醒信息已经保存在 m_clCRemindInfo中
 		if( null != m_clCRemindInfo )
 		{
-			if( !m_clCRemindInfo.checkTime())
+			if(  -1 != m_clCRemindInfo.m_bType && !m_clCRemindInfo.checkTime())
 			{
         		Toast toast = Toast.makeText(NoteWithYourMind.this, "提醒时间设定错误,请重新设定!", Toast.LENGTH_SHORT);
         		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );

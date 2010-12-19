@@ -70,8 +70,9 @@
 	android:layout_centerVertical="true"
 	android:layout_toLeftOf="@id/notelistitem_additionalinfo"
 	android:layout_toRightOf="@id/notelistitem_bigicon"
+	android:singleLine="true"
 	android:ellipsize = "end"
-	android:gravity="left"
+	android:gravity="left|center_vertical"
 	android:textSize="20sp"
 	android:textColor="#000000"
 	>

@@ -63,7 +63,7 @@ implements ListActivityCtrl, View.OnClickListener
         m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
      
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-		setContentView(R.layout.rootviewlist);	
+		setContentView(R.layout.searchresultviewlist);	
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
         
         m_bIsCommnetDisplay_more = new CommonContainer();
@@ -80,26 +80,17 @@ implements ListActivityCtrl, View.OnClickListener
     	m_ExtraData_SearchParam.g_bool_IsRemindSearch = true;
 		
 		ListView list = (ListView) findViewById(R.id.rootviewlist_list);
-        m_toolBarLayout = findViewById(R.id.rootviewlist_toolbar);
+        m_toolBarLayout = findViewById(R.id.searchresultviewlist_toolbar);
         m_NoteListUICtrl = new NoteListUICtrl(this, list, m_toolBarLayout, m_ExtraData_SearchParam);
         m_NoteListUICtrl.initializeSource();
         
-        ImageButton clBTMemoNewFolder = (ImageButton) findViewById(R.id.rootviewlist_toolbar_newfolder);
-		clBTMemoNewFolder.setOnClickListener(this);
-		
-		ImageButton clBTMemoNewNote = (ImageButton) findViewById(R.id.rootviewlist_toolbar_newnote);
-        clBTMemoNewNote.setOnClickListener(this);
-        
-        ImageButton clBTMemoMore = (ImageButton) findViewById(R.id.rootviewlist_toolbar_more);
-        clBTMemoMore.setOnClickListener(this);
         Button clBTMemoMore_delete = (Button) findViewById(R.id.toolbar_more_dlg_delete);
         clBTMemoMore_delete.setOnClickListener(this);
         Button clBTMemoMore_move = (Button) findViewById(R.id.toolbar_more_dlg_move);
         clBTMemoMore_move.setOnClickListener(this);
-        Button clBTMemoMore_SetPassword = (Button) findViewById(R.id.toolbar_more_dlg_setpassword);
-        clBTMemoMore_SetPassword.setOnClickListener(this);
+
         
-        ImageButton clBTMemoSearch = (ImageButton) findViewById(R.id.rootviewlist_toolbar_search);
+        ImageButton clBTMemoSearch = (ImageButton) findViewById(R.id.searchresultviewlist_toolbar_search);
         clBTMemoSearch.setOnClickListener(this);
         Button clBTMemoSearch_remind = (Button) findViewById(R.id.toolbar_search_dlg_remind);
         clBTMemoSearch_remind.setOnClickListener(this);
@@ -153,22 +144,10 @@ implements ListActivityCtrl, View.OnClickListener
 			executeAnimation(m_vSearchAnim, R.anim.commentdisplay_left_bottom, R.anim.commenthide_left_bottom, m_bIsCommnetDisplay_search);
 			processSearchClick(view);
 			break;
-		case R.id.rootviewlist_toolbar_newfolder:
-			processNewFolderClick(view);
-			break;
-		case R.id.rootviewlist_toolbar_newnote:
-			processNewNoteClick(view);
-			break;
-		case R.id.rootviewlist_toolbar_more:
-			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
-			break;
-		case R.id.rootviewlist_toolbar_search:
+		case R.id.searchresultviewlist_toolbar_search:
 			executeAnimation(m_vSearchAnim, R.anim.commentdisplay_left_bottom, R.anim.commenthide_left_bottom, m_bIsCommnetDisplay_search);
 			break;
-		case R.id.toolbar_more_dlg_setpassword:
-			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
-//			EncodeSettingDlg();
-			break;
+
 		default:
 		}
 	}
@@ -212,29 +191,18 @@ implements ListActivityCtrl, View.OnClickListener
 	
 	public void updateToolbar(CommonDefine.ToolbarStatusEnum enStatus){
 		CommonDefine.g_enToolbarStatus = enStatus;
-		ImageButton btNewFolder = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_newfolder);
-		ImageButton btNewNote = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_newnote);
-		ImageButton btSearch = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_search);
-		ImageButton btMore = (ImageButton)m_toolBarLayout.findViewById(R.id.rootviewlist_toolbar_more);
+		ImageButton btSearch = (ImageButton)m_toolBarLayout.findViewById(R.id.searchresultviewlist_toolbar_search);
 		ImageButton btDelete = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_delete);
 		ImageButton btCancel = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_cancel);
-		ImageButton btMove = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_move);
 		if(enStatus == CommonDefine.ToolbarStatusEnum.ToolbarStatus_Normal){
-			btNewNote.setVisibility(View.VISIBLE);
 			btSearch.setVisibility(View.VISIBLE);
-			btNewFolder.setVisibility(View.VISIBLE);
-			btMore.setVisibility(View.VISIBLE);
 			btDelete.setVisibility(View.GONE);
-			btMove.setVisibility(View.GONE);
 			btCancel.setVisibility(View.GONE);
 		}else{
 //			btDelete.setVisibility(View.VISIBLE);
 //			btMove.setVisibility(View.VISIBLE);
 //			btCancel.setVisibility(View.VISIBLE);
-			btNewNote.setVisibility(View.GONE);
 			btSearch.setVisibility(View.GONE);
-			btNewFolder.setVisibility(View.GONE);
-			btMore.setVisibility(View.GONE);
 		}
 	}
 

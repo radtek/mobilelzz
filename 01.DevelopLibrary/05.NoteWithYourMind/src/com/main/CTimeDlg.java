@@ -2,6 +2,7 @@ package com.main;
 
 //package com.main;n
 /* import相关class */
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
@@ -14,31 +15,29 @@ import android.widget.TimePicker;
 
 public class CTimeDlg extends CommentOutDlg implements View.OnClickListener
 {
-	public 	int		iHour;
-	public	int		iMinute;
+	public 	int		m_iHour;
+	public	int		m_iMinute;
 	TimePicker		Tp		=	null;
-	TextView	 	m_Time	=	null;
 	Byte			m_bType	=	-1;
 	
-	public CTimeDlg(Context context )
+	public CTimeDlg(Activity context )
 	{
 		super(context);
 		m_context	=	context;
-		iHour		=	-1;
-		iMinute		=	-1;
+		m_iHour		=	-1;
+		m_iMinute		=	-1;
 
 	}
 	
-	public void setDisplay( TextView TimeTxt )
+	public void setDisplay( )
 	{
         setContentView(R.layout.time);
-        m_Time	=	TimeTxt;
         Tp	=	(TimePicker)findViewById(R.id.TimePicker01);
         Tp.setIs24HourView( true );
-        if( iHour != -1 && iMinute != -1 )
+        if( m_iHour != -1 && m_iMinute != -1 )
         {
-        	Tp.setCurrentHour((int)iHour);
-        	Tp.setCurrentMinute((int)iMinute);
+        	Tp.setCurrentHour((int)m_iHour);
+        	Tp.setCurrentMinute((int)m_iMinute);
         }
         
         Button	btCancel	=	(Button)findViewById(R.id.TimeCancel);
@@ -66,9 +65,9 @@ public class CTimeDlg extends CommentOutDlg implements View.OnClickListener
         	cancel();
             break;
         case R.id.TimeOK:
-    		iHour	=	Tp.getCurrentHour();
-    		iMinute	=	Tp.getCurrentMinute();
-        	saveData( iHour, iMinute );
+        	m_iHour	=	Tp.getCurrentHour();
+    		m_iMinute	=	Tp.getCurrentMinute();
+        	saveData( m_iHour, m_iMinute );
         	cancel();
             break;
         default:
@@ -77,10 +76,12 @@ public class CTimeDlg extends CommentOutDlg implements View.OnClickListener
 	
 	public	void	saveData( int iHour, int iMinute )
 	{
-		if ( m_Time != null )
-		{
-			m_Time.setText(Integer.toString(iHour) + "小时"+ Integer.toString(iMinute)+"分钟" );
-		}
+		m_iHour		=	iHour;
+		m_iMinute	=	iMinute;
+		
+		TextView	TimeTxt				=	(TextView)m_context.findViewById(R.id.Time_txt);
+		TimeTxt.setText(Integer.toString(iHour) + "小时"+ Integer.toString(iMinute)+"分钟" );
+
 	}
 
 }

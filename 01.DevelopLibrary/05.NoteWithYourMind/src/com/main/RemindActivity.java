@@ -57,17 +57,6 @@ public class RemindActivity extends Activity	implements View.OnClickListener
    // 	WeekTxt				=	new	TextView[7];
     	m_RadioGroupTime	=	(RadioGroup)findViewById(R.id.timeRadioButton); 
     	m_RadioGroupDate	=	(RadioGroup)findViewById(R.id.dateRadioButton); 
-        
-    	TimeTxt				=	(TextView)findViewById(R.id.Time_txt);
-    	DateTxt				=	(TextView)findViewById(R.id.OnceText);
-    	CountDownTxt		=	(TextView)findViewById(R.id.daojishiTxt);
-    	WeekTxt[0]			=	(TextView)findViewById(R.id.MonTxt);
-    	WeekTxt[1]			=	(TextView)findViewById(R.id.TusTxt);
-    	WeekTxt[2]			=	(TextView)findViewById(R.id.WedTxt);
-    	WeekTxt[3]			=	(TextView)findViewById(R.id.ThrTxt);
-    	WeekTxt[4]			=	(TextView)findViewById(R.id.FriTxt);
-    	WeekTxt[5]			=	(TextView)findViewById(R.id.SatTxt);
-    	WeekTxt[6]			=	(TextView)findViewById(R.id.SunTxt);
     	
         rbTime		=	(RadioButton)findViewById(R.id.TimeSetting); 
         rbCountdown	=	(RadioButton)findViewById(R.id.daojishi); 
@@ -129,23 +118,23 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     //响应按下的处理
     private void processSaveTime(View view)
     {
-    	m_clCTimeDlg.setDisplay( TimeTxt );
+    	m_clCTimeDlg.setDisplay( );
  
     }
     
     private void processCountdown(View view)
     {
-    	m_clCCountdownDlg.setDisplay(CountDownTxt);
+    	m_clCCountdownDlg.setDisplay();
     }
     
     private void processOnceDate(View view)
     {
-    	m_clCDateDlg.setDisplay( DateTxt );
+    	m_clCDateDlg.setDisplay( );
     }
     
     private void processWeek(View view)
     {
-    	m_clCWeekDlg.setDisplay( WeekTxt );
+    	m_clCWeekDlg.setDisplay( );
     }
     private	void	processOK()
     {
@@ -153,15 +142,15 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     	
     	if( m_clCRemindInfo.m_bType == 2 )		//循环提醒
 		{				
-			m_clCRemindInfo.setWeekTime( m_clCTimeDlg.iHour , m_clCTimeDlg.iMinute, m_clCWeekDlg.Week );	
+			m_clCRemindInfo.setWeekTime( m_clCTimeDlg.m_iHour , m_clCTimeDlg.m_iMinute, m_clCWeekDlg.Week );	
 		}
 		else if( m_clCRemindInfo.m_bType == 1 )	//倒计时提醒
 		{
-			m_clCRemindInfo.setCutDownTime( m_clCCountdownDlg.iHour, m_clCCountdownDlg.iMinute );
+			m_clCRemindInfo.setCutDownTime( m_clCCountdownDlg.m_iHour, m_clCCountdownDlg.m_iMinute );
 		}
 		else if( m_clCRemindInfo.m_bType == 3 )
 		{	
-			m_clCRemindInfo.setNormalTime( m_clCTimeDlg.iHour, m_clCTimeDlg.iMinute, m_clCDateDlg.iYear, m_clCDateDlg.iMonth, m_clCDateDlg.iDay );
+			m_clCRemindInfo.setNormalTime( m_clCTimeDlg.m_iHour, m_clCTimeDlg.m_iMinute, m_clCDateDlg.m_iYear, m_clCDateDlg.m_iMonth, m_clCDateDlg.m_iDay );
 		}
     	if( m_clCRemindInfo.checkTime())
     	{
@@ -192,12 +181,12 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       	{
       		CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
       		m_clCRemindInfo.getCutDownTime( clCDateAndTime );
+      		m_clCCountdownDlg.saveData( clCDateAndTime.iHour, clCDateAndTime.iMinute );
       		
       		
       	}
       	else if( m_clCRemindInfo.m_bType == 2 )				//循环提醒
       	{       		
-      		rbTime.setChecked(true);
       		CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
       		byte	week[]	=	new	byte[ 7 ];
       		m_clCRemindInfo.getWeekTime( clCDateAndTime, week );
@@ -208,7 +197,6 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       	}
       	else if(  m_clCRemindInfo.m_bType == 3 )				//单次提醒
       	{
-      		rbTime.setChecked(true);
       		CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
       		
       		m_clCRemindInfo.getNormalTime( clCDateAndTime );
@@ -220,7 +208,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       }
       else
       {
-      	
+      	 
       }
     }
     
@@ -230,13 +218,13 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         { 
         	if(checkedId == R.id.TimeSetting)
         	{
-        		m_clCTimeDlg.setDisplay( TimeTxt );
+        		m_clCTimeDlg.setDisplay( );
         		btTime.setVisibility(View.VISIBLE);
         		btCountdown.setVisibility(View.GONE);
         	}
         	else if(checkedId==R.id.daojishi)
         	{
-        		m_clCCountdownDlg.setDisplay(CountDownTxt);
+        		m_clCCountdownDlg.setDisplay();
         		btTime.setVisibility(View.GONE);
         		btCountdown.setVisibility(View.VISIBLE);
         	}
@@ -249,13 +237,13 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         { 
         	if(checkedId == R.id.OnceRemind)
         	{
-        		m_clCDateDlg.setDisplay(DateTxt);
+        		m_clCDateDlg.setDisplay();
         		btOnceDate.setVisibility(View.VISIBLE);
         		btWeek.setVisibility(View.GONE);
         	}
         	else if(checkedId==R.id.EveryWeek)
         	{
-        		m_clCWeekDlg.setDisplay( WeekTxt );
+        		m_clCWeekDlg.setDisplay( );
         		btWeek.setVisibility(View.VISIBLE);
         		btOnceDate.setVisibility(View.GONE);
         	}

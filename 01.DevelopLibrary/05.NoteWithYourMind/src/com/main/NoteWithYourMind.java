@@ -35,6 +35,7 @@ import android.view.View;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -330,19 +331,70 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 //    	}else{
 //    		EtOnce.setText( "" );
 //    	}
-    	if(clRemindInfo!=null){
+    	
+    	TextView	Week[]	=	new	TextView[ 7 ];
+    	TextView	Time	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx0);
+    	Week[0]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx1);
+    	Week[1]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx2);
+    	Week[2]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx3);
+    	Week[3]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx4);
+    	Week[4]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx5);
+    	Week[5]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx6);
+    	Week[6]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx7);
+    	TextView	Type	=	(TextView)findViewById(R.id.editnote_remindinfo_type);
+    	
+    	TextView	Status	=	(TextView)findViewById(R.id.editnote_remindinfo_status);
+    	TextView	CountDownTime	=	(TextView)findViewById(R.id.editnote_remindinfo_nextremind);
+    	
+    	
+    	if(clRemindInfo!=null)
+    	{
+    		if ( 1 == clRemindInfo.m_bType ||  3 == clRemindInfo.m_bType )
+        	{
+    			for ( int i = 0; i < 7 ; ++i )
+    			{
+    				Week[i].setVisibility(View.GONE);
+    			}
+    			Time.setVisibility(View.VISIBLE);
+    			
+    			CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
+    			clRemindInfo.getNormalTime( clCDateAndTime );
+    			Time.setText("提醒时间 : " + String.valueOf(clCDateAndTime.iYear) + "年" + String.valueOf(clCDateAndTime.iMonth+1) + "月"
+    						+ String.valueOf(clCDateAndTime.iDay)+ "日" + String.valueOf(clCDateAndTime.iHour) + "小时" 
+    						+ String.valueOf(clCDateAndTime.iMinute) + "分");
+    			
     		if ( 1 == clRemindInfo.m_bType )
         	{
+    				Type.setText("提醒类型 : 倒计时" );
+    			}
+    			else
+    			{
+    				Type.setText("提醒类型 : 单次" );
+    			}
         		
         	}
         	else if( 2 == clRemindInfo.m_bType )
         	{
+    			for ( int i = 0; i < 7 ; ++i )
+    			{
+    				Week[i].setVisibility(View.VISIBLE);
+    				if( 1 == clRemindInfo.m_Week[i])
+    				{
+    					Week[i].setTextColor(Color.GREEN);
+    				}
+    			}
+    			Time.setVisibility(View.GONE); 
+    			
+    			Type.setText("提醒类型 : 循环" );
         		
         	}
-        	else if ( 3 == clRemindInfo.m_bType )
+        	else
         	{
-        		
+        		//error
         	}
+    		
+    		Status.setText("启用");			//	临时对应
+    		CountDownTime.setText(clRemindInfo.getCountDownBySting());
     	}
     }
     private void updateDetail(String strDetail){
@@ -739,6 +791,15 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		String strMemoText = memotext.getText().toString();
 		
 		//取得提醒信息 - zhu.t : 提醒信息已经保存在 m_clCRemindInfo中
+		if( null != m_clCRemindInfo )
+		{
+			if( !m_clCRemindInfo.checkTime())
+			{
+        		Toast toast = Toast.makeText(NoteWithYourMind.this, "提醒时间设定错误,请重新设定!", Toast.LENGTH_SHORT);
+        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+        		toast.show();
+			}
+		}
 		     		
 		if( strMemoText.length()>0 )
 		{
@@ -872,4 +933,22 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 
 		}
 		return super.onOptionsItemSelected(item);}
+}
+
+class CDateAndTime
+{
+	int iYear;
+	int iMonth;
+	int	iDay;
+	int iHour;
+	int iMinute;
+	
+	CDateAndTime()
+	{
+		iYear	=	0;
+		iMonth	=	0;
+		iDay	=	0;
+		iHour	=	0;
+		iMinute	=	0;
+	}
 }

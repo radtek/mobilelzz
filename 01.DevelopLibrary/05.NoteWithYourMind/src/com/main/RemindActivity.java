@@ -5,11 +5,13 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RemindActivity extends Activity	implements View.OnClickListener
 {
@@ -24,7 +26,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 	private 	RadioGroup 		m_RadioGroupTime;
 	private 	RadioGroup 		m_RadioGroupDate;
 	private 	RadioButton 	rbTime,rbCountdown; 
-	private		Byte			m_bType;
+	static		public	Byte			m_bType	=	-1;
 	
 	//btn
 	Button	btCountdown	=	null;
@@ -47,14 +49,11 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remindsetting2);
         m_clCRemindInfo		=	new		CRemindInfo ( (byte)-1 );
-    	m_clCDateDlg		=	new		CDateDlg( RemindActivity.this );
-    	m_clCDateDlg.Initialize(m_bType);
-    	m_clCWeekDlg		=	new		CWeekDlg( RemindActivity.this );
-    	m_clCWeekDlg.Initialize(m_bType);
+    	m_clCDateDlg		=	new		CDateDlg( RemindActivity.this);
+    	m_clCWeekDlg		=	new		CWeekDlg( RemindActivity.this);
     	m_clCTimeDlg		=	new		CTimeDlg( RemindActivity.this);
-    	m_clCTimeDlg.Initialize(m_bType);
-    	m_clCCountdownDlg	=	new		CCountdownDlg( RemindActivity.this );
-    	m_clCCountdownDlg.Initialize(m_bType);
+    	m_clCCountdownDlg	=	new		CCountdownDlg( RemindActivity.this);
+
    // 	WeekTxt				=	new	TextView[7];
     	m_RadioGroupTime	=	(RadioGroup)findViewById(R.id.timeRadioButton); 
     	m_RadioGroupDate	=	(RadioGroup)findViewById(R.id.dateRadioButton); 
@@ -152,24 +151,32 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     {
     	m_clCRemindInfo.m_bType	=	m_bType;
     	
-    	if( 2 == m_bType )		//循环提醒
+    	if( m_clCRemindInfo.m_bType == 2 )		//循环提醒
 		{				
 			m_clCRemindInfo.setWeekTime( m_clCTimeDlg.iHour , m_clCTimeDlg.iMinute, m_clCWeekDlg.Week );	
 		}
-		else if( 1 == m_bType )	//倒计时提醒
+		else if( m_clCRemindInfo.m_bType == 1 )	//倒计时提醒
 		{
 			m_clCRemindInfo.setCutDownTime( m_clCCountdownDlg.iHour, m_clCCountdownDlg.iMinute );
 		}
-		else if( 3 == m_bType )
+		else if( m_clCRemindInfo.m_bType == 3 )
 		{	
 			m_clCRemindInfo.setNormalTime( m_clCTimeDlg.iHour, m_clCTimeDlg.iMinute, m_clCDateDlg.iYear, m_clCDateDlg.iMonth, m_clCDateDlg.iDay );
 		}
-		
-		Intent intent = new Intent(RemindActivity.this, NoteWithYourMind.class);  
-		intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, m_clCRemindInfo );
-		intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
-		
-		startActivity(intent);	
+    	if( m_clCRemindInfo.checkTime())
+    	{
+    		Intent intent = new Intent(RemindActivity.this, NoteWithYourMind.class);  
+    		intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, m_clCRemindInfo );
+    		intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
+    		
+    		startActivity(intent);	
+    	}
+    	else
+    	{
+			Toast toast = Toast.makeText(RemindActivity.this, "时间设定错误，请重新设定!", Toast.LENGTH_SHORT);
+    		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+    		toast.show();
+    	}
     }
     
     //end
@@ -181,48 +188,34 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       if ( null != clTemp )		//	取得传入数据非空
       {
       	m_clCRemindInfo	=	clTemp;
-      	if( 1 == m_clCRemindInfo.m_bType )					//倒计时提醒
+      	if( m_clCRemindInfo.m_bType == 1 )					//倒计时提醒，暂时未对应
       	{
-      		rbCountdown.setChecked(true); 
-      		
-      		int	iHour	=	0;
-      		int	iMinute	=	0;
-      		m_clCRemindInfo.getCutDownTime(iHour, iMinute);
+      		CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
+      		m_clCRemindInfo.getCutDownTime( clCDateAndTime );
       		
       		
       	}
-      	else if( 2 == m_clCRemindInfo.m_bType )				//循环提醒
+      	else if( m_clCRemindInfo.m_bType == 2 )				//循环提醒
       	{       		
       		rbTime.setChecked(true);
-         		int	iHour	=	0;
-      		int	iMinute	=	0;
+      		CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
       		byte	week[]	=	new	byte[ 7 ];
-      		m_clCRemindInfo.getWeekTime(iHour, iMinute, week );
-      		m_clCTimeDlg.iHour		=	iHour;
-      		m_clCTimeDlg.iMinute	=	iMinute;
+      		m_clCRemindInfo.getWeekTime( clCDateAndTime, week );
       		
-      		int iLength	=	week.length;
-      		for( int i = 0; i < iLength; ++i )
-      		{
-      			m_clCWeekDlg.Week[ i ]	=	week[ i ];
-      		}
-      		     		     		
+      		m_clCTimeDlg.saveData(clCDateAndTime.iHour, clCDateAndTime.iMinute);
+      		
+      		m_clCWeekDlg.setInputSatus ( week );  		     		
       	}
-      	else if( 3 == m_clCRemindInfo.m_bType )				//单次提醒
+      	else if(  m_clCRemindInfo.m_bType == 3 )				//单次提醒
       	{
       		rbTime.setChecked(true);
-      		int	iHour	=	0;
-      		int	iMinute	=	0;
-      		int	iYear	=	0;
-      		int	iMonth	=	0;
-      		int	iDay	=	0;
-      		m_clCRemindInfo.getNormalTime(iHour, iMinute, iYear, iMonth, iDay);
-      		m_clCTimeDlg.iHour		=	iHour;
-      		m_clCTimeDlg.iMinute	=	iMinute;
+      		CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
       		
-      		m_clCDateDlg.iYear	=	iYear;
-      		m_clCDateDlg.iMonth	=	iDay;
-      		m_clCDateDlg.iDay	=	iMonth;
+      		m_clCRemindInfo.getNormalTime( clCDateAndTime );
+      		
+      		m_clCDateDlg.saveData( clCDateAndTime.iYear, clCDateAndTime.iMonth, clCDateAndTime.iDay );
+      		m_clCTimeDlg.saveData(clCDateAndTime.iHour, clCDateAndTime.iMinute);
+      		
       	}
       }
       else

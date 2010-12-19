@@ -20,20 +20,16 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
 	private		boolean		bIsSelect	=	false;
 	TextView	WeekTxt[];
 
-	public	void	Initialize( Byte type )
-	{
-		int	length	=	Week.length;
-		m_bType		=	type;
-		for ( int i = 0; i < length; ++i )
-		{
-			Week[ i ]	=	-1;
-		}
-	}
-	
 	public CWeekDlg(Context context )
 	{
 		super(context);
 		m_context	=	context;
+		
+		int	length	=	Week.length;
+		for ( int i = 0; i < length; ++i )
+		{
+			Week[ i ]	=	-1;
+		}
 	}
 	
 	public void setDisplay( TextView week[])
@@ -130,7 +126,34 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
 		checkBox[6].setChecked( bFlg );
     }
 	
-	void	saveData()
+	void	setInputSatus( byte	week[] )
+	{
+        CheckBox	checkBox[]	=	new	CheckBox[7];
+		
+		checkBox[0]	=	( CheckBox )findViewById( R.id.C1);
+		checkBox[1]	=	( CheckBox )findViewById( R.id.C2);
+		checkBox[2]	=	( CheckBox )findViewById( R.id.C3);
+		checkBox[3]	=	( CheckBox )findViewById( R.id.C4);
+		checkBox[4]	=	( CheckBox )findViewById( R.id.C5);
+		checkBox[5]	=	( CheckBox )findViewById( R.id.C6);
+		checkBox[6]	=	( CheckBox )findViewById( R.id.C7);	
+		
+		int iLength	=	week.length;
+  		for( int i = 0; i < iLength; ++i )
+  		{
+  			Week[ i ]	=	week[ i ];
+  			if( week[ i ] == 1 )
+  			{
+  				WeekTxt[i].setTextColor(Color.GREEN);
+  			}
+  			else
+  			{
+  				WeekTxt[i].setTextColor(Color.WHITE);
+  			}
+  		}
+	}
+	
+	void	saveData( )
 	{
         CheckBox	checkBox[]	=	new	CheckBox[7];
 		
@@ -153,7 +176,7 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
     	else
     	{
     		Week[0]		=	0;
-    		WeekTxt[0].setTextColor(Color.BLACK);
+    		WeekTxt[0].setTextColor(Color.WHITE);
     	}
     	
     	if( checkBox[1].isChecked())
@@ -165,7 +188,7 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
     	else
     	{
     		Week[1]	=	0;
-    		WeekTxt[1].setTextColor(Color.BLACK);
+    		WeekTxt[1].setTextColor(Color.WHITE);
     	}
     	
     	if( checkBox[2].isChecked())
@@ -177,7 +200,7 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
     	else
     	{
     		Week[2]		=	0;
-    		WeekTxt[2].setTextColor(Color.BLACK);
+    		WeekTxt[2].setTextColor(Color.WHITE);
     	}
     	
     	if( checkBox[3].isChecked())
@@ -189,7 +212,7 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
     	else
     	{
     		Week[3]		=	0;
-    		WeekTxt[3].setTextColor(Color.BLACK);
+    		WeekTxt[3].setTextColor(Color.WHITE);
     	}
     	
     	if( checkBox[4].isChecked())
@@ -201,7 +224,7 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
     	else 
     	{
     		Week[4]		=	0;
-    		WeekTxt[4].setTextColor(Color.BLACK);
+    		WeekTxt[4].setTextColor(Color.WHITE);
     	}
     	if( checkBox[5].isChecked())
     	{
@@ -212,7 +235,7 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
     	else
     	{
     		Week[5]		=	0;
-    		WeekTxt[5].setTextColor(Color.BLACK);
+    		WeekTxt[5].setTextColor(Color.WHITE);
     	}
     	if( checkBox[6].isChecked())
     	{
@@ -223,8 +246,10 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
     	else
     	{
     		Week[6]		=	0;
-    		WeekTxt[6].setTextColor(Color.BLACK);
+    		WeekTxt[6].setTextColor(Color.WHITE);
     	}
+    	
+    	RemindActivity.m_bType	=	2;
 //    	if ( 0 == bCheckFlg )
 //    	{
 //    		Toast toast = Toast.makeText(m_context, "没有设置星期，请重新设置!", Toast.LENGTH_SHORT);

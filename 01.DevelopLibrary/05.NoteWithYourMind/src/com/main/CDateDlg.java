@@ -21,18 +21,13 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
 	
 	TextView	m_Date		=	null;
 	
-	public	void	Initialize( Byte type )
-	{
-		iYear		=	-1;
-		iMonth		=	-1;
-		iDay		=	-1;
-		m_bType		=	type;	
-	}
-	
-	public CDateDlg(Context context )
+	public CDateDlg(Context context)
 	{
 		super(context);
 		m_context	=	context;
+		iYear		=	-1;
+		iMonth		=	-1;
+		iDay		=	-1;
 	}
 	
 	public void setDisplay( TextView TimeTxt )
@@ -72,22 +67,24 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
         	cancel();
             break;
         case R.id.DateOK:
-        	saveData();
+    		iYear	=	dp.getYear();
+    		iMonth	=	dp.getMonth();
+    		iDay	=	dp.getDayOfMonth();
+        	saveData( iYear, iMonth, iDay );
         	cancel();
             break;
         default:
         }
     }
 	
-	private	void	saveData()
+	public	void	saveData( int iYear, int iMonth, int iDay )
 	{
-		iYear	=	dp.getYear();
-		iMonth	=	dp.getMonth();
-		iDay	=	dp.getDayOfMonth();
+
 		if ( m_Date != null )
 		{
 			m_Date.setText(Integer.toString(iYear) + "Äê" + Integer.toString( iMonth+1 ) + "ÔÂ" + Integer.toString(iDay) + "ÈÕ" );
 		}
-		m_bType	=	3;
+		
+		RemindActivity.m_bType	=	3;
 	}
 }

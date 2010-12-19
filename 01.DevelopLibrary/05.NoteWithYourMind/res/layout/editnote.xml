@@ -77,6 +77,14 @@
 						android:layout_height="wrap_content"
 						android:orientation="horizontal">
 							<TextView
+					android:id="@+id/editnote_remindinfo_remindsettingdata_tx0"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="时间"
+					android:visibility="gone"
+					/>
+					<TextView
 							android:id="@+id/editnote_remindinfo_remindsettingdata_tx1"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
@@ -130,16 +138,30 @@
 						android:id="@+id/editnote_remindinfo_nextremind"
 						android:layout_width="fill_parent"
 						android:layout_height="wrap_content"
-						android:text="下次提醒：2天3小时后"
+				/>
+				<LinearLayout
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal">
+					<TextView
+					android:id="@+id/editnote_remindinfo_type"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="提醒类型:"
+					android:layout_weight="1"
 						/>
 						<TextView
 						android:id="@+id/editnote_remindinfo_status"
-						android:layout_width="fill_parent"
+					android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:text="启用"
+					android:layout_marginLeft="20px"
+					android:layout_weight="1"
+					android:layout_gravity="right"
+					android:layout_marginRight="20px"
 						/>
 					</LinearLayout>
 				</LinearLayout>
+		</LinearLayout>
 				<LinearLayout
 				android:id="@+id/editnote_voiceinfo"
 				android:orientation="vertical"
@@ -198,13 +220,13 @@
 						android:layout_weight="3"
 						android:layout_gravity="center_vertical"
 						/>
-						<TextView  android:id="@+id/rec_time"
+						<Chronometer  android:id="@+id/rec_time"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:layout_weight="1"
-						android:text = "00:00/00:00"
 						android:layout_gravity="center_vertical"
-						/>
+						>
+						</Chronometer>
 					</LinearLayout>
 				</LinearLayout>
 			</LinearLayout>

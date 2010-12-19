@@ -35,16 +35,85 @@ public class CRemindInfo implements Serializable
 		}
 	}
 	
-	public	void	getWeekTime( int iHour, int iMinute, byte week[] )
+	public	void	getWeekTime( CDateAndTime clCDateAndTime, byte week[] )
 	{
-		iHour	=	(int) (lTime >> 16);
-		iMinute	=	(int)lTime & 0x0000ffff;
+		clCDateAndTime.iHour	=	(int) (lTime >> 16);
+		clCDateAndTime.iMinute	=	(int)lTime & 0x0000ffff;
 		
 		int iLength	=	m_Week.length;
 		for( int i = 0; i < iLength; ++i )
 		{
 			week[ i ]	=	m_Week[ i ];
 		}
+	}
+	
+	public	String	getCountDownBySting()
+	{	
+		String	strTemp	=	null;
+		
+		if ( m_bType == 1 || m_bType == 3 )
+		{	
+			strTemp	=	SubCountdownByString( lTime );
+		}
+		else if ( m_bType == 2 )
+		{
+			long	lTimeTemp	=	getFirstCycelRemindTime();
+			
+			strTemp	=	SubCountdownByString( lTimeTemp );
+		}
+		else
+		{
+			//error
+		}
+		
+
+		return	strTemp;
+
+	}
+	
+	private	String	SubCountdownByString( long _lTime )
+	{
+		String	strTemp;
+		
+		Calendar clCalendar	=	Calendar.getInstance();
+		clCalendar.setTimeInMillis(System.currentTimeMillis());
+		long	lCur	=	clCalendar.getTimeInMillis();
+		
+		long	lTemp	=	_lTime - lCur;
+		if ( 0 > lTemp )
+		{
+			strTemp = "时间错误!";
+			return	strTemp;
+		}	
+		
+		int	iTimeTemp	=	0;
+		iTimeTemp	=	(int)(lTemp /1000 / 60 / 60 / 24 / 365);
+		if ( 0 < iTimeTemp )
+		{
+			strTemp = "下次提醒 : " + String.valueOf(iTimeTemp) +"年  后";
+			return	strTemp;
+		}
+		
+		iTimeTemp	=	(int)(lTemp /1000 / 60 / 60 / 24 );
+		if ( 0 < iTimeTemp )
+		{
+			strTemp = "下次提醒 : " + String.valueOf(iTimeTemp) +"天  后";
+			return	strTemp;
+		}
+		
+		int	iHour	=	(int)(lTemp / 1000 / 60/ 60 );
+		lTemp   -=	( iHour * 1000 * 60 * 60 );
+		
+		int	iMinute	=	(int)( lTemp / 1000 / 60 );	
+		
+		if( 0 < iHour || 0 < iMinute )
+		{
+			strTemp = "下次提醒 : " + String.valueOf(iHour) + "小时" + String.valueOf(iMinute) + "分钟  后";
+			return	strTemp;
+		}	
+		
+		strTemp = "时间错误!";
+		return	strTemp;
 	}
 	
 	public	void	setCutDownTime( int iHour, int iMinute )
@@ -59,9 +128,18 @@ public class CRemindInfo implements Serializable
 		lTime	+=	( iHour * 60 + iMinute ) * 1000;
 	}
 	
-	public	void	getCutDownTime( Integer iHour, Integer iMinute )
+	public	void	getCutDownTime( CDateAndTime clCDateAndTime )
 	{
+		Calendar clCalendar	=	Calendar.getInstance();
+		clCalendar.setTimeInMillis(System.currentTimeMillis());
 		
+		long	lCur	=	clCalendar.getTimeInMillis();
+		long	lTemp	=	lTime	-	lCur;
+		
+		clCDateAndTime.iHour	=	new	Integer((int)(lTemp / 1000 / 60/ 60 ));
+		lTemp   -=	( clCDateAndTime.iHour * 1000 * 60 * 60 );
+		
+		clCDateAndTime.iMinute	=	new	Integer((int)( lTemp / 1000 / 60 ));
 	}
 	
 	public	void	setNormalTime( int iHour, int iMinute, int iYear, int iMonth, int iDay )
@@ -80,16 +158,55 @@ public class CRemindInfo implements Serializable
 		lTime	=	clCalendar.getTimeInMillis();
 	}
 	
-	public	void	getNormalTime( Integer iHour, Integer iMinute, Integer iYear, Integer iMonth, Integer iDay )
+	public boolean	checkTime()
+	{
+		boolean		bflg	=	false;
+		
+		if( m_bType == 1 || m_bType == 3 )
+		{
+			Calendar clCalendar	=	Calendar.getInstance();
+			clCalendar.setTimeInMillis(System.currentTimeMillis());
+			
+			long	lCur	=	clCalendar.getTimeInMillis();
+			if ( lCur > lTime )
+			{
+				bflg	=	false;
+			}
+			else
+			{
+				bflg	=	true;
+			}
+		}
+		else if( m_bType == 2 )
+		{
+			
+			for ( int i = 0; i < 7; ++i )
+			{
+				if ( 1 == m_Week[ 1 ] )
+				{
+					bflg	=	true;
+					break;
+				}
+			}
+		}
+		else
+		{
+			//error
+		}
+		
+		return	bflg;
+	}
+	
+	public	void	getNormalTime( CDateAndTime clCDateAndTime )
 	{
 		Calendar clCalendar	=	Calendar.getInstance();
 		clCalendar.setTimeInMillis( lTime );
 		
-		iYear	=	clCalendar.get(Calendar.YEAR);
-		iMonth	=	clCalendar.get(Calendar.MONTH);
-		iDay	=	clCalendar.get(Calendar.DAY_OF_MONTH);
-		iHour	=	clCalendar.get(Calendar.HOUR_OF_DAY);
-		iMinute	=	clCalendar.get(Calendar.MINUTE);
+		clCDateAndTime.iYear	=	clCalendar.get(Calendar.YEAR);
+		clCDateAndTime.iMonth	=	clCalendar.get(Calendar.MONTH);
+		clCDateAndTime.iDay		=	clCalendar.get(Calendar.DAY_OF_MONTH);
+		clCDateAndTime.iHour	=	clCalendar.get(Calendar.HOUR_OF_DAY);
+		clCDateAndTime.iMinute	=	clCalendar.get(Calendar.MINUTE);
 	}
 	
 	//根据当前系统时间，计算取得循环提醒 的第一次要提醒的时间
@@ -97,7 +214,7 @@ public class CRemindInfo implements Serializable
 	public	long	getFirstCycelRemindTime()	
 	{
 		long	lTime	=	-1;				//返回值
-		if ( 2 == m_bType )					//2为循环提醒
+		if ( m_bType == 2 )					//2为循环提醒
 		{
 			//取得当前时间
 			Calendar clCalendar	=	Calendar.getInstance();
@@ -159,14 +276,14 @@ public class CRemindInfo implements Serializable
 		String	strType		=	null;
 		String	strInfo		=	null;
 		
-		if( 1 == m_bType )
+		if( m_bType == 1 )
 		{
 			strType	=	Interval;
 			Long	hour	=	lTime >> 16;
 			Long	minute	=	lTime & 0x0000ffff;
 			strInfo	=	hour.toString()+ "小时" + minute.toString() + "分钟 后提醒";
 		}
-		else if( 2 == m_bType )
+		else if( m_bType == 2 )
 		{
 			strType	=	Cycel;
 			strInfo	=	"每周" + " ";
@@ -184,7 +301,7 @@ public class CRemindInfo implements Serializable
 			Long	minute	=	lTime & 0x0000ffff;
 			strInfo	+=	hour.toString()+ "小时" + minute.toString() + "分钟 提醒";
 		}
-		else if( 3 == m_bType )
+		else if( m_bType == 3 )
 		{
 			strType	=	Once;
 			

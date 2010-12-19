@@ -32,7 +32,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import java.util.List;
 import java.util.Collections;
 import java.util.Comparator;
-
+ 
 
 class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickListener{
 	private enum MoveIn_State{

@@ -192,16 +192,6 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	        	myRecAudioDir.mkdir();
 	        } 
 	    }
-		
-		//如果存在录音文件 打开录音面板
-		if(mIsSoundFileExist)
-		{
-			clBTStartRecord.setVisibility(View.VISIBLE);
-			clBTStopRecord.setVisibility(View.VISIBLE);
-			clBTPlayRecord.setVisibility(View.VISIBLE);
-			clBTDeleteRecord.setVisibility(View.VISIBLE);
-			mIsOpenRecordPanel = true;
-		}
 	    
 	    //进度条
 	    mProgressBar01 = (ProgressBar)findViewById(R.id.progress_horizontal);
@@ -305,19 +295,20 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 //    	}else{
 //    		EtOnce.setText( "" );
 //    	}
-    	if ( 1 == clRemindInfo.m_bType )
-    	{
-    		
+    	if(clRemindInfo!=null){
+    		if ( 1 == clRemindInfo.m_bType )
+        	{
+        		
+        	}
+        	else if( 2 == clRemindInfo.m_bType )
+        	{
+        		
+        	}
+        	else if ( 3 == clRemindInfo.m_bType )
+        	{
+        		
+        	}
     	}
-    	else if( 2 == clRemindInfo.m_bType )
-    	{
-    		
-    	}
-    	else if ( 3 == clRemindInfo.m_bType )
-    	{
-    		
-    	}
-    	
     }
     private void updateDetail(String strDetail){
     	EditText EtOnce = (EditText) findViewById(R.id.ET_main_Memo);

@@ -99,7 +99,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	ImageButton													clBTStartRecord;
 	ImageButton													clBTStopRecord ;
     
-	private Chronometer 										chronometer;
+	private TextView	 										mchronometer;
 	protected static final int 									GUI_STOP_NOTIFIER = 0x108;
 	protected static final int 									GUI_THREADING_NOTIFIER = 0x109;
 	private SeekBar		 										mProgressBar01;
@@ -180,7 +180,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         
         
         //计时器
-		chronometer = (Chronometer) findViewById(R.id.rec_time);
+		mchronometer = (TextView) findViewById(R.id.rec_time);
 		//chronometer.setOnChronometerTickListener(this);
 		//chronometer.setFormat("MM::SS/05:00");
 			
@@ -207,7 +207,13 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         	 
     		public void onProgressChanged(SeekBar seekBar, int progress,
     				boolean fromUser) {
-    			// TODO Auto-generated method stub
+    			// TODO Auto-generated method stub    			
+		   		 int cur_sec  = mMediaPlayer.getCurrentPosition()/1000%60;
+				 int cur_min  = mMediaPlayer.getCurrentPosition()/1000/60;
+				 int total_sec = mMediaPlayer.getDuration()/1000%60;
+				 int total_min = mMediaPlayer.getDuration()/1000/60;
+				 mchronometer.setText(String.format("%02d:%02d/%02d:%02d", cur_min,cur_sec,  total_min ,total_sec));
+
     		}
      
     		public void onStartTrackingTouch(SeekBar seekBar) {
@@ -217,6 +223,11 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     			// TODO Auto-generated method stub
     			//mp.seekTo(sb.getProgress());
     			 mMediaPlayer.seekTo(mProgressBar01.getProgress());
+		   		 int cur_sec  = mMediaPlayer.getCurrentPosition()/1000%60;
+				 int cur_min  = mMediaPlayer.getCurrentPosition()/1000160;
+				 int total_sec = mMediaPlayer.getDuration()/1000%60;
+				 int total_min = mMediaPlayer.getDuration()/1000/60;
+				 mchronometer.setText(String.format("%02d:%02d/%02d:%02d", cur_min,cur_sec,  total_min ,total_sec));
     			 //chronometer.setBase(mProgressBar01.getProgress());
     			//SeekBar确定位置后，跳到指定位置
     		}
@@ -459,8 +470,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		clBTDeleteRecord.setEnabled(false);
 		
 		mIsRecordSound = true;
-        mProgressBar01.setFocusable(false);
-        
+
  	    Date d = new Date();
         d.toString();
         SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddkkmmss");
@@ -488,10 +498,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			e1.printStackTrace();
 		}
         mMediaRecorder01.start();
-        
-        chronometer.setBase(SystemClock.elapsedRealtime());
-        chronometer.start();
-        
+                
 	    mProgressBar01.setIndeterminate(false);
         mProgressBar01.setMax(mMaxTime);
         mProgressBar01.setProgress(0);
@@ -537,7 +544,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		{
 			//播放状态
 			mMediaPlayer.stop();
-			chronometer.stop();
+			//chronometer.stop();
 			mPlayThread.interrupt();
 		}
 		//录音状态
@@ -546,7 +553,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			mMediaRecorder01.stop();
 			mMediaRecorder01.release();
 			mMediaRecorder01 = null;
-			chronometer.stop();
+			//chronometer.stop();
 			mIsRecordSound = false;	
 			nThread.interrupt();
 		}		
@@ -581,7 +588,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 				{
 					mProgressBar01.setFocusable(true);
 					//Toast.makeText(NoteWithYourMind.this, myRecAudioFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
-					mMediaPlayer.setDataSource(/*"/sdcard/youchaihua.mp3"); */myRecAudioFile.getAbsolutePath());
+					mMediaPlayer.setDataSource("/sdcard/youchaihua.mp3"); //myRecAudioFile.getAbsolutePath()
 					/* 准备播放 */
 					mMediaPlayer.prepare();
 					/* 开始播放 */
@@ -591,9 +598,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 					clBTStopRecord.setEnabled(true);
 					clBTPlayRecord.setEnabled(false);
 					clBTDeleteRecord.setEnabled(false);
-					
-					chronometer.setBase(SystemClock.elapsedRealtime());
-			        chronometer.start();
+				
 			        
 				    mProgressBar01.setIndeterminate(false);
 				    
@@ -691,7 +696,6 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			          clBTPlayRecord.setEnabled(true);
 			    	  clBTDeleteRecord.setEnabled(true);  	  
 		          }
-		           chronometer.stop();
 		          break;
 		         
 		        case NoteWithYourMind.GUI_THREADING_NOTIFIER:
@@ -706,6 +710,12 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		        		 //mProgressBar01.setProgress((a*mMaxTime)/b  );	        		 
 		        		 //mProgressBar01.setProgress(intCounter);
 		        		 mProgressBar01.setProgress(a);
+		        		        		 
+		        		 int cur_sec  = mMediaPlayer.getCurrentPosition()/1000%60;
+		        		 int cur_min  = mMediaPlayer.getCurrentPosition()/1000/60;
+		        		 int total_sec = mMediaPlayer.getDuration()/1000%60;
+		        		 int total_min = mMediaPlayer.getDuration()/1000/60;
+						 mchronometer.setText(String.format("%02d:%02d/%02d:%02d", cur_min,cur_sec,  total_min ,total_sec));
 		        	 }
 		        	
 		          break;

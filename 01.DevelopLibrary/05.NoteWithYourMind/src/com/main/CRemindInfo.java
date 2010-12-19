@@ -233,17 +233,17 @@ public class CRemindInfo implements Serializable
 			long	lMinTime	=	Long.MAX_VALUE;		//差值为正的最小时间为下次提醒时间，初始化为整数最大值
 			long	lMaxTime	=	-1;					//差值为负的最小时间为下周的第一个提醒时间，初始化为负数最大值
 			
-			byte bSun	=	m_Week[6];
+			byte	bWeekTemp[]	=	new	byte[ 7 ];
 			for( int i = 0; i < 6; ++i )
 			{
-				m_Week[ i + 1 ]	=	m_Week[i];
+				bWeekTemp[ i + 1 ]	=	m_Week[i];
 			}
 			
-			m_Week[ 0 ]	=	bSun;
+			bWeekTemp[ 0 ]	=	m_Week[6];
 			
 			for	( int i = 0; i < 7; ++i )
 			{
-				 if ( 1 == m_Week[i] )
+				 if ( 1 == bWeekTemp[i] )
 				 {
 					clCalendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY + i );
 					int	hour	=	(int)lTime >> 16;
@@ -251,6 +251,8 @@ public class CRemindInfo implements Serializable
 					 clCalendar.set( Calendar.HOUR_OF_DAY, hour);
 					 clCalendar.set( Calendar.MINUTE, minute);
 					 lTempTime	=	clCalendar.getTimeInMillis();
+					 
+					 lTempTime	-=	ONE_WEEK_TIME;
 					 
 					 long	lMinTemp	=	lTempTime	-	lCurTimer;
 					 

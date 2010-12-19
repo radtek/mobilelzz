@@ -23,7 +23,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 	
 	private 	RadioGroup 		m_RadioGroupTime;
 	private 	RadioGroup 		m_RadioGroupDate;
-	static		public	Byte			m_bType	=	-1;
+	public	static	Byte			m_bType	=	-1;
 	
 	//btn
 	Button	btCountdown	=	null;

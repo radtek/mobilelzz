@@ -61,6 +61,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		OperationNoteKind_Edit,
 		OperationNoteKind_Update
 	}
+	
 	public static String 								ExtraData_EditNoteID		=	"com.main.ExtraData_EditNoteID";
 	public static String 								ExtraData_OperationNoteKind	=	"com.main.ExtraData_OperationNoteKind";
 	public static String 								ExtraData_OperationPreID	=	"com.main.ExtraData_OperationPreID";
@@ -458,7 +459,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		clBTDeleteRecord.setEnabled(false);
 		
 		mIsRecordSound = true;
-
+        mProgressBar01.setFocusable(false);
+        
  	    Date d = new Date();
         d.toString();
         SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddkkmmss");
@@ -577,8 +579,9 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 				/* 设置要播放的文件的路径 */
 				//if(myRecAudioFile!=null && myRecAudioFile.exists())
 				{
+					mProgressBar01.setFocusable(true);
 					//Toast.makeText(NoteWithYourMind.this, myRecAudioFile.getAbsolutePath(),Toast.LENGTH_LONG).show();
-					mMediaPlayer.setDataSource("/sdcard/youchaihua.mp3"); //myRecAudioFile.getAbsolutePath()
+					mMediaPlayer.setDataSource(/*"/sdcard/youchaihua.mp3"); */myRecAudioFile.getAbsolutePath());
 					/* 准备播放 */
 					mMediaPlayer.prepare();
 					/* 开始播放 */

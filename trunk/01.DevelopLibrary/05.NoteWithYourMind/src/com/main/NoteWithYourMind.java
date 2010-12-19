@@ -495,11 +495,21 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		//打开录音面板
 		View vVoicePanel = findViewById(R.id.editnote_voiceinfo); 
 		vVoicePanel.setVisibility(View.VISIBLE);
+		
+		if( myRecAudioFile!=null && myRecAudioFile.exists())
+		{			
+			clBTPlayRecord.setEnabled(true);
+			clBTDeleteRecord.setEnabled(true);
+		}
+		else
+		{
+			clBTPlayRecord.setEnabled(false);
+			clBTDeleteRecord.setEnabled(false);
+			
+		}
 		clBTStopRecord.setEnabled(false);
 		clBTStartRecord.setEnabled(true);
-		clBTPlayRecord.setEnabled(true);
-		clBTDeleteRecord.setEnabled(true);
-
+		
 		mIsOpenRecordPanel = true;
 	}
 	
@@ -654,12 +664,13 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			//	clBTDeleteRecord.setEnabled(false);
 			//}
 			//else
+	 		if(mMediaPlayer != null)
 			{
 				
 				/* 重置MediaPlayer */
 				mMediaPlayer.reset();
 				/* 设置要播放的文件的路径 */
-				//if(myRecAudioFile!=null && myRecAudioFile.exists())
+				if(myRecAudioFile!=null && myRecAudioFile.exists())
 				{
 					mProgressBar01.setFocusable(true);
 					//Toast.makeText(NoteWithYourMind.this, myRecAudioFile.getAbsolutePath(),Toast.LENGTH_LONG).show();

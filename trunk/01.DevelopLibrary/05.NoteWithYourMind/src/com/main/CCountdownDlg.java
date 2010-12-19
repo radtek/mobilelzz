@@ -18,17 +18,13 @@ public class CCountdownDlg extends CommentOutDlg implements View.OnClickListener
 	TimePicker		Tp		=	null;
 	TextView	 	m_Time	=	null;
 	
-	public	void	Initialize( Byte type )
-	{
-		iHour		=	-1;
-		iMinute		=	-1;
-		m_bType		=	type;
-	}
-	
+
 	public CCountdownDlg(Context context )
 	{
 		super(context);
 		m_context	=	context;
+		iHour		=	-1;
+		iMinute		=	-1;
 	}
 	
 	public void setDisplay( TextView TimeTxt )
@@ -84,7 +80,8 @@ public class CCountdownDlg extends CommentOutDlg implements View.OnClickListener
 			m_Time.setText(Integer.toString(iHour) + "小时"+ Integer.toString(iMinute)+"分钟后提醒" );
 		}
 		
-		m_bType	=	1;
+//		m_bType	=	1;
+		RemindActivity.m_bType	=	1;
 	}
 
 }

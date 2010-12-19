@@ -20,17 +20,13 @@ public class CTimeDlg extends CommentOutDlg implements View.OnClickListener
 	TextView	 	m_Time	=	null;
 	Byte			m_bType	=	-1;
 	
-	public	void	Initialize( Byte type )
-	{
-		iHour		=	-1;
-		iMinute		=	-1;
-		m_bType		=	type;	
-	}
-	
 	public CTimeDlg(Context context )
 	{
 		super(context);
 		m_context	=	context;
+		iHour		=	-1;
+		iMinute		=	-1;
+
 	}
 	
 	public void setDisplay( TextView TimeTxt )
@@ -70,17 +66,17 @@ public class CTimeDlg extends CommentOutDlg implements View.OnClickListener
         	cancel();
             break;
         case R.id.TimeOK:
-        	saveData();
+    		iHour	=	Tp.getCurrentHour();
+    		iMinute	=	Tp.getCurrentMinute();
+        	saveData( iHour, iMinute );
         	cancel();
             break;
         default:
         }
     }
 	
-	private	void	saveData()
+	public	void	saveData( int iHour, int iMinute )
 	{
-		iHour	=	Tp.getCurrentHour();
-		iMinute	=	Tp.getCurrentMinute();
 		if ( m_Time != null )
 		{
 			m_Time.setText(Integer.toString(iHour) + "–° ±"+ Integer.toString(iMinute)+"∑÷÷”" );

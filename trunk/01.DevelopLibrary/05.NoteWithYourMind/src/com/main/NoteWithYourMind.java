@@ -387,6 +387,10 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     				{
     					Week[i].setTextColor(Color.GREEN);
     				}
+    				else
+    				{
+    					Week[i].setTextColor(Color.WHITE);
+    				}
     			}
     			Time.setVisibility(View.GONE); 
     			

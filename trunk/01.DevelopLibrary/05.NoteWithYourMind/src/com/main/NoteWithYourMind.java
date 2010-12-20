@@ -589,9 +589,9 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
                 
         nThread = new Thread(new Runnable()
         {
-          public void run()
-          {
-        	  	int mMaxTime = CommonDefine.g_iMaxRecTime;
+			public void run()
+			{
+				int mMaxTime = CommonDefine.g_iMaxRecTime;
 				for (int i=0;i<mMaxTime+1;i++)
 				{
 				    try 
@@ -615,7 +615,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 				      NoteWithYourMind.this.myMessageHandler.sendMessage(m); 
 				    }   
 				}
-          	}
+			}
         });
         nThread.start();       
 	}
@@ -678,37 +678,9 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 				    mProgressBar01.setMax(m_iCurrentVoiceDataDuration);
 			        mProgressBar01.setProgress(0);
 			                
-//			        mPlayThread = new Thread(new Runnable()
-//			        {
-//			          public void run()
-//			          {
-//			            for (int i=0;i<m_iCurrentVoiceDataDuration+1;i++)
-//			            {
-//			                try 
-//			                {
-//								Thread.sleep(1000);
-//							} catch (InterruptedException e)
-//							{
-//								e.printStackTrace();
-//							}
-//							Message m = new Message();
-//							m.arg1 = i;
-//			                if( i==m_iCurrentVoiceDataDuration  || !mMediaPlayer.isPlaying())
-//			                {
-//								m.arg1 = m_iCurrentVoiceDataDuration;
-//								m.what = NoteWithYourMind.GUI_STOP_NOTIFIER;
-//								NoteWithYourMind.this.myMessageHandler.sendMessage(m);
-//								break;
-//			                }
-//			                else
-//			                {
-//								m.what = NoteWithYourMind.GUI_THREADING_NOTIFIER;
-//								NoteWithYourMind.this.myMessageHandler.sendMessage(m); 
-//			                }   
-//			            }
-//			          }
-//			        });
-//			        mPlayThread.start();  
+			        mPlayThread = new PlayWatcherThread(1000);
+			        
+			        mPlayThread.start();  
 				}
 			}
 				
@@ -751,24 +723,16 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		        case NoteWithYourMind.GUI_STOP_NOTIFIER:
 		          Thread.currentThread().interrupt();
 		          clBTStopRecord.performClick();
-//		          if (myRecAudioFile != null && mIsRecordSound )
-//		           {  
-//		              mMediaRecorder01.stop();
-//		              mMediaRecorder01.release();
-//		              mMediaRecorder01 = null;
-//		             
-//		              clBTStopRecord.setEnabled(false);
-//		
-//		              mIsRecordSound = false;
-//		              
-//		           }
-//		          else
-//		          {
-//			      	  clBTStartRecord.setEnabled(true);
-//			    	  clBTStopRecord.setEnabled(false);
-//			          clBTPlayRecord.setEnabled(true);
-//			    	  clBTDeleteRecord.setEnabled(true);  	  
-//		          }
+		          if (myRecAudioFile != null && mIsRecordSound )
+		           {  
+		           }
+		          else
+		          {
+		        	  mProgressBar01.setProgress(m_iCurrentVoiceDataDuration);
+						int total_sec = m_iCurrentVoiceDataDuration/1000%60;
+						int total_min = m_iCurrentVoiceDataDuration/1000/60;
+						mchronometer.setText(String.format("%02d:%02d/%02d:%02d", total_min,total_sec,  total_min ,total_sec));
+		          }
 		          break;
 		         
 		        case NoteWithYourMind.GUI_THREADING_NOTIFIER:
@@ -934,5 +898,41 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			break;
 
 		}
-		return super.onOptionsItemSelected(item);}
+		return super.onOptionsItemSelected(item);
+	}
+	class PlayWatcherThread extends Thread {  
+	    int milliseconds;  
+	      
+	    public PlayWatcherThread(int i){  
+	        milliseconds = i;  
+	    }  
+		public void run()
+		{
+			setPriority(MIN_PRIORITY);
+			for (int i=0;i<m_iCurrentVoiceDataDuration+1;i++)
+			{
+			    try 
+			    {
+					sleep(milliseconds);
+				} catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+				Message m = new Message();
+				m.arg1 = i;
+			    if( i==m_iCurrentVoiceDataDuration  || !mMediaPlayer.isPlaying())
+			    {
+					m.arg1 = m_iCurrentVoiceDataDuration;
+					m.what = NoteWithYourMind.GUI_STOP_NOTIFIER;
+					NoteWithYourMind.this.myMessageHandler.sendMessage(m);
+					break;
+			    }
+			    else
+			    {
+					m.what = NoteWithYourMind.GUI_THREADING_NOTIFIER;
+					NoteWithYourMind.this.myMessageHandler.sendMessage(m); 
+			    }   
+			}
+		}
+	}  
 }

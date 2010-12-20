@@ -9,15 +9,16 @@ class CommonDefine{
 		ToolbarStatus_Delete,
 		ToolbarStatus_Move
 	}
-	public static ToolbarStatusEnum g_enToolbarStatus = ToolbarStatusEnum.ToolbarStatus_Normal;
-	public static int g_int_Invalid_ID = -1;
-	public static int g_int_ListItemHeight = 65;
-	public static String g_str_PassWord = "";
-	public static boolean g_bool_IsPassWordChecked = false;
+	public static ToolbarStatusEnum 		g_enToolbarStatus = ToolbarStatusEnum.ToolbarStatus_Normal;
+	public static int 						g_int_Invalid_ID = -1;
+	public static int 						g_int_ListItemHeight = 65;
+	public static String 					g_str_PassWord = "";
+	public static boolean 					g_bool_IsPassWordChecked = false;
 
-	public static	CNoteDBCtrl		m_clCNoteDBCtrl = null;
+	public static	CNoteDBCtrl				m_clCNoteDBCtrl = null;
 	
-	public static String g_strAudioFilePath = "/note/record";
+	public static String 					g_strAudioFilePath = "/note/record";
+	public final static int					g_iMaxRecTime = 300;
 }
 
 class CommonContainer{

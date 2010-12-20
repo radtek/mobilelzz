@@ -73,8 +73,6 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	public static final int 							ITEM0	=	Menu.FIRST;
 	public static final int 							ITEM1	=	Menu.FIRST + 1;
 	
-	public static int								mMaxTime = 120;
-	
 	//进行DB操作的类
 	private CNoteDBCtrl 								m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
 	
@@ -104,13 +102,14 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	protected static final int 									GUI_STOP_NOTIFIER = 0x108;
 	protected static final int 									GUI_THREADING_NOTIFIER = 0x109;
 	private SeekBar		 										mProgressBar01;
-	public int 													intCounter=0;
+//	public int 													intCounter=0;
 	
 	private  Thread												nThread;
 	private  Thread												mPlayThread;
 	
 	/* MediaPlayer对象 */
 	public MediaPlayer											mMediaPlayer		= null;
+	private int													m_iCurrentVoiceDataDuration = CommonDefine.g_int_Invalid_ID;
 	
 	private boolean												mIsSoundFileExist   = false;
 	private boolean												mIsOpenRecordPanel  = false;
@@ -203,7 +202,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	    //进度条
 	    mProgressBar01 = (SeekBar)findViewById(R.id.progress_horizontal);
 	    mProgressBar01.setIndeterminate(false);
-        mProgressBar01.setMax(mMaxTime);
+        mProgressBar01.setMax(CommonDefine.g_iMaxRecTime);
         mProgressBar01.setProgress(0);
         
         OnSeekBarChangeListener sbLis=new OnSeekBarChangeListener(){
@@ -585,41 +584,40 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         mMediaRecorder01.start();
                 
 	    mProgressBar01.setIndeterminate(false);
-        mProgressBar01.setMax(mMaxTime);
+        mProgressBar01.setMax(CommonDefine.g_iMaxRecTime);
         mProgressBar01.setProgress(0);
                 
         nThread = new Thread(new Runnable()
         {
           public void run()
           {
-            for (int i=0;i<mMaxTime+1;i++)
-            {
-                intCounter = i;
-                try 
-                {
-					Thread.sleep(1000);
-				} catch (InterruptedException e)
+        	  	int mMaxTime = CommonDefine.g_iMaxRecTime;
+				for (int i=0;i<mMaxTime+1;i++)
 				{
-					e.printStackTrace();
+				    try 
+				    {
+						Thread.sleep(1000);
+					} catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					}
+					Message m = new Message();
+					m.arg1 = i;
+				    if( i==mMaxTime )
+				    {
+				      m.what = NoteWithYourMind.GUI_STOP_NOTIFIER;
+				      NoteWithYourMind.this.myMessageHandler.sendMessage(m);
+				      break;
+				    }
+				    else
+				    {
+				      m.what = NoteWithYourMind.GUI_THREADING_NOTIFIER;
+				      NoteWithYourMind.this.myMessageHandler.sendMessage(m); 
+				    }   
 				}
-                if( i==mMaxTime )
-                {
-                  Message m = new Message();
-                  m.what = NoteWithYourMind.GUI_STOP_NOTIFIER;
-                  NoteWithYourMind.this.myMessageHandler.sendMessage(m);
-                  break;
-                }
-                else
-                {
-                  Message m = new Message();
-                  m.what = NoteWithYourMind.GUI_THREADING_NOTIFIER;
-                  NoteWithYourMind.this.myMessageHandler.sendMessage(m); 
-                }   
-            }
-          }
+          	}
         });
         nThread.start();       
-  		
 	}
 	
 	//停止录音/暂停播放
@@ -654,19 +652,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	{
 	 	try
 		{
-			//if(mMediaPlayer != null &&  mMediaPlayer.isPlaying() )
-			//{
-			//	mMediaPlayer.seekTo(0);
-			//	mMediaPlayer.start();	
-			//	clBTStartRecord.setEnabled(false);
-			//	clBTStopRecord.setEnabled(true);
-			//	clBTPlayRecord.setEnabled(false);
-			//	clBTDeleteRecord.setEnabled(false);
-			//}
-			//else
 	 		if(mMediaPlayer != null)
 			{
-				
 				/* 重置MediaPlayer */
 				mMediaPlayer.reset();
 				/* 设置要播放的文件的路径 */
@@ -678,7 +665,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 					/* 准备播放 */
 					mMediaPlayer.prepare();
 					/* 开始播放 */
-					mMaxTime = mMediaPlayer.getDuration();
+					m_iCurrentVoiceDataDuration = mMediaPlayer.getDuration();
 					mMediaPlayer.start();	
 					clBTStartRecord.setEnabled(false);
 					clBTStopRecord.setEnabled(true);
@@ -688,40 +675,40 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			        
 				    mProgressBar01.setIndeterminate(false);
 				    
-				    mProgressBar01.setMax(mMaxTime);
+				    mProgressBar01.setMax(m_iCurrentVoiceDataDuration);
 			        mProgressBar01.setProgress(0);
 			                
-			        mPlayThread = new Thread(new Runnable()
-			        {
-			          public void run()
-			          {
-			            for (int i=0;i<mMaxTime+1;i++)
-			            {
-			                intCounter = i;
-			                try 
-			                {
-								Thread.sleep(1000);
-							} catch (InterruptedException e)
-							{
-								e.printStackTrace();
-							}
-			                if( i==mMaxTime  || !mMediaPlayer.isPlaying())
-			                {
-			                  Message m = new Message();
-			                  m.what = NoteWithYourMind.GUI_STOP_NOTIFIER;
-			                  NoteWithYourMind.this.myMessageHandler.sendMessage(m);
-			                  break;
-			                }
-			                else
-			                {
-			                  Message m = new Message();
-			                  m.what = NoteWithYourMind.GUI_THREADING_NOTIFIER;
-			                  NoteWithYourMind.this.myMessageHandler.sendMessage(m); 
-			                }   
-			            }
-			          }
-			        });
-			        mPlayThread.start();  
+//			        mPlayThread = new Thread(new Runnable()
+//			        {
+//			          public void run()
+//			          {
+//			            for (int i=0;i<m_iCurrentVoiceDataDuration+1;i++)
+//			            {
+//			                try 
+//			                {
+//								Thread.sleep(1000);
+//							} catch (InterruptedException e)
+//							{
+//								e.printStackTrace();
+//							}
+//							Message m = new Message();
+//							m.arg1 = i;
+//			                if( i==m_iCurrentVoiceDataDuration  || !mMediaPlayer.isPlaying())
+//			                {
+//								m.arg1 = m_iCurrentVoiceDataDuration;
+//								m.what = NoteWithYourMind.GUI_STOP_NOTIFIER;
+//								NoteWithYourMind.this.myMessageHandler.sendMessage(m);
+//								break;
+//			                }
+//			                else
+//			                {
+//								m.what = NoteWithYourMind.GUI_THREADING_NOTIFIER;
+//								NoteWithYourMind.this.myMessageHandler.sendMessage(m); 
+//			                }   
+//			            }
+//			          }
+//			        });
+//			        mPlayThread.start();  
 				}
 			}
 				
@@ -763,36 +750,34 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		      { 
 		        case NoteWithYourMind.GUI_STOP_NOTIFIER:
 		          Thread.currentThread().interrupt();
-		         
-		          if (myRecAudioFile != null && mIsRecordSound )
-		           {  
-		              mMediaRecorder01.stop();
-		              mMediaRecorder01.release();
-		              mMediaRecorder01 = null;
-		             
-		              clBTStopRecord.setEnabled(false);
-		
-		              mIsRecordSound = false;
-		              
-		           }
-		          else
-		          {
-			      	  clBTStartRecord.setEnabled(true);
-			    	  clBTStopRecord.setEnabled(false);
-			          clBTPlayRecord.setEnabled(true);
-			    	  clBTDeleteRecord.setEnabled(true);  	  
-		          }
+		          clBTStopRecord.performClick();
+//		          if (myRecAudioFile != null && mIsRecordSound )
+//		           {  
+//		              mMediaRecorder01.stop();
+//		              mMediaRecorder01.release();
+//		              mMediaRecorder01 = null;
+//		             
+//		              clBTStopRecord.setEnabled(false);
+//		
+//		              mIsRecordSound = false;
+//		              
+//		           }
+//		          else
+//		          {
+//			      	  clBTStartRecord.setEnabled(true);
+//			    	  clBTStopRecord.setEnabled(false);
+//			          clBTPlayRecord.setEnabled(true);
+//			    	  clBTDeleteRecord.setEnabled(true);  	  
+//		          }
 		          break;
 		         
 		        case NoteWithYourMind.GUI_THREADING_NOTIFIER:
 		        	if(!Thread.currentThread().isInterrupted() && mIsRecordSound  )
 			         { 
-			            mProgressBar01.setProgress(intCounter);
-			            
-		        		 int cur_sec  = intCounter%60;
-		        		 int cur_min  = intCounter/60;
-						 mchronometer.setText(String.format("%02d:%02d/%02d:%02d", cur_min,cur_sec,  3 ,0));
-	
+			            mProgressBar01.setProgress(msg.arg1);
+		        		 int cur_sec  = msg.arg1%60;
+		        		 int cur_min  = msg.arg1/60;
+						 mchronometer.setText(String.format("%02d:%02d/%02d:%02d", cur_min,cur_sec,  (CommonDefine.g_iMaxRecTime/60) ,0));
 			         }
 		        	 if( mMediaPlayer.isPlaying() )
 		        	 {
@@ -804,8 +789,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		        		        		 
 		        		 int cur_sec  = a/1000%60;
 		        		 int cur_min  = a/1000/60;
-		        		 int total_sec = mMaxTime/1000%60;
-		        		 int total_min = mMaxTime/1000/60;
+		        		 int total_sec = m_iCurrentVoiceDataDuration/1000%60;
+		        		 int total_min = m_iCurrentVoiceDataDuration/1000/60;
 						 mchronometer.setText(String.format("%02d:%02d/%02d:%02d", cur_min,cur_sec,  total_min ,total_sec));
 		        	 }
 		        	

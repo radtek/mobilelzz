@@ -355,7 +355,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     	
     	if(clRemindInfo!=null)
     	{
-    		if ( 1 == clRemindInfo.m_bType ||  3 == clRemindInfo.m_bType )
+    		if ( 1 == clRemindInfo.m_iType ||  3 == clRemindInfo.m_iType )
         	{
     			for ( int i = 0; i < 7 ; ++i )
     			{
@@ -369,7 +369,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     						+ String.valueOf(clCDateAndTime.iDay)+ "日" + String.valueOf(clCDateAndTime.iHour) + "小时" 
     						+ String.valueOf(clCDateAndTime.iMinute) + "分");
     			
-    		if ( 1 == clRemindInfo.m_bType )
+    		if ( 1 == clRemindInfo.m_iType )
         	{
     				Type.setText("提醒类型 : 倒计时" );
     			}
@@ -379,7 +379,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     			}
         		
         	}
-        	else if( 2 == clRemindInfo.m_bType )
+        	else if( 2 == clRemindInfo.m_iType )
         	{
     			for ( int i = 0; i < 7 ; ++i )
     			{
@@ -414,7 +414,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     		{
     			Status.setText("启用");
     			CountDownTime.setText( strTemp );
-    			clRemindInfo.bRemindAble	=	0;
+    			clRemindInfo.m_iRemindAble	=	0;
     		}
     		
     	}
@@ -459,7 +459,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	private void processSetRemindClick(View view){
 		Intent intent = new Intent();
 		intent.setClass(NoteWithYourMind.this, RemindActivity.class);
-		if( (m_clCRemindInfo!=null)&&(m_clCRemindInfo.m_bType != -1) )
+		if( (m_clCRemindInfo!=null)&&(m_clCRemindInfo.m_iType != -1) )
 		{
 			intent.putExtra( ExtraData_RemindSetting, m_clCRemindInfo ); 
 		}
@@ -812,7 +812,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		//取得提醒信息 - zhu.t : 提醒信息已经保存在 m_clCRemindInfo中
 		if( null != m_clCRemindInfo )
 		{
-			if(  -1 != m_clCRemindInfo.m_bType && !m_clCRemindInfo.checkTime())
+			if(  -1 != m_clCRemindInfo.m_iType && !m_clCRemindInfo.checkTime())
 			{
         		Toast toast = Toast.makeText(NoteWithYourMind.this, "提醒时间设定错误,请重新设定!", Toast.LENGTH_SHORT);
         		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
@@ -858,7 +858,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		clCMemoInfo.dLastModifyTime =	clCalendar.getTimeInMillis();
 		clCMemoInfo.strDetail		=	strMemoText;
 		
-    	if ( (m_clCRemindInfo!=null) && (-1 != m_clCRemindInfo.m_bType) )
+    	if ( (m_clCRemindInfo!=null) && (-1 != m_clCRemindInfo.m_iType) )
     	{
     		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
     		clCMemoInfo.iIsRemindAble	=	1;
@@ -884,7 +884,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         	
         	//保存提醒信息 - zhu.t
         	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-        	if( m_clCRemindInfo != null && -1 != m_clCRemindInfo.m_bType ){
+        	if( m_clCRemindInfo != null && -1 != m_clCRemindInfo.m_iType ){
         		if ( -1 == clCRemindOperator.addRemind( this, _id, m_clCRemindInfo) )
 				{
 					//设置提醒失败
@@ -935,22 +935,4 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 
 		}
 		return super.onOptionsItemSelected(item);}
-}
-
-class CDateAndTime
-{
-	int iYear;
-	int iMonth;
-	int	iDay;
-	int iHour;
-	int iMinute;
-	
-	CDateAndTime()
-	{
-		iYear	=	0;
-		iMonth	=	0;
-		iDay	=	0;
-		iHour	=	0;
-		iMinute	=	0;
-	}
 }

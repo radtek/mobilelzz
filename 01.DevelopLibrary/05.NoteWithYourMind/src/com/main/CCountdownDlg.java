@@ -14,63 +14,70 @@ public class CCountdownDlg extends CommentOutDlg implements View.OnClickListener
 {
 	public 	int		m_iHour;
 	public	int		m_iMinute;
-	TimePicker		Tp		=	null;
+	TimePicker		m_Tp		=	null;
 	
 	public CCountdownDlg(Activity context )
 	{
 		super(context);
-		m_context	=	context;
-		m_iHour		=	-1;
-		m_iMinute		=	-1;
+		m_iHour			=	CommonDefine.g_int_Invalid_ID;
+		m_iMinute		=	CommonDefine.g_int_Invalid_ID;
 	}
 	
 	public void setDisplay()
 	{
-        setContentView(R.layout.time);
-        Tp	=	(TimePicker)findViewById(R.id.TimePicker01);
-        Tp.setIs24HourView( true );
-        if( m_iHour != -1 && m_iMinute != -1 )
+        setContentView( R.layout.time );
+        
+        m_Tp	=	(TimePicker)findViewById(R.id.TimePicker01);
+        m_Tp.setIs24HourView( true );
+        
+        if( ( m_iHour 	!= CommonDefine.g_int_Invalid_ID ) 
+         && ( m_iMinute != CommonDefine.g_int_Invalid_ID ) )
         {
-        	Tp.setCurrentHour((int)m_iHour);
-        	Tp.setCurrentMinute((int)m_iMinute);
+        	m_Tp.setCurrentHour(m_iHour);
+        	m_Tp.setCurrentMinute(m_iMinute);
         }
         else
         {
-        	Tp.setCurrentHour(0);
-        	Tp.setCurrentMinute(0);        	
+        	m_Tp.setCurrentHour(0);
+        	m_Tp.setCurrentMinute(0);        	
         }
         
         Button	btCancel	=	(Button)findViewById(R.id.TimeCancel);
         btCancel.setOnClickListener(this);
+        
         Button	btOK		=	(Button)findViewById(R.id.TimeOK);
         btOK.setOnClickListener(this);
+        
         setProperty();
         setTitle("倒计时设定");
         show(); 
     }
     private void setProperty()
     {
-        Window		window	=	getWindow();						//得到对话框的窗口．
-        WindowManager.LayoutParams	wl	=	window.getAttributes();
-        wl.x	=	iPosX;											//这两句设置了对话框的位置．
-        wl.y	=	iPosY;		
-        wl.width	=	250;
-        //wl.gravity=Gravity.BOTTOM;         
-        window.setAttributes(wl);        
+        Window						window	=	getWindow();						//得到对话框的窗口．
+        WindowManager.LayoutParams	wl		=	window.getAttributes();
+        
+        wl.x		=	m_iPosX;											
+        wl.y		=	m_iPosX;		
+        wl.width	=	300;
+       
+        window.setAttributes( wl );        
    }
-	public void onClick(View view)
+    public void onClick(View view)
 	{
-        switch(view.getId()){
-        case R.id.TimeCancel:
-        	cancel();
-            break;
-        case R.id.TimeOK:
-    		int	iHour	=	Tp.getCurrentHour();
-    		int	iMinute	=	Tp.getCurrentMinute();
-        	saveData( iHour, iMinute );
-        	cancel();
-            break;
-        default:
+        switch( view.getId() )
+        {
+	        case R.id.TimeCancel:
+	        	cancel();
+	            break;
+	        case R.id.TimeOK:
+	    		int	iHour	=	m_Tp.getCurrentHour();
+	    		int	iMinute	=	m_Tp.getCurrentMinute();
+	        	saveData( iHour, iMinute );
+	        	cancel();
+	            break;
+	        default:
+	        	break;
         }
     }
 	
@@ -80,10 +87,20 @@ public class CCountdownDlg extends CommentOutDlg implements View.OnClickListener
 		m_iMinute	=	iMinute;
 		
 		TextView	CountDownTxt		=	(TextView)m_context.findViewById(R.id.daojishiTxt);
-
-		CountDownTxt.setText(Integer.toString(iHour) + "小时"+ Integer.toString(iMinute)+"分钟后提醒" );
 		
-		RemindActivity.m_bType	=	1;
+		if ( m_iHour < 0 || m_iMinute < 0 )
+		{
+			m_iHour		=	0;
+			m_iMinute	=	0;
+			
+			CountDownTxt.setText("倒计时已过期!");
+		}
+		else
+		{
+			CountDownTxt.setText(Integer.toString(iHour) + "小时"+ Integer.toString(iMinute)+"分钟后提醒" );
+		}
+		
+		RemindActivity.m_iType	=	1;
 	}
 
 }

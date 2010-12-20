@@ -14,45 +14,45 @@ public class CTimeDlg extends CommentOutDlg implements View.OnClickListener
 {
 	public 	int		m_iHour;
 	public	int		m_iMinute;
-	TimePicker		Tp		=	null;
-	Byte			m_bType	=	-1;
+	TimePicker		m_Tp		=	null;
 	
 	public CTimeDlg(Activity context )
 	{
 		super(context);
-		m_context	=	context;
-		m_iHour		=	-1;
-		m_iMinute		=	-1;
+		m_iHour		=	CommonDefine.g_int_Invalid_ID;
+		m_iMinute	=	CommonDefine.g_int_Invalid_ID;
 
 	}
 	
 	public void setDisplay( )
 	{
         setContentView(R.layout.time);
-        Tp	=	(TimePicker)findViewById(R.id.TimePicker01);
-        Tp.setIs24HourView( true );
+        m_Tp	=	(TimePicker)findViewById(R.id.TimePicker01);
+        m_Tp.setIs24HourView( true );
         if( m_iHour != -1 && m_iMinute != -1 )
         {
-        	Tp.setCurrentHour((int)m_iHour);
-        	Tp.setCurrentMinute((int)m_iMinute);
+        	m_Tp.setCurrentHour(m_iHour);
+        	m_Tp.setCurrentMinute(m_iMinute);
         }
         
         Button	btCancel	=	(Button)findViewById(R.id.TimeCancel);
         btCancel.setOnClickListener(this);
+        
         Button	btOK		=	(Button)findViewById(R.id.TimeOK);
         btOK.setOnClickListener(this);
+        
         setProperty();
         setTitle("时间设定");
         show(); 
     }
     private void setProperty()
     {
-        Window		window	=	getWindow();						//得到对话框的窗口．
+        Window		window	=	getWindow();
         WindowManager.LayoutParams	wl	=	window.getAttributes();
-        wl.x	=	iPosX;											//这两句设置了对话框的位置．
-        wl.y	=	iPosY;		
+        wl.x		=	m_iPosX;
+        wl.y		=	m_iPosY;		
         wl.width	=	250;
-        //wl.gravity=Gravity.BOTTOM;         
+        
         window.setAttributes(wl);        
    }
 	public void onClick(View view)
@@ -62,13 +62,14 @@ public class CTimeDlg extends CommentOutDlg implements View.OnClickListener
         	cancel();
             break;
         case R.id.TimeOK:
-        	m_iHour	=	Tp.getCurrentHour();
-    		m_iMinute	=	Tp.getCurrentMinute();
+        	m_iHour	=	m_Tp.getCurrentHour();
+    		m_iMinute	=	m_Tp.getCurrentMinute();
         	saveData( m_iHour, m_iMinute );
         	cancel();
             break;
         default:
-        }
+        	break;
+       }
     }
 	
 	public	void	saveData( int iHour, int iMinute )

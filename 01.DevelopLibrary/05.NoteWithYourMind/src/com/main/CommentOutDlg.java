@@ -8,15 +8,16 @@ import android.app.Dialog;
 /* 实际跳出闹铃Dialog的Activity */
 public class CommentOutDlg extends Dialog
 {
-	protected 	Activity m_context;
-	protected	int		iPosX;
-	protected	int		iPosY;
+	protected 	Activity 	m_context;
+	protected	int			m_iPosX;
+	protected	int			m_iPosY;
 	
-	public CommentOutDlg(Activity context){
+	public	CommentOutDlg( Activity context )
+	{
 		super(context);
 		m_context 	=	context;
-		iPosX		=	8;
-		iPosY		=	10;
+		m_iPosX		=	8;
+		m_iPosY		=	10;
 	}
 
 }

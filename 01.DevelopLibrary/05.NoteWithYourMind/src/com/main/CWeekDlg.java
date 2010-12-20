@@ -11,18 +11,17 @@ import android.widget.TextView;
 
 public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
 {
-	byte		Week[]	=	new byte[7];	//从周日到周六
-	private		boolean		bIsSelect	=	false;
+	byte		m_bWeek[]	=	new byte[7];	//从周日到周六
+	boolean		m_bIsSelect	=	false;
 
 	public CWeekDlg( Activity context )
 	{
 		super(context);
-		m_context	=	context;
 		
-		int	length	=	Week.length;
+		int	length	=	m_bWeek.length;
 		for ( int i = 0; i < length; ++i )
 		{
-			Week[ i ]	=	-1;
+			m_bWeek[ i ]	=	(byte)CommonDefine.g_int_Invalid_ID;
 		}
 	}
 	
@@ -42,7 +41,7 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
 		checkBox[6]	=	( CheckBox )findViewById( R.id.C7);	
         for( int i = 0; i < 7; ++i )
         {
-        	if( 1 == Week[i] )
+        	if( 1 == m_bWeek[i] )
         	{
         		checkBox[i].setChecked(true);
         	}
@@ -54,19 +53,22 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
         
         Button	btCancel	=	(Button)findViewById(R.id.WeekCancel);
         btCancel.setOnClickListener(this);
+        
         Button	btOK		=	(Button)findViewById(R.id.WeekOK);
         btOK.setOnClickListener(this);
+        
         Button	btSelect	=	(Button)findViewById(R.id.remind_select);
         btSelect.setOnClickListener(this);
+        
         show(); 
     }
     private void setProperty()
     {
-        Window		window	=	getWindow();						//得到对话框的窗口．
+        Window		window	=	getWindow();	
         WindowManager.LayoutParams	wl	=	window.getAttributes();
-        wl.x		=	iPosX;											//这两句设置了对话框的位置．
-        wl.y		=	iPosY;	
-        wl.width	=	300;       
+        wl.x		=	m_iPosX;	
+        wl.y		=	m_iPosY;	
+        wl.width	=	400;       
         window.setAttributes(wl);        
    }
 	public void onClick(View view)
@@ -80,18 +82,18 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
         	cancel();
         	break;
         case R.id.remind_select:
-        	if ( bIsSelect )
+        	if ( m_bIsSelect )
 			{
 				/**反选**/
-				bIsSelect	=	false;					
+        		m_bIsSelect	=	false;					
 			}
 			else
 			{
 				/**选择**/
-				bIsSelect	=	true;
+				m_bIsSelect	=	true;
 			}
 			
-			setCheckBoxFlg( bIsSelect );
+			setCheckBoxFlg( m_bIsSelect );
             break;
         default:
         }
@@ -142,7 +144,7 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
 		int iLength	=	week.length;
   		for( int i = 0; i < iLength; ++i )
   		{
-  			Week[ i ]	=	week[ i ];
+  			m_bWeek[ i ]	=	week[ i ];
   			if( week[ i ] == 1 )
   			{
   				WeekTxt[i].setTextColor(Color.GREEN);
@@ -175,96 +177,82 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
     	WeekTxt[5]			=	(TextView)m_context.findViewById(R.id.SatTxt);
     	WeekTxt[6]			=	(TextView)m_context.findViewById(R.id.SunTxt);
 		
-		byte	bCheckFlg		=	0;
-    	
-    	if( checkBox[0].isChecked())
+		if( checkBox[0].isChecked())
     	{
-    		Week[0]		=	1;
-    		bCheckFlg	=	1;
+    		m_bWeek[0]		=	1;
     		WeekTxt[0].setTextColor(Color.GREEN);
     	}
     	else
     	{
-    		Week[0]		=	0;
+    		m_bWeek[0]		=	0;
     		WeekTxt[0].setTextColor(Color.WHITE);
     	}
     	
     	if( checkBox[1].isChecked())
     	{
-    		Week[1]		=	1;
-    		bCheckFlg	=	1;
+    		m_bWeek[1]		=	1;
     		WeekTxt[1].setTextColor(Color.GREEN);
     	}
     	else
     	{
-    		Week[1]	=	0;
+    		m_bWeek[1]	=	0;
     		WeekTxt[1].setTextColor(Color.WHITE);
     	}
     	
     	if( checkBox[2].isChecked())
     	{
-    		Week[2]		=	1;
-    		bCheckFlg	=	1;
+    		m_bWeek[2]		=	1;
     		WeekTxt[2].setTextColor(Color.GREEN);
     	}
     	else
     	{
-    		Week[2]		=	0;
+    		m_bWeek[2]		=	0;
     		WeekTxt[2].setTextColor(Color.WHITE);
     	}
     	
     	if( checkBox[3].isChecked())
     	{
-    		Week[3]		=	1;
-    		bCheckFlg	=	1;
+    		m_bWeek[3]		=	1;
     		WeekTxt[3].setTextColor(Color.GREEN);
     	}
     	else
     	{
-    		Week[3]		=	0;
+    		m_bWeek[3]		=	0;
     		WeekTxt[3].setTextColor(Color.WHITE);
     	}
     	
     	if( checkBox[4].isChecked())
     	{
-    		Week[4]	=	1;
-    		bCheckFlg	=	1;
+    		m_bWeek[4]	=	1;
     		WeekTxt[4].setTextColor(Color.GREEN);
     	}
     	else 
     	{
-    		Week[4]		=	0;
+    		m_bWeek[4]		=	0;
     		WeekTxt[4].setTextColor(Color.WHITE);
     	}
     	if( checkBox[5].isChecked())
     	{
-    		Week[5]		=	1;
-    		bCheckFlg	=	1;
+    		m_bWeek[5]		=	1;
     		WeekTxt[5].setTextColor(Color.GREEN);
     	}
     	else
     	{
-    		Week[5]		=	0;
+    		m_bWeek[5]		=	0;
     		WeekTxt[5].setTextColor(Color.WHITE);
     	}
     	if( checkBox[6].isChecked())
     	{
-    		Week[6]		=	1;
-    		bCheckFlg	=	1;
+    		m_bWeek[6]		=	1;
     		WeekTxt[6].setTextColor(Color.GREEN);
     	}
     	else
     	{
-    		Week[6]		=	0;
+    		m_bWeek[6]		=	0;
     		WeekTxt[6].setTextColor(Color.WHITE);
     	}
     	
-    	RemindActivity.m_bType	=	2;
-//    	if ( 0 == bCheckFlg )
-//    	{
-//    		Toast toast = Toast.makeText(m_context, "没有设置星期，请重新设置!", Toast.LENGTH_SHORT);
-//    		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-//    		toast.show();		
-//    	}
+    	RemindActivity.m_iType	=	2;
+
 	}
 }

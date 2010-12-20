@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +24,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 	
 	private 	RadioGroup 		m_RadioGroupTime;
 	private 	RadioGroup 		m_RadioGroupDate;
-	public	static	Byte			m_bType	=	-1;
+	public	static	int			m_iType	=	CommonDefine.g_int_Invalid_ID;
 	
 	//btn
 	Button	btCountdown	=	null;
@@ -38,6 +39,10 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 	TextView	TimeTxt	=	null;
 	TextView	CountDownTxt	=	null;
 	TextView	DateTxt	=	null;
+	
+	boolean		m_bInputflg		=	false;
+	
+	private 	RadioButton 	rbTime,	rbCountdown, rbOnce, rbWeek; 
 	
     public void onCreate(Bundle savedInstanceState)
     {
@@ -73,6 +78,11 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         btOK		=	(Button) findViewById(R.id.OKBtn);
         btOK.setOnClickListener(this);
         
+        rbTime		=	(RadioButton)findViewById(R.id.TimeSetting); 
+        rbCountdown	=	(RadioButton)findViewById(R.id.daojishi); 
+        
+        rbOnce		=	(RadioButton)findViewById(R.id.OnceRemind); 
+        rbWeek	=	(RadioButton)findViewById(R.id.EveryWeek); 
 
         //根据从编辑画页传入的数据设置当前Activity的状态
         setInput();
@@ -129,17 +139,17 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     }
     private	void	processOK()
     {
-    	m_clCRemindInfo.m_bType	=	m_bType;
+    	m_clCRemindInfo.m_iType	=	m_iType;
     	
-    	if( m_clCRemindInfo.m_bType == 2 )		//循环提醒
+    	if( m_clCRemindInfo.m_iType == 2 )		//循环提醒
 		{				
-			m_clCRemindInfo.setWeekTime( m_clCTimeDlg.m_iHour , m_clCTimeDlg.m_iMinute, m_clCWeekDlg.Week );	
+			m_clCRemindInfo.setWeekTime( m_clCTimeDlg.m_iHour , m_clCTimeDlg.m_iMinute, m_clCWeekDlg.m_bWeek );	
 		}
-		else if( m_clCRemindInfo.m_bType == 1 )	//倒计时提醒
+		else if( m_clCRemindInfo.m_iType == 1 )	//倒计时提醒
 		{
 			m_clCRemindInfo.setCutDownTime( m_clCCountdownDlg.m_iHour, m_clCCountdownDlg.m_iMinute );
 		}
-		else if( m_clCRemindInfo.m_bType == 3 )
+		else if( m_clCRemindInfo.m_iType == 3 )
 		{	
 			m_clCRemindInfo.setNormalTime( m_clCTimeDlg.m_iHour, m_clCTimeDlg.m_iMinute, m_clCDateDlg.m_iYear, m_clCDateDlg.m_iMonth, m_clCDateDlg.m_iDay );
 		}
@@ -165,26 +175,33 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     {
 	  Intent iExtraData = getIntent();
       CRemindInfo	clTemp	=	(CRemindInfo)iExtraData.getSerializableExtra(NoteWithYourMind.ExtraData_RemindSetting);
+      
+      m_bInputflg	=	true;
+      
       if ( null != clTemp )		//	取得传入数据非空
       {
       	m_clCRemindInfo	=	clTemp;
-      	if( m_clCRemindInfo.m_bType == 1 )					//倒计时提醒
+      	if( m_clCRemindInfo.m_iType == 1 )					//倒计时提醒
       	{
       		CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
       		m_clCRemindInfo.getCutDownTime( clCDateAndTime );
-      		m_clCCountdownDlg.saveData( clCDateAndTime.iHour, clCDateAndTime.iMinute ); 		
+      		m_clCCountdownDlg.saveData( clCDateAndTime.iHour, clCDateAndTime.iMinute ); 
+      		rbCountdown.setChecked(true);
       	}
-      	else if( m_clCRemindInfo.m_bType == 2 )				//循环提醒
+      	else if( m_clCRemindInfo.m_iType == 2 )				//循环提醒
       	{       		
       		CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
       		byte	week[]	=	new	byte[ 7 ];
       		m_clCRemindInfo.getWeekTime( clCDateAndTime, week );
       		
+      		rbTime.setChecked(true);
+      		rbWeek.setChecked(true);
+      		
       		m_clCTimeDlg.saveData(clCDateAndTime.iHour, clCDateAndTime.iMinute);
       		
       		m_clCWeekDlg.setInputSatus ( week );  		     		
       	}
-      	else if(  m_clCRemindInfo.m_bType == 3 )				//单次提醒
+      	else if(  m_clCRemindInfo.m_iType == 3 )				//单次提醒
       	{
       		CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
       		
@@ -193,12 +210,17 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       		m_clCDateDlg.saveData( clCDateAndTime.iYear, clCDateAndTime.iMonth, clCDateAndTime.iDay );
       		m_clCTimeDlg.saveData(clCDateAndTime.iHour, clCDateAndTime.iMinute);
       		
+      		rbTime.setChecked(true);
+      		rbOnce.setChecked(true);
+      		
       	}
       }
       else
       {
       	 
       }
+      
+      m_bInputflg	=	false;
     }
     
     private RadioGroup.OnCheckedChangeListener mChangeRadioTime = new RadioGroup.OnCheckedChangeListener()
@@ -207,15 +229,22 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         { 
         	if(checkedId == R.id.TimeSetting)
         	{
-        		m_clCTimeDlg.setDisplay( );
-        		btTime.setVisibility(View.VISIBLE);
-        		btCountdown.setVisibility(View.GONE);
+        		if ( !m_bInputflg )
+        		{
+            		m_clCTimeDlg.setDisplay( );
+            		btTime.setVisibility(View.VISIBLE);
+            		btCountdown.setVisibility(View.GONE);
+        		}
+
         	}
         	else if(checkedId==R.id.daojishi)
         	{
-        		m_clCCountdownDlg.setDisplay();
-        		btTime.setVisibility(View.GONE);
-        		btCountdown.setVisibility(View.VISIBLE);
+        		if ( !m_bInputflg )
+        		{
+            		m_clCCountdownDlg.setDisplay();
+            		btTime.setVisibility(View.GONE);
+            		btCountdown.setVisibility(View.VISIBLE);   			
+        		}
         	}
         }
     };
@@ -226,47 +255,23 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         { 
         	if(checkedId == R.id.OnceRemind)
         	{
-        		m_clCDateDlg.setDisplay();
-        		btOnceDate.setVisibility(View.VISIBLE);
-        		btWeek.setVisibility(View.GONE);
+        		if ( !m_bInputflg )
+        		{
+            		m_clCDateDlg.setDisplay();
+            		btOnceDate.setVisibility(View.VISIBLE);
+            		btWeek.setVisibility(View.GONE);      			
+        		}
+
         	}
         	else if(checkedId==R.id.EveryWeek)
         	{
-        		m_clCWeekDlg.setDisplay( );
-        		btWeek.setVisibility(View.VISIBLE);
-        		btOnceDate.setVisibility(View.GONE);
+        		if ( !m_bInputflg )
+        		{
+            		m_clCWeekDlg.setDisplay( );
+            		btWeek.setVisibility(View.VISIBLE);
+            		btOnceDate.setVisibility(View.GONE);      			
+        		}
         	}
         }
     };
-    
-    String	getDayofWeek( Calendar	clCalendar )
-    {
-    	String	strTemp	=	null;
-    	switch( clCalendar.get(Calendar.DAY_OF_WEEK) )
-    	{
-    	case	1:
-    		strTemp	=	"日";
-    		break;
-    	case	2:
-    		strTemp	=	"一";
-    		break;
-    	case	3:
-    		strTemp	=	"二";
-    		break;
-    	case	4:
-    		strTemp	=	"三";
-    		break;
-    	case	5:
-    		strTemp	=	"四";
-    		break;
-    	case	6:
-    		strTemp	=	"五";
-    		break;
-    	case	7:
-    		strTemp	=	"六";
-    		break;
-    	}
-    	
-    	return	strTemp;
-    }
 }

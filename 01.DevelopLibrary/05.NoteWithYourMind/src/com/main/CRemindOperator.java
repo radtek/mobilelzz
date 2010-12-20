@@ -18,7 +18,6 @@ public final class CRemindOperator
     private CNoteDBCtrl m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
     private CRemindOperator()
     {
-    	//读取所有要被提醒的记录保存到hashMap中，并将每条提醒设置到alarmManager中
     }  
       
     public synchronized static CRemindOperator getInstance()
@@ -37,9 +36,9 @@ public final class CRemindOperator
     		m_clCNoteDBCtrl	=	new	CNoteDBCtrl( context );
     	}
 		
-    	if ( 1 == _clCRemindInfo.m_bType )
+    	if ( 1 == _clCRemindInfo.m_iType )
     	{
-    		if ( clCalendar.getTimeInMillis() > _clCRemindInfo.lTime )
+    		if ( clCalendar.getTimeInMillis() > _clCRemindInfo.m_lTime )
     		{
         		Toast toast = Toast.makeText(context, "提醒时间不正确，请重新设置!", Toast.LENGTH_SHORT);
         		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
@@ -51,24 +50,24 @@ public final class CRemindOperator
     		
     		CMemoInfo		clCMemoInfo	=	new	CMemoInfo();
     		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
-    		clCMemoInfo.iIsRemindAble	=	(int)(_clCRemindInfo.bRemindAble);
+    		clCMemoInfo.iIsRemindAble	=	_clCRemindInfo.m_iRemindAble;
     		clCMemoInfo.RemindType		=	1;
-    		clCMemoInfo.dRemindTime		=	_clCRemindInfo.lTime;
+    		clCMemoInfo.dRemindTime		=	_clCRemindInfo.m_lTime;
     		m_clCNoteDBCtrl.Update((int)_id, clCMemoInfo);
     		
 			AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
 	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
 	    	MyIntent.putExtra( "id", _id );
 	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
-	    	alarmManager.set(AlarmManager.RTC_WAKEUP, _clCRemindInfo.lTime, pendingIntent);
+	    	alarmManager.set(AlarmManager.RTC_WAKEUP, _clCRemindInfo.m_lTime, pendingIntent);
     	}
-    	else if ( 2 == _clCRemindInfo.m_bType )
+    	else if ( 2 == _clCRemindInfo.m_iType )
     	{
 	    	CMemoInfo		clCMemoInfo	=	new	CMemoInfo();
     		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
-    		clCMemoInfo.iIsRemindAble	=	(int)(_clCRemindInfo.bRemindAble);
+    		clCMemoInfo.iIsRemindAble	=	_clCRemindInfo.m_iRemindAble;
 	    	clCMemoInfo.RemindType		=	2;
-	    	clCMemoInfo.dRemindTime		=	_clCRemindInfo.lTime;
+	    	clCMemoInfo.dRemindTime		=	_clCRemindInfo.m_lTime;
 	    	clCMemoInfo.m_Week			=	_clCRemindInfo.m_Week;
 	    	m_clCNoteDBCtrl.Update((int)_id, clCMemoInfo);
 	    	
@@ -80,9 +79,9 @@ public final class CRemindOperator
 	    	alarmManager.set(AlarmManager.RTC_WAKEUP, firtTime, pendingIntent);
     		
     	}
-    	else if ( 3 == _clCRemindInfo.m_bType )
+    	else if ( 3 == _clCRemindInfo.m_iType )
     	{		
-    		if ( clCalendar.getTimeInMillis() > _clCRemindInfo.lTime )
+    		if ( clCalendar.getTimeInMillis() > _clCRemindInfo.m_lTime )
     		{
         		Toast toast = Toast.makeText(context, "提醒时间不正确，请重新设置!", Toast.LENGTH_SHORT);
         		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
@@ -96,14 +95,14 @@ public final class CRemindOperator
 	    	MyIntent.putExtra( "id", _id );
 	    	
 	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-	    	alarmManager.set(AlarmManager.RTC_WAKEUP, _clCRemindInfo.lTime, pendingIntent);
+	    	alarmManager.set(AlarmManager.RTC_WAKEUP, _clCRemindInfo.m_lTime, pendingIntent);
 	    	
 	    	CMemoInfo		clCMemoInfo	=	new	CMemoInfo();
 	    	
 	    	clCMemoInfo.RemindType		=	3;
-	    	clCMemoInfo.dRemindTime		=	_clCRemindInfo.lTime;
+	    	clCMemoInfo.dRemindTime		=	_clCRemindInfo.m_lTime;
     		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
-    		clCMemoInfo.iIsRemindAble	=	(int)(_clCRemindInfo.bRemindAble);
+    		clCMemoInfo.iIsRemindAble	=	_clCRemindInfo.m_iRemindAble;
 	    	m_clCNoteDBCtrl.Update((int)_id, clCMemoInfo);
     	}
     	
@@ -123,13 +122,13 @@ public final class CRemindOperator
     	CRemindInfo		clCRemindInfo	=	new	CRemindInfo( (byte)-1 );
     	getRemindInfo( context, _id, clCRemindInfo );
  	
-	    if ( 1 == clCRemindInfo.m_bType || 3 == clCRemindInfo.m_bType )
+	    if ( 1 == clCRemindInfo.m_iType || 3 == clCRemindInfo.m_iType )
 	    {
 	    	CMemoInfo	clCMemoInfo	=	new	CMemoInfo();
 	    	clCMemoInfo.iIsRemindAble	=	-1;
 	    	m_clCNoteDBCtrl.Update(_id, clCMemoInfo );
 	    }
-	    else if( 2 == clCRemindInfo.m_bType )		//循环提醒
+	    else if( 2 == clCRemindInfo.m_iType )		//循环提醒
 	    {
 	    	long	lTime	=	clCRemindInfo.getFirstCycelRemindTime();
 	    	
@@ -181,15 +180,15 @@ public final class CRemindOperator
     	cur.moveToFirst();
         int	index		=	cur.getColumnIndex( CNoteDBCtrl.KEY_isremind );
         int isRemind	=	cur.getInt( index );
-        _clCRemindInfo.bRemindAble	=	(byte)isRemind;
+        _clCRemindInfo.m_iRemindAble	=	(byte)isRemind;
         
         index		=	cur.getColumnIndex( CNoteDBCtrl.KEY_remindtype );
         int isRemindType			=	cur.getInt( index );
-        _clCRemindInfo.m_bType		=	(byte)isRemindType;
+        _clCRemindInfo.m_iType		=	(byte)isRemindType;
         
         index		=	cur.getColumnIndex( CNoteDBCtrl.KEY_remindtime );
         long remindTime				=	cur.getLong(index);
-        _clCRemindInfo.lTime		=	remindTime;
+        _clCRemindInfo.m_lTime		=	remindTime;
         
         index		=	cur.getColumnIndex( CNoteDBCtrl.KEY_monday );
         int iMonday			=	cur.getInt( index );

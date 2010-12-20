@@ -15,6 +15,9 @@ public class CMemoInfo {
 	public final static Integer IsRemind_Yes = 0;
 	public final static Integer IsRemind_No = 1;
 	
+	public final static Integer IsRemind_Able_Yes = 1;
+	public final static Integer IsRemind_Able_No = 0;
+	
 	public final static Integer PreId_Root = 0;
 	public final static Integer Id_Invalid = -1;
 

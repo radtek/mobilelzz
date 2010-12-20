@@ -210,16 +210,16 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     		public void onProgressChanged(SeekBar seekBar, int progress,
     				boolean fromUser) {
     			// TODO Auto-generated method stub  
-    			if(mMediaPlayer != null &&  mMediaPlayer.isPlaying())
-    			{
-	       			 mMediaPlayer.seekTo(mProgressBar01.getProgress());
-			   		 int cur_sec  = mMediaPlayer.getCurrentPosition()/1000%60;
-					 int cur_min  = mMediaPlayer.getCurrentPosition()/1000160;
-					 int total_sec = mMediaPlayer.getDuration()/1000%60;
-					 int total_min = mMediaPlayer.getDuration()/1000/60;
-					 mchronometer.setText(String.format("%02d:%02d/%02d:%02d", cur_min,cur_sec,  total_min ,total_sec));   				
+    			//if(mMediaPlayer != null &&  mMediaPlayer.isPlaying())
+    			//{
+	       		//	 mMediaPlayer.seekTo(mProgressBar01.getProgress());
+			   //		 int cur_sec  = mMediaPlayer.getCurrentPosition()/1000%60;
+				//	 int cur_min  = mMediaPlayer.getCurrentPosition()/1000160;
+				//	 int total_sec = mMediaPlayer.getDuration()/1000%60;
+				//	 int total_min = mMediaPlayer.getDuration()/1000/60;
+				//	 mchronometer.setText(String.format("%02d:%02d/%02d:%02d", cur_min,cur_sec,  total_min ,total_sec));   				
     				
-    			}
+    			//}
 
     		}
      

@@ -14,35 +14,33 @@
 		android:orientation="vertical"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:layout_alignParentTop="true"
-		android:background="@drawable/background_toolbar">
+		android:layout_alignParentTop="true">
 			<LinearLayout
 			android:id="@+id/search_toolbar_nomalshow"
 			android:orientation="horizontal"
 			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:background="@drawable/background_toolbar">
+			android:layout_height="wrap_content">
 					<EditText
 					android:id="@+id/search_toolbar_edittext"
 					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
+					android:layout_height="35dp"
 					android:layout_centerVertical="true"	
-					android:textColor="#000000"
-					android:textSize="16sp"
+					android:textSize="14sp"
+					android:textColor="#808080FF"
 					android:text="请输入检索关键字"
-					android:layout_weight="2"
+					android:layout_weight="3"
 					android:layout_marginLeft="20px" >
 					</EditText>
 					<ImageButton
 						android:id="@+id/search_toolbar_btn_search"
 						android:layout_width="wrap_content"
-						android:layout_height="40dp"
+						android:layout_height="32dp"
 						android:layout_weight="1"
 						android:layout_gravity="center_vertical"
 						android:gravity="center"
 						android:layout_marginLeft="5px"
-						android:layout_marginRight="10px"
-						android:background="@drawable/btn_toolbar"
+						android:layout_marginRight="20px"
+						android:background="@drawable/button_normal"
 						android:src="@drawable/toolbar_search"
 					/>
 			</LinearLayout>
@@ -50,8 +48,7 @@
 			android:id="@+id/search_toolbar_deepshow"
 			android:orientation="horizontal"
 			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:background="@drawable/background_toolbar">
+			android:layout_height="wrap_content">
 				<LinearLayout android:id="@+id/search_toolbar_deepshow_C1"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
@@ -61,15 +58,14 @@
 					android:id="@+id/C1"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:layout_marginLeft="5px"
+					android:layout_marginLeft="10px"
 					/>
 					<TextView
 					android:id="@+id/T1"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
+					android:textColor="#000000"
 					android:text="提醒"
-					android:layout_weight="1"
 					android:gravity="left"
 					android:layout_marginLeft="5px"
 					>
@@ -84,14 +80,13 @@
 					android:id="@+id/C2"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_weight="1"
 					/>
 					<TextView
 					android:id="@+id/T2"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
+					android:textColor="#000000"
 					android:text="语音"
-					android:layout_weight="1"
 					android:gravity="left"
 					android:layout_marginLeft="5px"
 					>
@@ -106,20 +101,50 @@
 					android:id="@+id/C3"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_weight="1"
+					android:layout_marginLeft="10px"
 					/>
 					<TextView
 					android:id="@+id/T3"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
+					android:textColor="#000000"
 					android:text="文本"
-					android:layout_weight="1"
 					android:gravity="left"
 					android:layout_marginLeft="5px"
+					android:layout_marginRight="10px"
 					>
 					</TextView>
 				</LinearLayout>
 			</LinearLayout>
+			<LinearLayout
+			android:id="@+id/search_toolbar_encodeshow"
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content" >
+				<LinearLayout android:id="@+id/search_toolbar_encodeshow_C4"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:layout_marginLeft="5px"
+				android:orientation="horizontal" >
+					<CheckBox
+					android:id="@+id/C4"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="5px"
+					/>
+					<TextView
+					android:id="@+id/T4"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textColor="#000000"
+					android:text="搜索加密情报"
+					android:gravity="left"
+					android:layout_marginLeft="5px"	
+					android:checked="true" >
+					</TextView>
+				</LinearLayout>	
+			</LinearLayout>			
 		</LinearLayout>
 		<LinearLayout
 		android:id="@+id/searchresultviewlist_toolbar"

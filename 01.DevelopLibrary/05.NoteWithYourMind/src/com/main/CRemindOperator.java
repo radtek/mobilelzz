@@ -50,7 +50,7 @@ public final class CRemindOperator
     		
     		
     		CMemoInfo		clCMemoInfo	=	new	CMemoInfo();
-    		clCMemoInfo.iIsRemind		=	1;
+    		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
     		clCMemoInfo.iIsRemindAble	=	(int)(_clCRemindInfo.bRemindAble);
     		clCMemoInfo.RemindType		=	1;
     		clCMemoInfo.dRemindTime		=	_clCRemindInfo.lTime;
@@ -65,7 +65,7 @@ public final class CRemindOperator
     	else if ( 2 == _clCRemindInfo.m_bType )
     	{
 	    	CMemoInfo		clCMemoInfo	=	new	CMemoInfo();
-    		clCMemoInfo.iIsRemind		=	1;
+    		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
     		clCMemoInfo.iIsRemindAble	=	(int)(_clCRemindInfo.bRemindAble);
 	    	clCMemoInfo.RemindType		=	2;
 	    	clCMemoInfo.dRemindTime		=	_clCRemindInfo.lTime;

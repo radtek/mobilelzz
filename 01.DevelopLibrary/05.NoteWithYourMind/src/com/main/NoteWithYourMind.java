@@ -797,15 +797,15 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		        	 if( mMediaPlayer.isPlaying() )
 		        	 {
 		        		 int a = mMediaPlayer.getCurrentPosition();
-		        		 int b = mMediaPlayer.getDuration();
-		        		 //mProgressBar01.setProgress((a*mMaxTime)/b  );	        		 
-		        		 //mProgressBar01.setProgress(intCounter);
+//		        		 int b = mMediaPlayer.getDuration();
+//		        		 mProgressBar01.setProgress((a*mMaxTime)/b  );	        		 
+//		        		 mProgressBar01.setProgress(intCounter);
 		        		 mProgressBar01.setProgress(a);
 		        		        		 
-		        		 int cur_sec  = mMediaPlayer.getCurrentPosition()/1000%60;
-		        		 int cur_min  = mMediaPlayer.getCurrentPosition()/1000/60;
-		        		 int total_sec = mMediaPlayer.getDuration()/1000%60;
-		        		 int total_min = mMediaPlayer.getDuration()/1000/60;
+		        		 int cur_sec  = a/1000%60;
+		        		 int cur_min  = a/1000/60;
+		        		 int total_sec = mMaxTime/1000%60;
+		        		 int total_min = mMaxTime/1000/60;
 						 mchronometer.setText(String.format("%02d:%02d/%02d:%02d", cur_min,cur_sec,  total_min ,total_sec));
 		        	 }
 		        	

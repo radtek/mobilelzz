@@ -19,6 +19,17 @@ class CommonDefine{
 	
 	public static String 					g_strAudioFilePath = "/note/record";
 	public final static int					g_iMaxRecTime = 300;
+	
+	public static int 						E_FAIL	= -1;
+	public static int 						S_OK	= 0;
+	public static int 						Invalid_Value	= -1;
+	
+
+	public static int 						Remind_Type_Invalid		=	-1;
+	public static int 						Remind_Type_CountDown	=	1;
+	public static int 						Remind_Type_Week		=	2;
+	public static int 						Remind_Type_Once		=	3;
+
 }
 
 class CommonContainer{

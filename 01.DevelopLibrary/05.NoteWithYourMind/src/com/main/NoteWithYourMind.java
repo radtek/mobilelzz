@@ -152,7 +152,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			CommonDefine.m_clCNoteDBCtrl = m_clCNoteDBCtrl;
 		}
 		
-		m_clCRemindInfo	=	new	CRemindInfo( (byte) -1 );
+//		m_clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Invalid );
     	//点击保存Button，进行新增或更新操作
         ImageButton	clBTSave	=	(ImageButton) findViewById(R.id.editnote_toolbar_save);
         clBTSave.setOnClickListener(this);
@@ -295,6 +295,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	        	    	strDetail = curExtraMemo.getString( index );
 	        	    	
 	        	    	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
+	        	    	m_clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Invalid );
 	            		clCRemindOperator.getRemindInfo(curExtraMemo, m_clCRemindInfo);
 	            		
 	            		index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_audioDataName);
@@ -321,9 +322,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			updateVoice(null);
 		}else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Update )
 		{
-			CRemindInfo temp =	( CRemindInfo )iExtraData.getSerializableExtra( ExtraData_RemindSetting );
-			m_clCRemindInfo = temp;
-			updateTime(temp);
+			m_clCRemindInfo =	( CRemindInfo )iExtraData.getSerializableExtra( ExtraData_RemindSetting );
+			updateTime( m_clCRemindInfo );
 		}
 		ScrollView etNoteText = (ScrollView)findViewById(R.id.editnote_noteinfo_scroll);
 		etNoteText.scrollBy(0, -100);
@@ -356,7 +356,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     	
     	if(clRemindInfo!=null)
     	{
-    		if ( 1 == clRemindInfo.m_iType ||  3 == clRemindInfo.m_iType )
+    		if ( CommonDefine.Remind_Type_CountDown == clRemindInfo.m_iType ||  CommonDefine.Remind_Type_Once == clRemindInfo.m_iType )
         	{
     			for ( int i = 0; i < 7 ; ++i )
     			{
@@ -369,18 +369,17 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     			Time.setText("提醒时间 : " + String.valueOf(clCDateAndTime.iYear) + "年" + String.valueOf(clCDateAndTime.iMonth+1) + "月"
     						+ String.valueOf(clCDateAndTime.iDay)+ "日" + String.valueOf(clCDateAndTime.iHour) + "小时" 
     						+ String.valueOf(clCDateAndTime.iMinute) + "分");
-    			
-    		if ( 1 == clRemindInfo.m_iType )
-        	{
-    				Type.setText("提醒类型 : 倒计时" );
-    			}
-    			else
-    			{
-    				Type.setText("提醒类型 : 单次" );
-    			}
-        		
-        	}
-        	else if( 2 == clRemindInfo.m_iType )
+	    			
+	    		if ( CommonDefine.Remind_Type_CountDown == clRemindInfo.m_iType )
+	        	{
+	    				Type.setText("提醒类型 : 倒计时" );
+	    		}
+				else
+				{
+					Type.setText("提醒类型 : 单次" );
+				}      		
+	        }
+        	else if( CommonDefine.Remind_Type_Week == clRemindInfo.m_iType )
         	{
     			for ( int i = 0; i < 7 ; ++i )
     			{
@@ -410,12 +409,13 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     		{
     			Status.setText("停用");
     			CountDownTime.setText( "下次提醒 : 已过期 ");
+    			clRemindInfo.m_iRemindAble	=	CMemoInfo.IsRemind_Able_No;
     		}
     		else
     		{
     			Status.setText("启用");
     			CountDownTime.setText( strTemp );
-    			clRemindInfo.m_iRemindAble	=	0;
+    			clRemindInfo.m_iRemindAble	=	CMemoInfo.IsRemind_Able_Yes;
     		}
     		
     	}
@@ -460,7 +460,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	private void processSetRemindClick(View view){
 		Intent intent = new Intent();
 		intent.setClass(NoteWithYourMind.this, RemindActivity.class);
-		if( (m_clCRemindInfo!=null)&&(m_clCRemindInfo.m_iType != -1) )
+		if( ( m_clCRemindInfo != null ) && ( m_clCRemindInfo.m_iType != CommonDefine.Remind_Type_Invalid ) )
 		{
 			intent.putExtra( ExtraData_RemindSetting, m_clCRemindInfo ); 
 		}
@@ -777,7 +777,9 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		//取得提醒信息 - zhu.t : 提醒信息已经保存在 m_clCRemindInfo中
 		if( null != m_clCRemindInfo )
 		{
-			if(  -1 != m_clCRemindInfo.m_iType && !m_clCRemindInfo.checkTime())
+			if(  CommonDefine.Remind_Type_Invalid != m_clCRemindInfo.m_iType 
+			&&   m_clCRemindInfo.m_iRemindAble == CMemoInfo.IsRemind_Able_Yes 
+			&&  !m_clCRemindInfo.checkTime())
 			{
         		Toast toast = Toast.makeText(NoteWithYourMind.this, "提醒时间设定错误,请重新设定!", Toast.LENGTH_SHORT);
         		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
@@ -823,15 +825,15 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		clCMemoInfo.dLastModifyTime =	clCalendar.getTimeInMillis();
 		clCMemoInfo.strDetail		=	strMemoText;
 		
-    	if ( (m_clCRemindInfo!=null) && (-1 != m_clCRemindInfo.m_iType) )
+    	if ( ( m_clCRemindInfo != null ) && ( CommonDefine.Remind_Type_Invalid != m_clCRemindInfo.m_iType ) )
     	{
     		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
-    		clCMemoInfo.iIsRemindAble	=	CMemoInfo.IsEditEnable_Enable;
+    		clCMemoInfo.iIsRemindAble	=	m_clCRemindInfo.m_iRemindAble;
     	}
     	else
     	{
     		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_No;
-    		clCMemoInfo.iIsRemindAble	=	CMemoInfo.IsEditEnable_Invalid;
+ //   		clCMemoInfo.iIsRemindAble	=	0;
     	}
 
 		if((myRecAudioFile!=null) && (myRecAudioFile.isFile())){
@@ -850,10 +852,11 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         	//保存提醒信息 - zhu.t
         	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
         	if( m_clCRemindInfo != null && -1 != m_clCRemindInfo.m_iType ){
-        		if ( -1 == clCRemindOperator.addRemind( this, _id, m_clCRemindInfo) )
+        		if ( CommonDefine.g_int_Invalid_ID != _id 
+        		  && CommonDefine.E_FAIL == clCRemindOperator.addRemind( this, (int)_id, m_clCRemindInfo) )
 				{
 					//设置提醒失败
-        			return	-1;
+        			return	CommonDefine.E_FAIL;
 				}				
         	}
 		}
@@ -863,12 +866,12 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			m_clCNoteDBCtrl.Update(m_ExtraData_EditNoteID,clCMemoInfo );
 			//判断是否需要更新提醒信息 - zhu.t
 			CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-			if ( m_clCRemindInfo!= null )
+			if ( m_clCRemindInfo!= null  )
 			{
-				if ( -1 == clCRemindOperator.editRemind(this, m_ExtraData_EditNoteID, m_clCRemindInfo ) )
+				if ( CommonDefine.E_FAIL == clCRemindOperator.editRemind(this, m_ExtraData_EditNoteID, m_clCRemindInfo ) )
 				{
 					//设置提醒失败
-        			return	-1;				
+        			return	CommonDefine.E_FAIL;			
 				}
 			}
         }

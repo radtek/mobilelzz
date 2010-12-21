@@ -14,7 +14,7 @@ public class AlarmReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		long id	=	intent.getLongExtra("id", -1);
+		int id	=	intent.getIntExtra("id", -1);
 		
 	    Intent iIntent = new Intent(context, AlarmAlert.class);    
 	    iIntent.putExtra("id", id);
@@ -23,6 +23,6 @@ public class AlarmReceiver extends BroadcastReceiver
 	    
 	    //¸üÐÂÌáÐÑ×´Ì¬
 	    CRemindOperator	clCRemindOperator	=	  CRemindOperator.getInstance();  
-	    clCRemindOperator.alarmAlert(context, (int)id );
+	    clCRemindOperator.alarmAlert(context, id );
 	}
 }

@@ -1,7 +1,5 @@
 package com.main;
 
-import java.util.Calendar;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -17,51 +15,54 @@ public class BootReceiver extends BroadcastReceiver {
     {
     	
 		CNoteDBCtrl	clCNoteDBCtrl	=	new	CNoteDBCtrl( ctx );
-		Calendar	clCalendar 		= 	Calendar.getInstance();
+
+		Cursor clCursor	=	clCNoteDBCtrl.getRemindInfo();	
+		if ( !clCursor.moveToFirst() )
+		{
+			return;
+		}
 		
-		
-		Cursor clCursor	=	clCNoteDBCtrl.getRemindInfo();
 		if ( clCursor.getCount() > 0 )
 		{
-			clCalendar.setTimeInMillis(System.currentTimeMillis());
-			int		iColumn		=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_id );
-			int	lID		=	clCursor.getInt( iColumn );
-				
-			clCursor.moveToFirst();
+		
 			do
 			{
+				int	iColumn	=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_id );
+				int	iID		=	clCursor.getInt( iColumn );
+				
 				iColumn		=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_remindtype );
 				int	lType		=	clCursor.getInt( iColumn );
-				if( 1 == lType || 3 == lType )						// 间隔:1,单次:3
+				if( CommonDefine.Remind_Type_CountDown == lType || CommonDefine.Remind_Type_Once == lType )		// 间隔:1,单次:3
 				{
 					int 	TimeIndex	=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_remindtime );
 					long	lDbTime		=	clCursor.getLong( TimeIndex );
 					
 					AlarmManager	alarmManager	=	(AlarmManager)ctx.getSystemService( Context.ALARM_SERVICE );
 			    	Intent 			MyIntent		=	new Intent( ctx, AlarmReceiver.class );
-			    	MyIntent.putExtra( "id", lID );
+			    	MyIntent.putExtra( "id", iID );
 			    	
 			    	
-			    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(ctx, lID,MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
+			    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(ctx, iID, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
 			    	alarmManager.set( AlarmManager.RTC_WAKEUP, lDbTime, pendingIntent );				
 				}
-				else if ( 2 == lType )					// 循环:2
+				else if ( CommonDefine.Remind_Type_Week == lType )					// 循环:2
 				{
 					CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-					CRemindInfo clCRemindInfo	=	new	CRemindInfo( (byte)-1 );
-					clCRemindOperator.getRemindInfo( ctx, lID, clCRemindInfo);
+					CRemindInfo 	clCRemindInfo		=	new	CRemindInfo( CommonDefine.Remind_Type_Invalid );
+					if( CommonDefine.E_FAIL == clCRemindOperator.getRemindInfo( ctx, iID, clCRemindInfo ) )
+					{
+						continue;
+					}
 					
 					long	lTime	=	clCRemindInfo.getFirstCycelRemindTime();
 					
 					AlarmManager	alarmManager	=	(AlarmManager)ctx.getSystemService( Context.ALARM_SERVICE );
 			    	Intent 			MyIntent		=	new Intent( ctx, AlarmReceiver.class );
-			    	MyIntent.putExtra( "id", lID );
+			    	MyIntent.putExtra( "id", iID );
 			    	
-			    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(ctx, lID, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+			    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(ctx, iID, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 			    	alarmManager.set( AlarmManager.RTC_WAKEUP, lTime, pendingIntent );	
-				}
-
-					
+				}				
 			}while( clCursor.moveToNext() );
 		}
     }    

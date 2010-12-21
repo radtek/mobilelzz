@@ -48,7 +48,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remindsetting2);
-        m_clCRemindInfo		=	new		CRemindInfo ( (byte)-1 );
+        m_clCRemindInfo		=	new		CRemindInfo ( CommonDefine.Remind_Type_Invalid );
     	m_clCDateDlg		=	new		CDateDlg( RemindActivity.this);
     	m_clCWeekDlg		=	new		CWeekDlg( RemindActivity.this);
     	m_clCTimeDlg		=	new		CTimeDlg( RemindActivity.this);
@@ -155,6 +155,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 		}
     	if( m_clCRemindInfo.checkTime())
     	{
+    		m_clCRemindInfo.m_iRemindAble	=	CMemoInfo.IsRemind_Able_Yes;
     		Intent intent = new Intent(RemindActivity.this, NoteWithYourMind.class);  
     		intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, m_clCRemindInfo );
     		intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
@@ -232,19 +233,19 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         		if ( !m_bInputflg )
         		{
             		m_clCTimeDlg.setDisplay( );
-            		btTime.setVisibility(View.VISIBLE);
-            		btCountdown.setVisibility(View.GONE);
         		}
+        		btTime.setVisibility(View.VISIBLE);
+        		btCountdown.setVisibility(View.GONE);
 
         	}
         	else if(checkedId==R.id.daojishi)
         	{
         		if ( !m_bInputflg )
         		{
-            		m_clCCountdownDlg.setDisplay();
-            		btTime.setVisibility(View.GONE);
-            		btCountdown.setVisibility(View.VISIBLE);   			
+            		m_clCCountdownDlg.setDisplay();  			
         		}
+        		btTime.setVisibility(View.GONE);
+        		btCountdown.setVisibility(View.VISIBLE); 
         	}
         }
     };
@@ -257,20 +258,20 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         	{
         		if ( !m_bInputflg )
         		{
-            		m_clCDateDlg.setDisplay();
-            		btOnceDate.setVisibility(View.VISIBLE);
-            		btWeek.setVisibility(View.GONE);      			
+            		m_clCDateDlg.setDisplay();     			
         		}
+        		btOnceDate.setVisibility(View.VISIBLE);
+        		btWeek.setVisibility(View.GONE); 
 
         	}
         	else if(checkedId==R.id.EveryWeek)
         	{
         		if ( !m_bInputflg )
         		{
-            		m_clCWeekDlg.setDisplay( );
-            		btWeek.setVisibility(View.VISIBLE);
-            		btOnceDate.setVisibility(View.GONE);      			
+            		m_clCWeekDlg.setDisplay( );   			
         		}
+        		btWeek.setVisibility(View.VISIBLE);
+        		btOnceDate.setVisibility(View.GONE);   
         	}
         }
     };

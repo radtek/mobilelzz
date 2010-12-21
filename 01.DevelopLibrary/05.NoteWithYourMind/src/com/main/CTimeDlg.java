@@ -51,7 +51,7 @@ public class CTimeDlg extends CommentOutDlg implements View.OnClickListener
         WindowManager.LayoutParams	wl	=	window.getAttributes();
         wl.x		=	m_iPosX;
         wl.y		=	m_iPosY;		
-        wl.width	=	250;
+   //     wl.width	=	250;
         
         window.setAttributes(wl);        
    }

@@ -19,6 +19,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -935,4 +936,12 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			}
 		}
 	}  
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if ((keyCode == KeyEvent.KEYCODE_BACK)) { 
+        	if(clBTStopRecord.isClickable()){
+        		clBTStopRecord.performClick();
+        	}
+        } 
+        return super.onKeyDown(keyCode, event); 
+    }
 }

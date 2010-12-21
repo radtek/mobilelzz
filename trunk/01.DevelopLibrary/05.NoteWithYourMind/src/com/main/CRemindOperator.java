@@ -25,7 +25,7 @@ public final class CRemindOperator
         return _INSTANCE;  
     }  
     
-    public	int	addRemind( Context context, long _id, CRemindInfo _clCRemindInfo )
+    public	int	addRemind( Context context, int _id, CRemindInfo _clCRemindInfo )
     {
     	//外面使用时需要先将该条提醒Insert到DB中，然后再调用该方法
     	//Insert时和提醒相关的属性可以设置为无效，这里会进行Update
@@ -36,7 +36,8 @@ public final class CRemindOperator
     		m_clCNoteDBCtrl	=	new	CNoteDBCtrl( context );
     	}
 		
-    	if ( 1 == _clCRemindInfo.m_iType )
+    	if ( CommonDefine.Remind_Type_CountDown == _clCRemindInfo.m_iType
+    	  || CommonDefine.Remind_Type_Once == _clCRemindInfo.m_iType )
     	{
     		if ( clCalendar.getTimeInMillis() > _clCRemindInfo.m_lTime )
     		{
@@ -44,69 +45,54 @@ public final class CRemindOperator
         		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
         		toast.show();	
         		
-        		return	-1;
+        		return	CommonDefine.E_FAIL;
     		}
     		
     		
     		CMemoInfo		clCMemoInfo	=	new	CMemoInfo();
-    		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
+ //   		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
     		clCMemoInfo.iIsRemindAble	=	_clCRemindInfo.m_iRemindAble;
-    		clCMemoInfo.RemindType		=	1;
+    		clCMemoInfo.RemindType		=	_clCRemindInfo.m_iType;
     		clCMemoInfo.dRemindTime		=	_clCRemindInfo.m_lTime;
-    		m_clCNoteDBCtrl.Update((int)_id, clCMemoInfo);
+    		m_clCNoteDBCtrl.Update(_id, clCMemoInfo);
     		
-			AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
-	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
-	    	MyIntent.putExtra( "id", _id );
-	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
-	    	alarmManager.set(AlarmManager.RTC_WAKEUP, _clCRemindInfo.m_lTime, pendingIntent);
+    		if ( clCMemoInfo.iIsRemindAble	==	CMemoInfo.IsRemind_Able_Yes )
+    		{
+    			AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
+    	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
+    	    	MyIntent.putExtra( "id", _id );
+    	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, _id, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
+    	    	alarmManager.set(AlarmManager.RTC_WAKEUP, _clCRemindInfo.m_lTime, pendingIntent);			
+    		}
+
     	}
-    	else if ( 2 == _clCRemindInfo.m_iType )
+    	else if ( CommonDefine.Remind_Type_Week == _clCRemindInfo.m_iType )
     	{
 	    	CMemoInfo		clCMemoInfo	=	new	CMemoInfo();
-    		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
+   // 		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
     		clCMemoInfo.iIsRemindAble	=	_clCRemindInfo.m_iRemindAble;
-	    	clCMemoInfo.RemindType		=	2;
+	    	clCMemoInfo.RemindType		=	_clCRemindInfo.m_iType;
 	    	clCMemoInfo.dRemindTime		=	_clCRemindInfo.m_lTime;
 	    	clCMemoInfo.m_Week			=	_clCRemindInfo.m_Week;
-	    	m_clCNoteDBCtrl.Update((int)_id, clCMemoInfo);
+	    	m_clCNoteDBCtrl.Update(_id, clCMemoInfo);
 	    	
-	    	long firtTime	=	_clCRemindInfo.getFirstCycelRemindTime();
-			AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
-	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
-	    	MyIntent.putExtra( "id", _id );
-	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-	    	alarmManager.set(AlarmManager.RTC_WAKEUP, firtTime, pendingIntent);
     		
-    	}
-    	else if ( 3 == _clCRemindInfo.m_iType )
-    	{		
-    		if ( clCalendar.getTimeInMillis() > _clCRemindInfo.m_lTime )
+    		if ( clCMemoInfo.iIsRemindAble	==	CMemoInfo.IsRemind_Able_Yes  )
     		{
-        		Toast toast = Toast.makeText(context, "提醒时间不正确，请重新设置!", Toast.LENGTH_SHORT);
-        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-        		toast.show();	
-        		
-        		return	-1;
-    		}
-    				
-    		AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
-	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
-	    	MyIntent.putExtra( "id", _id );
-	    	
-	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-	    	alarmManager.set(AlarmManager.RTC_WAKEUP, _clCRemindInfo.m_lTime, pendingIntent);
-	    	
-	    	CMemoInfo		clCMemoInfo	=	new	CMemoInfo();
-	    	
-	    	clCMemoInfo.RemindType		=	3;
-	    	clCMemoInfo.dRemindTime		=	_clCRemindInfo.m_lTime;
-    		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
-    		clCMemoInfo.iIsRemindAble	=	_clCRemindInfo.m_iRemindAble;
-	    	m_clCNoteDBCtrl.Update((int)_id, clCMemoInfo);
+    	    	long firtTime	=	_clCRemindInfo.getFirstCycelRemindTime();
+    			AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
+    	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
+    	    	MyIntent.putExtra( "id", _id );
+    	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, _id, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+    	    	alarmManager.set(AlarmManager.RTC_WAKEUP, firtTime, pendingIntent);		
+    		} 		
+    	}
+    	else
+    	{		
+    		//error
     	}
     	
-    	return	0;
+    	return	CommonDefine.S_OK;
     }
     
     public	void	alarmAlert( Context context, int _id )
@@ -119,16 +105,20 @@ public final class CRemindOperator
     		m_clCNoteDBCtrl	=	new	CNoteDBCtrl( context );
     	}
     	
-    	CRemindInfo		clCRemindInfo	=	new	CRemindInfo( (byte)-1 );
-    	getRemindInfo( context, _id, clCRemindInfo );
+    	CRemindInfo		clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Invalid );
+    	
+    	if ( CommonDefine.E_FAIL == getRemindInfo( context, _id, clCRemindInfo ) )
+    	{
+    		return;
+    	}
  	
-	    if ( 1 == clCRemindInfo.m_iType || 3 == clCRemindInfo.m_iType )
+	    if ( CommonDefine.Remind_Type_CountDown == clCRemindInfo.m_iType || CommonDefine.Remind_Type_Once == clCRemindInfo.m_iType )
 	    {
 	    	CMemoInfo	clCMemoInfo	=	new	CMemoInfo();
-	    	clCMemoInfo.iIsRemindAble	=	-1;
+	    	clCMemoInfo.iIsRemindAble	=	CMemoInfo.IsRemind_Able_No;
 	    	m_clCNoteDBCtrl.Update(_id, clCMemoInfo );
 	    }
-	    else if( 2 == clCRemindInfo.m_iType )		//循环提醒
+	    else if( CommonDefine.Remind_Type_Week == clCRemindInfo.m_iType )		//循环提醒
 	    {
 	    	long	lTime	=	clCRemindInfo.getFirstCycelRemindTime();
 	    	
@@ -136,7 +126,7 @@ public final class CRemindOperator
 	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
 	    	MyIntent.putExtra( "id", _id );
 	    	
-	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, 0);
+	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
 	    	alarmManager.set(AlarmManager.RTC_WAKEUP, lTime, pendingIntent);
 	    }
 	    else
@@ -146,13 +136,13 @@ public final class CRemindOperator
     		
     }
     
-    public	int	editRemind( Context context, long _id, CRemindInfo _clCRemindInfo )
+    public	int	editRemind( Context context, int _id, CRemindInfo _clCRemindInfo )
     {
     	//对一个提醒进行编辑时调用该方法。
     	AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
     	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
     	MyIntent.putExtra( "id", _id );
-    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, 0);
+    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, _id, MyIntent, 0);
     	alarmManager.cancel(pendingIntent);
     	
     	return	addRemind( context, _id, _clCRemindInfo  );
@@ -164,20 +154,25 @@ public final class CRemindOperator
     	//将一条提醒设置为无效
     	//由于提醒不能转为Memo，所以该方法对删除和设置为Disable都好用
     	AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
-    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
+    	
     	for( int i = 0; i < needDeleteIDs.length; ++i )
     	{
-        	MyIntent.putExtra( "id", needDeleteIDs[i] );
-        	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)needDeleteIDs[i], MyIntent, 0);
+    		Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
+    		MyIntent.putExtra( "id", needDeleteIDs[i] );
+        	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)needDeleteIDs[i], MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
         	alarmManager.cancel(pendingIntent);
     	}
 
     }
     
-    public	void	getRemindInfo( Cursor cur, CRemindInfo _clCRemindInfo )
+    public	int	getRemindInfo( Cursor cur, CRemindInfo _clCRemindInfo )
     {
     	//根据ID从DB中取得提醒信息
-    	cur.moveToFirst();
+    	if ( !cur.moveToFirst() )
+    	{
+    		return	CommonDefine.E_FAIL;
+    	}
+    	
         int	index		=	cur.getColumnIndex( CNoteDBCtrl.KEY_isremind );
         int isRemind	=	cur.getInt( index );
         _clCRemindInfo.m_iRemindAble	=	(byte)isRemind;
@@ -218,17 +213,19 @@ public final class CRemindOperator
         int iSunday			=	cur.getInt( index );
         _clCRemindInfo.m_Week[ 6 ]	=	(byte)iSunday;
         
+        return	CommonDefine.S_OK;    
     }
     
-    public	void	getRemindInfo( Context context, int id, CRemindInfo _clCRemindInfo )
+    public	int	getRemindInfo( Context context, int id, CRemindInfo _clCRemindInfo )
     {
     	if( null == m_clCNoteDBCtrl )
     	{
     		m_clCNoteDBCtrl	=	new	CNoteDBCtrl( context );
     	}
+    	
     	Cursor cur	=	m_clCNoteDBCtrl.getRemindByID(id);
     	
-    	getRemindInfo( cur, _clCRemindInfo );
+    	return	getRemindInfo( cur, _clCRemindInfo );
     }
     
 }

@@ -51,11 +51,11 @@ public class CRemindInfo implements Serializable
 	{	
 		String	strTemp	=	null;
 		
-		if ( m_iType == 1 || m_iType == 3 )
+		if ( m_iType == CommonDefine.Remind_Type_CountDown || m_iType == CommonDefine.Remind_Type_Once )
 		{	
 			strTemp	=	SubCountdownByString( m_lTime );
 		}
-		else if ( m_iType == 2 )
+		else if ( m_iType == CommonDefine.Remind_Type_Week )
 		{
 			long	lTimeTemp	=	getFirstCycelRemindTime();
 			
@@ -165,7 +165,7 @@ public class CRemindInfo implements Serializable
 	{
 		boolean		bflg	=	false;
 		
-		if( m_iType == 1 || m_iType == 3 )
+		if( m_iType == CommonDefine.Remind_Type_CountDown || m_iType == CommonDefine.Remind_Type_Once )
 		{
 			Calendar clCalendar	=	Calendar.getInstance();
 			clCalendar.setTimeInMillis(System.currentTimeMillis());
@@ -180,7 +180,7 @@ public class CRemindInfo implements Serializable
 				bflg	=	true;
 			}
 		}
-		else if( m_iType == 2 )
+		else if( m_iType == CommonDefine.Remind_Type_Week )
 		{
 			
 			for ( int i = 0; i < 7; ++i )
@@ -288,7 +288,7 @@ public class CRemindInfo implements Serializable
 			}
 		}
 		
-		return	-1;
+		return	CommonDefine.E_FAIL;
 	}
 	
 

@@ -217,7 +217,7 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 			int iVoiceFlag = getItem(position).iIsHaveAudioData;
 			if(isRemindValue == CMemoInfo.IsRemind_Yes){
 				itemdetail.bIsRemind = true;
-				icon1.setBackgroundResource(R.drawable.notelistitem_icon_alarm);
+				icon1.setBackgroundResource(R.drawable.notelistitem_icon_alarm_valid);
 				icon1.setVisibility(View.VISIBLE);
 				if(iVoiceFlag == CMemoInfo.IsHaveAudioData_Yes){//for voice
 					icon2.setBackgroundResource(R.drawable.notelistitem_icon_voice);

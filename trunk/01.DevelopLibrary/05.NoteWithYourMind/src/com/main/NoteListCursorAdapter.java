@@ -189,11 +189,17 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 			bigIcon.setBackgroundResource(R.drawable.notelistitem_bigicon_text);
 			int isRemindIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isremind);
 			int isRemindValue = cursor.getInt(isRemindIndex);
+			int isRemindableIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isremindable);
+			int isRemindableValue = cursor.getInt(isRemindableIndex);
 			int iVoiceFlagIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isHaveAudioData);
 			int iVoiceFlag = cursor.getInt(iVoiceFlagIndex);
 			if(isRemindValue == CMemoInfo.IsRemind_Yes){
 				itemdetail.bIsRemind = true;
-				icon1.setBackgroundResource(R.drawable.notelistitem_icon_alarm);
+				if(isRemindableValue==CMemoInfo.IsEditEnable_Enable){
+					icon1.setBackgroundResource(R.drawable.notelistitem_icon_alarm_valid);
+				}else{
+					icon1.setBackgroundResource(R.drawable.notelistitem_icon_alarm_invalid);
+				}
 				icon1.setVisibility(View.VISIBLE);
 				if(iVoiceFlag == CMemoInfo.IsHaveAudioData_Yes){//for voice
 					icon2.setBackgroundResource(R.drawable.notelistitem_icon_voice);

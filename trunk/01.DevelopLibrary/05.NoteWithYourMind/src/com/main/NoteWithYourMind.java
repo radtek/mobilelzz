@@ -826,12 +826,12 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     	if ( (m_clCRemindInfo!=null) && (-1 != m_clCRemindInfo.m_iType) )
     	{
     		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
-    		clCMemoInfo.iIsRemindAble	=	1;
+    		clCMemoInfo.iIsRemindAble	=	CMemoInfo.IsEditEnable_Enable;
     	}
     	else
     	{
     		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_No;
-    		clCMemoInfo.iIsRemindAble	=	0;
+    		clCMemoInfo.iIsRemindAble	=	CMemoInfo.IsEditEnable_Invalid;
     	}
 
 		if((myRecAudioFile!=null) && (myRecAudioFile.isFile())){

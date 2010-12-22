@@ -72,7 +72,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         btWeek		=	(Button) findViewById(R.id.EveryWeekImg);
         btWeek.setOnClickListener(this);
         
-        btCancel	=	(Button) findViewById(R.id.CancelBtn);
+        btCancel	=	(Button) findViewById(R.id.DisableBtn);
         btCancel.setOnClickListener(this);
         
         btOK		=	(Button) findViewById(R.id.OKBtn);
@@ -105,11 +105,11 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     		case R.id.EveryWeekImg:
     			processWeek(view);
     			break;
-    		case R.id.CancelBtn:
-    			
+    		case R.id.DisableBtn:
+    			processAble( false );
     			break;
        		case R.id.OKBtn:	
-       			processOK();
+       			processAble( true );
     			break;   			
     		default:
     			break;
@@ -137,36 +137,53 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     {
     	m_clCWeekDlg.setDisplay( );
     }
-    private	void	processOK()
+    
+    private	void	processAble( boolean bAble )
     {
     	m_clCRemindInfo.m_iType	=	m_iType;
     	
-    	if( m_clCRemindInfo.m_iType == 2 )		//循环提醒
+    	if( m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_Week )		//循环提醒
 		{				
 			m_clCRemindInfo.setWeekTime( m_clCTimeDlg.m_iHour , m_clCTimeDlg.m_iMinute, m_clCWeekDlg.m_bWeek );	
 		}
-		else if( m_clCRemindInfo.m_iType == 1 )	//倒计时提醒
+		else if( m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_CountDown )	//倒计时提醒
 		{
 			m_clCRemindInfo.setCutDownTime( m_clCCountdownDlg.m_iHour, m_clCCountdownDlg.m_iMinute );
 		}
-		else if( m_clCRemindInfo.m_iType == 3 )
+		else if( m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_Once )
 		{	
 			m_clCRemindInfo.setNormalTime( m_clCTimeDlg.m_iHour, m_clCTimeDlg.m_iMinute, m_clCDateDlg.m_iYear, m_clCDateDlg.m_iMonth, m_clCDateDlg.m_iDay );
 		}
-    	if( m_clCRemindInfo.checkTime())
+    	
+    		
+    	if ( bAble )
     	{
-    		m_clCRemindInfo.m_iRemindAble	=	CMemoInfo.IsRemind_Able_Yes;
+        	if( m_clCRemindInfo.checkTime())
+        	{
+        		m_clCRemindInfo.m_iRemindAble	=	CMemoInfo.IsRemind_Able_Yes; 
+        		m_clCRemindInfo.m_iIsRemind		=	CMemoInfo.IsRemind_Yes;
+        		Intent intent = new Intent(RemindActivity.this, NoteWithYourMind.class);  
+        		intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, m_clCRemindInfo );
+        		intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
+        		
+        		startActivity(intent);	
+        	}
+        	else
+        	{
+        		Toast toast = Toast.makeText(RemindActivity.this, "时间设定错误，请重新设定!", Toast.LENGTH_SHORT);
+        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+        		toast.show();  			
+        	}	
+    	}
+    	else
+    	{
+    		m_clCRemindInfo.m_iRemindAble	=	CMemoInfo.IsRemind_Able_No;  
+    		m_clCRemindInfo.m_iIsRemind		=	CMemoInfo.IsRemind_Yes;
     		Intent intent = new Intent(RemindActivity.this, NoteWithYourMind.class);  
     		intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, m_clCRemindInfo );
     		intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
     		
-    		startActivity(intent);	
-    	}
-    	else
-    	{
-			Toast toast = Toast.makeText(RemindActivity.this, "时间设定错误，请重新设定!", Toast.LENGTH_SHORT);
-    		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-    		toast.show();
+    		startActivity(intent);			
     	}
     }
     

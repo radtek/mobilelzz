@@ -31,11 +31,7 @@ public final class CRemindOperator
     	//Insert时和提醒相关的属性可以设置为无效，这里会进行Update
 		Calendar clCalendar	=	Calendar.getInstance();
 		clCalendar.setTimeInMillis(System.currentTimeMillis());
-		if( null == m_clCNoteDBCtrl )
-    	{
-    		m_clCNoteDBCtrl	=	new	CNoteDBCtrl( context );
-    	}
-		
+	
     	if ( CommonDefine.Remind_Type_CountDown == _clCRemindInfo.m_iType
     	  || CommonDefine.Remind_Type_Once == _clCRemindInfo.m_iType )
     	{
@@ -49,14 +45,7 @@ public final class CRemindOperator
     		}
     		
     		
-    		CMemoInfo		clCMemoInfo	=	new	CMemoInfo();
- //   		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
-    		clCMemoInfo.iIsRemindAble	=	_clCRemindInfo.m_iRemindAble;
-    		clCMemoInfo.RemindType		=	_clCRemindInfo.m_iType;
-    		clCMemoInfo.dRemindTime		=	_clCRemindInfo.m_lTime;
-    		m_clCNoteDBCtrl.Update(_id, clCMemoInfo);
-    		
-    		if ( clCMemoInfo.iIsRemindAble	==	CMemoInfo.IsRemind_Able_Yes )
+    		if ( _clCRemindInfo.m_iRemindAble	==	CMemoInfo.IsRemind_Able_Yes )
     		{
     			AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
     	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
@@ -67,17 +56,8 @@ public final class CRemindOperator
 
     	}
     	else if ( CommonDefine.Remind_Type_Week == _clCRemindInfo.m_iType )
-    	{
-	    	CMemoInfo		clCMemoInfo	=	new	CMemoInfo();
-   // 		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
-    		clCMemoInfo.iIsRemindAble	=	_clCRemindInfo.m_iRemindAble;
-	    	clCMemoInfo.RemindType		=	_clCRemindInfo.m_iType;
-	    	clCMemoInfo.dRemindTime		=	_clCRemindInfo.m_lTime;
-	    	clCMemoInfo.m_Week			=	_clCRemindInfo.m_Week;
-	    	m_clCNoteDBCtrl.Update(_id, clCMemoInfo);
-	    	
-    		
-    		if ( clCMemoInfo.iIsRemindAble	==	CMemoInfo.IsRemind_Able_Yes  )
+    	{   		
+    		if ( _clCRemindInfo.m_iRemindAble	==	CMemoInfo.IsRemind_Able_Yes  )
     		{
     	    	long firtTime	=	_clCRemindInfo.getFirstCycelRemindTime();
     			AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
@@ -173,13 +153,17 @@ public final class CRemindOperator
     		return	CommonDefine.E_FAIL;
     	}
     	
-        int	index		=	cur.getColumnIndex( CNoteDBCtrl.KEY_isremind );
+        int	index		=	cur.getColumnIndex( CNoteDBCtrl.KEY_isremindable );
+        int isRemindable	=	cur.getInt( index );
+        _clCRemindInfo.m_iRemindAble	=	isRemindable;
+        
+        index		=	cur.getColumnIndex( CNoteDBCtrl.KEY_isremind );
         int isRemind	=	cur.getInt( index );
-        _clCRemindInfo.m_iRemindAble	=	(byte)isRemind;
+        _clCRemindInfo.m_iIsRemind	=	isRemind;
         
         index		=	cur.getColumnIndex( CNoteDBCtrl.KEY_remindtype );
         int isRemindType			=	cur.getInt( index );
-        _clCRemindInfo.m_iType		=	(byte)isRemindType;
+        _clCRemindInfo.m_iType		=	isRemindType;
         
         index		=	cur.getColumnIndex( CNoteDBCtrl.KEY_remindtime );
         long remindTime				=	cur.getLong(index);

@@ -301,7 +301,18 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	        	    	
 	        	    	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
 	        	    	m_clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Invalid );
-	            		clCRemindOperator.getRemindInfo(curExtraMemo, m_clCRemindInfo);
+	            		if ( CommonDefine.E_FAIL == clCRemindOperator.getRemindInfo(curExtraMemo, m_clCRemindInfo))
+	            		{
+	            			m_clCRemindInfo	=	null;
+	            		}//如果编辑的Memo为提醒则设定提醒框为显示
+	            		else if( CMemoInfo.IsRemind_Yes == m_clCRemindInfo.m_iIsRemind )
+	            		{
+	            			setRemindDisplay();
+	            		}
+	            		else
+	            		{
+	            			m_clCRemindInfo	=	null;
+	            		}
 	            		
 	            		index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_audioDataName);
 	            		String temp = curExtraMemo.getString(index);
@@ -316,7 +327,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			updateDetail(strDetail);
 			updateVoice(strAudioFileName);
 			
-		}else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New )
+		}
+		else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New )
 		{
 			m_ExtraData_PreID = iExtraData.getIntExtra(ExtraData_OperationPreID, CommonDefine.g_int_Invalid_ID);
 			//将时间设置为空
@@ -325,11 +337,18 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			updateDetail(null);
 			//将语音设置为空
 			updateVoice(null);
-		}else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Update )
+		}
+		else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Update )
 		{
 			m_clCRemindInfo =	( CRemindInfo )iExtraData.getSerializableExtra( ExtraData_RemindSetting );
+			if( null != m_clCRemindInfo && CMemoInfo.IsRemind_Yes == m_clCRemindInfo.m_iIsRemind )
+			{
+				setRemindDisplay();
+			}
+			
 			updateTime( m_clCRemindInfo );
 		}
+		
 		ScrollView etNoteText = (ScrollView)findViewById(R.id.editnote_noteinfo_scroll);
 		etNoteText.scrollBy(0, -100);
 	}
@@ -408,19 +427,23 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         		//error
         	}
     		
+    		if ( CMemoInfo.IsRemind_Able_Yes == clRemindInfo.m_iRemindAble )
+    		{
+    			Status.setText("启用");
+    		}
+    		else
+    		{
+    			Status.setText("停用");
+    		}
     		
     		String	strTemp	=	clRemindInfo.getCountDownBySting();
     		if ( null == strTemp ) 
     		{
-    			Status.setText("停用");
     			CountDownTime.setText( "下次提醒 : 已过期 ");
-    			clRemindInfo.m_iRemindAble	=	CMemoInfo.IsRemind_Able_No;
     		}
     		else
     		{
-    			Status.setText("启用");
     			CountDownTime.setText( strTemp );
-    			clRemindInfo.m_iRemindAble	=	CMemoInfo.IsRemind_Able_Yes;
     		}
     		
     	}
@@ -780,7 +803,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		String strMemoText = memotext.getText().toString();
 		
 		//取得提醒信息 - zhu.t : 提醒信息已经保存在 m_clCRemindInfo中
-		if( null != m_clCRemindInfo )
+		if( null != m_clCRemindInfo && CMemoInfo.IsRemind_Yes ==  m_clCRemindInfo.m_iIsRemind )
 		{
 			if(  CommonDefine.Remind_Type_Invalid != m_clCRemindInfo.m_iType 
 			&&   m_clCRemindInfo.m_iRemindAble == CMemoInfo.IsRemind_Able_Yes 
@@ -829,22 +852,21 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     	Calendar		clCalendar	=	Calendar.getInstance();
 		clCMemoInfo.dLastModifyTime =	clCalendar.getTimeInMillis();
 		clCMemoInfo.strDetail		=	strMemoText;
+		if( null != m_clCRemindInfo )
+		{
+			clCMemoInfo.iIsRemind		=	m_clCRemindInfo.m_iIsRemind;
+			clCMemoInfo.iIsRemindAble	=	m_clCRemindInfo.m_iRemindAble;
+    		clCMemoInfo.RemindType		=	m_clCRemindInfo.m_iType;
+    		clCMemoInfo.dRemindTime		=	m_clCRemindInfo.m_lTime;
+    		clCMemoInfo.m_Week			=	m_clCRemindInfo.m_Week;
+		}
 		
-    	if ( ( m_clCRemindInfo != null ) && ( CommonDefine.Remind_Type_Invalid != m_clCRemindInfo.m_iType ) )
-    	{
-    		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_Yes;
-    		clCMemoInfo.iIsRemindAble	=	m_clCRemindInfo.m_iRemindAble;
-    	}
-    	else
-    	{
-    		clCMemoInfo.iIsRemind		=	CMemoInfo.IsRemind_No;
- //   		clCMemoInfo.iIsRemindAble	=	0;
-    	}
-
 		if((myRecAudioFile!=null) && (myRecAudioFile.isFile())){
 			clCMemoInfo.iIsHaveAudioData = CMemoInfo.IsHaveAudioData_Yes;
 			clCMemoInfo.strAudioFileName = myRecAudioFile.getName();
 		}
+		
+		CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
     	
     	if ( m_ExtraData_PreID != CMemoInfo.Id_Invalid )
 		{
@@ -855,8 +877,9 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         	long	_id	=	m_clCNoteDBCtrl.Create(clCMemoInfo);
         	
         	//保存提醒信息 - zhu.t
-        	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-        	if( m_clCRemindInfo != null && -1 != m_clCRemindInfo.m_iType ){
+        	
+        	if( m_clCRemindInfo != null && CommonDefine.Remind_Type_Invalid != m_clCRemindInfo.m_iType )
+        	{
         		if ( CommonDefine.g_int_Invalid_ID != _id 
         		  && CommonDefine.E_FAIL == clCRemindOperator.addRemind( this, (int)_id, m_clCRemindInfo) )
 				{
@@ -870,7 +893,6 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			//编辑Memo
 			m_clCNoteDBCtrl.Update(m_ExtraData_EditNoteID,clCMemoInfo );
 			//判断是否需要更新提醒信息 - zhu.t
-			CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
 			if ( m_clCRemindInfo!= null  )
 			{
 				if ( CommonDefine.E_FAIL == clCRemindOperator.editRemind(this, m_ExtraData_EditNoteID, m_clCRemindInfo ) )
@@ -952,4 +974,10 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         } 
         return super.onKeyDown(keyCode, event); 
     }
+	
+	public	void	setRemindDisplay()
+	{
+		ScrollView	SV	=	(ScrollView)findViewById(R.id.editnote_noteinfo_scroll);
+		SV.setVisibility(View.VISIBLE);
+	}
 }

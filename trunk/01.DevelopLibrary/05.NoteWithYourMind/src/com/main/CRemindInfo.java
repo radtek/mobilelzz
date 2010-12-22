@@ -20,6 +20,7 @@ public class CRemindInfo implements Serializable
 	long		m_lTime;				//如果单次提醒表示日期年月日
 										//如果是循环提醒则高4为表示小时，低位表示分钟
 	int			m_iRemindAble;
+	int			m_iIsRemind;
 	
 	public	void	setWeekTime( int iHour, int iMinute, byte week[] )
 	{
@@ -304,6 +305,7 @@ public class CRemindInfo implements Serializable
 		m_lTime			=	0;
 		
 		m_iRemindAble	=	CommonDefine.g_int_Invalid_ID;
+		m_iIsRemind		=	CommonDefine.g_int_Invalid_ID;
 	}
 	
 }

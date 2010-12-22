@@ -17,7 +17,8 @@ class CommonDefine{
 
 	public static	CNoteDBCtrl				m_clCNoteDBCtrl = null;
 	
-	public static String 					g_strAudioFilePath = "/note/record";
+	public static String 					g_strAudioFilePath = "/record";
+	public static String 					g_strAppFilePath = "/note";
 	public final static int					g_iMaxRecTime = 300;
 	
 	public static int 						E_FAIL	= -1;

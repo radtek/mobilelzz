@@ -192,12 +192,17 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	    if (sdCardExit)
 	    {
 	    	SdCardDir = Environment.getExternalStorageDirectory();
-	    	String AudioDir = SdCardDir.toString() + CommonDefine.g_strAudioFilePath;   
-	        myRecAudioDir = new File(AudioDir);
-	        if(!myRecAudioDir.exists())
+	    	String strAppDir = SdCardDir.toString() + CommonDefine.g_strAppFilePath;
+	    	File fAppDir = new File(strAppDir);
+	        if(!fAppDir.exists())
 	        {
-	        	myRecAudioDir.mkdir();
+	        	fAppDir.mkdir();
 	        } 
+	        String strAudioDir =  strAppDir+CommonDefine.g_strAudioFilePath;
+	        myRecAudioDir = new File(strAudioDir);
+	        if(!myRecAudioDir.exists()){
+	        	myRecAudioDir.mkdir();
+	        }
 	    }
 	    
 	    //½ø¶ÈÌõ

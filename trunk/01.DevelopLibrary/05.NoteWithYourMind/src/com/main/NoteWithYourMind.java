@@ -137,7 +137,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
 			CommonDefine.m_clCNoteDBCtrl = m_clCNoteDBCtrl;
 		}
-		
+		m_NoteInfoFromDB = new CMemoInfo();
 //		m_clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Invalid );
     	//点击保存Button，进行新增或更新操作
 		m_SaveBT	=	(ImageButton) findViewById(R.id.editnote_toolbar_save);

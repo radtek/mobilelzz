@@ -120,8 +120,10 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         if ((keyCode == KeyEvent.KEYCODE_BACK))
         { 
         	Intent intent = new Intent(RemindActivity.this, NoteWithYourMind.class);
+        	intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, m_clCRemindInfo );
         	intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
-        	return	true;
+        	startActivity(intent);
+        	return true;
         } 
         return super.onKeyDown(keyCode, event); 
     } 

@@ -64,58 +64,43 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		OperationNoteKind_Update
 	}
 	
-	public static String 								ExtraData_EditNoteID		=	"com.main.ExtraData_EditNoteID";
-	public static String 								ExtraData_OperationNoteKind	=	"com.main.ExtraData_OperationNoteKind";
-	public static String 								ExtraData_OperationPreID	=	"com.main.ExtraData_OperationPreID";
+	public static String 										ExtraData_EditNoteID		=	"com.main.ExtraData_EditNoteID";
+	public static String 										ExtraData_OperationNoteKind	=	"com.main.ExtraData_OperationNoteKind";
+	public static String 										ExtraData_OperationPreID	=	"com.main.ExtraData_OperationPreID";
 	
-	public static String 								ExtraData_RemindSetting	=	"com.main.ExtraData_RemindSetting";
-	
-	//皮肤设定和加密设定的Menu
-	public static final int 							ITEM0	=	Menu.FIRST;
-	public static final int 							ITEM1	=	Menu.FIRST + 1;
+	public static String 										ExtraData_RemindSetting	=	"com.main.ExtraData_RemindSetting";
 	
 	//进行DB操作的类
-	private CNoteDBCtrl 								m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
-	
-	//进行时间操作的类
-//	private Calendar clCalendar	=	Calendar.getInstance();
+	private CNoteDBCtrl 										m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
 
 	private int 												m_ExtraData_EditNoteID 		=	CMemoInfo.Id_Invalid;
 	private int 												m_ExtraData_PreID 		=	CMemoInfo.Id_Invalid;
 	private OperationNoteKindEnum 								m_ExtraData_OperationNoteKind = null;
 	
-	CRemindInfo													m_clCRemindInfo	=	null;
-	private boolean 											sdCardExit;
+	private CRemindInfo											m_clCRemindInfo	=	null;
+	
+	private boolean 											m_bSDCardExit;
 	private File 												myRecAudioFile = null;
 	private File 												myRecAudioDir = null;
-	private File												SdCardDir;
 	private MediaRecorder 										mMediaRecorder01;
-	
-
-	ImageButton													clBT_Rec_BackGroud;  
-	ImageButton													clBTPlayRecord;
-	ImageButton													clBTDeleteRecord;
-	ImageButton													clBTRecord;
-	ImageButton													clBTStartRecord;
-	ImageButton													clBTStopRecord ;
-    
+	private boolean												mIsOpenRecordPanel  = false;
+	private boolean 											mIsRecordSound		= false;
+	private ImageButton											clBT_Rec_BackGroud;  
+	private ImageButton											clBTPlayRecord;
+	private ImageButton											clBTDeleteRecord;
+	private ImageButton											clBTRecord;
+	private ImageButton											clBTStartRecord;
+	private ImageButton											clBTStopRecord ;
 	private TextView	 										mchronometer;
 	protected static final int 									GUI_STOP_NOTIFIER = 0x108;
 	protected static final int 									GUI_THREADING_NOTIFIER = 0x109;
 	private SeekBar		 										mProgressBar01;
-//	public int 													intCounter=0;
-	
 	private  Thread												nThread;
 	private  Thread												mPlayThread;
-	
-	/* MediaPlayer对象 */
-	public MediaPlayer											mMediaPlayer		= null;
+	private MediaPlayer											mMediaPlayer		= null;
 	private int													m_iCurrentVoiceDataDuration = CommonDefine.g_int_Invalid_ID;
 	
-	private boolean												mIsSoundFileExist   = false;
-	private boolean												mIsOpenRecordPanel  = false;
-	private boolean 											mIsRecordSound		= false;
-	
+	private CMemoInfo											m_NoteInfoFromDB = null;											
 	///////////////////////onStart////////////////////////////////////////////////
 	public void onNewIntent(Intent intent)
 	{
@@ -151,8 +136,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
 			CommonDefine.m_clCNoteDBCtrl = m_clCNoteDBCtrl;
 		}
-		
-//		m_clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Invalid );
+		m_NoteInfoFromDB = new CMemoInfo();
     	//点击保存Button，进行新增或更新操作
         ImageButton	clBTSave	=	(ImageButton) findViewById(R.id.editnote_toolbar_save);
         clBTSave.setOnClickListener(this);
@@ -188,10 +172,10 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		//chronometer.setFormat("MM::SS/05:00");
 			
 		//检查是否存在SD卡		
-	    sdCardExit = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);   
-	    if (sdCardExit)
+	    m_bSDCardExit = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);   
+	    if (m_bSDCardExit)
 	    {
-	    	SdCardDir = Environment.getExternalStorageDirectory();
+	    	File SdCardDir = Environment.getExternalStorageDirectory();
 	    	String strAppDir = SdCardDir.toString() + CommonDefine.g_strAppFilePath;
 	    	File fAppDir = new File(strAppDir);
 	        if(!fAppDir.exists())
@@ -298,7 +282,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	        			//取得Memo中的Text信息
 			        	index	=	curExtraMemo.getColumnIndex( CNoteDBCtrl.KEY_detail );
 	        	    	strDetail = curExtraMemo.getString( index );
-	        	    	
+	        	    	m_NoteInfoFromDB.strDetail = strDetail;
 	        	    	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
 	        	    	m_clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Invalid );
 	            		if ( CommonDefine.E_FAIL == clCRemindOperator.getRemindInfo(curExtraMemo, m_clCRemindInfo))
@@ -307,10 +291,11 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	            		}//如果编辑的Memo为提醒则设定提醒框为显示
 	            		else if( CMemoInfo.IsRemind_Yes == m_clCRemindInfo.m_iIsRemind )
 	            		{
-	            			setRemindDisplay();
+	            			setRemindDisplay(true);
 	            		}
 	            		else
 	            		{
+	            			setRemindDisplay(false);
 	            			m_clCRemindInfo	=	null;
 	            		}
 	            		
@@ -343,7 +328,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			m_clCRemindInfo =	( CRemindInfo )iExtraData.getSerializableExtra( ExtraData_RemindSetting );
 			if( null != m_clCRemindInfo && CMemoInfo.IsRemind_Yes == m_clCRemindInfo.m_iIsRemind )
 			{
-				setRemindDisplay();
+				setRemindDisplay(true);
 			}
 			
 			updateTime( m_clCRemindInfo );
@@ -353,7 +338,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		etNoteText.scrollBy(0, -100);
 	}
     private void updateVoice(String strAudioFileName){
-    	if(strAudioFileName!=null && sdCardExit ){
+    	if(strAudioFileName!=null && m_bSDCardExit ){
     		myRecAudioFile = new File(myRecAudioDir, strAudioFileName);
     		openVoicePanel();
     	}else{
@@ -380,6 +365,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     	
     	if(clRemindInfo!=null)
     	{
+    		setRemindDisplay(true);
     		if ( CommonDefine.Remind_Type_CountDown == clRemindInfo.m_iType ||  CommonDefine.Remind_Type_Once == clRemindInfo.m_iType )
         	{
     			for ( int i = 0; i < 7 ; ++i )
@@ -445,7 +431,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     		{
     			CountDownTime.setText( strTemp );
     		}
-    		
+    	}else{
+    		setRemindDisplay(false);
     	}
     }
     private void updateDetail(String strDetail){
@@ -544,7 +531,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	//开始录音
 	private void processRecClick(View view)
 	{		
-		if (!sdCardExit)
+		if (!m_bSDCardExit)
         {
            Toast.makeText(NoteWithYourMind.this, "没有SDCard",Toast.LENGTH_LONG).show();
            return;
@@ -730,7 +717,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			mMediaPlayer.stop();			
 		}
 				
-  		if (myRecAudioFile != null && sdCardExit)
+  		if (myRecAudioFile != null && m_bSDCardExit)
   		{
   			if (myRecAudioFile.exists())
   				myRecAudioFile.delete();       
@@ -910,27 +897,27 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	 * menu.findItem(EXIT_ID);找到特定的MenuItem
 	 * MenuItem.setIcon.可以设置menu按钮的背景
 	 */
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		MenuInflater inf = getMenuInflater();
-		inf.inflate(R.menu.menu_mian_setting, menu);
-		return true;
-	}
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		super.onCreateOptionsMenu(menu);
+//		MenuInflater inf = getMenuInflater();
+//		inf.inflate(R.menu.menu_mian_setting, menu);
+//		return true;
+//	}
 	
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case ITEM0: 
-				/*   menu button push action */ 
-				
-			break;
-		case ITEM1: 
-				/*   menu button push action */ 
-			//EncodeSettingDlg();
-			break;
-
-		}
-		return super.onOptionsItemSelected(item);
-	}
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		switch (item.getItemId()) {
+//		case ITEM0: 
+//				/*   menu button push action */ 
+//				
+//			break;
+//		case ITEM1: 
+//				/*   menu button push action */ 
+//			//EncodeSettingDlg();
+//			break;
+//
+//		}
+//		return super.onOptionsItemSelected(item);
+//	}
 	class PlayWatcherThread extends Thread {  
 	    int milliseconds;  
 	      
@@ -975,9 +962,13 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         return super.onKeyDown(keyCode, event); 
     }
 	
-	public	void	setRemindDisplay()
+	public	void	setRemindDisplay(boolean bIsDisplay)
 	{
-		ScrollView	SV	=	(ScrollView)findViewById(R.id.editnote_noteinfo_scroll);
-		SV.setVisibility(View.VISIBLE);
+		View	SV	=	findViewById(R.id.editnote_remindinfo);
+		if(bIsDisplay){
+			SV.setVisibility(View.VISIBLE);	
+		}else{
+			SV.setVisibility(View.GONE);
+		}
 	}
 }

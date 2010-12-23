@@ -99,7 +99,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		{
 			//delete rec--->
 			ArrayList<Integer> alIDs = new ArrayList<Integer>();
-			findSelectItemDBID(alIDs);
+			m_myAdapter.getSelectItemDBID(alIDs);
 			if(alIDs.size()>0){
 				Integer[] needDeleteIDs = (Integer[])alIDs.toArray(new Integer[0]);
     			m_clCNoteDBCtrl.Delete(needDeleteIDs);
@@ -123,7 +123,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		{
 			m_MoveIn_State = MoveIn_State.MoveIn_SelectFolder;
 			ArrayList<Integer> alIDs = new ArrayList<Integer>();
-			findSelectItemDBID(alIDs);
+			m_myAdapter.getSelectItemDBID(alIDs);
 			if(alIDs.size()<=0){
 				m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
 				Return2TargetList();
@@ -184,7 +184,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 						id = 0;
 					}
 					ArrayList<Integer> alIDs = new ArrayList<Integer>();
-					findSelectItemDBID(alIDs);
+					m_myAdapter.getSelectItemDBID(alIDs);
 					Move2Folder(alIDs, (int)id);
             		m_dlgFolderList.cancel();
             		Return2TargetList();
@@ -426,21 +426,25 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		//update toolbar
 		updateToolBar();
 	}
-	private void findSelectItemDBID(ArrayList<Integer> alIDs)
-	{
-		int count = m_myAdapter.getCount();
-		for(int i = 0; i < count; i++)
-		{
-			final CheckBox cb = (CheckBox)m_targetList.getChildAt(i).findViewById(R.id.notelistitem_noteselect);
-			if(cb!=null){
-				boolean b = cb.isChecked();
-				if(b==true){
-					int iID = (int)m_myAdapter.getItemId(i);
-					alIDs.add(new Integer(iID));
-				}
-			}
-		}
-	}
+//	private void findSelectItemDBID(ArrayList<Integer> alIDs)
+//	{
+//		int count = m_myAdapter.getCount();
+//		for(int i = 0; i < count; i++)
+//		{
+//			View v = m_targetList.getChildAt(i);
+//			if(v!=null)
+//			{
+//				CheckBox cb = (CheckBox)v.findViewById(R.id.notelistitem_noteselect);
+//				if(cb!=null){
+//					boolean b = cb.isChecked();
+//					if(b==true){
+//						int iID = (int)m_myAdapter.getItemId(i);
+//						alIDs.add(new Integer(iID));
+//					}
+//				}
+//			}
+//		}
+//	}
 	private void Move2Folder(ArrayList<Integer> alIDs, int id)
 	{
 		int count = alIDs.size();

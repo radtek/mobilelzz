@@ -776,9 +776,16 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		boolean bRet = false;
 		EditText etDetail = (EditText) findViewById(R.id.ET_main_Memo);
 		String temp = etDetail.getText().toString();
-		if(!temp.equals(m_NoteInfoFromDB.strDetail)){
-			bRet = true;
+		if(m_NoteInfoFromDB.strDetail!=null){
+			if(!temp.equals(m_NoteInfoFromDB.strDetail)){
+				bRet = true;
+			}
+		}else{
+			if(!temp.equals("")){
+				bRet = true;
+			}
 		}
+		
 		return bRet;
 	}
 	private boolean CheckVoice(){
@@ -821,7 +828,10 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		FillTextInfo(clNoteInfo);
 		FillVoiceInfo(clNoteInfo);
 		FillRemindInfo(clNoteInfo);
-		SaveChagedNoteInfo(clNoteInfo);
+		int r = SaveChagedNoteInfo(clNoteInfo);
+		if(r==0){
+			NoteWithYourMind.this.finish();	
+		}
 		
 //		//取得Memo信息
 //		EditText memotext = (EditText) findViewById(R.id.ET_main_Memo);
@@ -864,15 +874,23 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     
     private int SaveChagedNoteInfo(CMemoInfo clNoteInfo)
     {
-    	/*
-
-    	*/
     	clNoteInfo.iId = m_ExtraData_EditNoteID;
     	if(m_ExtraData_PreID!=CommonDefine.g_int_Invalid_ID){
     		clNoteInfo.iPreId			=	m_ExtraData_PreID;	
     	}
     	clNoteInfo.iType			=	CMemoInfo.Type_Memo;
-
+    	if(clNoteInfo.strDetail==null || clNoteInfo.strDetail.equals("")){
+    		if(clNoteInfo.iIsRemind == CMemoInfo.IsRemind_Yes){
+    			clNoteInfo.strDetail="提醒***";
+    		}else if(clNoteInfo.iIsRemind == CMemoInfo.IsHaveAudioData_Yes){
+    			clNoteInfo.strDetail="语音***";
+    		}else{
+    			Toast toast = Toast.makeText(NoteWithYourMind.this, "请输入内容", Toast.LENGTH_SHORT);
+        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+        		toast.show();
+        		return CommonDefine.E_FAIL;
+    		}
+    	}
     	int	_id	=	m_clCNoteDBCtrl.Update(clNoteInfo);
     	m_NoteInfoFromDB = clNoteInfo;
 //		if( null != m_clCRemindInfo )

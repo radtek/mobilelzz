@@ -36,6 +36,7 @@
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:scrollbars="vertical"
+		android:fillViewport="true"
 		android:layout_above="@id/editnote_toolbar"
 		>
 		<LinearLayout
@@ -161,7 +162,7 @@
 			android:orientation="vertical"
 			android:layout_width="fill_parent"
 			android:layout_height="0dp"
-			android:layout_weight="1"
+			android:layout_weight="1.5"
 			android:visibility="gone"
 			>
 				<LinearLayout
@@ -227,7 +228,7 @@
 				android:id="@+id/ET_main_Memo"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:layout_weight="6"
+				android:layout_weight="4"
 				android:textSize="22sp"
 				android:gravity = "top"
 				android:layout_marginLeft="3dip"

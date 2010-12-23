@@ -96,7 +96,8 @@ public final class CRemindOperator
 	    {
 	    	CMemoInfo	clCMemoInfo	=	new	CMemoInfo();
 	    	clCMemoInfo.iIsRemindAble	=	CMemoInfo.IsRemind_Able_No;
-	    	m_clCNoteDBCtrl.Update(_id, clCMemoInfo );
+	    	clCMemoInfo.iId = _id;
+	    	m_clCNoteDBCtrl.Update( clCMemoInfo );
 	    }
 	    else if( CommonDefine.Remind_Type_Week == clCRemindInfo.m_iType )		//—≠ª∑Ã·–—
 	    {

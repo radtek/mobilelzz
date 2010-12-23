@@ -449,7 +449,8 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		for(int i = 0; i < count; i++ )
 		{
 			int iId = alIDs.get(i);
-			m_clCNoteDBCtrl.Update(iId, clRec);
+			clRec.iId = iId;
+			m_clCNoteDBCtrl.Update(clRec);
 		}
 	}
 	private void confirmPassword(int iDBRecID){

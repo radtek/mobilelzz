@@ -1,4 +1,6 @@
 package com.main;
+import java.util.Calendar;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -188,13 +190,14 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		m_db.update(DB_TABLE_PassWord, initialValues, null, null);
 		
 	}
-	public	long Create( CMemoInfo clCMemoInfo )
+	public	int Create( CMemoInfo clCMemoInfo )
 	{
 		//m_db.execSQL("insert into DB_TABLE("+KEY_preid+","+KEY_type+","+KEY_isremind+","+KEY_remindtime+","+KEY_createtime+","+KEY_lastmodifytime+","+
 		//		KEY_iseditenable+","+KEY_remindmask+","+KEY_detail+") values(?,?,?,?,?,?,?,?,?)"
 		//			, new Object[]{clCMemoInfo.iPreId,clCMemoInfo.iType,clCMemoInfo.iIsRemind
 		//			,clCMemoInfo.dRemindTime,clCMemoInfo.dCreateTime,clCMemoInfo.dLastModifyTime,clCMemoInfo.iIsEditEnable,
 		//			clCMemoInfo.iRemindMask,clCMemoInfo.strDetail} );
+		clCMemoInfo.dCreateTime		=	System.currentTimeMillis();
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_preid, clCMemoInfo.iPreId);
 		initialValues.put(KEY_type, clCMemoInfo.iType);
@@ -218,7 +221,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		initialValues.put(KEY_isHaveAudioData, clCMemoInfo.iIsHaveAudioData);
 		initialValues.put(KEY_audioDataName, clCMemoInfo.strAudioFileName);
 
-		return	m_db.insert(DB_TABLE, KEY_id, initialValues);
+		return	(int)m_db.insert(DB_TABLE, KEY_id, initialValues);
 	}
 
 	public	void Delete( Integer[] id )
@@ -232,115 +235,106 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		}	
 	}
 	
-	public	void Update( int id, CMemoInfo clCMemoInfo )
+	public	int Update( CMemoInfo clCMemoInfo )
 	{
-//		SQLiteDatabase db=this.getWritableDatabase();
-		ContentValues cv=new ContentValues();
-		if ( -1 != clCMemoInfo.iPreId )
-		{
-			cv.put(KEY_preid, clCMemoInfo.iPreId.toString());
+		Calendar		clCalendar	=	Calendar.getInstance();
+		clCMemoInfo.dLastModifyTime =	clCalendar.getTimeInMillis();
+    	
+		int iEffectedID = CommonDefine.g_int_Invalid_ID;
+		int id = clCMemoInfo.iId;
+		if(id == CommonDefine.g_int_Invalid_ID){
+			iEffectedID = Create(clCMemoInfo);
+		}else{
+			ContentValues cv=new ContentValues();
+			if ( -1 != clCMemoInfo.iPreId )
+			{
+				cv.put(KEY_preid, clCMemoInfo.iPreId.toString());
+			}
+			if ( -1 != clCMemoInfo.iType )
+			{
+				cv.put(KEY_type, clCMemoInfo.iType.toString());
+			}
+			if ( -1 != clCMemoInfo.iIsRemind )
+			{
+				cv.put(KEY_isremind, clCMemoInfo.iIsRemind.toString());
+			}
+			if ( -1 != clCMemoInfo.dRemindTime )
+			{
+				cv.put(KEY_remindtime, Long.toString(clCMemoInfo.dRemindTime));
+			}
+			if ( -1 != clCMemoInfo.dCreateTime )
+			{
+				cv.put(KEY_createtime, Long.toString(clCMemoInfo.dCreateTime));
+			}
+			if ( -1 != clCMemoInfo.dLastModifyTime )
+			{
+				cv.put(KEY_lastmodifytime, Long.toString(clCMemoInfo.dLastModifyTime));
+			}
+			if ( -1 != clCMemoInfo.iIsEditEnable )
+			{
+				cv.put(KEY_iseditenable, clCMemoInfo.iIsEditEnable.toString());
+			}
+			if ( -1 != clCMemoInfo.iIsRemindAble )
+			{
+				cv.put(KEY_isremindable, clCMemoInfo.iIsRemindAble.toString());
+			}
+			if ( -1 != clCMemoInfo.RemindType )
+			{
+				cv.put(KEY_remindtype, clCMemoInfo.RemindType.toString());
+			}
+			if ( null != clCMemoInfo.strDetail )
+			{
+				cv.put(KEY_detail, clCMemoInfo.strDetail);
+			}
+			if ( null != clCMemoInfo.strPassword )
+			{
+				cv.put(KEY_password, clCMemoInfo.strPassword);
+			}
+			if ( -1 != clCMemoInfo.iIsEncode)
+			{
+				cv.put(KEY_isencode, clCMemoInfo.iIsEncode.toString());
+			}
+			if ( -1 != clCMemoInfo.m_Week[0])
+			{
+				cv.put(KEY_monday, clCMemoInfo.m_Week[0].toString());
+			}
+			if ( -1 != clCMemoInfo.m_Week[1])
+			{
+				cv.put(KEY_tuesday, clCMemoInfo.m_Week[1].toString());
+			}
+			if ( -1 != clCMemoInfo.m_Week[2])
+			{
+				cv.put(KEY_wednesday, clCMemoInfo.m_Week[2].toString());
+			}
+			if ( -1 != clCMemoInfo.m_Week[3])
+			{
+				cv.put(KEY_thursday, clCMemoInfo.m_Week[3].toString());
+			}
+			
+			if ( -1 != clCMemoInfo.m_Week[4])
+			{
+				cv.put(KEY_friday, clCMemoInfo.m_Week[4].toString());
+			}
+			if ( -1 != clCMemoInfo.m_Week[5])
+			{
+				cv.put(KEY_staturday, clCMemoInfo.m_Week[5].toString());
+			}
+			if ( -1 != clCMemoInfo.m_Week[6])
+			{
+				cv.put(KEY_sunday, clCMemoInfo.m_Week[6].toString());
+			}
+			if ( -1 != clCMemoInfo.iIsHaveAudioData)
+			{
+				cv.put(KEY_isHaveAudioData, clCMemoInfo.iIsHaveAudioData);
+			}
+			if ( null != clCMemoInfo.strAudioFileName)
+			{
+				cv.put(KEY_audioDataName, clCMemoInfo.strAudioFileName);
+			}
+			String[] whereValue={ Integer.toString(id)};
+			iEffectedID = m_db.update(DB_TABLE, cv, KEY_id+"=?", whereValue);
 		}
 		
-		if ( -1 != clCMemoInfo.iType )
-		{
-			cv.put(KEY_type, clCMemoInfo.iType.toString());
-		}
-		
-		if ( -1 != clCMemoInfo.iIsRemind )
-		{
-			cv.put(KEY_isremind, clCMemoInfo.iIsRemind.toString());
-		}
-		
-		if ( -1 != clCMemoInfo.dRemindTime )
-		{
-			cv.put(KEY_remindtime, Long.toString(clCMemoInfo.dRemindTime));
-		}
-		
-		if ( -1 != clCMemoInfo.dCreateTime )
-		{
-			cv.put(KEY_createtime, Long.toString(clCMemoInfo.dCreateTime));
-		}
-		
-		if ( -1 != clCMemoInfo.dLastModifyTime )
-		{
-			cv.put(KEY_lastmodifytime, Long.toString(clCMemoInfo.dLastModifyTime));
-		}
-		
-		if ( -1 != clCMemoInfo.iIsEditEnable )
-		{
-			cv.put(KEY_iseditenable, clCMemoInfo.iIsEditEnable.toString());
-		}
-		
-		if ( -1 != clCMemoInfo.iIsRemindAble )
-		{
-			cv.put(KEY_isremindable, clCMemoInfo.iIsRemindAble.toString());
-		}
-		
-		if ( -1 != clCMemoInfo.RemindType )
-		{
-			cv.put(KEY_remindtype, clCMemoInfo.RemindType.toString());
-		}
-		
-		if ( null != clCMemoInfo.strDetail )
-		{
-			cv.put(KEY_detail, clCMemoInfo.strDetail);
-		}
-		
-		if ( null != clCMemoInfo.strPassword )
-		{
-			cv.put(KEY_password, clCMemoInfo.strPassword);
-		}
-		
-		if ( -1 != clCMemoInfo.iIsEncode)
-		{
-			cv.put(KEY_isencode, clCMemoInfo.iIsEncode.toString());
-		}
-		
-		if ( -1 != clCMemoInfo.m_Week[0])
-		{
-			cv.put(KEY_monday, clCMemoInfo.m_Week[0].toString());
-		}
-		
-		if ( -1 != clCMemoInfo.m_Week[1])
-		{
-			cv.put(KEY_tuesday, clCMemoInfo.m_Week[1].toString());
-		}
-		
-		if ( -1 != clCMemoInfo.m_Week[2])
-		{
-			cv.put(KEY_wednesday, clCMemoInfo.m_Week[2].toString());
-		}
-		
-		if ( -1 != clCMemoInfo.m_Week[3])
-		{
-			cv.put(KEY_thursday, clCMemoInfo.m_Week[3].toString());
-		}
-		
-		if ( -1 != clCMemoInfo.m_Week[4])
-		{
-			cv.put(KEY_friday, clCMemoInfo.m_Week[4].toString());
-		}
-		
-		if ( -1 != clCMemoInfo.m_Week[5])
-		{
-			cv.put(KEY_staturday, clCMemoInfo.m_Week[5].toString());
-		}
-		
-		if ( -1 != clCMemoInfo.m_Week[6])
-		{
-			cv.put(KEY_sunday, clCMemoInfo.m_Week[6].toString());
-		}
-		if ( -1 != clCMemoInfo.iIsHaveAudioData)
-		{
-			cv.put(KEY_isHaveAudioData, clCMemoInfo.iIsHaveAudioData);
-		}
-		if ( null != clCMemoInfo.strAudioFileName)
-		{
-			cv.put(KEY_audioDataName, clCMemoInfo.strAudioFileName);
-		}
-		
-		String[] whereValue={ Integer.toString(id)};
-		
-		m_db.update(DB_TABLE, cv, KEY_id+"=?", whereValue);
+		return iEffectedID;
 	}
 }

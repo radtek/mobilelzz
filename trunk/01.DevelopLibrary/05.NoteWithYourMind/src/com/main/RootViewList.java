@@ -439,7 +439,8 @@ implements ListActivityCtrl, View.OnClickListener
 						clCMemoInfo.strDetail = strFolderNameNew;
 					    c = Calendar.getInstance();
 						clCMemoInfo.dLastModifyTime = c.getTimeInMillis();	
-						m_clCNoteDBCtrl.Update(m_iContextMenu_DBID,clCMemoInfo);
+						clCMemoInfo.iId = m_iContextMenu_DBID;
+						m_clCNoteDBCtrl.Update(clCMemoInfo);
 						m_NoteListUICtrl.updateListData(CommonDefine.g_int_Invalid_ID);
 						
 						dialog.cancel();
@@ -498,7 +499,8 @@ implements ListActivityCtrl, View.OnClickListener
 						clCMemoInfo.iIsEncode = CMemoInfo.IsEncode_Yes;						;
 						c = Calendar.getInstance();
 						clCMemoInfo.dLastModifyTime = c.getTimeInMillis();	
-						m_clCNoteDBCtrl.Update(m_iContextMenu_DBID,clCMemoInfo);
+						clCMemoInfo.iId = m_iContextMenu_DBID;
+						m_clCNoteDBCtrl.Update(clCMemoInfo);
 						m_NoteListUICtrl.updateListData(CommonDefine.g_int_Invalid_ID);
 	        			Toast toast = Toast.makeText(RootViewList.this, "已设置查看锁", Toast.LENGTH_SHORT);
 	            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
@@ -535,7 +537,8 @@ implements ListActivityCtrl, View.OnClickListener
 	 						    c = Calendar.getInstance();
 								clCMemoInfo.dLastModifyTime = c.getTimeInMillis();							
 			            		clCMemoInfo.iIsEncode	=	CMemoInfo.IsEncode_No;
-			            		m_clCNoteDBCtrl.Update(m_iContextMenu_DBID,clCMemoInfo);     		
+			            		clCMemoInfo.iId = m_iContextMenu_DBID;
+			            		m_clCNoteDBCtrl.Update(clCMemoInfo);     		
 			            		m_NoteListUICtrl.updateListData(CommonDefine.g_int_Invalid_ID);
 			            		Toast toast = Toast.makeText(RootViewList.this, "已取消查看锁", Toast.LENGTH_SHORT);
 			            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );

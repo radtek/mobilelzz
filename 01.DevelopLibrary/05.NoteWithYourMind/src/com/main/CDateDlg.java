@@ -2,6 +2,8 @@ package com.main;
 
 //package com.main;n
 /* import相关class */
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.view.View;
 import android.view.Window;
@@ -22,17 +24,17 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
 	public CDateDlg(Activity context)
 	{
 		super(context);
-		m_iYear		=	CommonDefine.g_int_Invalid_ID;
-		m_iMonth	=	CommonDefine.g_int_Invalid_ID;
-		m_iDay		=	CommonDefine.g_int_Invalid_ID;
+//		m_iYear		=	CommonDefine.g_int_Invalid_ID;
+//		m_iMonth	=	CommonDefine.g_int_Invalid_ID;
+//		m_iDay		=	CommonDefine.g_int_Invalid_ID;
 		
-//		Calendar clCalendar	=	Calendar.getInstance();
-//		clCalendar.setTimeInMillis(System.currentTimeMillis());
-//		m_iYear		=	clCalendar.get(Calendar.YEAR);
-//		m_iMonth	=	clCalendar.get(Calendar.MONTH);
-//		m_iDay		=	clCalendar.get(Calendar.DAY_OF_MONTH);
-//		
-//		saveData( m_iYear, m_iMonth, m_iDay );
+		Calendar clCalendar	=	Calendar.getInstance();
+		clCalendar.setTimeInMillis(System.currentTimeMillis());
+		m_iYear		=	clCalendar.get(Calendar.YEAR);
+		m_iMonth	=	clCalendar.get(Calendar.MONTH);
+		m_iDay		=	clCalendar.get(Calendar.DAY_OF_MONTH);
+		
+		saveData( m_iYear, m_iMonth, m_iDay );
 	}
 	
 	public void setDisplay( )
@@ -97,6 +99,6 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
 
 		DateTxt.setText(Integer.toString(iYear) + "年" + Integer.toString( iMonth+1 ) + "月" + Integer.toString(iDay) + "日" );
 		
-		RemindActivity.m_iType	=	3;
+		RemindActivity.m_iType	=	CommonDefine.Remind_Type_Once;
 	}
 }

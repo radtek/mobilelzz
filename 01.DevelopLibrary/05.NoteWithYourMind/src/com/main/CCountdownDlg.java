@@ -100,7 +100,7 @@ public class CCountdownDlg extends CommentOutDlg implements View.OnClickListener
 			CountDownTxt.setText(Integer.toString(iHour) + "小时"+ Integer.toString(iMinute)+"分钟后提醒" );
 		}
 		
-		RemindActivity.m_iType	=	1;
+		RemindActivity.m_iType	=	CommonDefine.Remind_Type_CountDown;
 	}
 
 }

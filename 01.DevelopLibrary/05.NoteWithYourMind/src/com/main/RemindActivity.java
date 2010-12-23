@@ -1,11 +1,10 @@
 package com.main;
 
-import java.util.Calendar;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -116,6 +115,17 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     	}
     }
     
+    public boolean onKeyDown(int keyCode, KeyEvent event) 
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        { 
+        	Intent intent = new Intent(RemindActivity.this, NoteWithYourMind.class);
+        	intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
+        	return	true;
+        } 
+        return super.onKeyDown(keyCode, event); 
+    } 
+    
     //响应按下的处理
     private void processSaveTime(View view)
     {
@@ -199,14 +209,14 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       if ( null != clTemp )		//	取得传入数据非空
       {
       	m_clCRemindInfo	=	clTemp;
-      	if( m_clCRemindInfo.m_iType == 1 )					//倒计时提醒
+      	if( m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_CountDown )					//倒计时提醒
       	{
       		CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
       		m_clCRemindInfo.getCutDownTime( clCDateAndTime );
       		m_clCCountdownDlg.saveData( clCDateAndTime.iHour, clCDateAndTime.iMinute ); 
       		rbCountdown.setChecked(true);
       	}
-      	else if( m_clCRemindInfo.m_iType == 2 )				//循环提醒
+      	else if( m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_Week)				//循环提醒
       	{       		
       		CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
       		byte	week[]	=	new	byte[ 7 ];
@@ -219,7 +229,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       		
       		m_clCWeekDlg.setInputSatus ( week );  		     		
       	}
-      	else if(  m_clCRemindInfo.m_iType == 3 )				//单次提醒
+      	else if(  m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_Once )				//单次提醒
       	{
       		CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
       		

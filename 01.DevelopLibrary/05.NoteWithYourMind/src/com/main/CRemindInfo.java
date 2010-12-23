@@ -41,11 +41,15 @@ public class CRemindInfo implements Serializable
 		clCDateAndTime.iHour	=	(int) (m_lTime >> 16);
 		clCDateAndTime.iMinute	=	(int) m_lTime & 0x0000ffff;
 		
-		int iLength	=	m_Week.length;
-		for( int i = 0; i < iLength; ++i )
+		if ( null != week )
 		{
-			week[ i ]	=	m_Week[ i ];
+			int iLength	=	m_Week.length;
+			for( int i = 0; i < iLength; ++i )
+			{
+				week[ i ]	=	m_Week[ i ];
+			}		
 		}
+
 	}
 	
 	public	String	getCountDownBySting()	//取得距离下次提醒还有多长时间的字符串

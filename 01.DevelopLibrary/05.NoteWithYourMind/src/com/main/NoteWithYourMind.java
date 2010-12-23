@@ -137,7 +137,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
 			CommonDefine.m_clCNoteDBCtrl = m_clCNoteDBCtrl;
 		}
-		m_NoteInfoFromDB = new CMemoInfo();
+		
+//		m_clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Invalid );
     	//点击保存Button，进行新增或更新操作
 		m_SaveBT	=	(ImageButton) findViewById(R.id.editnote_toolbar_save);
 		m_SaveBT.setOnClickListener(this);
@@ -359,7 +360,6 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     	Week[4]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx5);
     	Week[5]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx6);
     	Week[6]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx7);
-    	TextView	Type	=	(TextView)findViewById(R.id.editnote_remindinfo_type);
     	
     	TextView	Status	=	(TextView)findViewById(R.id.editnote_remindinfo_status);
     	TextView	CountDownTime	=	(TextView)findViewById(R.id.editnote_remindinfo_nextremind);
@@ -378,18 +378,10 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     			
     			CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
     			clRemindInfo.getNormalTime( clCDateAndTime );
-    			Time.setText("提醒时间 : " + String.valueOf(clCDateAndTime.iYear) + "年" + String.valueOf(clCDateAndTime.iMonth+1) + "月"
-    						+ String.valueOf(clCDateAndTime.iDay)+ "日" + String.valueOf(clCDateAndTime.iHour) + "小时" 
-    						+ String.valueOf(clCDateAndTime.iMinute) + "分");
-	    			
-	    		if ( CommonDefine.Remind_Type_CountDown == clRemindInfo.m_iType )
-	        	{
-	    				Type.setText("提醒类型 : 倒计时" );
-	    		}
-				else
-				{
-					Type.setText("提醒类型 : 单次" );
-				}      		
+    			Time.setText( String.valueOf(clCDateAndTime.iYear) + "/" + String.valueOf(clCDateAndTime.iMonth+1) + "/"
+    						+ String.valueOf(clCDateAndTime.iDay) + " " + String.valueOf(clCDateAndTime.iHour) + ":" 
+    						+ String.valueOf(clCDateAndTime.iMinute));
+	    			   		
 	        }
         	else if( CommonDefine.Remind_Type_Week == clRemindInfo.m_iType )
         	{
@@ -405,10 +397,11 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     					Week[i].setTextColor(Color.WHITE);
     				}
     			}
-    			Time.setVisibility(View.GONE); 
-    			
-    			Type.setText("提醒类型 : 循环" );
         		
+    			CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
+    			clRemindInfo.getWeekTime( clCDateAndTime, null );
+    			Time.setText( String.valueOf(clCDateAndTime.iHour) + ":" + String.valueOf(clCDateAndTime.iMinute));
+    			    		
         	}
         	else
         	{
@@ -427,7 +420,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     		String	strTemp	=	clRemindInfo.getCountDownBySting();
     		if ( null == strTemp ) 
     		{
-    			CountDownTime.setText( "下次提醒 : 已过期 ");
+    			CountDownTime.setText( "已过期 ");
     		}
     		else
     		{

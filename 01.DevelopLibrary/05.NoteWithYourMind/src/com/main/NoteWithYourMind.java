@@ -100,7 +100,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	private MediaPlayer											mMediaPlayer		= null;
 	private int													m_iCurrentVoiceDataDuration = CommonDefine.g_int_Invalid_ID;
 	
-	private CMemoInfo											m_NoteInfoFromDB = null;											
+	private CMemoInfo											m_NoteInfoFromDB = null;
+	private ImageButton											m_SaveBT = null;
 	///////////////////////onStart////////////////////////////////////////////////
 	public void onNewIntent(Intent intent)
 	{
@@ -138,8 +139,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		}
 		m_NoteInfoFromDB = new CMemoInfo();
     	//点击保存Button，进行新增或更新操作
-        ImageButton	clBTSave	=	(ImageButton) findViewById(R.id.editnote_toolbar_save);
-        clBTSave.setOnClickListener(this);
+		m_SaveBT	=	(ImageButton) findViewById(R.id.editnote_toolbar_save);
+		m_SaveBT.setOnClickListener(this);
         
         //录制语音Button
         clBTRecord	=	(ImageButton) findViewById(R.id.editnote_toolbar_recvoice);
@@ -713,18 +714,12 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	//删除录音文件
 	private void processDeleteClick(View view)
 	{
-		if(mMediaPlayer != null && mMediaPlayer.isPlaying())
-		{
-			mMediaPlayer.stop();			
-		}
-				
-  		if (myRecAudioFile != null && m_bSDCardExit)
-  		{
-  			if (myRecAudioFile.exists())
-  				myRecAudioFile.delete();       
-			
-			myRecAudioFile = null;
-		}
+//		if(mMediaPlayer != null && mMediaPlayer.isPlaying())
+//		{
+//			mMediaPlayer.stop();			
+//		}
+//				
+		myRecAudioFile = null;
   		hideVoicePanel();
 	}
 	
@@ -784,112 +779,159 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	/*--------------------------------------------------------------------------------------
 	 * 录音和播放的处理 end
 	 *--------------------------------------------------------------------------------------*/
-	
-	private void processSaveClick(View view){
-		//取得Memo信息
-		EditText memotext = (EditText) findViewById(R.id.ET_main_Memo);
-		String strMemoText = memotext.getText().toString();
+	private boolean CheckText(){
+		boolean bRet = false;
+		EditText etDetail = (EditText) findViewById(R.id.ET_main_Memo);
+		String temp = etDetail.getText().toString();
+		if(!temp.equals(m_NoteInfoFromDB.strDetail)){
+			bRet = true;
+		}
+		return bRet;
+	}
+	private boolean CheckVoice(){
+		boolean bRet = false;
+		if(myRecAudioFile!=null&&m_NoteInfoFromDB.strAudioFileName!=null){
+			if(!myRecAudioFile.getName().equals(m_NoteInfoFromDB.strAudioFileName)){
+				bRet = true;
+			}
+		}else if(myRecAudioFile==null&&m_NoteInfoFromDB.strAudioFileName==null){
+		}else{
+			bRet = true;
+			
+		}
+
+		return bRet;	
+	}
+	private boolean CheckRemind(){
+		boolean bRet = false;
 		
-		//取得提醒信息 - zhu.t : 提醒信息已经保存在 m_clCRemindInfo中
-		if( null != m_clCRemindInfo && CMemoInfo.IsRemind_Yes ==  m_clCRemindInfo.m_iIsRemind )
-		{
-			if(  CommonDefine.Remind_Type_Invalid != m_clCRemindInfo.m_iType 
-			&&   m_clCRemindInfo.m_iRemindAble == CMemoInfo.IsRemind_Able_Yes 
-			&&  !m_clCRemindInfo.checkTime())
-			{
-        		Toast toast = Toast.makeText(NoteWithYourMind.this, "提醒时间设定错误,请重新设定!", Toast.LENGTH_SHORT);
-        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-        		toast.show();
-        		return;
-			}
-		}
-		     		
-		if( strMemoText.length()>0 )
-		{
-			//保存用户设定的Memo和提醒信息
-			if ( 0 == SaveEditData( strMemoText ) )
-			{
-        		Toast toast = Toast.makeText(NoteWithYourMind.this, "保存成功", Toast.LENGTH_SHORT);
-        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-        		toast.show();
-        		NoteWithYourMind.this.finish();
-			}
-    		
-		}
-		//无输入信息
-		else
-		{
-			Toast toast = Toast.makeText(NoteWithYourMind.this, "请输入内容", Toast.LENGTH_SHORT);
-    		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-    		toast.show();
-		}
+		return bRet;
+	}
+	private void FillTextInfo(CMemoInfo clNoteInfo){
+		EditText etDetail = (EditText) findViewById(R.id.ET_main_Memo);
+		clNoteInfo.strDetail = etDetail.getText().toString();
+
+	}
+	private void FillVoiceInfo(CMemoInfo clNoteInfo){
+		clNoteInfo.iIsHaveAudioData = myRecAudioFile==null?CMemoInfo.IsHaveAudioData_No:CMemoInfo.IsHaveAudioData_Yes;
+		clNoteInfo.strAudioFileName = myRecAudioFile==null?null:myRecAudioFile.getName();
+
+	}
+	private void FillRemindInfo(CMemoInfo clNoteInfo){
+		
+	}
+	private void processSaveClick(View view){
+		/*
+
+		 */
+		CMemoInfo clNoteInfo = new CMemoInfo(); 
+		FillTextInfo(clNoteInfo);
+		FillVoiceInfo(clNoteInfo);
+		FillRemindInfo(clNoteInfo);
+		SaveChagedNoteInfo(clNoteInfo);
+		
+//		//取得Memo信息
+//		EditText memotext = (EditText) findViewById(R.id.ET_main_Memo);
+//		String strMemoText = memotext.getText().toString();
+//		
+//		//取得提醒信息 - zhu.t : 提醒信息已经保存在 m_clCRemindInfo中
+//		if( null != m_clCRemindInfo && CMemoInfo.IsRemind_Yes ==  m_clCRemindInfo.m_iIsRemind )
+//		{
+//			if(  CommonDefine.Remind_Type_Invalid != m_clCRemindInfo.m_iType 
+//			&&   m_clCRemindInfo.m_iRemindAble == CMemoInfo.IsRemind_Able_Yes 
+//			&&  !m_clCRemindInfo.checkTime())
+//			{
+//        		Toast toast = Toast.makeText(NoteWithYourMind.this, "提醒时间设定错误,请重新设定!", Toast.LENGTH_SHORT);
+//        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+//        		toast.show();
+//        		return;
+//			}
+//		}
+//		     		
+//		if( strMemoText.length()>0 )
+//		{
+//			//保存用户设定的Memo和提醒信息
+//			if ( 0 == SaveEditData( strMemoText ) )
+//			{
+//        		Toast toast = Toast.makeText(NoteWithYourMind.this, "保存成功", Toast.LENGTH_SHORT);
+//        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+//        		toast.show();
+//        		NoteWithYourMind.this.finish();
+//			}
+//    		
+//		}
+//		//无输入信息
+//		else
+//		{
+//			Toast toast = Toast.makeText(NoteWithYourMind.this, "请输入内容", Toast.LENGTH_SHORT);
+//    		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+//    		toast.show();
+//		}
 	}
     
-    private int SaveEditData(String strMemoText)
+    private int SaveChagedNoteInfo(CMemoInfo clNoteInfo)
     {
     	/*
-    	 如果时间有效
-    	 	保存时间
-    	 如果语音有效
-    	 	保存语音
-    	 如果文本有效
-    	 	保存文本
+
     	*/
-    	CMemoInfo		clCMemoInfo	=	new	CMemoInfo();
-    	
-    	Calendar		clCalendar	=	Calendar.getInstance();
-		clCMemoInfo.dLastModifyTime =	clCalendar.getTimeInMillis();
-		clCMemoInfo.strDetail		=	strMemoText;
-		if( null != m_clCRemindInfo )
-		{
-			clCMemoInfo.iIsRemind		=	m_clCRemindInfo.m_iIsRemind;
-			clCMemoInfo.iIsRemindAble	=	m_clCRemindInfo.m_iRemindAble;
-    		clCMemoInfo.RemindType		=	m_clCRemindInfo.m_iType;
-    		clCMemoInfo.dRemindTime		=	m_clCRemindInfo.m_lTime;
-    		clCMemoInfo.m_Week			=	m_clCRemindInfo.m_Week;
-		}
-		
-		if((myRecAudioFile!=null) && (myRecAudioFile.isFile())){
-			clCMemoInfo.iIsHaveAudioData = CMemoInfo.IsHaveAudioData_Yes;
-			clCMemoInfo.strAudioFileName = myRecAudioFile.getName();
-		}
-		
-		CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-    	
-    	if ( m_ExtraData_PreID != CMemoInfo.Id_Invalid )
-		{
-    		clCMemoInfo.iType			=	CMemoInfo.Type_Memo;
-        	clCMemoInfo.iPreId			=	m_ExtraData_PreID;
-        	clCMemoInfo.dCreateTime		=	System.currentTimeMillis();
-        	clCMemoInfo.dRemindTime		=	clCalendar.getTimeInMillis(); 
-        	long	_id	=	m_clCNoteDBCtrl.Create(clCMemoInfo);
-        	
-        	//保存提醒信息 - zhu.t
-        	
-        	if( m_clCRemindInfo != null && CommonDefine.Remind_Type_Invalid != m_clCRemindInfo.m_iType )
-        	{
-        		if ( CommonDefine.g_int_Invalid_ID != _id 
-        		  && CommonDefine.E_FAIL == clCRemindOperator.addRemind( this, (int)_id, m_clCRemindInfo) )
-				{
-					//设置提醒失败
-        			return	CommonDefine.E_FAIL;
-				}				
-        	}
-		}
-    	else if ( m_ExtraData_EditNoteID != CMemoInfo.Id_Invalid )
-		{
-			//编辑Memo
-			m_clCNoteDBCtrl.Update(m_ExtraData_EditNoteID,clCMemoInfo );
-			//判断是否需要更新提醒信息 - zhu.t
-			if ( m_clCRemindInfo!= null  )
-			{
-				if ( CommonDefine.E_FAIL == clCRemindOperator.editRemind(this, m_ExtraData_EditNoteID, m_clCRemindInfo ) )
-				{
-					//设置提醒失败
-        			return	CommonDefine.E_FAIL;			
-				}
-			}
-        }
+    	clNoteInfo.iId = m_ExtraData_EditNoteID;
+    	if(m_ExtraData_PreID!=CommonDefine.g_int_Invalid_ID){
+    		clNoteInfo.iPreId			=	m_ExtraData_PreID;	
+    	}
+    	clNoteInfo.iType			=	CMemoInfo.Type_Memo;
+
+    	int	_id	=	m_clCNoteDBCtrl.Update(clNoteInfo);
+    	m_NoteInfoFromDB = clNoteInfo;
+//		if( null != m_clCRemindInfo )
+//		{
+//			clCMemoInfo.iIsRemind		=	m_clCRemindInfo.m_iIsRemind;
+//			clCMemoInfo.iIsRemindAble	=	m_clCRemindInfo.m_iRemindAble;
+//    		clCMemoInfo.RemindType		=	m_clCRemindInfo.m_iType;
+//    		clCMemoInfo.dRemindTime		=	m_clCRemindInfo.m_lTime;
+//    		clCMemoInfo.m_Week			=	m_clCRemindInfo.m_Week;
+//		}
+//		
+//		if((myRecAudioFile!=null) && (myRecAudioFile.isFile())){
+//			clCMemoInfo.iIsHaveAudioData = CMemoInfo.IsHaveAudioData_Yes;
+//			clCMemoInfo.strAudioFileName = myRecAudioFile.getName();
+//		}
+//		
+//		CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
+//    	
+//    	if ( m_ExtraData_PreID != CMemoInfo.Id_Invalid )
+//		{
+//    		clCMemoInfo.iType			=	CMemoInfo.Type_Memo;
+//        	clCMemoInfo.iPreId			=	m_ExtraData_PreID;
+//        	clCMemoInfo.dCreateTime		=	System.currentTimeMillis();
+//        	clCMemoInfo.dRemindTime		=	clCalendar.getTimeInMillis(); 
+//        	long	_id	=	m_clCNoteDBCtrl.Create(clCMemoInfo);
+//        	
+//        	//保存提醒信息 - zhu.t
+//        	
+//        	if( m_clCRemindInfo != null && CommonDefine.Remind_Type_Invalid != m_clCRemindInfo.m_iType )
+//        	{
+//        		if ( CommonDefine.g_int_Invalid_ID != _id 
+//        		  && CommonDefine.E_FAIL == clCRemindOperator.addRemind( this, (int)_id, m_clCRemindInfo) )
+//				{
+//					//设置提醒失败
+//        			return	CommonDefine.E_FAIL;
+//				}				
+//        	}
+//		}
+//    	else if ( m_ExtraData_EditNoteID != CMemoInfo.Id_Invalid )
+//		{
+//			//编辑Memo
+//			m_clCNoteDBCtrl.Update(m_ExtraData_EditNoteID,clCMemoInfo );
+//			//判断是否需要更新提醒信息 - zhu.t
+//			if ( m_clCRemindInfo!= null  )
+//			{
+//				if ( CommonDefine.E_FAIL == clCRemindOperator.editRemind(this, m_ExtraData_EditNoteID, m_clCRemindInfo ) )
+//				{
+//					//设置提醒失败
+//        			return	CommonDefine.E_FAIL;			
+//				}
+//			}
+//        }
     	
     	return 0;
     }
@@ -958,6 +1000,41 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		if ((keyCode == KeyEvent.KEYCODE_BACK)) { 
         	if(clBTStopRecord.isClickable()){
         		clBTStopRecord.performClick();
+        	}
+        	boolean bTextChanged = CheckText();
+        	boolean bVoiceChanged = CheckVoice();
+        	boolean bRemindChanged = CheckRemind();
+        	String strMess = "有未保存内容：";
+        	if(bTextChanged){
+        		strMess += "文本 ";
+        	}
+        	if(bVoiceChanged){
+        		strMess += "语音 ";
+        	}
+        	if(bRemindChanged){
+        		strMess += "提醒 ";
+        	}
+        	if(bTextChanged||bVoiceChanged||bRemindChanged){
+        		new AlertDialog.Builder(this)
+                //.setIcon(R.drawable.clock)
+                .setTitle("保存提示")
+                .setMessage(strMess)
+                .setPositiveButton("保存",
+                 new DialogInterface.OnClickListener()
+                {
+                  public void onClick(DialogInterface dialog, int whichButton)
+                  {
+                	  m_SaveBT.performClick();
+                  }
+                })
+                .setNegativeButton("不保存",new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int i)
+					{
+						NoteWithYourMind.this.finish();
+					}
+				})
+                .show();
+        		return true;
         	}
         } 
         return super.onKeyDown(keyCode, event); 

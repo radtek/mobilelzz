@@ -818,6 +818,14 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 
 	}
 	private void FillRemindInfo(CMemoInfo clNoteInfo){
+		if ( null != m_clCRemindInfo )
+		{
+			clNoteInfo.iIsRemind		=	m_clCRemindInfo.m_iIsRemind;
+			clNoteInfo.iIsRemindAble	=	m_clCRemindInfo.m_iRemindAble;
+			clNoteInfo.RemindType		=	m_clCRemindInfo.m_iType;
+			clNoteInfo.dRemindTime		=	m_clCRemindInfo.m_lTime;
+			clNoteInfo.m_Week			=	m_clCRemindInfo.m_Week;	
+		}
 		
 	}
 	private void processSaveClick(View view){
@@ -828,10 +836,18 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		FillTextInfo(clNoteInfo);
 		FillVoiceInfo(clNoteInfo);
 		FillRemindInfo(clNoteInfo);
-		int r = SaveChagedNoteInfo(clNoteInfo);
-		if(r==0){
-			NoteWithYourMind.this.finish();	
+		int _id = SaveChagedNoteInfo(clNoteInfo);
+		CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
+		if( clNoteInfo.iId == CommonDefine.g_int_Invalid_ID && _id != CommonDefine.E_FAIL )
+		{
+			clCRemindOperator.addRemind( this, _id, m_clCRemindInfo);
 		}
+		else if( clNoteInfo.iId != CommonDefine.g_int_Invalid_ID  )
+		{
+			clCRemindOperator.editRemind( this, clNoteInfo.iId, m_clCRemindInfo);
+		}
+
+		NoteWithYourMind.this.finish();	
 		
 //		//取得Memo信息
 //		EditText memotext = (EditText) findViewById(R.id.ET_main_Memo);
@@ -944,7 +960,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 //			}
 //        }
     	
-    	return 0;
+    	return _id;
     }
 
 	 /*

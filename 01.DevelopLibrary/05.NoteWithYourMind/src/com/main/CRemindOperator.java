@@ -29,49 +29,48 @@ public final class CRemindOperator
     {
     	//外面使用时需要先将该条提醒Insert到DB中，然后再调用该方法
     	//Insert时和提醒相关的属性可以设置为无效，这里会进行Update
-		Calendar clCalendar	=	Calendar.getInstance();
-		clCalendar.setTimeInMillis(System.currentTimeMillis());
-	
-    	if ( CommonDefine.Remind_Type_CountDown == _clCRemindInfo.m_iType
-    	  || CommonDefine.Remind_Type_Once == _clCRemindInfo.m_iType )
+    	if ( _clCRemindInfo.m_iRemindAble == CMemoInfo.IsRemind_Able_Yes 
+    		&& _clCRemindInfo.m_iIsRemind == CMemoInfo.IsRemind_Yes )
     	{
-    		if ( clCalendar.getTimeInMillis() > _clCRemindInfo.m_lTime )
-    		{
-        		Toast toast = Toast.makeText(context, "提醒时间不正确，请重新设置!", Toast.LENGTH_SHORT);
-        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-        		toast.show();	
+    		Calendar clCalendar	=	Calendar.getInstance();
+    		clCalendar.setTimeInMillis(System.currentTimeMillis());
+    	
+        	if ( CommonDefine.Remind_Type_CountDown == _clCRemindInfo.m_iType
+        	  || CommonDefine.Remind_Type_Once == _clCRemindInfo.m_iType )
+        	{
+        		if ( clCalendar.getTimeInMillis() > _clCRemindInfo.m_lTime )
+        		{
+            		Toast toast = Toast.makeText(context, "提醒时间不正确，请重新设置!", Toast.LENGTH_SHORT);
+            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+            		toast.show();	
+            		
+            		return	CommonDefine.E_FAIL;
+        		}
         		
-        		return	CommonDefine.E_FAIL;
-    		}
-    		
-    		
-    		if ( _clCRemindInfo.m_iRemindAble	==	CMemoInfo.IsRemind_Able_Yes )
-    		{
     			AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
     	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
     	    	MyIntent.putExtra( "id", _id );
     	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, _id, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
     	    	alarmManager.set(AlarmManager.RTC_WAKEUP, _clCRemindInfo.m_lTime, pendingIntent);			
-    		}
 
-    	}
-    	else if ( CommonDefine.Remind_Type_Week == _clCRemindInfo.m_iType )
-    	{   		
-    		if ( _clCRemindInfo.m_iRemindAble	==	CMemoInfo.IsRemind_Able_Yes  )
-    		{
+
+        	}
+        	else if ( CommonDefine.Remind_Type_Week == _clCRemindInfo.m_iType )
+        	{   		
     	    	long firtTime	=	_clCRemindInfo.getFirstCycelRemindTime();
     			AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
     	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
     	    	MyIntent.putExtra( "id", _id );
     	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, _id, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-    	    	alarmManager.set(AlarmManager.RTC_WAKEUP, firtTime, pendingIntent);		
-    		} 		
+    	    	alarmManager.set(AlarmManager.RTC_WAKEUP, firtTime, pendingIntent);				
+        	}
+        	else
+        	{		
+        		//error
+        	}
+        	
     	}
-    	else
-    	{		
-    		//error
-    	}
-    	
+		
     	return	CommonDefine.S_OK;
     }
     

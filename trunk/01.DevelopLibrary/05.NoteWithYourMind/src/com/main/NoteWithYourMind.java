@@ -882,7 +882,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     	if(clNoteInfo.strDetail==null || clNoteInfo.strDetail.equals("")){
     		if(clNoteInfo.iIsRemind == CMemoInfo.IsRemind_Yes){
     			clNoteInfo.strDetail="Ã·–—***";
-    		}else if(clNoteInfo.iIsRemind == CMemoInfo.IsHaveAudioData_Yes){
+    		}else if(clNoteInfo.iIsHaveAudioData == CMemoInfo.IsHaveAudioData_Yes){
     			clNoteInfo.strDetail="”Ô“Ù***";
     		}else{
     			Toast toast = Toast.makeText(NoteWithYourMind.this, "«Î ‰»Îƒ⁄»›", Toast.LENGTH_SHORT);

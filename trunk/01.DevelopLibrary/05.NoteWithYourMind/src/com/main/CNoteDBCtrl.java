@@ -43,7 +43,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	private static final String	DB_TABLE				= "Notes";
 	private static final String	DB_TABLE_PassWord		= "PassWord";
 	// Êý¾Ý¿â°æ±¾
-	private static final int	DB_VERSION		= 2;
+	private static final int	DB_VERSION		= 1;
 	
 	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" 
 												+ KEY_id 				+ " INTEGER PRIMARY KEY AUTOINCREMENT," 
@@ -88,7 +88,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		db.execSQL( Trigger_CREATE );
 		db.execSQL( DB_CREATE_Table_PassWord );
 		ContentValues initialValues = new ContentValues();
-		initialValues.put(KEY_password, "");
+		initialValues.put(KEY_password, "123456");
 		db.insert(DB_TABLE_PassWord, KEY_id, initialValues);
 	}
 

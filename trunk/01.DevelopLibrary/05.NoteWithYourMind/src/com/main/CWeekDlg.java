@@ -252,7 +252,7 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
     		WeekTxt[6].setTextColor(Color.WHITE);
     	}
     	
-    	RemindActivity.m_iType	=	2;
+    	RemindActivity.m_iType	=	CommonDefine.Remind_Type_Week;
 
 	}
 }

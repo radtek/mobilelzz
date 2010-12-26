@@ -378,9 +378,11 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     			
     			CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
     			clRemindInfo.getNormalTime( clCDateAndTime );
-    			Time.setText( String.valueOf(clCDateAndTime.iYear) + "/" + String.valueOf(clCDateAndTime.iMonth+1) + "/"
-    						+ String.valueOf(clCDateAndTime.iDay) + " " + String.valueOf(clCDateAndTime.iHour) + ":" 
-    						+ String.valueOf(clCDateAndTime.iMinute));
+//    			Time.setText( String.valueOf(clCDateAndTime.iYear) + "/" + String.valueOf(clCDateAndTime.iMonth+1) + "/"
+//    						+ String.valueOf(clCDateAndTime.iDay) + " " + String.valueOf(clCDateAndTime.iHour) + ":" 
+//    						+ String.valueOf(clCDateAndTime.iMinute));
+    			Time.setText( String.format("%04d/%02d/%02d %02d:%02d", clCDateAndTime.iYear, clCDateAndTime.iMonth+1
+    						, clCDateAndTime.iDay, clCDateAndTime.iHour, clCDateAndTime.iMinute));
 	    			   		
 	        }
         	else if( CommonDefine.Remind_Type_Week == clRemindInfo.m_iType )
@@ -400,7 +402,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
         		
     			CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
     			clRemindInfo.getWeekTime( clCDateAndTime, null );
-    			Time.setText( String.valueOf(clCDateAndTime.iHour) + ":" + String.valueOf(clCDateAndTime.iMinute));
+ //   			Time.setText( String.valueOf(clCDateAndTime.iHour) + ":" + String.valueOf(clCDateAndTime.iMinute));
+    			Time.setText( String.format("%02d:%02d", clCDateAndTime.iHour, clCDateAndTime.iMinute));
     			    		
         	}
         	else
@@ -426,9 +429,10 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     		{
     			CountDownTime.setText( strTemp );
     		}
-    	}else{
-    		setRemindDisplay(false);
     	}
+//    	else{
+//    		setRemindDisplay(false);
+//    	}
     }
     private void updateDetail(String strDetail){
     	EditText EtOnce = (EditText) findViewById(R.id.ET_main_Memo);
@@ -865,85 +869,10 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     	}
     	int	_id	=	m_clCNoteDBCtrl.Update(clNoteInfo);
     	m_NoteInfoFromDB = clNoteInfo;
-//		if( null != m_clCRemindInfo )
-//		{
-//			clCMemoInfo.iIsRemind		=	m_clCRemindInfo.m_iIsRemind;
-//			clCMemoInfo.iIsRemindAble	=	m_clCRemindInfo.m_iRemindAble;
-//    		clCMemoInfo.RemindType		=	m_clCRemindInfo.m_iType;
-//    		clCMemoInfo.dRemindTime		=	m_clCRemindInfo.m_lTime;
-//    		clCMemoInfo.m_Week			=	m_clCRemindInfo.m_Week;
-//		}
-//		
-//		if((myRecAudioFile!=null) && (myRecAudioFile.isFile())){
-//			clCMemoInfo.iIsHaveAudioData = CMemoInfo.IsHaveAudioData_Yes;
-//			clCMemoInfo.strAudioFileName = myRecAudioFile.getName();
-//		}
-//		
-//		CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-//    	
-//    	if ( m_ExtraData_PreID != CMemoInfo.Id_Invalid )
-//		{
-//    		clCMemoInfo.iType			=	CMemoInfo.Type_Memo;
-//        	clCMemoInfo.iPreId			=	m_ExtraData_PreID;
-//        	clCMemoInfo.dCreateTime		=	System.currentTimeMillis();
-//        	clCMemoInfo.dRemindTime		=	clCalendar.getTimeInMillis(); 
-//        	long	_id	=	m_clCNoteDBCtrl.Create(clCMemoInfo);
-//        	
-//        	//保存提醒信息 - zhu.t
-//        	
-//        	if( m_clCRemindInfo != null && CommonDefine.Remind_Type_Invalid != m_clCRemindInfo.m_iType )
-//        	{
-//        		if ( CommonDefine.g_int_Invalid_ID != _id 
-//        		  && CommonDefine.E_FAIL == clCRemindOperator.addRemind( this, (int)_id, m_clCRemindInfo) )
-//				{
-//					//设置提醒失败
-//        			return	CommonDefine.E_FAIL;
-//				}				
-//        	}
-//		}
-//    	else if ( m_ExtraData_EditNoteID != CMemoInfo.Id_Invalid )
-//		{
-//			//编辑Memo
-//			m_clCNoteDBCtrl.Update(m_ExtraData_EditNoteID,clCMemoInfo );
-//			//判断是否需要更新提醒信息 - zhu.t
-//			if ( m_clCRemindInfo!= null  )
-//			{
-//				if ( CommonDefine.E_FAIL == clCRemindOperator.editRemind(this, m_ExtraData_EditNoteID, m_clCRemindInfo ) )
-//				{
-//					//设置提醒失败
-//        			return	CommonDefine.E_FAIL;			
-//				}
-//			}
-//        }
     	
     	return _id;
     }
 
-	 /*
-	 * menu.findItem(EXIT_ID);找到特定的MenuItem
-	 * MenuItem.setIcon.可以设置menu按钮的背景
-	 */
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		super.onCreateOptionsMenu(menu);
-//		MenuInflater inf = getMenuInflater();
-//		inf.inflate(R.menu.menu_mian_setting, menu);
-//		return true;
-//	}
-	
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		switch (item.getItemId()) {
-//		case ITEM0: 
-//				/*   menu button push action */ 
-//				
-//			break;
-//		case ITEM1: 
-//				/*   menu button push action */ 
-//			//EncodeSettingDlg();
-//			break;
-//
-//		}
-//		return super.onOptionsItemSelected(item);
-//	}
 	class PlayWatcherThread extends Thread {  
 	    int milliseconds;  
 	      

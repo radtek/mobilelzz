@@ -131,6 +131,7 @@ implements ListActivityCtrl, View.OnClickListener
 			}else{
 				
 			}
+			setIntent(null);
 		}else{
 			
 		}
@@ -315,8 +316,8 @@ implements ListActivityCtrl, View.OnClickListener
 		clCMemoInfo.dLastModifyTime = c.getTimeInMillis();							
 		clCMemoInfo.strDetail	=	strDetail;
 		clCMemoInfo.dCreateTime = c.getTimeInMillis();
-		m_clCNoteDBCtrl.Create(clCMemoInfo); 
-		m_NoteListUICtrl.updateListData(CommonDefine.g_int_Invalid_ID);
+		int id = m_clCNoteDBCtrl.Create(clCMemoInfo); 
+		m_NoteListUICtrl.updateListData(id);
 		
 	}
 	public boolean onCreateOptionsMenu(Menu menu) {

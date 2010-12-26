@@ -294,6 +294,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			        	index	=	curExtraMemo.getColumnIndex( CNoteDBCtrl.KEY_detail );
 	        	    	strDetail = curExtraMemo.getString( index );
 	        	    	m_NoteInfoFromDB.strDetail = strDetail;
+	        	    	index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_preid);
+	        	    	m_ExtraData_PreID = curExtraMemo.getInt(index);
 	        	    	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
 	        	    	m_clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Invalid );
 	            		if ( CommonDefine.E_FAIL == clCRemindOperator.getRemindInfo(curExtraMemo, m_clCRemindInfo))
@@ -856,7 +858,34 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		clCRemindOperator.processRemind(this, _id, m_clCRemindInfo);
 		
 		if(_id != CommonDefine.E_FAIL){
-			NoteWithYourMind.this.finish();	
+			if(clNoteInfo.iPreId==CMemoInfo.PreId_Root){
+				Intent intent = new Intent();
+				intent.putExtra(RootViewList.ExtraData_initListItemDBID, _id);
+				intent.setClass(this, RootViewList.class);
+				startActivity(intent);
+			}else{
+				int valueEncode = CommonDefine.g_int_Invalid_ID;
+				Cursor cr = m_clCNoteDBCtrl.getNoteRec(clNoteInfo.iPreId);
+				if(cr!=null){
+					cr.moveToFirst();
+					int index = cr.getColumnIndex(CNoteDBCtrl.KEY_isencode);
+					valueEncode = cr.getInt(index);
+					cr.close();
+				}
+				if(valueEncode==CMemoInfo.IsEncode_Yes){
+					Intent intent = new Intent();
+					intent.putExtra(RootViewList.ExtraData_initListItemDBID, clNoteInfo.iPreId);
+					intent.setClass(this, RootViewList.class);
+					startActivity(intent);
+				}else{
+					Intent intent = new Intent();
+					intent.putExtra(FolderViewList.ExtraData_initListItemDBID, _id);
+					intent.putExtra(FolderViewList.ExtraData_FolderDBID, clNoteInfo.iPreId);
+					intent.setClass(this, FolderViewList.class);
+					startActivity(intent);
+				}
+			}
+			this.finish();	
 		}
 		
 	}

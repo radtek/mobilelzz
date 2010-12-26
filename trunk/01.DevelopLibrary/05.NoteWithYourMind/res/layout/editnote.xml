@@ -218,7 +218,7 @@
 				android:id="@+id/ET_main_Memo"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:layout_weight="10"
+				android:layout_weight="20"
 				android:textSize="22sp"
 				android:gravity = "top"
 				android:layout_marginLeft="3dip"

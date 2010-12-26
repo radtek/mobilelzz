@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Calendar;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -25,11 +24,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
+import android.widget.SimpleCursorAdapter;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Toast;
 import android.view.View;
@@ -47,6 +50,7 @@ import android.os.Environment;
 import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Chronometer.OnChronometerTickListener;
+import android.text.TextPaint;
 import android.util.*;
 import android.net.Uri;
 import android.content.Intent;
@@ -102,6 +106,9 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 	
 	private CMemoInfo											m_NoteInfoFromDB = null;
 	private ImageButton											m_SaveBT = null;
+	private ImageButton											m_SaveAs = null;
+	
+	private AlertDialog 										m_dlgFolderList = null;
 	///////////////////////onStart////////////////////////////////////////////////
 	public void onNewIntent(Intent intent)
 	{
@@ -142,6 +149,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     	//点击保存Button，进行新增或更新操作
 		m_SaveBT	=	(ImageButton) findViewById(R.id.editnote_toolbar_save);
 		m_SaveBT.setOnClickListener(this);
+		m_SaveAs	=	(ImageButton) findViewById(R.id.editnote_toolbar_saveas);
+		m_SaveAs.setOnClickListener(this);
         
         //录制语音Button
         clBTRecord	=	(ImageButton) findViewById(R.id.editnote_toolbar_recvoice);
@@ -449,6 +458,9 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		switch(view.getId()){
 		case R.id.editnote_toolbar_save:
 			processSaveClick(view);
+		    break;
+		case R.id.editnote_toolbar_saveas:
+			processSaveAsClick(view);
 		    break;
 		case R.id.editnote_toolbar_recvoice:
 			processRevoiceClick(view);
@@ -847,6 +859,67 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 			NoteWithYourMind.this.finish();	
 		}
 		
+	}
+	
+	private void processSaveAsClick(View view){
+		LayoutInflater factory = LayoutInflater.from(this);
+		final View DialogView = factory.inflate(R.layout.folderlist, null);
+		
+		m_dlgFolderList = new AlertDialog.Builder(this)
+			.setTitle("请选择文件夹")
+			.setView(DialogView)
+			.setNegativeButton("取消",new DialogInterface.OnClickListener(){
+				public void onClick(DialogInterface dialog, int i)
+				{
+					dialog.cancel();
+				}
+			})
+			.create();
+		ListView folderList = (ListView) DialogView.findViewById(R.id.folderlist_view);
+		if(m_ExtraData_PreID!=CMemoInfo.PreId_Root){
+			TextView tvRootFolder = new TextView(this);
+			tvRootFolder.setText("根目录");
+			tvRootFolder.setPadding(2, 0, 0, 0);
+			tvRootFolder.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
+			tvRootFolder.setHeight(CommonDefine.g_int_ListItemHeight);
+			tvRootFolder.setTextColor(Color.WHITE);       				
+			TextPaint tp = tvRootFolder.getPaint(); 
+			tp.setFakeBoldText(true); 
+			folderList.addHeaderView(tvRootFolder);
+		}
+		Cursor cursorFolderList	=	m_clCNoteDBCtrl.getMemoFolderInRoot();
+		startManagingCursor(cursorFolderList);
+		if(cursorFolderList.getCount()>0){
+			if(cursorFolderList!=null){
+				ListAdapter LA_FolderList = new SimpleCursorAdapter(
+						this,
+						android.R.layout.simple_list_item_1,
+						cursorFolderList,
+						new String[]{CNoteDBCtrl.KEY_detail},
+						new int[]{android.R.id.text1}
+						);
+				folderList.setAdapter(LA_FolderList);
+			} 
+		}else{
+			Toast toast = Toast.makeText(this, "当前没有可以移动到的文件夹\n请先建立文件夹", Toast.LENGTH_LONG);
+    		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+    		toast.show();
+		}
+		
+		folderList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3){
+				ListAdapter LA = (ListAdapter)arg0.getAdapter();
+				long id = LA.getItemId(arg2);
+				if(id<0){
+					id = 0;
+				}
+				m_ExtraData_PreID = (int)id;
+				m_SaveBT.performClick();
+        		m_dlgFolderList.cancel();
+
+			}
+		});
+		m_dlgFolderList.show(); 
 	}
     
     private int SaveChagedNoteInfo(CMemoInfo clNoteInfo)

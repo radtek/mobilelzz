@@ -328,13 +328,14 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		}
 		else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Update )
 		{
-			m_clCRemindInfo =	( CRemindInfo )iExtraData.getSerializableExtra( ExtraData_RemindSetting );
-			if( null != m_clCRemindInfo && CMemoInfo.IsRemind_Yes == m_clCRemindInfo.m_iIsRemind )
+			CRemindInfo	clTemp	=	( CRemindInfo )iExtraData.getSerializableExtra( ExtraData_RemindSetting );
+			if( null != clTemp && CMemoInfo.IsRemind_Yes == clTemp.m_iIsRemind )
 			{
 				setRemindDisplay(true);
+				m_clCRemindInfo	=	clTemp;
 			}
 			
-			updateTime( m_clCRemindInfo );
+			updateTime( clTemp );
 		}
 		
 		ScrollView etNoteText = (ScrollView)findViewById(R.id.editnote_noteinfo_scroll);

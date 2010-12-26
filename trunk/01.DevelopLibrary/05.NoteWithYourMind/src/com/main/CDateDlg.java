@@ -24,9 +24,9 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
 	public CDateDlg(Activity context)
 	{
 		super(context);
-		m_iYear		=	CommonDefine.g_int_Invalid_ID;
-		m_iMonth	=	CommonDefine.g_int_Invalid_ID;
-		m_iDay		=	CommonDefine.g_int_Invalid_ID;
+		m_iYear		=	CommonDefine.g_int_Invalid_Time;
+		m_iMonth	=	CommonDefine.g_int_Invalid_Time;
+		m_iDay		=	CommonDefine.g_int_Invalid_Time;
 		
 //		Calendar clCalendar	=	Calendar.getInstance();
 //		clCalendar.setTimeInMillis(System.currentTimeMillis());
@@ -45,9 +45,9 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
         setProperty();
         setTitle("日期设定");
         
-        if( CommonDefine.g_int_Invalid_ID != m_iYear 
-        &&  CommonDefine.g_int_Invalid_ID != m_iMonth 
-        &&  CommonDefine.g_int_Invalid_ID != m_iDay )
+        if( CommonDefine.g_int_Invalid_Time != m_iYear 
+        &&  CommonDefine.g_int_Invalid_Time != m_iMonth 
+        &&  CommonDefine.g_int_Invalid_Time != m_iDay )
         {
         	m_dp.updateDate( m_iYear, m_iMonth, m_iDay );
         }

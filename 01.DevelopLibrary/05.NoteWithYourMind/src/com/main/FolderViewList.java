@@ -13,7 +13,7 @@ import android.widget.ListView;
 public class FolderViewList extends Activity implements ListActivityCtrl
 {
 	public static String ExtraData_FolderDBID = "com.main.ExtraData_DBID";	
-
+	public static String ExtraData_initListItemDBID		=	"com.main.ExtraData_RootList_initListItemDBID";
 	private String m_strFolderName = "";
 	private Integer m_iEncodeFlag = CMemoInfo.IsEncode_Invalid;
 	private Integer m_iRemindFlag = CMemoInfo.IsRemind_Invalid;
@@ -75,6 +75,18 @@ public class FolderViewList extends Activity implements ListActivityCtrl
 	public void onResume()
 	{
 		super.onResume();
+		Intent extra = getIntent();
+		if(extra!=null){
+			int initListItemDBID = extra.getIntExtra(ExtraData_initListItemDBID, CommonDefine.g_int_Invalid_ID);
+			if(initListItemDBID!=CommonDefine.g_int_Invalid_ID){
+				m_NoteListUICtrl.updateListData(initListItemDBID);
+			}else{
+				
+			}
+			setIntent(null);
+		}else{
+			
+		}
 	}
 	public void onDestroy()
 	{

@@ -403,6 +403,14 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 			 * 查找initListItemDBID对应的pos
 			 * 移动list光标到pos
 			 */
+			int initPos = CommonDefine.g_int_Invalid_ID;
+			int count = m_myAdapter.getCount();
+			for(int i = 0; i < count; i++ ){
+				if(initListItemDBID == m_myAdapter.getItemId(i)){
+					initPos = i;
+				}
+			}
+			m_targetList.setSelectionFromTop(initPos, 20);
 		}
 	}
 	

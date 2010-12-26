@@ -19,8 +19,8 @@ public class CTimeDlg extends CommentOutDlg implements View.OnClickListener
 	public CTimeDlg(Activity context )
 	{
 		super(context);
-		m_iHour		=	CommonDefine.g_int_Invalid_ID;
-		m_iMinute	=	CommonDefine.g_int_Invalid_ID;
+		m_iHour		=	CommonDefine.g_int_Invalid_Time;
+		m_iMinute	=	CommonDefine.g_int_Invalid_Time;
 
 	}
 	
@@ -29,7 +29,7 @@ public class CTimeDlg extends CommentOutDlg implements View.OnClickListener
         setContentView(R.layout.time);
         m_Tp	=	(TimePicker)findViewById(R.id.TimePicker01);
         m_Tp.setIs24HourView( true );
-        if( m_iHour != -1 && m_iMinute != -1 )
+        if( m_iHour != CommonDefine.g_int_Invalid_Time && m_iMinute != CommonDefine.g_int_Invalid_Time )
         {
         	m_Tp.setCurrentHour(m_iHour);
         	m_Tp.setCurrentMinute(m_iMinute);

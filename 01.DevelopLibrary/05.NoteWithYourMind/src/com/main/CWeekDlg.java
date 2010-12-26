@@ -21,7 +21,7 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
 		int	length	=	m_bWeek.length;
 		for ( int i = 0; i < length; ++i )
 		{
-			m_bWeek[ i ]	=	(byte)CommonDefine.g_int_Invalid_ID;
+			m_bWeek[ i ]	=	(byte)CommonDefine.g_int_Invalid_Time;
 		}
 	}
 	

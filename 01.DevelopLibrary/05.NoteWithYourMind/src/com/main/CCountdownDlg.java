@@ -19,8 +19,8 @@ public class CCountdownDlg extends CommentOutDlg implements View.OnClickListener
 	public CCountdownDlg(Activity context )
 	{
 		super(context);
-		m_iHour			=	CommonDefine.g_int_Invalid_ID;
-		m_iMinute		=	CommonDefine.g_int_Invalid_ID;
+		m_iHour			=	CommonDefine.g_int_Invalid_Time;
+		m_iMinute		=	CommonDefine.g_int_Invalid_Time;
 	}
 	
 	public void setDisplay()
@@ -30,8 +30,8 @@ public class CCountdownDlg extends CommentOutDlg implements View.OnClickListener
         m_Tp	=	(TimePicker)findViewById(R.id.TimePicker01);
         m_Tp.setIs24HourView( true );
         
-        if( ( m_iHour 	!= CommonDefine.g_int_Invalid_ID ) 
-         && ( m_iMinute != CommonDefine.g_int_Invalid_ID ) )
+        if( ( m_iHour 	!= CommonDefine.g_int_Invalid_Time ) 
+         && ( m_iMinute != CommonDefine.g_int_Invalid_Time ) )
         {
         	m_Tp.setCurrentHour(m_iHour);
         	m_Tp.setCurrentMinute(m_iMinute);

@@ -165,28 +165,28 @@
 					<ImageButton 
 					android:id="@+id/IMG_B_REC" 
 					android:layout_width="wrap_content" 
-					android:layout_height="fill_parent" 
+					android:layout_height="wrap_content" 
 					android:layout_weight="1"
 					android:src="@drawable/record">
 					</ImageButton>
 					<ImageButton 
 					android:id="@+id/IMG_B_STOP" 
 					android:layout_width="wrap_content" 
-					android:layout_height="fill_parent" 
+					android:layout_height="wrap_content" 
 					android:layout_weight="1"
 					android:src="@drawable/stop">
 					</ImageButton>
 					<ImageButton 
 					android:id="@+id/IMG_B_PLAY" 
 					android:layout_width="wrap_content" 
-					android:layout_height="fill_parent" 
+					android:layout_height="wrap_content" 
 					android:layout_weight="1"
 					android:src="@drawable/play">
 					</ImageButton>
 					<ImageButton 
 					android:id="@+id/IMG_B_DELETE" 
 					android:layout_width="wrap_content" 
-					android:layout_height="fill_parent" 
+					android:layout_height="wrap_content" 
 					android:layout_weight="1"
 					android:src="@drawable/delete">
 					</ImageButton>

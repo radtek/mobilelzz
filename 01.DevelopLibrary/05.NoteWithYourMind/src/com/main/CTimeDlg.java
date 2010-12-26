@@ -78,7 +78,8 @@ public class CTimeDlg extends CommentOutDlg implements View.OnClickListener
 		m_iMinute	=	iMinute;
 		
 		TextView	TimeTxt				=	(TextView)m_context.findViewById(R.id.Time_txt);
-		TimeTxt.setText(Integer.toString(iHour) + "小时"+ Integer.toString(iMinute)+"分钟" );
+//		TimeTxt.setText(Integer.toString(iHour) + "小时"+ Integer.toString(iMinute)+"分钟" );
+		TimeTxt.setText(String.format("%02d:%02d", iHour, iMinute) );
 		
 //		if( RemindActivity.m_iType	!=	CommonDefine.Remind_Type_Week )
 //		{

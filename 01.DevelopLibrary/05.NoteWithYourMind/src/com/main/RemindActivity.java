@@ -247,7 +247,6 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       		rbWeek.setChecked(true);
       		
       		m_clCTimeDlg.saveData(clCDateAndTime.iHour, clCDateAndTime.iMinute);
-      		
       		m_clCWeekDlg.setInputSatus ( week );  		     		
       	}
       	else if(  m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_Once )				//µ•¥ŒÃ·–—

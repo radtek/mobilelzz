@@ -3,6 +3,8 @@ package com.main;
 import java.io.Serializable;
 import java.util.Calendar;
 
+import android.util.Log;
+
 public class CRemindInfo implements Serializable
 {
 
@@ -231,7 +233,8 @@ public class CRemindInfo implements Serializable
 			clCalendar.set(Calendar.SECOND, 0);
 			clCalendar.set(Calendar.MILLISECOND, 0);
 			long	lCurTimer	=	clCalendar.getTimeInMillis();
-			
+//			 Log.d("CurrentTime:",  String.format("%04d/%02d/%02d %02d:%02d DayofWeek:%2d", clCalendar.get(Calendar.YEAR), clCalendar.get(Calendar.MONTH)+1
+//						, clCalendar.get(Calendar.DAY_OF_MONTH), clCalendar.get(Calendar.HOUR_OF_DAY), clCalendar.get(Calendar.MINUTE), clCalendar.get(Calendar.DAY_OF_WEEK)));	
 
 			long	lTempTime	=	-1;					//临时变量
 			long	lMinTime	=	Long.MAX_VALUE;		//差值为正的最小时间为下次提醒时间，初始化为整数最大值
@@ -249,14 +252,18 @@ public class CRemindInfo implements Serializable
 			{
 				 if ( 1 == bWeekTemp[i] )
 				 {
-					clCalendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY + i );
-					int	hour	=	(int)m_lTime >> 16;
-					int	minute	=	(int)m_lTime & 0x0000ffff;
+					 clCalendar.setTimeInMillis(System.currentTimeMillis());
+					 clCalendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY + i );
+					 int	hour	=	(int)m_lTime >> 16;
+					 int	minute	=	(int)m_lTime & 0x0000ffff;
 					 clCalendar.set( Calendar.HOUR_OF_DAY, hour);
 					 clCalendar.set( Calendar.MINUTE, minute);
 					 lTempTime	=	clCalendar.getTimeInMillis();
 					 
-					 lTempTime	-=	ONE_WEEK_TIME;
+//					 lTempTime	-=	ONE_WEEK_TIME;
+					 clCalendar.setTimeInMillis(lTempTime);
+//					 Log.d("LastWeek:",String.format("%04d/%02d/%02d %02d:%02d DayofWeek:%2d", clCalendar.get(Calendar.YEAR), clCalendar.get(Calendar.MONTH)+1
+//								, clCalendar.get(Calendar.DAY_OF_MONTH), clCalendar.get(Calendar.HOUR_OF_DAY), clCalendar.get(Calendar.MINUTE), clCalendar.get(Calendar.DAY_OF_WEEK)));
 					 
 					 long	lMinTemp	=	lTempTime	-	lCurTimer;
 					 
@@ -274,6 +281,9 @@ public class CRemindInfo implements Serializable
 						 {
 							 lMaxTime			=	lMinTemp;
 							 lTimeInnerMax		=	lTempTime;
+							 clCalendar.setTimeInMillis(lTimeInnerMax);
+//							 Log.d("RemindInfo:", String.format("%04d/%02d/%02d %02d:%02d DayofWeek:%2d", clCalendar.get(Calendar.YEAR), clCalendar.get(Calendar.MONTH)+1
+//										, clCalendar.get(Calendar.DAY_OF_MONTH), clCalendar.get(Calendar.HOUR_OF_DAY), clCalendar.get(Calendar.MINUTE), clCalendar.get(Calendar.DAY_OF_WEEK)));
 						 }
 					 }
 				 }
@@ -283,12 +293,16 @@ public class CRemindInfo implements Serializable
 			{
 				lTimeInnerMax	+=	ONE_WEEK_TIME;
 				
-				clCalendar.setTimeInMillis( lTimeInnerMax );		
+				clCalendar.setTimeInMillis( lTimeInnerMax );
+//				 Log.d("ResultMax", String.format("%04d/%02d/%02d %02d:%02d DayofWeek:%2d", clCalendar.get(Calendar.YEAR), clCalendar.get(Calendar.MONTH)+1
+//							, clCalendar.get(Calendar.DAY_OF_MONTH), clCalendar.get(Calendar.HOUR_OF_DAY), clCalendar.get(Calendar.MINUTE), clCalendar.get(Calendar.DAY_OF_WEEK)));
 				return	lTimeInnerMax;
 			}
 			else
 			{
 				clCalendar.setTimeInMillis( lTimeInnerMin );
+//				 Log.d("ResultMin",String.format("%04d/%02d/%02d %02d:%02d DayofWeek:%2d", clCalendar.get(Calendar.YEAR), clCalendar.get(Calendar.MONTH)+1
+//							, clCalendar.get(Calendar.DAY_OF_MONTH), clCalendar.get(Calendar.HOUR_OF_DAY), clCalendar.get(Calendar.MINUTE), clCalendar.get(Calendar.DAY_OF_WEEK)));
 				return	lTimeInnerMin;
 			}
 		}

@@ -24,8 +24,20 @@ public final class CRemindOperator
     {  
         return _INSTANCE;  
     }  
+    public int processRemind(Context context, int _id, CRemindInfo _clCRemindInfo){
+    	int ret = CommonDefine.E_FAIL;
+    	if(_clCRemindInfo==null){
+    		return ret;
+    	}
+    	if(_id==CommonDefine.g_int_Invalid_ID){
+    		ret = addRemind( context, _id, _clCRemindInfo);
+    	}else{
+    		ret = editRemind( context, _id, _clCRemindInfo);
+    	}
+    	return ret;
+    }
     
-    public	int	addRemind( Context context, int _id, CRemindInfo _clCRemindInfo )
+    private	int	addRemind( Context context, int _id, CRemindInfo _clCRemindInfo )
     {
     	//外面使用时需要先将该条提醒Insert到DB中，然后再调用该方法
     	//Insert时和提醒相关的属性可以设置为无效，这里会进行Update
@@ -116,7 +128,7 @@ public final class CRemindOperator
     		
     }
     
-    public	int	editRemind( Context context, int _id, CRemindInfo _clCRemindInfo )
+    private	int	editRemind( Context context, int _id, CRemindInfo _clCRemindInfo )
     {
     	//对一个提醒进行编辑时调用该方法。
     	AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
@@ -200,7 +212,7 @@ public final class CRemindOperator
         return	CommonDefine.S_OK;    
     }
     
-    public	int	getRemindInfo( Context context, int id, CRemindInfo _clCRemindInfo )
+    private	int	getRemindInfo( Context context, int id, CRemindInfo _clCRemindInfo )
     {
     	if( null == m_clCNoteDBCtrl )
     	{

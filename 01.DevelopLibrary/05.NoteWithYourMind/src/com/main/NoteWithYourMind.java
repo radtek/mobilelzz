@@ -829,63 +829,19 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		
 	}
 	private void processSaveClick(View view){
-		/*
 
-		 */
 		CMemoInfo clNoteInfo = new CMemoInfo(); 
 		FillTextInfo(clNoteInfo);
 		FillVoiceInfo(clNoteInfo);
 		FillRemindInfo(clNoteInfo);
 		int _id = SaveChagedNoteInfo(clNoteInfo);
 		CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
-		if( clNoteInfo.iId == CommonDefine.g_int_Invalid_ID && _id != CommonDefine.E_FAIL )
-		{
-			clCRemindOperator.addRemind( this, _id, m_clCRemindInfo);
-		}
-		else if( clNoteInfo.iId != CommonDefine.g_int_Invalid_ID  )
-		{
-			clCRemindOperator.editRemind( this, clNoteInfo.iId, m_clCRemindInfo);
-		}
-
-		NoteWithYourMind.this.finish();	
+		clCRemindOperator.processRemind(this, _id, m_clCRemindInfo);
 		
-//		//取得Memo信息
-//		EditText memotext = (EditText) findViewById(R.id.ET_main_Memo);
-//		String strMemoText = memotext.getText().toString();
-//		
-//		//取得提醒信息 - zhu.t : 提醒信息已经保存在 m_clCRemindInfo中
-//		if( null != m_clCRemindInfo && CMemoInfo.IsRemind_Yes ==  m_clCRemindInfo.m_iIsRemind )
-//		{
-//			if(  CommonDefine.Remind_Type_Invalid != m_clCRemindInfo.m_iType 
-//			&&   m_clCRemindInfo.m_iRemindAble == CMemoInfo.IsRemind_Able_Yes 
-//			&&  !m_clCRemindInfo.checkTime())
-//			{
-//        		Toast toast = Toast.makeText(NoteWithYourMind.this, "提醒时间设定错误,请重新设定!", Toast.LENGTH_SHORT);
-//        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-//        		toast.show();
-//        		return;
-//			}
-//		}
-//		     		
-//		if( strMemoText.length()>0 )
-//		{
-//			//保存用户设定的Memo和提醒信息
-//			if ( 0 == SaveEditData( strMemoText ) )
-//			{
-//        		Toast toast = Toast.makeText(NoteWithYourMind.this, "保存成功", Toast.LENGTH_SHORT);
-//        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-//        		toast.show();
-//        		NoteWithYourMind.this.finish();
-//			}
-//    		
-//		}
-//		//无输入信息
-//		else
-//		{
-//			Toast toast = Toast.makeText(NoteWithYourMind.this, "请输入内容", Toast.LENGTH_SHORT);
-//    		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-//    		toast.show();
-//		}
+		if(_id != CommonDefine.E_FAIL){
+			NoteWithYourMind.this.finish();	
+		}
+		
 	}
     
     private int SaveChagedNoteInfo(CMemoInfo clNoteInfo)

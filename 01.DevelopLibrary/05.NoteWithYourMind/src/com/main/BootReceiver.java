@@ -49,7 +49,7 @@ public class BootReceiver extends BroadcastReceiver {
 				{
 					CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
 					CRemindInfo 	clCRemindInfo		=	new	CRemindInfo( CommonDefine.Remind_Type_Invalid );
-					if( CommonDefine.E_FAIL == clCRemindOperator.getRemindInfo( ctx, iID, clCRemindInfo ) )
+					if( CommonDefine.E_FAIL == clCRemindOperator.getRemindInfo( clCursor, clCRemindInfo ) )
 					{
 						continue;
 					}

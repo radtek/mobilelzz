@@ -1,5 +1,7 @@
 package com.main;
 
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -165,6 +167,15 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 		{	
 			m_clCRemindInfo.setNormalTime( m_clCTimeDlg.m_iHour, m_clCTimeDlg.m_iMinute, m_clCDateDlg.m_iYear, m_clCDateDlg.m_iMonth, m_clCDateDlg.m_iDay );
 		}
+		else
+		{
+			m_clCRemindInfo.m_iType		=	CommonDefine.Remind_Type_Once;
+            Calendar clCalendar     =     Calendar. getInstance();
+            clCalendar.setTimeInMillis(System. currentTimeMillis());
+
+			m_clCRemindInfo.setNormalTime( m_clCTimeDlg.m_iHour, m_clCTimeDlg.m_iMinute, clCalendar.get(Calendar.YEAR)
+					, clCalendar.get(Calendar.MONTH), clCalendar.get(Calendar.DAY_OF_MONTH) );
+		}
     	
     		
     	if ( bAble )
@@ -204,7 +215,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     {
 	  Intent iExtraData = getIntent();
       CRemindInfo	clTemp	=	(CRemindInfo)iExtraData.getSerializableExtra(NoteWithYourMind.ExtraData_RemindSetting);
-      
+      m_iType	=	CommonDefine.g_int_Invalid_ID;
       m_bInputflg	=	true;
       
       if ( null != clTemp )		//	取得传入数据非空

@@ -332,7 +332,8 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 				cv.put(KEY_audioDataName, clCMemoInfo.strAudioFileName);
 			}
 			String[] whereValue={ Integer.toString(id)};
-			iEffectedID = m_db.update(DB_TABLE, cv, KEY_id+"=?", whereValue);
+			m_db.update(DB_TABLE, cv, KEY_id+"=?", whereValue);
+			iEffectedID = clCMemoInfo.iId;
 		}
 		
 		return iEffectedID;

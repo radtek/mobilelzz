@@ -18,7 +18,7 @@ public class CRemindInfo implements Serializable
 	
 	int			m_iType;				//间隔:1,循环:2,单次:3,无效:-1
 	long		m_lTime;				//如果单次提醒表示日期年月日
-										//如果是循环提醒则高4为表示小时，低位表示分钟
+										//如果是循环提醒则高4位表示小时，低4位表示分钟
 	int			m_iRemindAble;
 	int			m_iIsRemind;
 	
@@ -223,7 +223,7 @@ public class CRemindInfo implements Serializable
 	{
 		long	lTimeInnerMax	=	-1;				//返回值
 		long	lTimeInnerMin	=	-1;				//返回值
-		if ( m_iType == 2 )					//2为循环提醒
+		if ( m_iType == CommonDefine.Remind_Type_Week )	
 		{
 			//取得当前时间
 			Calendar clCalendar	=	Calendar.getInstance();

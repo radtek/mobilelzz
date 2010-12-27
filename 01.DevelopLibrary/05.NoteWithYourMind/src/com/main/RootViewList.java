@@ -38,9 +38,7 @@ implements ListActivityCtrl, View.OnClickListener
 	private View m_toolBarLayout;
 	private int m_iContextMenu_DBID = CommonDefine.g_int_Invalid_ID;
 	private CommonContainer m_bIsCommnetDisplay_more;
-	private CommonContainer m_bIsCommnetDisplay_search;
 	
-	private View m_vSearchAnim = null;
 	private View m_vMoreAnim = null;
 	private ListUICtrlParam  UICtrlParam;
 	
@@ -79,9 +77,8 @@ implements ListActivityCtrl, View.OnClickListener
         
         m_bIsCommnetDisplay_more = new CommonContainer();
         m_bIsCommnetDisplay_more.setBOOL(false);
-        m_bIsCommnetDisplay_search = new CommonContainer();
-        m_bIsCommnetDisplay_search.setBOOL(false);
-        m_vSearchAnim  = RootViewList.this.findViewById(R.id.toolbar_search_dlg);
+
+
         m_vMoreAnim  = RootViewList.this.findViewById(R.id.toolbar_more_dlg);
         
         ListView list = (ListView) findViewById(R.id.rootviewlist_list);
@@ -112,8 +109,7 @@ implements ListActivityCtrl, View.OnClickListener
         
         ImageButton clBTMemoSearch = (ImageButton) findViewById(R.id.rootviewlist_toolbar_search);
         clBTMemoSearch.setOnClickListener(this);
-        Button clBTMemoSearch_remind = (Button) findViewById(R.id.toolbar_search_dlg_remind);
-        clBTMemoSearch_remind.setOnClickListener(this);
+
 	}
 	
 	public void onStop()
@@ -152,10 +148,6 @@ implements ListActivityCtrl, View.OnClickListener
     			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
     			bRet = true;
     		}
-        	if(m_bIsCommnetDisplay_search.getBOOL()){
-        		executeAnimation(m_vSearchAnim, R.anim.commentdisplay_left_bottom, R.anim.commenthide_left_bottom, m_bIsCommnetDisplay_search);
-        		bRet = true;
-    		}
         	if(bRet){
         		return true;
         		
@@ -173,10 +165,6 @@ implements ListActivityCtrl, View.OnClickListener
 			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
 			m_NoteListUICtrl.processMoveClick(view);
 			break;
-		case R.id.toolbar_search_dlg_remind:
-			executeAnimation(m_vSearchAnim, R.anim.commentdisplay_left_bottom, R.anim.commenthide_left_bottom, m_bIsCommnetDisplay_search);
-			processSearchClick(view);
-			break;
 		case R.id.rootviewlist_toolbar_newfolder:
 			processNewFolderClick(view);
 			break;
@@ -187,7 +175,7 @@ implements ListActivityCtrl, View.OnClickListener
 			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
 			break;
 		case R.id.rootviewlist_toolbar_search:
-			executeAnimation(m_vSearchAnim, R.anim.commentdisplay_left_bottom, R.anim.commenthide_left_bottom, m_bIsCommnetDisplay_search);
+			processSearchClick(view);
 			break;
 		case R.id.toolbar_more_dlg_setpassword:
 			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
@@ -213,14 +201,6 @@ implements ListActivityCtrl, View.OnClickListener
 	
 	private void processSearchClick(View view){
 		Intent intent = new Intent(RootViewList.this, SearchResultViewList.class);
-
-		switch(view.getId()){
-		case R.id.toolbar_search_dlg_remind:
-			intent.putExtra(SearchResultViewList.ExtraData_SearchKind, SearchResultViewList.SearchKindEnum.SearchKind_Remind);					
-		    break;
-		default:
-		}
-
 		startActivity(intent);
 	}
 	

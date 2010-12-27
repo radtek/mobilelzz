@@ -340,42 +340,33 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 				/*如果是检索结果List,先判断检索输入条件，用ArrayAdapter与ListView进行绑定*/
 
 				if(m_myArrayListAdapter==null){
-					
-					if(( m_ListUICtrlParam.g_bool_IsRemindSearch )
-							&&( ! m_ListUICtrlParam.g_bool_IsVoiceSearch )
-							&&( ! m_ListUICtrlParam.g_bool_IsTextSearch ))
-
+					if( m_ListUICtrlParam.g_bool_IsTextSearch )
 					{
 						//只检索全部的提醒
-						Cursor cursor = m_clCNoteDBCtrl.getAllRemindInfo();
+						Cursor cursor = m_clCNoteDBCtrl.getAllNotEncodeInfo();
 						m_sourceManager.startManagingCursor(cursor);
 						//cursor转化为ArrayList
 
 						List<CMemoInfo> Items = new ArrayList<CMemoInfo>();
 						ChangeCursorToArrayList( cursor ,Items);
 						
+						if(m_ListUICtrlParam.g_str_SearchKey != ""){
+							FilterArrayListbySearchParam( Items );
+						}
+
+/*						
 						//对搜索结果的List进行排序
 		                Collections.sort(Items, new SortByRemindFirst());
 		                Collections.sort(Items, new SortByVoiceFirst());
 		                Collections.sort(Items, new SortByRemindTime());
 		                Collections.sort(Items, new SortByLastModifyTime());				
-
+*/
 						m_myArrayListAdapter = new NoteListArrayAdapter( m_sourceManager,  Items);
 
 						m_targetList.setAdapter(m_myArrayListAdapter);
 					}
-					else if(( !m_ListUICtrlParam.g_bool_IsRemindSearch )
-							&&( m_ListUICtrlParam.g_bool_IsVoiceSearch )
-							&&( ! m_ListUICtrlParam.g_bool_IsTextSearch ))
-
-					{
-
-						//只检索全部的带语音的便签
-
-					}
 					else{
-
-
+							//功能暂不开发
 					}
 
 				}else{
@@ -591,4 +582,23 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 
 	}
 
+	private void FilterArrayListbySearchParam( List<CMemoInfo> Items){
+
+		int Count = Items.size();
+		for(int i=Count-1;i>=0;i--)
+		{			
+			CMemoInfo clCMemoInfo	= Items.get(i);
+			String sDetail=clCMemoInfo.strDetail;
+			if( sDetail.indexOf(m_ListUICtrlParam.g_str_SearchKey) ==  -1) 
+			{
+				Items.remove(i);
+			}
+		}
+	}
+
+	public void SetSearchParam(  ListUICtrlParam CtrlParam ){
+
+		m_ListUICtrlParam = CtrlParam;
+		m_myArrayListAdapter = null;		
+	}
 }

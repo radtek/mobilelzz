@@ -96,45 +96,4 @@
 		/>
 
 	</LinearLayout>
-	<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/toolbar_search_dlg"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:orientation="horizontal"
-	android:background="@drawable/toolbar_search_dlg"
-	android:layout_gravity="left|bottom"
-	android:layout_marginBottom="52dp"
-	android:layout_marginRight="5dp"
-	android:visibility="gone"
-	>
-		<Button
-		  android:id="@+id/toolbar_search_dlg_remind"
-		  android:layout_width="wrap_content"
-		  android:layout_height="wrap_content"
-		  android:layout_marginLeft="5dp"
-		  android:layout_marginRight="5dp"
-		  android:layout_marginTop="5dp"
-		  android:background="@drawable/toolbar_search_remind"
-		/>
-		<Button
-		  android:id="@+id/toolbar_search_dlg_voice"
-		  android:layout_width="wrap_content"
-		  android:layout_height="wrap_content"
-		  android:layout_marginLeft="5dp"
-		  android:layout_marginRight="5dp"
-		  android:layout_marginTop="5dp"
-		  android:background="@drawable/toolbar_search_voice"
-		/>
-		<Button
-		  android:id="@+id/toolbar_search_dlg_deepsearch"
-		  android:layout_width="wrap_content"
-		  android:layout_height="wrap_content"
-		  android:layout_marginLeft="5dp"
-		  android:layout_marginRight="5dp"
-		  android:layout_marginTop="5dp"
-		  android:background="@drawable/toolbar_search_deepsearch"
-		/>
-
-	</LinearLayout>
 </FrameLayout>

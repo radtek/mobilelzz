@@ -52,6 +52,7 @@
 			android:layout_weight="1"
 			android:orientation="horizontal"
 			android:visibility="gone"
+			android:padding="5dp"
 			>
 				<ImageButton
 				android:id="@+id/editnote_remindinfo_alarmIcon"
@@ -154,6 +155,7 @@
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:visibility="gone"
+			android:padding="5dp"
 			>
 				<LinearLayout
 				android:id="@+id/editnote_voiceinfo_operationpanel"

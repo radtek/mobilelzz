@@ -23,8 +23,9 @@
 	android:id="@+id/notelistitem_additionalinfo"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
-	android:layout_alignParentRight="true"
-	android:layout_marginRight="40dp"
+	android:layout_toLeftOf="@id/notelistitem_noteselect"
+	android:layout_alignWithParentIfMissing="true"
+	android:layout_marginRight="5dp"
 	android:orientation="vertical"
 	>
 		<TextView

@@ -453,6 +453,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     	}else{
     		EtOnce.setText( "" );
     	}
+    	EtOnce.setSelected(false);
     	EtOnce.clearFocus();
     }
     

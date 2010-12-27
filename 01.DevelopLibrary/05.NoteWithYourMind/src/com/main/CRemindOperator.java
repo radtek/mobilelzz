@@ -221,7 +221,10 @@ public final class CRemindOperator
     	
     	Cursor cur	=	m_clCNoteDBCtrl.getRemindByID(id);
     	
-    	return	getRemindInfo( cur, _clCRemindInfo );
+		int	iTemp	=	getRemindInfo( cur, _clCRemindInfo );
+    	
+		cur.close();
+		return	iTemp;
     }
     
 }

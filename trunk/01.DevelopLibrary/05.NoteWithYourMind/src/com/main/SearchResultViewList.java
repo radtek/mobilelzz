@@ -31,27 +31,21 @@ public class SearchResultViewList extends Activity
 implements ListActivityCtrl, View.OnClickListener
 {
 
-	public	enum	SearchKindEnum
-	{
-		SearchKind_Remind,
-		SearchKind_Voice,
-		SearchKind_DeepSearch
-	}
 	
-	public static String ExtraData_SearchKind		=	"com.main.ExtraData_SearchResultList_SearchKind";
 	public static String ExtraData_initListItemDBID		=	"com.main.ExtraData_RootList_initListItemDBID";
 	
-	private ListUICtrlParam  m_ExtraData_SearchParam;
 	private NoteListUICtrl m_NoteListUICtrl;
 	private Calendar c;
 	private CNoteDBCtrl		m_clCNoteDBCtrl;
 	private View m_toolBarLayout;
 	private int m_iContextMenu_DBID = CommonDefine.g_int_Invalid_ID;
 	private CommonContainer m_bIsCommnetDisplay_more;
-	private CommonContainer m_bIsCommnetDisplay_search;
 	
-	private View m_vSearchAnim = null;
 	private View m_vMoreAnim = null;
+
+	ListUICtrlParam m_SearchParam =null;
+
+	
 //	public void onNewIntent(Intent intent){
 //		setIntent(intent);
 //	}
@@ -68,32 +62,39 @@ implements ListActivityCtrl, View.OnClickListener
         
         m_bIsCommnetDisplay_more = new CommonContainer();
         m_bIsCommnetDisplay_more.setBOOL(false);
-        m_bIsCommnetDisplay_search = new CommonContainer();
-        m_bIsCommnetDisplay_search.setBOOL(false);
-        m_vSearchAnim  = SearchResultViewList.this.findViewById(R.id.toolbar_search_dlg);
         m_vMoreAnim  = SearchResultViewList.this.findViewById(R.id.toolbar_more_dlg);
         
-    	Intent iExtraData = getIntent();
-    	SearchKindEnum SearchKind =	(SearchKindEnum)iExtraData.getSerializableExtra(ExtraData_SearchKind);
-    	m_ExtraData_SearchParam = new ListUICtrlParam();
-   		m_ExtraData_SearchParam.g_enListType = ListUICtrlParam.ListTypeEnum.ListType_SearchResultList;
-    	m_ExtraData_SearchParam.g_bool_IsRemindSearch = true;
+	m_SearchParam = new ListUICtrlParam();
+   	m_SearchParam.g_enListType = ListUICtrlParam.ListTypeEnum.ListType_SearchResultList;
+    	m_SearchParam.g_bool_IsTextSearch = true;
+	m_SearchParam.g_str_SearchKey = "";	
+	m_SearchParam.g_enSortType= ListUICtrlParam.ListSortTypeEnum.SortType_Normal;	
 		
 		ListView list = (ListView) findViewById(R.id.rootviewlist_list);
         m_toolBarLayout = findViewById(R.id.searchresultviewlist_toolbar);
-        m_NoteListUICtrl = new NoteListUICtrl(this, list, m_toolBarLayout, m_ExtraData_SearchParam);
+        m_NoteListUICtrl = new NoteListUICtrl(this, list, m_toolBarLayout, m_SearchParam);
         m_NoteListUICtrl.initializeSource();
         
+        ImageButton clBTStartSearch = (ImageButton) findViewById(R.id.search_toolbar_btn_search);
+        clBTStartSearch.setOnClickListener(this);        
+        
+        ImageButton clBTMemoMore = (ImageButton) findViewById(R.id.searchresultviewlist_toolbar_more);
+        clBTMemoMore.setOnClickListener(this);
+		
         Button clBTMemoMore_delete = (Button) findViewById(R.id.toolbar_more_dlg_delete);
         clBTMemoMore_delete.setOnClickListener(this);
         Button clBTMemoMore_move = (Button) findViewById(R.id.toolbar_more_dlg_move);
         clBTMemoMore_move.setOnClickListener(this);
 
+        Button clBTSortByRemindFirst = (Button) findViewById(R.id.searchresultviewlist_toolbar_SortByRemindFirst);
+        clBTSortByRemindFirst.setOnClickListener(this);
+
+        Button clBTSortByVoiceFirst = (Button) findViewById(R.id.searchresultviewlist_toolbar_SortByVoiceFirst);
+        clBTSortByVoiceFirst.setOnClickListener(this);
+
+        Button clBTSortByTextFirst = (Button) findViewById(R.id.searchresultviewlist_toolbar_SortByTextFirst);
+        clBTSortByTextFirst.setOnClickListener(this);
         
-        ImageButton clBTMemoSearch = (ImageButton) findViewById(R.id.searchresultviewlist_toolbar_search);
-        clBTMemoSearch.setOnClickListener(this);
-        Button clBTMemoSearch_remind = (Button) findViewById(R.id.toolbar_search_dlg_remind);
-        clBTMemoSearch_remind.setOnClickListener(this);
 	}
 	
 	public void onStop()
@@ -103,17 +104,17 @@ implements ListActivityCtrl, View.OnClickListener
 	public void onResume()
 	{
 		super.onResume();
-		Intent extra = getIntent();
-		if(extra!=null){
-			int initListItemDBID = extra.getIntExtra(ExtraData_initListItemDBID, CommonDefine.g_int_Invalid_ID);
-			if(initListItemDBID!=CommonDefine.g_int_Invalid_ID){
-				m_NoteListUICtrl.updateListData(initListItemDBID);
-			}else{
+//		Intent extra = getIntent();
+//		if(extra!=null){
+//			int initListItemDBID = extra.getIntExtra(ExtraData_initListItemDBID, CommonDefine.g_int_Invalid_ID);
+//			if(initListItemDBID!=CommonDefine.g_int_Invalid_ID){
+//				m_NoteListUICtrl.updateListData(initListItemDBID);
+//			}else{
 				
-			}
-		}else{
+//			}
+//		}else{
 			
-		}
+//		}
 	}
 	public void onDestroy()
 	{
@@ -132,6 +133,16 @@ implements ListActivityCtrl, View.OnClickListener
     }
 	public void onClick(View view){
 		switch(view.getId()){
+		case R.id.searchresultviewlist_toolbar_SortByRemindFirst:
+		case R.id.searchresultviewlist_toolbar_SortByVoiceFirst:
+		case R.id.searchresultviewlist_toolbar_SortByTextFirst:	
+		case R.id.search_toolbar_btn_search:	
+			processSortClick(view);
+			break;
+
+		case R.id.searchresultviewlist_toolbar_more:
+			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
+			break;
 		case R.id.toolbar_more_dlg_delete:
 			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
 			m_NoteListUICtrl.processDeleteClick(view);
@@ -140,14 +151,6 @@ implements ListActivityCtrl, View.OnClickListener
 			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
 			m_NoteListUICtrl.processMoveClick(view);
 			break;
-		case R.id.toolbar_search_dlg_remind:
-			executeAnimation(m_vSearchAnim, R.anim.commentdisplay_left_bottom, R.anim.commenthide_left_bottom, m_bIsCommnetDisplay_search);
-			processSearchClick(view);
-			break;
-		case R.id.searchresultviewlist_toolbar_search:
-			executeAnimation(m_vSearchAnim, R.anim.commentdisplay_left_bottom, R.anim.commenthide_left_bottom, m_bIsCommnetDisplay_search);
-			break;
-
 		default:
 		}
 	}
@@ -166,15 +169,33 @@ implements ListActivityCtrl, View.OnClickListener
 		}
 	}
 	
-	private void processSearchClick(View view){
+	private void processSortClick(View view){
 
-		Intent intent = new Intent(SearchResultViewList.this, SearchResultViewList.class);
+		EditText Keyword = (EditText) findViewById(R.id.search_toolbar_edittext);
+		String strKeyword = Keyword.getText().toString();
 
-		startActivity(intent);
+		switch(view.getId()){
+		case R.id.searchresultviewlist_toolbar_SortByRemindFirst:
+			m_SearchParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_RemindFirst;
+			break;
+		case R.id.searchresultviewlist_toolbar_SortByVoiceFirst:
+			m_SearchParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_VoiceFirst;
+			break;
+		case R.id.searchresultviewlist_toolbar_SortByTextFirst:
+			m_SearchParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_TextFirst;
+			break;
+		default:
+			m_SearchParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_Normal;
+			break;
+		}		
+		m_SearchParam.g_enListType  = ListUICtrlParam.ListTypeEnum.ListType_SearchResultList;
+		m_SearchParam.g_bool_IsTextSearch = true;
+		m_SearchParam.g_str_SearchKey = strKeyword;
+		
+		m_NoteListUICtrl.SetSearchParam( m_SearchParam);
+		m_NoteListUICtrl.updateListData(CommonDefine.g_int_Invalid_ID);
 
-	}
-	
-	private void processMoreClick(View view){
+		
 
 	}
 	
@@ -185,70 +206,22 @@ implements ListActivityCtrl, View.OnClickListener
 		startActivity(intent);
 	}
 	
-	private void processNewFolderClick(View view){
-		PopUpNewFolderDlg();
-	}
-	
 	public void updateToolbar(CommonDefine.ToolbarStatusEnum enStatus){
 		CommonDefine.g_enToolbarStatus = enStatus;
-		ImageButton btSearch = (ImageButton)m_toolBarLayout.findViewById(R.id.searchresultviewlist_toolbar_search);
+		Button btSortByRemindFirst = (Button)m_toolBarLayout.findViewById(R.id.searchresultviewlist_toolbar_SortByRemindFirst);
+		ImageButton btMore = (ImageButton)m_toolBarLayout.findViewById(R.id.searchresultviewlist_toolbar_more);
 		ImageButton btDelete = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_delete);
 		ImageButton btCancel = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_cancel);
 		if(enStatus == CommonDefine.ToolbarStatusEnum.ToolbarStatus_Normal){
-			btSearch.setVisibility(View.VISIBLE);
+			btSortByRemindFirst.setVisibility(View.VISIBLE);
 			btDelete.setVisibility(View.GONE);
 			btCancel.setVisibility(View.GONE);
 		}else{
 //			btDelete.setVisibility(View.VISIBLE);
 //			btMove.setVisibility(View.VISIBLE);
 //			btCancel.setVisibility(View.VISIBLE);
-			btSearch.setVisibility(View.GONE);
+			btSortByRemindFirst.setVisibility(View.GONE);
 		}
-	}
-
-
-	private void PopUpNewFolderDlg(){
-		LayoutInflater factory = LayoutInflater.from(SearchResultViewList.this);
-		final View DialogView = factory.inflate(R.layout.dialognewfolder, null);
-		AlertDialog clDlgNewFolder = new AlertDialog.Builder(SearchResultViewList.this)	
-			//.setIcon(R.drawable.clock)
-			.setTitle("请输入文件夹名称")
-			.setView(DialogView)
-			.setPositiveButton("确定",new DialogInterface.OnClickListener(){
-				public void onClick(DialogInterface dialog, int i)
-				{
-	        		EditText FolderNameText = (EditText) DialogView.findViewById(R.id.foldername_edit);
-	        		String strFolderNameText = FolderNameText.getText().toString();
-	        		if(strFolderNameText.length()>0){
-	        			CreateFolderRec(strFolderNameText);
-	            		dialog.cancel();
-	        		}else{
-	        			Toast toast = Toast.makeText(SearchResultViewList.this, "请输入文件夹名称", Toast.LENGTH_SHORT);
-	            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-	            		toast.show();
-	        		}	
-				}
-			})
-			.setNegativeButton("取消",new DialogInterface.OnClickListener(){
-				public void onClick(DialogInterface dialog, int i)
-				{
-					dialog.cancel();
-				}
-			})
-			.create();
-		clDlgNewFolder.show();    
-	}
-	private void CreateFolderRec(String strDetail){
-		CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-		clCMemoInfo.iPreId	=	CMemoInfo.PreId_Root;
-		clCMemoInfo.iType	=	CMemoInfo.Type_Folder;
-		c = Calendar.getInstance();
-		clCMemoInfo.dLastModifyTime = c.getTimeInMillis();							
-		clCMemoInfo.strDetail	=	strDetail;
-		clCMemoInfo.dCreateTime = c.getTimeInMillis();
-		m_clCNoteDBCtrl.Create(clCMemoInfo); 
-		m_NoteListUICtrl.updateListData(CommonDefine.g_int_Invalid_ID);
-		
 	}
 
 }

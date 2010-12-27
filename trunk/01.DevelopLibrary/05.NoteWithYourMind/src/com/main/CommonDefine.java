@@ -53,13 +53,24 @@ class ListUICtrlParam{
 		g_str_SearchKey = "";
 		g_int_PreID = -1;
 		g_enListType = ListTypeEnum.ListType_NormalList;
+		g_enSortType = ListSortTypeEnum.SortType_Normal;
 	}
 	public	enum	ListTypeEnum
 	{
 		ListType_NormalList,          //通过指定PreID，来提供PreID对应的子List
 		ListType_SearchResultList,   //通过设定检索条件，来提供检索结果List
 	}
+
+	public	enum	ListSortTypeEnum
+	{
+		SortType_Normal,
+		SortType_RemindFirst,
+		SortType_VoiceFirst,
+		SortType_TextFirst,
+	}
+
 	public ListTypeEnum g_enListType;
+	public ListSortTypeEnum g_enSortType;
 	
 	public int g_int_PreID;
 	

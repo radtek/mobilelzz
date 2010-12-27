@@ -19,6 +19,7 @@ public class BootReceiver extends BroadcastReceiver {
 		Cursor clCursor	=	clCNoteDBCtrl.getRemindInfo();	
 		if ( !clCursor.moveToFirst() )
 		{
+			clCursor.close();
 			return;
 		}
 		
@@ -65,5 +66,7 @@ public class BootReceiver extends BroadcastReceiver {
 				}				
 			}while( clCursor.moveToNext() );
 		}
+		
+		clCursor.close();
     }    
 } 

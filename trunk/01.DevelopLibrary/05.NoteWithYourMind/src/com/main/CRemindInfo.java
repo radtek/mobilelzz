@@ -230,8 +230,7 @@ public class CRemindInfo implements Serializable
 			//取得当前时间
 			Calendar clCalendar	=	Calendar.getInstance();
 			clCalendar.setTimeInMillis(System.currentTimeMillis());
-			clCalendar.set(Calendar.SECOND, 0);
-			clCalendar.set(Calendar.MILLISECOND, 0);
+
 			long	lCurTimer	=	clCalendar.getTimeInMillis();
 //			 Log.d("CurrentTime:",  String.format("%04d/%02d/%02d %02d:%02d DayofWeek:%2d", clCalendar.get(Calendar.YEAR), clCalendar.get(Calendar.MONTH)+1
 //						, clCalendar.get(Calendar.DAY_OF_MONTH), clCalendar.get(Calendar.HOUR_OF_DAY), clCalendar.get(Calendar.MINUTE), clCalendar.get(Calendar.DAY_OF_WEEK)));	
@@ -253,6 +252,8 @@ public class CRemindInfo implements Serializable
 				 if ( 1 == bWeekTemp[i] )
 				 {
 					 clCalendar.setTimeInMillis(System.currentTimeMillis());
+					 clCalendar.set(Calendar.SECOND, 0);
+					 clCalendar.set(Calendar.MILLISECOND, 0);
 					 clCalendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY + i );
 					 int	hour	=	(int)m_lTime >> 16;
 					 int	minute	=	(int)m_lTime & 0x0000ffff;
@@ -260,7 +261,6 @@ public class CRemindInfo implements Serializable
 					 clCalendar.set( Calendar.MINUTE, minute);
 					 lTempTime	=	clCalendar.getTimeInMillis();
 					 
-//					 lTempTime	-=	ONE_WEEK_TIME;
 					 clCalendar.setTimeInMillis(lTempTime);
 //					 Log.d("LastWeek:",String.format("%04d/%02d/%02d %02d:%02d DayofWeek:%2d", clCalendar.get(Calendar.YEAR), clCalendar.get(Calendar.MONTH)+1
 //								, clCalendar.get(Calendar.DAY_OF_MONTH), clCalendar.get(Calendar.HOUR_OF_DAY), clCalendar.get(Calendar.MINUTE), clCalendar.get(Calendar.DAY_OF_WEEK)));

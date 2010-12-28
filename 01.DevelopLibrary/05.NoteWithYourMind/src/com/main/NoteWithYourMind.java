@@ -122,6 +122,9 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 	}
 	
 	public void pauseMediaInteract(){
+		if(clBTStopRecord.isClickable()){
+    		clBTStopRecord.performClick();
+    	}
 		Toast.makeText(NoteWithYourMind.this, "来电话了~~~~",Toast.LENGTH_LONG).show();
 	}
 	

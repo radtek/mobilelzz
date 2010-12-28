@@ -125,16 +125,9 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 	public void pauseMediaInteract(){
 		if(clBTStopRecord.isClickable()){
     		if(mMediaPlayer != null && mMediaPlayer.isPlaying()){
-    			mPlayThread.suspend();
-    			try 
-			    {
-					Thread.sleep(1000);
-				} catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-    			mMediaPlayer.pause();
     			m_isMediaPausingForPhoneStateChange = true;
+    			mPlayThread.suspend();
+    			mMediaPlayer.pause();
     		}
     	}
 //		Toast.makeText(NoteWithYourMind.this, "来电话了~~~~",Toast.LENGTH_LONG).show();
@@ -144,13 +137,6 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 		if(clBTStopRecord.isClickable()){
     		if(mMediaPlayer != null && m_isMediaPausingForPhoneStateChange){
     			mMediaPlayer.start();
-    			try 
-			    {
-					Thread.sleep(1000);
-				} catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
     			mPlayThread.resume();
     			m_isMediaPausingForPhoneStateChange = false;
     		}

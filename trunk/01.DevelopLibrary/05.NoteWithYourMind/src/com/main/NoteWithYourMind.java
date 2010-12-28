@@ -109,6 +109,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 	private  Thread												mPlayThread;
 	private MediaPlayer											mMediaPlayer		= null;
 	private int													m_iCurrentVoiceDataDuration = CommonDefine.g_int_Invalid_ID;
+	private boolean												m_isMediaPausingForPhoneStateChange = false;
 	
 	private CMemoInfo											m_NoteInfoFromDB = null;
 	private ImageButton											m_SaveBT = null;
@@ -123,13 +124,38 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 	
 	public void pauseMediaInteract(){
 		if(clBTStopRecord.isClickable()){
-    		clBTStopRecord.performClick();
+    		if(mMediaPlayer != null && mMediaPlayer.isPlaying()){
+    			mPlayThread.suspend();
+    			try 
+			    {
+					Thread.sleep(1000);
+				} catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+    			mMediaPlayer.pause();
+    			m_isMediaPausingForPhoneStateChange = true;
+    		}
     	}
-		Toast.makeText(NoteWithYourMind.this, "来电话了~~~~",Toast.LENGTH_LONG).show();
+//		Toast.makeText(NoteWithYourMind.this, "来电话了~~~~",Toast.LENGTH_LONG).show();
 	}
 	
 	public void resumeMediaInteract(){
-		Toast.makeText(NoteWithYourMind.this, "挂电话了~~~~",Toast.LENGTH_LONG).show();
+		if(clBTStopRecord.isClickable()){
+    		if(mMediaPlayer != null && m_isMediaPausingForPhoneStateChange){
+    			mMediaPlayer.start();
+    			try 
+			    {
+					Thread.sleep(1000);
+				} catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+    			mPlayThread.resume();
+    			m_isMediaPausingForPhoneStateChange = false;
+    		}
+    	}
+//		Toast.makeText(NoteWithYourMind.this, "挂电话了~~~~",Toast.LENGTH_LONG).show();
 	}
 	
 	public void onResume()
@@ -1009,7 +1035,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 				}
 				Message m = new Message();
 				m.arg1 = i;
-			    if( i==m_iCurrentVoiceDataDuration  || !mMediaPlayer.isPlaying())
+			    if( i==m_iCurrentVoiceDataDuration  || (!mMediaPlayer.isPlaying() && !m_isMediaPausingForPhoneStateChange))
 			    {
 					m.arg1 = m_iCurrentVoiceDataDuration;
 					m.what = NoteWithYourMind.GUI_STOP_NOTIFIER;

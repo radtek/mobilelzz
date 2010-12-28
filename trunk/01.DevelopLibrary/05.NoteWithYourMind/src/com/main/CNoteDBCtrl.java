@@ -5,9 +5,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 
-public class CNoteDBCtrl extends SDSQLiteOpenHelper {
+public class CNoteDBCtrl extends SQLiteOpenHelper {
 
 	public static final String	KEY_id					= "_id";												
 	public static final String	KEY_preid				= "preid";											

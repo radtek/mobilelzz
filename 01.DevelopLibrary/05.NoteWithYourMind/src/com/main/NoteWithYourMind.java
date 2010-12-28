@@ -50,6 +50,8 @@ import android.os.Environment;
 import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Chronometer.OnChronometerTickListener;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.text.TextPaint;
 import android.util.*;
 import android.net.Uri;
@@ -57,8 +59,12 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 
+interface MediaStatusControl{
+	public void pauseMediaInteract();
+	public void resumeMediaInteract();
+}
 @SuppressWarnings("unused")
-public class NoteWithYourMind extends Activity implements View.OnClickListener
+public class NoteWithYourMind extends Activity implements View.OnClickListener, MediaStatusControl
 {
 	//前一个Activity的类型
 	public	enum	OperationNoteKindEnum
@@ -115,14 +121,13 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		setIntent(intent);
 	}
 	
-//	public void onDestroy()
-//	{
-//		if(m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New){
-//			Intent intent = new Intent(this, RootViewList.class);
-//			startActivity(intent);
-//		}
-//		super.onDestroy();
-//	}
+	public void pauseMediaInteract(){
+		Toast.makeText(NoteWithYourMind.this, "来电话了~~~~",Toast.LENGTH_LONG).show();
+	}
+	
+	public void resumeMediaInteract(){
+		Toast.makeText(NoteWithYourMind.this, "挂电话了~~~~",Toast.LENGTH_LONG).show();
+	}
 	
 	public void onResume()
 	{
@@ -140,6 +145,10 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
     {
     	super.onCreate(savedInstanceState);
 		setContentView( R.layout.editnote );
+		TelephonyManager tm = (TelephonyManager)this.getSystemService(this.TELEPHONY_SERVICE);
+		MediaPhoneCallListener MediaListener = new MediaPhoneCallListener();
+		MediaListener.setSourceControl(this);
+		tm.listen(MediaListener, PhoneStateListener.LISTEN_CALL_STATE);
 		if(m_clCNoteDBCtrl==null){
 			m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
 			CommonDefine.m_clCNoteDBCtrl = m_clCNoteDBCtrl;
@@ -1064,5 +1073,28 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener
 		}else{
 			SV.setVisibility(View.GONE);
 		}
+	}
+}
+
+class MediaPhoneCallListener extends PhoneStateListener{
+	private MediaStatusControl m_mediaControl = null;
+	public void setSourceControl(MediaStatusControl mediaControl){
+		m_mediaControl = mediaControl;
+	}
+	public void onCallStateChanged(int state, String incomingNumber){
+		switch(state){
+			case TelephonyManager.CALL_STATE_IDLE:
+				if(m_mediaControl!=null){
+					m_mediaControl.resumeMediaInteract();
+				}
+				break;
+			case TelephonyManager.CALL_STATE_OFFHOOK:
+			case TelephonyManager.CALL_STATE_RINGING:
+				if(m_mediaControl!=null){
+					m_mediaControl.pauseMediaInteract();
+				}
+				break;
+		}
+		super.onCallStateChanged(state, incomingNumber);
 	}
 }

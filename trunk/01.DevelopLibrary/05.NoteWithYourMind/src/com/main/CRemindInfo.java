@@ -37,6 +37,17 @@ public class CRemindInfo implements Serializable
 			m_Week[ i ]	=	week[ i ];
 		}
 	}
+
+	public	void	setWeekTime( CMemoInfo clMemoInfo )
+	{
+		m_lTime	=	clMemoInfo.dRemindTime;
+		
+		int iLength	=	m_Week.length;
+		for( int i = 0; i < iLength; ++i )
+		{
+			m_Week[ i ]	=	clMemoInfo.m_Week[ i ];
+		}
+	}
 	
 	public	void	getWeekTime( CDateAndTime clCDateAndTime, byte week[] )
 	{

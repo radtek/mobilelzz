@@ -46,6 +46,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 	private MoveIn_State m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
 	
 	private AlertDialog m_dlgFolderList;
+	private AlertDialog m_dlgSortTypeList;	
 	public ListView m_targetList;
 	private ListUICtrlParam m_ListUICtrlParam;
 	private View m_toolBarLayout;
@@ -71,6 +72,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		m_myAdapter = null;
 		m_myArrayListAdapter = null;
 		m_dlgFolderList = null;
+		m_dlgSortTypeList = null;
 	}
 	
 	public void onClick(View view){
@@ -337,13 +339,10 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 
 		}
 		else{
-				/*如果是检索结果List,先判断检索输入条件，用ArrayAdapter与ListView进行绑定*/
-
 				if(m_myArrayListAdapter==null){
 					if( m_ListUICtrlParam.g_bool_IsTextSearch )
 					{
-						//只检索全部的提醒
-						Cursor cursor = m_clCNoteDBCtrl.getAllNotEncodeInfo();
+						Cursor cursor = m_clCNoteDBCtrl.getAllNotEncodeMemo();
 						m_sourceManager.startManagingCursor(cursor);
 						//cursor转化为ArrayList
 
@@ -354,13 +353,24 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 							FilterArrayListbySearchParam( Items );
 						}
 
-/*						
-						//对搜索结果的List进行排序
-		                Collections.sort(Items, new SortByRemindFirst());
-		                Collections.sort(Items, new SortByVoiceFirst());
-		                Collections.sort(Items, new SortByRemindTime());
-		                Collections.sort(Items, new SortByLastModifyTime());				
-*/
+						switch(m_ListUICtrlParam.g_enSortType){
+						case SortType_Normal:
+							Collections.sort(Items, new SortByLastModifyTime());
+							break;
+						case SortType_RemindFirst:
+							Collections.sort(Items, new SortByRemindFirst());
+							break;
+						case SortType_VoiceFirst:
+							Collections.sort(Items, new SortByVoiceFirst());							
+							break;
+						case SortType_TextFirst:
+							
+							break;
+						default:
+
+							break;
+						}
+
 						m_myArrayListAdapter = new NoteListArrayAdapter( m_sourceManager,  Items);
 
 						m_targetList.setAdapter(m_myArrayListAdapter);

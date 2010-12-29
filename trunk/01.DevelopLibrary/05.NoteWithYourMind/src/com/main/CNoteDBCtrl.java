@@ -161,10 +161,10 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_isremind+"=? and "+KEY_isremindable+"=?", new String[]{String.valueOf(1),String.valueOf(1)} );
 	}
 	
-	public	Cursor	getAllNotEncodeInfo()
+	public	Cursor	getAllNotEncodeMemo()
 	{
-		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_isencode+"!=? order by "+
-				KEY_lastmodifytime+" desc",  new String[]{String.valueOf(CMemoInfo.IsEncode_Yes)} );
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_isencode+"!=? and "+KEY_type+"!=? order by "+
+				KEY_lastmodifytime+" asc",  new String[]{String.valueOf(CMemoInfo.IsEncode_Yes), String.valueOf(CMemoInfo.Type_Folder)} );
 	}
 
 	public	Cursor	getRemindByID( int id )

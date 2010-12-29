@@ -80,14 +80,78 @@ class ListUICtrlParam{
 	public String g_str_SearchKey;
 }
 
-
-// 通过是否是提醒排序，提醒最优，排在最上面
 class SortByRemindFirst implements  Comparator<CMemoInfo> {
 
 	public int  compare(CMemoInfo object1, CMemoInfo object2) {
+
+
+		if(0 != CompareByRemindFirst(object1,object2)){
+			return CompareByRemindFirst(object1,object2);	
+		}
+
+		return CompareByRemindTime(object1,object2);	
+
+	}
+	private int  CompareByRemindFirst(CMemoInfo object1, CMemoInfo object2) {
 		return ( object1.iIsRemind - object2.iIsRemind );	
 	}
+		
+	private int  CompareByRemindTime(CMemoInfo object1, CMemoInfo object2) {
+		if(( object1.iIsRemind!=CMemoInfo.IsRemind_No )
+			&& ( object2.iIsRemind!=CMemoInfo.IsRemind_No )){
+			return 0;
+		}
+
+		if(( object1.iIsRemindAble!=CMemoInfo.IsRemind_Able_No )
+			&& ( object2.iIsRemindAble!=CMemoInfo.IsRemind_Able_No )){
+
+			long T1=0;
+			long T2=0;
+				
+			if(( object1.RemindType == CommonDefine.Remind_Type_CountDown )
+				||( object1.RemindType == CommonDefine.Remind_Type_Once ))
+			{
+
+				T1	=	object1.dRemindTime;
+
+			}
+			else if( object1.RemindType == CommonDefine.Remind_Type_Week ){
+
+				CRemindInfo	clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Week );
+				
+				clCRemindInfo.setWeekTime( object1 );
+
+				T1	=	clCRemindInfo.getFirstCycelRemindTime();
+
+
+			}
+
+			if(( object2.RemindType == CommonDefine.Remind_Type_CountDown )
+				||( object2.RemindType == CommonDefine.Remind_Type_Once ))
+			{
+
+				T2	=	object2.dRemindTime;
+
+			}
+			else if( object2.RemindType == CommonDefine.Remind_Type_Week ){
+
+				CRemindInfo	clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Week );
+				
+				clCRemindInfo.setWeekTime( object2 );
+
+				T2	=	clCRemindInfo.getFirstCycelRemindTime();
+			}		
+
+			return (int)( T1 -T2 );
+
+		}
+
+		return ( object2.iIsRemindAble - object1.iIsRemindAble );	
+	}
+
+
 }
+
 
 //通过提醒时间排序，最近的提醒时间最优，排在最上面!!!!!!!!!!???????
 class SortByRemindTime implements  Comparator<CMemoInfo> {

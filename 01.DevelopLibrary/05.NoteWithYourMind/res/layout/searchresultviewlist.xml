@@ -58,24 +58,10 @@
 		android:layout_alignParentBottom="true"
 		android:background="@drawable/background_toolbar">
 			<Button
-				android:id="@+id/searchresultviewlist_toolbar_SortByRemindFirst"
+				android:id="@+id/searchresultviewlist_toolbar_SortSetting"
 				style="@style/ToolBarButton"
-				android:text="提醒优先"
+				android:text="切换排序"
 				android:textColor="#000000"/>
-			<Button
-				android:id="@+id/searchresultviewlist_toolbar_SortByVoiceFirst"
-				style="@style/ToolBarButton"
-				android:text="语音优先"
-				android:textColor="#000000"/>
-			<Button
-				android:id="@+id/searchresultviewlist_toolbar_SortByTextFirst"
-				style="@style/ToolBarButton"
-				android:text="文本优先"
-				android:textColor="#000000"/>
-			<ImageButton
-				android:id="@+id/searchresultviewlist_toolbar_more"
-				style="@style/ToolBarButton"
-				android:src="@drawable/toolbar_more"/>
 			<ImageButton
 				android:id="@+id/toolbar_delete"
 				style="@style/ToolBarButton"
@@ -91,6 +77,16 @@
 				style="@style/ToolBarButton"
 				android:src="@drawable/toolbar_cancel"
 				android:visibility="gone"/>
+			<Button
+			  android:id="@+id/toolbar_more_dlg_delete"
+				style="@style/ToolBarButton"
+			  android:background="@drawable/toolbar_more_delete"
+			/>
+			<Button
+			  android:id="@+id/toolbar_more_dlg_move"
+				style="@style/ToolBarButton"
+			  android:background="@drawable/toolbar_more_move"
+			/>
 		</LinearLayout>		
 		<ListView 
 			android:id = "@+id/rootviewlist_list"
@@ -100,37 +96,5 @@
 			android:layout_below="@id/search_toolbar"
 			android:layout_marginTop="5px"
 		/>
-	</RelativeLayout>	
-	<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/toolbar_more_dlg"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:orientation="horizontal"
-	android:background="@drawable/toolbar_more_dlg"
-	android:layout_gravity="right|bottom"
-	android:layout_marginBottom="52dp"
-	android:layout_marginRight="5dp"
-	android:visibility="gone"
-	>
-		<Button
-		  android:id="@+id/toolbar_more_dlg_delete"
-		  android:layout_width="wrap_content"
-		  android:layout_height="wrap_content"
-		  android:layout_marginLeft="5dp"
-		  android:layout_marginRight="5dp"
-		  android:layout_marginTop="5dp"
-		  android:background="@drawable/toolbar_more_delete"
-		/>
-		<Button
-		  android:id="@+id/toolbar_more_dlg_move"
-		  android:layout_width="wrap_content"
-		  android:layout_height="wrap_content"
-		  android:layout_marginLeft="5dp"
-		  android:layout_marginRight="5dp"
-		  android:layout_marginTop="5dp"
-		  android:background="@drawable/toolbar_more_move"
-		/>
-
-	</LinearLayout>
+	</RelativeLayout>
 </FrameLayout>

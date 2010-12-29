@@ -31,11 +31,11 @@ public class NoteWidget extends AppWidgetProvider
 		PendingIntent pintent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		remoteViews.setOnClickPendingIntent(R.id.widget_B_Memo, pintent);
 		
-//		Intent intentRemind = new Intent(context, RootViewList.class);
+		Intent intentRemind = new Intent(context, SearchResultViewList.class);
 //		intentRemind.putExtra(RootViewList.ExtraData_initListItemDBID, CommonDefine.g_int_Invalid_ID);
-//		PendingIntent pintentRemind = PendingIntent.getActivity(context, 1, intentRemind, PendingIntent.FLAG_UPDATE_CURRENT);
-//		remoteViews.setOnClickPendingIntent(R.id.widget_B_Remind, pintentRemind);
-//		
+		PendingIntent pintentRemind = PendingIntent.getActivity(context, 1, intentRemind, PendingIntent.FLAG_UPDATE_CURRENT);
+		remoteViews.setOnClickPendingIntent(R.id.widget_B_Search, pintentRemind);
+		
 		Intent intentNewNote = new Intent(context, NoteWithYourMind.class);
 		intentNewNote.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_New);
 		intentNewNote.putExtra(NoteWithYourMind.ExtraData_OperationPreID, CMemoInfo.PreId_Root);

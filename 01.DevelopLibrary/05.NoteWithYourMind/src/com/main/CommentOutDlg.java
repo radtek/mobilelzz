@@ -4,6 +4,7 @@ package com.main;
 /* import相关class */
 import android.app.Activity;
 import android.app.Dialog;
+import android.view.View;
 
 /* 实际跳出闹铃Dialog的Activity */
 public class CommentOutDlg extends Dialog
@@ -18,6 +19,24 @@ public class CommentOutDlg extends Dialog
 		m_context 	=	context;
 		m_iPosX		=	8;
 		m_iPosY		=	10;
+	}
+	
+	public	void	hideView( int id )
+	{
+		View	vw	=	 m_context.findViewById(id);
+		if( null != vw )
+		{
+			vw.setVisibility(View.GONE);
+		}	
+	}
+	
+	public	void	showView( int id )
+	{
+		View	vw	=	 m_context.findViewById(id);
+		if( null != vw )
+		{
+			vw.setVisibility(View.VISIBLE);
+		}	
 	}
 
 }

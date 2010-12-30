@@ -19,14 +19,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_weight="1"
 		>
 		<Button
-		android:id="@+id/DateCancel"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="取消"
-		android:layout_weight="1"
-		>
-		</Button>
-		<Button
 		android:id="@+id/DateOK"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -34,6 +26,15 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_weight="1"
 		>
 		</Button>
+		<Button
+		android:id="@+id/DateCancel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="取消"
+		android:layout_weight="1"
+		>
+		</Button>
+
 		</LinearLayout>
 </LinearLayout>
 

@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -22,7 +23,8 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 	private		CTimeDlg		m_clCTimeDlg	=	null;
 	private		CCountdownDlg	m_clCCountdownDlg	=	null;
 	
-	
+	private		CheckBox		m_cbRing		=	null;
+	private		CheckBox		m_cbVibrate	=	null;
 	private 	RadioGroup 		m_RadioGroupTime;
 	private 	RadioGroup 		m_RadioGroupDate;
 	public	static	int			m_iType	=	CommonDefine.g_int_Invalid_ID;
@@ -49,7 +51,6 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.remindsetting2);
-        m_clCRemindInfo		=	new		CRemindInfo ( CommonDefine.Remind_Type_Invalid );
     	m_clCDateDlg		=	new		CDateDlg( RemindActivity.this);
     	m_clCWeekDlg		=	new		CWeekDlg( RemindActivity.this);
     	m_clCTimeDlg		=	new		CTimeDlg( RemindActivity.this);
@@ -83,7 +84,10 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         rbCountdown	=	(RadioButton)findViewById(R.id.daojishi); 
         
         rbOnce		=	(RadioButton)findViewById(R.id.OnceRemind); 
-        rbWeek	=	(RadioButton)findViewById(R.id.EveryWeek); 
+        rbWeek		=	(RadioButton)findViewById(R.id.EveryWeek); 
+        
+        m_cbRing	=	( CheckBox )findViewById( R.id.RingCB);
+        m_cbVibrate	=	( CheckBox )findViewById( R.id.VibrateCB);
 
         //根据从编辑画页传入的数据设置当前Activity的状态
         setInput();
@@ -164,6 +168,24 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     		return;
     	}
     	
+    	if( m_cbRing.isChecked() )
+    	{
+    		m_clCRemindInfo.m_iIsRing	=	CMemoInfo.Ring_On;
+    	}
+    	else
+    	{
+    		m_clCRemindInfo.m_iIsRing	=	CMemoInfo.Ring_Off;
+    	}
+    	
+    	if( m_cbVibrate.isChecked() )
+    	{
+    		m_clCRemindInfo.m_iIsVibrate	=	CMemoInfo.Vibrate_On;
+    	}
+    	else
+    	{
+    		m_clCRemindInfo.m_iIsVibrate	=	CMemoInfo.Vibrate_Off;
+    	}
+    	
     	if( m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_Week )		//循环提醒
 		{				
 			m_clCRemindInfo.setWeekTime( m_clCTimeDlg.m_iHour , m_clCTimeDlg.m_iMinute, m_clCWeekDlg.m_bWeek );	
@@ -230,6 +252,24 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       if ( null != clTemp )		//	取得传入数据非空
       {
       	m_clCRemindInfo	=	clTemp;
+      	if( CMemoInfo.Ring_On == m_clCRemindInfo.m_iIsRing )
+      	{
+      		m_cbRing.setChecked(true);
+      	}
+      	else
+      	{
+      		m_cbRing.setChecked(false);
+      	}
+      	
+      	if( CMemoInfo.Vibrate_On == m_clCRemindInfo.m_iIsVibrate )
+      	{
+      		m_cbVibrate.setChecked(true);
+      	}
+      	else
+      	{
+      		m_cbVibrate.setChecked(false);
+      	}
+      	
       	if( m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_CountDown )					//倒计时提醒
       	{
       		CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
@@ -279,6 +319,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       }
       else
       {
+        m_clCRemindInfo		=	new		CRemindInfo ( CommonDefine.Remind_Type_Invalid );
   		m_clCTimeDlg.hideView( R.id.timeLayout);
 		m_clCDateDlg.hideView( R.id.dateLayout);
 		m_clCWeekDlg.hideView( R.id.weekLayout);

@@ -840,6 +840,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 			clNoteInfo.RemindType		=	m_clCRemindInfo.m_iType;
 			clNoteInfo.dRemindTime		=	m_clCRemindInfo.m_lTime;
 			clNoteInfo.m_Week			=	m_clCRemindInfo.m_Week;	
+			clNoteInfo.iRing			=	m_clCRemindInfo.m_iIsRing;
+			clNoteInfo.iVibrate			=	m_clCRemindInfo.m_iIsVibrate;
 		}
 		
 	}

@@ -12,16 +12,18 @@ import android.widget.Toast;
 
 public final class CRemindOperator
 {
-    private static final CRemindOperator _INSTANCE	=	new CRemindOperator();  
-    
-    
-    private CNoteDBCtrl m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
-    private CRemindOperator()
+    private static CRemindOperator _INSTANCE	=	null;  
+    private CNoteDBCtrl m_clCNoteDBCtrl = null;
+    private CRemindOperator(Context context)
     {
+    	m_clCNoteDBCtrl = CommonDefine.getNoteDBCtrl(context);
     }  
       
-    public synchronized static CRemindOperator getInstance()
+    public synchronized static CRemindOperator getInstance(Context context)
     {  
+    	if(_INSTANCE == null){
+    		_INSTANCE = new CRemindOperator(context);
+    	}
         return _INSTANCE;  
     }  
     public int processRemind(Context context, int _id, CRemindInfo _clCRemindInfo){

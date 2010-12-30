@@ -41,7 +41,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		MoveIn_SelectFolder
 	}
 	
-	private CNoteDBCtrl m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
+	private CNoteDBCtrl m_clCNoteDBCtrl = null;
 	private boolean m_bIsDelete = false;
 	private MoveIn_State m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
 	
@@ -63,6 +63,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		m_toolBarLayout = toolBarLayout;
 		m_myAdapter = null;
 		m_myArrayListAdapter = null;
+		m_clCNoteDBCtrl = CommonDefine.getNoteDBCtrl(sourceManager);
 	}
 	
 	public void releaseSource(){
@@ -105,7 +106,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 			if(alIDs.size()>0){
 				Integer[] needDeleteIDs = (Integer[])alIDs.toArray(new Integer[0]);
     			m_clCNoteDBCtrl.Delete(needDeleteIDs);
-				CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
+				CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance(m_sourceManager);
 				clCRemindOperator.disableRemind( m_sourceManager, needDeleteIDs );
 			}
 			Return2TargetList();

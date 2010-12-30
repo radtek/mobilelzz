@@ -926,27 +926,26 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 						new int[]{android.R.id.text1}
 						);
 				folderList.setAdapter(LA_FolderList);
+				folderList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+					public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3){
+						ListAdapter LA = (ListAdapter)arg0.getAdapter();
+						long id = LA.getItemId(arg2);
+						if(id<0){
+							id = 0;
+						}
+						m_ExtraData_PreID = (int)id;
+						m_SaveBT.performClick();
+		        		m_dlgFolderList.cancel();
+
+					}
+				});
+				m_dlgFolderList.show(); 
 			} 
 		}else{
 			Toast toast = Toast.makeText(this, "当前没有可以移动到的文件夹\n请先建立文件夹", Toast.LENGTH_LONG);
     		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
     		toast.show();
 		}
-		
-		folderList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3){
-				ListAdapter LA = (ListAdapter)arg0.getAdapter();
-				long id = LA.getItemId(arg2);
-				if(id<0){
-					id = 0;
-				}
-				m_ExtraData_PreID = (int)id;
-				m_SaveBT.performClick();
-        		m_dlgFolderList.cancel();
-
-			}
-		});
-		m_dlgFolderList.show(); 
 	}
     
     private int SaveChagedNoteInfo(CMemoInfo clNoteInfo)

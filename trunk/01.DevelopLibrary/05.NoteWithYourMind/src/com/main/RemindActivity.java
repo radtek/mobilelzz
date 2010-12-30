@@ -45,6 +45,8 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 	
 	boolean		m_bInputflg		=	false;
 	
+	TextView	tvType		=	null;
+	
 	private 	RadioButton 	rbTime,	rbCountdown, rbOnce, rbWeek; 
 	
     public void onCreate(Bundle savedInstanceState)
@@ -61,6 +63,8 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     	      
         m_RadioGroupTime.setOnCheckedChangeListener(mChangeRadioTime);
         m_RadioGroupDate.setOnCheckedChangeListener(mChangeRadioDate);
+        
+        tvType	=	(TextView)findViewById(R.id.RemindType);
         
         btTime	=	(Button) findViewById(R.id.TimeSettingBtnImg);
         btTime.setOnClickListener(this);
@@ -252,6 +256,17 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       if ( null != clTemp )		//	取得传入数据非空
       {
       	m_clCRemindInfo	=	clTemp;
+      	
+      	TextView	tvStatus	=	(TextView)findViewById(R.id.RemindStatus);
+      	if( m_clCRemindInfo.m_iRemindAble == CMemoInfo.IsRemind_Able_Yes )
+      	{
+      		tvStatus.setText("启用");
+      	}
+      	else
+      	{
+      		tvStatus.setText("停用");
+      	}
+      	
       	if( CMemoInfo.Ring_On == m_clCRemindInfo.m_iIsRing )
       	{
       		m_cbRing.setChecked(true);
@@ -281,6 +296,8 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     		m_clCDateDlg.hideView( R.id.dateLayout);
     		m_clCWeekDlg.hideView( R.id.weekLayout);
     		m_clCCountdownDlg.showView( R.id.countDownLayout);
+    		
+    		tvType.setText("当前提醒为 : 倒计时提醒");
       	}
       	else if( m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_Week)				//循环提醒
       	{       		
@@ -297,6 +314,8 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     		m_clCDateDlg.hideView( R.id.dateLayout);
     		m_clCWeekDlg.showView( R.id.weekLayout);
     		m_clCCountdownDlg.hideView( R.id.countDownLayout);
+    		
+    		tvType.setText("当前提醒为 : 循环提醒");
       	}
       	else if(  m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_Once )				//单次提醒
       	{
@@ -315,6 +334,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     		m_clCWeekDlg.hideView( R.id.weekLayout);
     		m_clCCountdownDlg.hideView( R.id.countDownLayout);
       		
+    		tvType.setText("当前提醒为 : 单次提醒");
       	}
       }
       else
@@ -339,6 +359,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         		{
             		m_clCTimeDlg.setDisplay( );
         		}
+        		tvType.setText("");
         		m_clCTimeDlg.showView( R.id.timeLayout);
         		m_clCCountdownDlg.hideView( R.id.countDownLayout);
 //        		btTime.setVisibility(View.VISIBLE);
@@ -355,6 +376,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         		m_clCDateDlg.hideView( R.id.dateLayout);
         		m_clCWeekDlg.hideView( R.id.weekLayout);
         		m_clCCountdownDlg.showView( R.id.countDownLayout);
+        		tvType.setText("当前提醒为 : 倒计时提醒");
         		
 //        		btTime.setVisibility(View.GONE);
 //        		btCountdown.setVisibility(View.VISIBLE); 
@@ -376,6 +398,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         		m_clCDateDlg.showView( R.id.dateLayout);
         		m_clCWeekDlg.hideView( R.id.weekLayout);
         		m_clCCountdownDlg.hideView( R.id.countDownLayout);
+        		tvType.setText("当前提醒为 : 单次提醒");
 //        		btOnceDate.setVisibility(View.VISIBLE);
 //        		btWeek.setVisibility(View.GONE); 
 
@@ -390,6 +413,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         		m_clCDateDlg.hideView( R.id.dateLayout);
         		m_clCWeekDlg.showView( R.id.weekLayout);
         		m_clCCountdownDlg.hideView( R.id.countDownLayout);
+        		tvType.setText("当前提醒为 : 循环提醒");
 //        		btWeek.setVisibility(View.VISIBLE);
 //        		btOnceDate.setVisibility(View.GONE);   
         	}

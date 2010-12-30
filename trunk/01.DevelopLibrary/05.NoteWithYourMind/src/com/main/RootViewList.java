@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -56,11 +55,7 @@ implements ListActivityCtrl, View.OnClickListener
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		//创建DB操作类
-		if(CommonDefine.m_clCNoteDBCtrl==null){
-			CommonDefine.m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
-		}
-        m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
+        m_clCNoteDBCtrl = CommonDefine.getNoteDBCtrl(this);
     	Cursor	curPassWord	=	m_clCNoteDBCtrl.getPassWord();
         curPassWord.moveToFirst();
 		int count = curPassWord.getCount();

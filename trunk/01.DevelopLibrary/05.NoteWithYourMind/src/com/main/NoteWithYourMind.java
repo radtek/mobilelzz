@@ -1,68 +1,39 @@
 package com.main;
 
-import java.text.SimpleDateFormat;
-import java.util.*; 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
+import android.text.TextPaint;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.SimpleCursorAdapter;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.Toast;
-import android.view.View;
-import android.app.AlertDialog;
-import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.widget.Button;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.content.DialogInterface;
-import android.media.MediaRecorder;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.os.Environment;
-import android.widget.Chronometer;
 import android.widget.TextView;
-import android.widget.Chronometer.OnChronometerTickListener;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
-import android.text.TextPaint;
-import android.util.*;
-import android.net.Uri;
-import android.content.Intent;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
+import android.widget.Toast;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
-interface MediaStatusControl{
-	public void pauseMediaInteract();
-	public void resumeMediaInteract();
-}
 @SuppressWarnings("unused")
 public class NoteWithYourMind extends Activity implements View.OnClickListener, MediaStatusControl
 {
@@ -81,7 +52,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 	public static String 										ExtraData_RemindSetting	=	"com.main.ExtraData_RemindSetting";
 	
 	//进行DB操作的类
-	private CNoteDBCtrl 										m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
+	private CNoteDBCtrl 										m_clCNoteDBCtrl = null;
 
 	private int 												m_ExtraData_EditNoteID 		=	CMemoInfo.Id_Invalid;
 	private int 												m_ExtraData_PreID 		=	CMemoInfo.Id_Invalid;
@@ -160,14 +131,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
     {
     	super.onCreate(savedInstanceState);
 		setContentView( R.layout.editnote );
-		TelephonyManager tm = (TelephonyManager)this.getSystemService(this.TELEPHONY_SERVICE);
-		MediaPhoneCallListener MediaListener = new MediaPhoneCallListener();
-		MediaListener.setSourceControl(this);
-		tm.listen(MediaListener, PhoneStateListener.LISTEN_CALL_STATE);
-		if(m_clCNoteDBCtrl==null){
-			m_clCNoteDBCtrl	=	new	CNoteDBCtrl( this );
-			CommonDefine.m_clCNoteDBCtrl = m_clCNoteDBCtrl;
-		}
+		CommonDefine.getMediaPhoneCallListener(this).setSourceControl(this);
+		m_clCNoteDBCtrl = CommonDefine.getNoteDBCtrl(this);
 		m_NoteInfoFromDB = new CMemoInfo();
 //		m_clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Invalid );
     	//点击保存Button，进行新增或更新操作
@@ -320,7 +285,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 	        	    	m_NoteInfoFromDB.strDetail = strDetail;
 	        	    	index = curExtraMemo.getColumnIndex(CNoteDBCtrl.KEY_preid);
 	        	    	m_ExtraData_PreID = curExtraMemo.getInt(index);
-	        	    	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
+	        	    	CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance(this);
 	        	    	m_clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Invalid );
 	            		if ( CommonDefine.E_FAIL == clCRemindOperator.getRemindInfo(curExtraMemo, m_clCRemindInfo))
 	            		{
@@ -587,6 +552,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 			           public void onClick(DialogInterface dialog, int id) {
 			        	   myRecAudioFile.delete();
 			        	   myRecAudioFile = null;
+			        	   RecVoice();
 			           }
 			       })
 			       .setNegativeButton("否", new DialogInterface.OnClickListener() {
@@ -595,8 +561,13 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 			           }
 			       });
 			AlertDialog alert = builder.create();	
+			alert.show();
+		}else{
+			RecVoice();	
 		}
-		
+	}
+	
+	private void RecVoice(){
 		if(mMediaPlayer != null && mMediaPlayer.isPlaying())
 		{
 			mMediaPlayer.stop();
@@ -672,7 +643,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 				}
 			}
         });
-        nThread.start();       
+        nThread.start();  
 	}
 	
 	//停止录音/暂停播放
@@ -777,10 +748,10 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 		           }
 		          else
 		          {
-		        	  mProgressBar01.setProgress(m_iCurrentVoiceDataDuration);
+		        	  mProgressBar01.setProgress(0);
 						int total_sec = m_iCurrentVoiceDataDuration/1000%60;
 						int total_min = m_iCurrentVoiceDataDuration/1000/60;
-						mchronometer.setText(String.format("%02d:%02d/%02d:%02d", total_min,total_sec,  total_min ,total_sec));
+						mchronometer.setText(String.format("%02d:%02d/%02d:%02d", 0,0,  total_min ,total_sec));
 		          }
 		          break;
 		         
@@ -879,7 +850,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 		FillVoiceInfo(clNoteInfo);
 		FillRemindInfo(clNoteInfo);
 		int _id = SaveChagedNoteInfo(clNoteInfo);
-		CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
+		CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance(this);
 		clCRemindOperator.processRemind(this, _id, m_clCRemindInfo);
 		
 		if(_id != CommonDefine.E_FAIL){
@@ -1091,25 +1062,3 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 	}
 }
 
-class MediaPhoneCallListener extends PhoneStateListener{
-	private MediaStatusControl m_mediaControl = null;
-	public void setSourceControl(MediaStatusControl mediaControl){
-		m_mediaControl = mediaControl;
-	}
-	public void onCallStateChanged(int state, String incomingNumber){
-		switch(state){
-			case TelephonyManager.CALL_STATE_IDLE:
-				if(m_mediaControl!=null){
-					m_mediaControl.resumeMediaInteract();
-				}
-				break;
-			case TelephonyManager.CALL_STATE_OFFHOOK:
-			case TelephonyManager.CALL_STATE_RINGING:
-				if(m_mediaControl!=null){
-					m_mediaControl.pauseMediaInteract();
-				}
-				break;
-		}
-		super.onCallStateChanged(state, incomingNumber);
-	}
-}

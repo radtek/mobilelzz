@@ -167,7 +167,7 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		Button icon2 = (Button) view.findViewById(R.id.notelistitem_icon2);
 		if(iTypeValue==CMemoInfo.Type_Folder){
 			bigIcon.setBackgroundResource(R.drawable.notelistitem_bigicon_folder);
-			long Count = CommonDefine.m_clCNoteDBCtrl.getRecCountInFolder(iIDValue);
+			long Count = CommonDefine.getNoteDBCtrl(m_context).getRecCountInFolder(iIDValue);
 			String strCount = "("+String.valueOf(Count)+")";
 			countTV.setText(strCount);
 			itemdetail.bIsFolder = true;

@@ -48,7 +48,7 @@ public class BootReceiver extends BroadcastReceiver {
 				}
 				else if ( CommonDefine.Remind_Type_Week == lType )					// Ñ­»·:2
 				{
-					CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance();
+					CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance(ctx);
 					CRemindInfo 	clCRemindInfo		=	new	CRemindInfo( CommonDefine.Remind_Type_Invalid );
 					if( CommonDefine.E_FAIL == clCRemindOperator.getRemindInfo( clCursor, clCRemindInfo ) )
 					{

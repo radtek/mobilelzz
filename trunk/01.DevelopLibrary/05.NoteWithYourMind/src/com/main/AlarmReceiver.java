@@ -22,7 +22,7 @@ public class AlarmReceiver extends BroadcastReceiver
 	    context.startActivity( iIntent );
 	    
 	    //¸üÐÂÌáÐÑ×´Ì¬
-	    CRemindOperator	clCRemindOperator	=	  CRemindOperator.getInstance();  
+	    CRemindOperator	clCRemindOperator	=	  CRemindOperator.getInstance(context);  
 	    clCRemindOperator.alarmAlert(context, id );
 	}
 }

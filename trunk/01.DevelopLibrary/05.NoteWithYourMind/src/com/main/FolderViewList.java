@@ -18,7 +18,6 @@ public class FolderViewList extends Activity implements ListActivityCtrl
 	private Integer m_iEncodeFlag = CMemoInfo.IsEncode_Invalid;
 	private Integer m_iRemindFlag = CMemoInfo.IsRemind_Invalid;
 	private int m_iFolder_DBID = CommonDefine.g_int_Invalid_ID;
-	private CNoteDBCtrl m_clCNoteDBCtrl = CommonDefine.m_clCNoteDBCtrl;
 	private NoteListUICtrl m_NoteListUICtrl;
 	private View m_toolBarLayout;
 

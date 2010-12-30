@@ -1,6 +1,11 @@
 package com.main;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+
+import android.content.Context;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 
 class CommonDefine{
 	public	enum	ToolbarStatusEnum
@@ -16,7 +21,7 @@ class CommonDefine{
 	public static String 					g_str_PassWord = "";
 	public static boolean 					g_bool_IsPassWordChecked = false;
 
-	public static	CNoteDBCtrl				m_clCNoteDBCtrl = null;
+	private static	CNoteDBCtrl				m_clCNoteDBCtrl = null;
 	
 	public static String 					g_strAudioFilePath = "/record";
 	public static String 					g_strAppFilePath = "/note";
@@ -31,7 +36,63 @@ class CommonDefine{
 	public static int 						Remind_Type_CountDown	=	1;
 	public static int 						Remind_Type_Week		=	2;
 	public static int 						Remind_Type_Once		=	3;
+	
+	private static MediaPhoneCallListener 	m_MediaPhoneCallListener = null;
+	
+	static public CNoteDBCtrl getNoteDBCtrl(Context context){
+		if(m_clCNoteDBCtrl==null){
+			m_clCNoteDBCtrl = new CNoteDBCtrl(context);
+		}else{
+			
+		}
+		return m_clCNoteDBCtrl;
+	}
+	
+	static public MediaPhoneCallListener getMediaPhoneCallListener(Context context){
+		if(m_MediaPhoneCallListener==null){
+			m_MediaPhoneCallListener = new MediaPhoneCallListener();
+			m_MediaPhoneCallListener.initSource();
+			TelephonyManager tm = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+			tm.listen(m_MediaPhoneCallListener, PhoneStateListener.LISTEN_CALL_STATE);
+		}else{
+			
+		}
+		return m_MediaPhoneCallListener;
+	}
 
+}
+interface MediaStatusControl{
+	public void pauseMediaInteract();
+	public void resumeMediaInteract();
+}
+class MediaPhoneCallListener extends PhoneStateListener{
+	private ArrayList<MediaStatusControl> m_mediaControl = null;
+	public void setSourceControl(MediaStatusControl mediaControl){
+		m_mediaControl.add(mediaControl);
+	}
+	public void initSource(){
+		m_mediaControl = new ArrayList<MediaStatusControl>();
+	}
+	public void onCallStateChanged(int state, String incomingNumber){
+		switch(state){
+			case TelephonyManager.CALL_STATE_IDLE:
+				if(m_mediaControl!=null){
+					for(int i = 0; i < m_mediaControl.size(); i++){
+						m_mediaControl.get(i).resumeMediaInteract();
+					}
+				}
+				break;
+			case TelephonyManager.CALL_STATE_OFFHOOK:
+			case TelephonyManager.CALL_STATE_RINGING:
+				if(m_mediaControl!=null){
+					for(int i = 0; i < m_mediaControl.size(); i++){
+						m_mediaControl.get(i).pauseMediaInteract();
+					}
+				}
+				break;
+		}
+		super.onCallStateChanged(state, incomingNumber);
+	}
 }
 
 class CommonContainer{

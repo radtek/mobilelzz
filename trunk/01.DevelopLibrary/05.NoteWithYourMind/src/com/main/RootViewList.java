@@ -1,13 +1,18 @@
 package com.main;
 
+import java.lang.ref.WeakReference;
+import java.text.DateFormat.Field;
 import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -271,6 +276,7 @@ implements ListActivityCtrl, View.OnClickListener
 	        			Toast toast = Toast.makeText(RootViewList.this, "请输入文件夹名称", Toast.LENGTH_SHORT);
 	            		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
 	            		toast.show();
+	            		
 	        		}	
 				}
 			})
@@ -281,6 +287,7 @@ implements ListActivityCtrl, View.OnClickListener
 				}
 			})
 			.create();
+		replaceDialogButtonHandler(clDlgNewFolder);
 		clDlgNewFolder.show();    
 	}
 	private void CreateFolderRec(String strDetail){
@@ -692,5 +699,46 @@ implements ListActivityCtrl, View.OnClickListener
 //			clDlg.show();
 //		
 //	}
+	private void replaceDialogButtonHandler(Dialog dlg){
+		try
+		{
+			java.lang.reflect.Field field = dlg.getClass().getDeclaredField("mAlert");
+			field.setAccessible( true );
+			//   获得mAlert变量的值
+			Object obj = field.get(dlg);
+			field = obj.getClass().getDeclaredField( "mHandler" );
+			field.setAccessible( true );
+			//   修改mHandler变量的值，使用新的ButtonHandler类
+			field.set(obj, new ButtonHandler(dlg));
+		}
+		catch (Exception e)
+		{
+		}
+	}
 
+}
+
+class ButtonHandler extends Handler
+{
+
+	private WeakReference < DialogInterface > mDialog;
+	
+	public ButtonHandler(DialogInterface dialog)
+	{
+	mDialog =   new WeakReference < DialogInterface > (dialog);
+	}
+	
+	public   void handleMessage(Message msg)
+	{
+		switch (msg.what)
+		{
+		
+			case DialogInterface.BUTTON_POSITIVE:
+			case DialogInterface.BUTTON_NEGATIVE:
+			case DialogInterface.BUTTON_NEUTRAL:
+			((DialogInterface.OnClickListener) msg.obj).onClick(mDialog
+			.get(), msg.what);
+			break ;
+		}
+	}
 }

@@ -236,6 +236,11 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       		m_clCRemindInfo.getCutDownTime( clCDateAndTime );
       		m_clCCountdownDlg.saveData( clCDateAndTime.iHour, clCDateAndTime.iMinute ); 
       		rbCountdown.setChecked(true);
+      		
+    		m_clCTimeDlg.hideView( R.id.timeLayout);
+    		m_clCDateDlg.hideView( R.id.dateLayout);
+    		m_clCWeekDlg.hideView( R.id.weekLayout);
+    		m_clCCountdownDlg.showView( R.id.countDownLayout);
       	}
       	else if( m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_Week)				//循环提醒
       	{       		
@@ -247,7 +252,11 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       		rbWeek.setChecked(true);
       		
       		m_clCTimeDlg.saveData(clCDateAndTime.iHour, clCDateAndTime.iMinute);
-      		m_clCWeekDlg.setInputSatus ( week );  		     		
+      		m_clCWeekDlg.setInputSatus ( week );  	
+    		m_clCTimeDlg.showView( R.id.timeLayout);
+    		m_clCDateDlg.hideView( R.id.dateLayout);
+    		m_clCWeekDlg.showView( R.id.weekLayout);
+    		m_clCCountdownDlg.hideView( R.id.countDownLayout);
       	}
       	else if(  m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_Once )				//单次提醒
       	{
@@ -261,11 +270,19 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       		rbTime.setChecked(true);
       		rbOnce.setChecked(true);
       		
+    		m_clCTimeDlg.showView( R.id.timeLayout);
+    		m_clCDateDlg.showView( R.id.dateLayout);
+    		m_clCWeekDlg.hideView( R.id.weekLayout);
+    		m_clCCountdownDlg.hideView( R.id.countDownLayout);
+      		
       	}
       }
       else
       {
-      	 
+  		m_clCTimeDlg.hideView( R.id.timeLayout);
+		m_clCDateDlg.hideView( R.id.dateLayout);
+		m_clCWeekDlg.hideView( R.id.weekLayout);
+		m_clCCountdownDlg.hideView( R.id.countDownLayout);
       }
       
       m_bInputflg	=	false;
@@ -281,8 +298,10 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         		{
             		m_clCTimeDlg.setDisplay( );
         		}
-        		btTime.setVisibility(View.VISIBLE);
-        		btCountdown.setVisibility(View.GONE);
+        		m_clCTimeDlg.showView( R.id.timeLayout);
+        		m_clCCountdownDlg.hideView( R.id.countDownLayout);
+//        		btTime.setVisibility(View.VISIBLE);
+//        		btCountdown.setVisibility(View.GONE);
 
         	}
         	else if(checkedId==R.id.daojishi)
@@ -291,8 +310,13 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         		{
             		m_clCCountdownDlg.setDisplay();  			
         		}
-        		btTime.setVisibility(View.GONE);
-        		btCountdown.setVisibility(View.VISIBLE); 
+        		m_clCTimeDlg.hideView( R.id.timeLayout);
+        		m_clCDateDlg.hideView( R.id.dateLayout);
+        		m_clCWeekDlg.hideView( R.id.weekLayout);
+        		m_clCCountdownDlg.showView( R.id.countDownLayout);
+        		
+//        		btTime.setVisibility(View.GONE);
+//        		btCountdown.setVisibility(View.VISIBLE); 
         	}
         }
     };
@@ -307,8 +331,12 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         		{
             		m_clCDateDlg.setDisplay();     			
         		}
-        		btOnceDate.setVisibility(View.VISIBLE);
-        		btWeek.setVisibility(View.GONE); 
+ //       		m_clCTimeDlg.showView( R.id.timeLayout);
+        		m_clCDateDlg.showView( R.id.dateLayout);
+        		m_clCWeekDlg.hideView( R.id.weekLayout);
+        		m_clCCountdownDlg.hideView( R.id.countDownLayout);
+//        		btOnceDate.setVisibility(View.VISIBLE);
+//        		btWeek.setVisibility(View.GONE); 
 
         	}
         	else if(checkedId==R.id.EveryWeek)
@@ -317,8 +345,12 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         		{
             		m_clCWeekDlg.setDisplay( );   			
         		}
-        		btWeek.setVisibility(View.VISIBLE);
-        		btOnceDate.setVisibility(View.GONE);   
+ //       		m_clCTimeDlg.showView( R.id.timeLayout);
+        		m_clCDateDlg.hideView( R.id.dateLayout);
+        		m_clCWeekDlg.showView( R.id.weekLayout);
+        		m_clCCountdownDlg.hideView( R.id.countDownLayout);
+//        		btWeek.setVisibility(View.VISIBLE);
+//        		btOnceDate.setVisibility(View.GONE);   
         	}
         }
     };

@@ -95,10 +95,47 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
 		m_iMonth	=	iMonth;
 		m_iDay		=	iDay;
 		
+        Calendar clCalendar     =     Calendar.getInstance();
+        clCalendar.setTimeInMillis(System.currentTimeMillis());
+        clCalendar.set(Calendar.YEAR, iYear);
+        clCalendar.set(Calendar.MONTH, iMonth);
+        clCalendar.set(Calendar.DAY_OF_MONTH, iDay);
+		
 		TextView	DateTxt				=	(TextView)m_context.findViewById(R.id.OnceText);
 
-		DateTxt.setText(Integer.toString(iYear) + "年" + Integer.toString( iMonth+1 ) + "月" + Integer.toString(iDay) + "日" );
+		DateTxt.setText(Integer.toString(iYear) + "年" + Integer.toString( iMonth+1 ) + "月" + Integer.toString(iDay) + "日" + "  " + getDayofWeek(clCalendar));
 		
 		RemindActivity.m_iType	=	CommonDefine.Remind_Type_Once;
 	}
+	
+    String	getDayofWeek( Calendar	clCalendar )
+    {
+    	String	strTemp	=	null;
+    	switch( clCalendar.get(Calendar.DAY_OF_WEEK) )
+    	{
+    	case	1:
+    		strTemp	=	"星期日";
+    		break;
+    	case	2:
+    		strTemp	=	"星期一";
+    		break;
+    	case	3:
+    		strTemp	=	"星期二";
+    		break;
+    	case	4:
+    		strTemp	=	"星期三";
+    		break;
+    	case	5:
+    		strTemp	=	"星期四";
+    		break;
+    	case	6:
+    		strTemp	=	"星期五";
+    		break;
+    	case	7:
+    		strTemp	=	"星期六";
+    		break;
+    	}
+    	
+    	return	strTemp;
+    }
 }

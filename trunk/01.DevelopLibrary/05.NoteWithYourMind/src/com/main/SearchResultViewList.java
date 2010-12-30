@@ -63,12 +63,12 @@ implements ListActivityCtrl, View.OnClickListener
         ImageButton clBTStartSearch = (ImageButton) findViewById(R.id.search_toolbar_btn_search);
         clBTStartSearch.setOnClickListener(this);        
 		
-        Button clBTSortSetting = (Button) findViewById(R.id.searchresultviewlist_toolbar_SortSetting);
+        ImageButton clBTSortSetting = (ImageButton) findViewById(R.id.searchresultviewlist_toolbar_SortSetting);
         clBTSortSetting.setOnClickListener(this);
 
-		Button clBTMemoMore_delete = (Button) findViewById(R.id.toolbar_more_dlg_delete);
+        ImageButton clBTMemoMore_delete = (ImageButton) findViewById(R.id.toolbar_delete);
         clBTMemoMore_delete.setOnClickListener(this);
-        Button clBTMemoMore_move = (Button) findViewById(R.id.toolbar_more_dlg_move);
+        ImageButton clBTMemoMore_move = (ImageButton) findViewById(R.id.toolbar_move);
         clBTMemoMore_move.setOnClickListener(this);
         
 	}
@@ -115,10 +115,10 @@ implements ListActivityCtrl, View.OnClickListener
 		case R.id.search_toolbar_btn_search:	
 			processSortClick();
 			break;
-		case R.id.toolbar_more_dlg_delete:
+		case R.id.toolbar_delete:
 			m_NoteListUICtrl.processDeleteClick(view);
 		    break;
-		case R.id.toolbar_more_dlg_move:
+		case R.id.toolbar_move:
 			m_NoteListUICtrl.processMoveClick(view);
 			break;
 		default:
@@ -206,26 +206,28 @@ implements ListActivityCtrl, View.OnClickListener
 			m_dlgSortTypeList.show();      			
 		
 	}
-	
-	
-	private void processNewNoteClick(View view){
-		Intent intent = new Intent(SearchResultViewList.this, NoteWithYourMind.class);
-		intent.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_New);
-		intent.putExtra(NoteWithYourMind.ExtraData_OperationPreID, CMemoInfo.PreId_Root);
-		startActivity(intent);
-	}
+//	
+//	
+//	private void processNewNoteClick(View view){
+//		Intent intent = new Intent(SearchResultViewList.this, NoteWithYourMind.class);
+//		intent.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_New);
+//		intent.putExtra(NoteWithYourMind.ExtraData_OperationPreID, CMemoInfo.PreId_Root);
+//		startActivity(intent);
+//	}
 	
 	public void updateToolbar(CommonDefine.ToolbarStatusEnum enStatus){
+		ImageButton btSort = (ImageButton)m_toolBarLayout.findViewById(R.id.searchresultviewlist_toolbar_SortSetting);
 		CommonDefine.g_enToolbarStatus = enStatus;
-		ImageButton btDelete = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_delete);
-		ImageButton btCancel = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_cancel);
 		if(enStatus == CommonDefine.ToolbarStatusEnum.ToolbarStatus_Normal){
-			btDelete.setVisibility(View.GONE);
+			ImageButton btDelete = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_delete);
+			ImageButton btCancel = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_cancel);
+			ImageButton btMove = (ImageButton)m_toolBarLayout.findViewById(R.id.toolbar_move);
+			btSort.setVisibility(View.VISIBLE);
+			btDelete.setVisibility(View.VISIBLE);
+			btMove.setVisibility(View.VISIBLE);
 			btCancel.setVisibility(View.GONE);
 		}else{
-//			btDelete.setVisibility(View.VISIBLE);
-//			btMove.setVisibility(View.VISIBLE);
-//			btCancel.setVisibility(View.VISIBLE);
+			btSort.setVisibility(View.GONE);
 		}
 	}
 

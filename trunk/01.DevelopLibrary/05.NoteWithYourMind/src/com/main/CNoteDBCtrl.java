@@ -35,6 +35,9 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	public static final String	KEY_isHaveAudioData		= "ishavevoice";
 	public static final String	KEY_audioDataName		= "audiodataname";
 	
+	public static final String	KEY_isRing				= "isring";
+	public static final String	KEY_isVibrate			= "isvibrate";
+	
 	public static final String	KEY_rec_count_in_folder = "reccountinfolder";
 	// 数据库名称为data
 	private static final String	DB_NAME			= "NoteWithYourMind.db";
@@ -43,7 +46,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	private static final String	DB_TABLE				= "Notes";
 	private static final String	DB_TABLE_PassWord		= "PassWord";
 	// 数据库版本
-	private static final int	DB_VERSION		= 2;
+	private static final int	DB_VERSION		= 3;
 	
 	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" 
 												+ KEY_id 				+ " INTEGER PRIMARY KEY AUTOINCREMENT," 
@@ -67,7 +70,9 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 												+ KEY_staturday 		+ " INTERGER,"
 												+ KEY_sunday 			+ " INTERGER,"
 												+ KEY_isHaveAudioData	+ " INTERGER,"
-												+ KEY_audioDataName		+ " TEXT"
+												+ KEY_audioDataName		+ " TEXT,"
+												+ KEY_isRing			+ " INTERGER,"
+												+ KEY_isVibrate			+ " INTERGER"
 												+ ")";
 
 	private static final String	Trigger_CREATE	=	"create trigger delete_sub_rec before delete on " + DB_TABLE +" for each row " +
@@ -222,6 +227,9 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		initialValues.put(KEY_sunday, clCMemoInfo.m_Week[6]);
 		initialValues.put(KEY_isHaveAudioData, clCMemoInfo.iIsHaveAudioData);
 		initialValues.put(KEY_audioDataName, clCMemoInfo.strAudioFileName);
+		
+		initialValues.put(KEY_isRing, clCMemoInfo.iRing);
+		initialValues.put(KEY_isVibrate, clCMemoInfo.iVibrate);
 
 		return	(int)m_db.insert(DB_TABLE, KEY_id, initialValues);
 	}
@@ -333,6 +341,16 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 			{
 				cv.put(KEY_audioDataName, clCMemoInfo.strAudioFileName);
 			}
+			
+			if ( -1 != clCMemoInfo.iIsHaveAudioData)
+			{
+				cv.put(KEY_isRing, clCMemoInfo.iRing);
+			}
+			if ( -1 != clCMemoInfo.iIsHaveAudioData)
+			{
+				cv.put(KEY_isVibrate, clCMemoInfo.iVibrate);
+			}
+			
 			String[] whereValue={ Integer.toString(id)};
 			m_db.update(DB_TABLE, cv, KEY_id+"=?", whereValue);
 			iEffectedID = clCMemoInfo.iId;

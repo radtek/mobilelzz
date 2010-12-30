@@ -15,11 +15,16 @@ import android.os.Vibrator;
 /* 实际跳出闹铃Dialog的Activity */
 public class AlarmAlert extends Activity
 {
-  @Override
+
+  MediaPlayer 	mp;
+  Vibrator 		vibrator;
+  
+  int			iIsRing;
+  int			iIsVibrate;
+  
   protected void onCreate(Bundle savedInstanceState) 
   {
-		final MediaPlayer mp;
-		final Vibrator vibrator;
+
     super.onCreate(savedInstanceState);
     /* 跳出的闹铃警示  */
     Intent iExtraData = getIntent();
@@ -35,13 +40,26 @@ public class AlarmAlert extends Activity
     
 	int	iColumn	=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_detail );
 	String	strDetail		=	clCursor.getString(iColumn);
+	
+	iColumn	=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_isRing );
+	iIsRing		=	clCursor.getInt(iColumn);
+	
+	iColumn	=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_isVibrate );
+	iIsVibrate		=	clCursor.getInt(iColumn);
     
-    mp =MediaPlayer.create(this, R.raw.bks);
-    mp.start();
-    vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE); 
-    long[] pattern = {800, 50, 400, 30};
-    vibrator.vibrate(pattern, 2);
-    
+	if( CMemoInfo.Ring_On == iIsRing )
+	{
+	    mp =MediaPlayer.create(this, R.raw.bks);
+	    mp.start();
+	}
+
+	if ( CMemoInfo.Vibrate_On == iIsVibrate )
+	{
+	    vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE); 
+	    long[] pattern = {1000, 1000, 1000, 500};
+	    vibrator.vibrate( pattern, 0 );
+	}
+	 
     new AlertDialog.Builder(AlarmAlert.this)
         //.setIcon(R.drawable.clock)
         .setTitle("闹钟响了!!")
@@ -52,12 +70,22 @@ public class AlarmAlert extends Activity
           public void onClick(DialogInterface dialog, int whichButton)
           {
             /* 关闭Activity */
-        	  mp.stop();
-        	  mp.release();
-        	  vibrator.cancel();
+        	  if( CMemoInfo.Ring_On == iIsRing )
+        	  {
+            	  mp.stop();
+            	  mp.release();	  
+        	  }
+        	  
+        	  if ( CMemoInfo.Vibrate_On == iIsVibrate )
+        	  {
+        		  vibrator.cancel();
+        	  }
+        	  
         	  AlarmAlert.this.finish();
           }
         })
         .show();
+    
+    clCursor.close();
   } 
 }

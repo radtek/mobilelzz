@@ -18,6 +18,12 @@ public class CMemoInfo {
 	public final static Integer IsRemind_Able_Yes = 1;
 	public final static Integer IsRemind_Able_No = 0;
 	
+	public final static Integer Ring_On 	= 1;
+	public final static Integer Ring_Off 	= 0;
+	
+	public final static Integer Vibrate_On	= 1;
+	public final static Integer Vibrate_Off = 0;
+	
 	public final static Integer PreId_Root = 0;
 	public final static Integer Id_Invalid = -1;
 
@@ -44,6 +50,8 @@ public class CMemoInfo {
 	Integer		iIsEncode;	
 	Byte		m_Week[]	=	new Byte[7];
 	
+	Integer		iVibrate;
+	Integer		iRing;
 	Integer		iIsHaveAudioData;
 	String		strAudioFileName;
 	CMemoInfo()
@@ -61,6 +69,8 @@ public class CMemoInfo {
 		strDetail		=	null;
 		strPassword		=	null;
 		iIsEncode		=	-1;
+		iVibrate		=	-1;
+		iRing			=	-1;
 		int	length	=	m_Week.length;
 		for ( int i = 0; i < length; ++i )
 		{

@@ -46,7 +46,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			android:id="@+id/TimeSetting"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:text="设定时间"
+			android:text="时间点设定 "
 			>
 			</RadioButton>
 			<LinearLayout
@@ -77,7 +77,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			android:id="@+id/daojishi"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:text="设定倒计时"
+			android:text="倒计时设定 "
 			>
 			</RadioButton>
 			<LinearLayout
@@ -126,7 +126,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			android:id="@+id/OnceRemind"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="提醒一次"
+			android:text="单次设定 "
 			>
 			</RadioButton>
 			<LinearLayout
@@ -155,7 +155,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			android:id="@+id/EveryWeek"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="每周提醒"
+			android:text="循环设定 "
 			>
 			</RadioButton>
 			<LinearLayout
@@ -234,6 +234,28 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 
 <!--   日期设定结束   --> 
 
+	<LinearLayout
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	>
+		<CheckBox
+		android:id="@+id/RingCB"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:text="响铃"
+		>
+		</CheckBox>
+		<CheckBox
+		android:id="@+id/VibrateCB"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:text="震动"
+		>
+		</CheckBox>
+	</LinearLayout>
 	<RelativeLayout
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"

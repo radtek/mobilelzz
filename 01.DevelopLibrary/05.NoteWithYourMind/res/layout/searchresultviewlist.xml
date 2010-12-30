@@ -57,36 +57,26 @@
 		android:layout_height="wrap_content"
 		android:layout_alignParentBottom="true"
 		android:background="@drawable/background_toolbar">
-			<Button
+			<ImageButton
 				android:id="@+id/searchresultviewlist_toolbar_SortSetting"
 				style="@style/ToolBarButton"
-				android:text="切换排序"
+				android:src="@drawable/toolbar_sort"
 				android:textColor="#000000"/>
 			<ImageButton
 				android:id="@+id/toolbar_delete"
 				style="@style/ToolBarButton"
 				android:src="@drawable/toolbar_delete"
-				android:visibility="gone"/>
+				/>
 			<ImageButton
 				android:id="@+id/toolbar_move"
 				style="@style/ToolBarButton"
 				android:src="@drawable/toolbar_move"
-				android:visibility="gone"/>
+				/>
 			<ImageButton
 				android:id="@+id/toolbar_cancel"
 				style="@style/ToolBarButton"
 				android:src="@drawable/toolbar_cancel"
 				android:visibility="gone"/>
-			<Button
-			  android:id="@+id/toolbar_more_dlg_delete"
-				style="@style/ToolBarButton"
-			  android:background="@drawable/toolbar_more_delete"
-			/>
-			<Button
-			  android:id="@+id/toolbar_more_dlg_move"
-				style="@style/ToolBarButton"
-			  android:background="@drawable/toolbar_more_move"
-			/>
 		</LinearLayout>		
 		<ListView 
 			android:id = "@+id/rootviewlist_list"

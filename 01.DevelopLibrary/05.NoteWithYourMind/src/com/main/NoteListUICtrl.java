@@ -432,7 +432,12 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 	{
 		m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
 		m_bIsDelete = false;
-		m_myAdapter.clearSelectResult();
+		if(m_myAdapter!=null){
+			m_myAdapter.clearSelectResult();	
+		}
+		if(m_myArrayListAdapter!=null){
+			m_myArrayListAdapter.clearSelectResult();	
+		}
 		//update toolbar
 		updateToolBar();
 	}

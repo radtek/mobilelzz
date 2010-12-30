@@ -87,6 +87,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 	private ImageButton											m_SaveAs = null;
 	
 	private AlertDialog 										m_dlgFolderList = null;
+	private ImageButton											clBTAlarm;
 	///////////////////////onStart////////////////////////////////////////////////
 	public void onNewIntent(Intent intent)
 	{
@@ -165,6 +166,9 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
         ImageButton clBTSetRemind	=	(ImageButton) findViewById(R.id.editnote_toolbar_setremind);
         clBTSetRemind.setOnClickListener(this);
         
+        //启动或停用提醒
+        clBTAlarm	=	(ImageButton)findViewById(R.id.editnote_remindinfo_alarmIcon);
+        clBTAlarm.setOnClickListener(this);
         
         //计时器
 		mchronometer = (TextView) findViewById(R.id.rec_time);
@@ -472,7 +476,37 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 		case R.id.editnote_toolbar_setremind:
 			processSetRemindClick(view);
 			break;
+		case R.id.editnote_remindinfo_alarmIcon:
+			processEnableAlarm( view );
+			break;
 		default:
+		}
+	}
+	
+	private void processEnableAlarm(View view)
+	{
+		if( null != m_clCRemindInfo )
+		{
+			TextView	Status	=	(TextView)findViewById(R.id.editnote_remindinfo_status);
+			if( m_clCRemindInfo.m_iRemindAble == CMemoInfo.IsRemind_Able_Yes )
+			{
+				m_clCRemindInfo.m_iRemindAble	=	CMemoInfo.IsRemind_Able_No;
+				Status.setText("停用");
+			}
+			else
+			{
+				if( m_clCRemindInfo.checkTime())
+				{
+					m_clCRemindInfo.m_iRemindAble	=	CMemoInfo.IsRemind_Able_Yes; 
+					Status.setText("启用");
+				}
+				else
+				{
+	        		Toast toast = Toast.makeText(NoteWithYourMind.this, "时间已过期，请进入提醒画页重新设定!", Toast.LENGTH_SHORT);
+	        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+	        		toast.show();  	
+				}
+			}
 		}
 	}
 	

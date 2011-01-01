@@ -384,6 +384,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
             		{
                 		m_clCDateDlg.setDisplay();     			
             		}
+            		m_clCTimeDlg.showView( R.id.timeLayout);
             		m_clCDateDlg.showView( R.id.dateLayout);
             		m_clCWeekDlg.hideView( R.id.weekLayout);
             		m_clCCountdownDlg.hideView( R.id.countDownLayout);
@@ -401,6 +402,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
             		{
                 		m_clCWeekDlg.setDisplay( );   			
             		}
+            		m_clCTimeDlg.showView( R.id.timeLayout);
             		m_clCDateDlg.hideView( R.id.dateLayout);
             		m_clCWeekDlg.showView( R.id.weekLayout);
             		m_clCCountdownDlg.hideView( R.id.countDownLayout);

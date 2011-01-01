@@ -44,6 +44,7 @@ public class CCountdownDlg extends CommentOutDlg implements View.OnClickListener
         	m_Tp.setCurrentMinute(0);        	
         }
         
+       
         Button	btCancel	=	(Button)findViewById(R.id.TimeCancel);
         btCancel.setOnClickListener(this);
         
@@ -54,6 +55,9 @@ public class CCountdownDlg extends CommentOutDlg implements View.OnClickListener
         setTitle("倒计时设定");
         show(); 
     }
+	
+
+    
     private void setProperty()
     {
         Window						window	=	getWindow();						//得到对话框的窗口．
@@ -74,6 +78,7 @@ public class CCountdownDlg extends CommentOutDlg implements View.OnClickListener
 	        	cancel();
 	            break;
 	        case R.id.TimeOK:
+	        	m_Tp.clearFocus();
 	    		int	iHour	=	m_Tp.getCurrentHour();
 	    		int	iMinute	=	m_Tp.getCurrentMinute();
 	        	saveData( iHour, iMinute );

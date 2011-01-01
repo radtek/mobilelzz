@@ -170,7 +170,11 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
         return super.onKeyDown(keyCode, event); 
     }
 	public void onClick(View view){
-		executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
+		boolean bIsProcessAnim = false;
+		if(m_bIsCommnetDisplay_more.getBOOL()){
+			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);	
+			bIsProcessAnim = true;
+		}
 		switch(view.getId()){
 		case R.id.toolbar_more_dlg_delete:
 //			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
@@ -187,7 +191,9 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 			processNewNoteClick(view);
 			break;
 		case R.id.rootviewlist_toolbar_more:
-//			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
+			if(!bIsProcessAnim && !m_bIsCommnetDisplay_more.getBOOL()){
+				executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);	
+			}
 			break;
 		case R.id.rootviewlist_toolbar_search:
 			processSearchClick(view);

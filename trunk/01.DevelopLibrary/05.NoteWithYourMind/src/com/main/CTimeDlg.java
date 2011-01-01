@@ -63,6 +63,7 @@ public class CTimeDlg extends CommentOutDlg implements View.OnClickListener
         	cancel();
             break;
         case R.id.TimeOK:
+        	m_Tp.clearFocus();
         	m_iHour		=	m_Tp.getCurrentHour();
     		m_iMinute	=	m_Tp.getCurrentMinute();
         	saveData( m_iHour, m_iMinute );

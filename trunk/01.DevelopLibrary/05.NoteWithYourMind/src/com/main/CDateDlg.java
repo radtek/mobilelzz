@@ -83,6 +83,7 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
 	        	cancel();
 	            break;
 	        case R.id.DateOK:
+	        	m_dp.clearFocus();
 	        	m_iYear		=	m_dp.getYear();
 	        	m_iMonth	=	m_dp.getMonth();
 	        	m_iDay		=	m_dp.getDayOfMonth();

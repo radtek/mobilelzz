@@ -13,7 +13,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 
 /* 实际跳出闹铃Dialog的Activity */
-public class AlarmAlert extends Activity
+public class AlarmAlert extends Activity implements MediaStatusControl
 {
 
   MediaPlayer 	mp;
@@ -26,6 +26,7 @@ public class AlarmAlert extends Activity
   {
 
     super.onCreate(savedInstanceState);
+    CommonDefine.getMediaPhoneCallListener(this).setSourceControl(this);
     /* 跳出的闹铃警示  */
     Intent iExtraData = getIntent();
     int id	=	iExtraData.getIntExtra("id", -1);
@@ -41,11 +42,11 @@ public class AlarmAlert extends Activity
 	int	iColumn	=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_detail );
 	String	strDetail		=	clCursor.getString(iColumn);
 	
-	iColumn	=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_isRing );
+	iColumn		=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_isRing );
 	iIsRing		=	clCursor.getInt(iColumn);
 	
-	iColumn	=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_isVibrate );
-	iIsVibrate		=	clCursor.getInt(iColumn);
+	iColumn		=	clCursor.getColumnIndex( CNoteDBCtrl.KEY_isVibrate );
+	iIsVibrate	=	clCursor.getInt(iColumn);
     
 	if( CMemoInfo.Ring_On == iIsRing )
 	{
@@ -87,5 +88,23 @@ public class AlarmAlert extends Activity
         .show();
     
     clCursor.close();
-  } 
+  }
+
+@Override
+public void pauseMediaInteract() {
+	// TODO Auto-generated method stub
+	if( null != mp )
+	{
+		mp.pause();
+	}
+}
+
+@Override
+public void resumeMediaInteract() {
+	// TODO Auto-generated method stub
+	if( null != mp )
+	{
+		mp.start();
+	}
+} 
 }

@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Layout;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -20,9 +21,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnTouchListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -30,10 +33,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 public class RootViewList extends Activity 
-implements ListActivityCtrl, View.OnClickListener
+implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 {
 	public static String ExtraData_initListItemDBID		=	"com.main.ExtraData_RootList_initListItemDBID";
 	private NoteListUICtrl m_NoteListUICtrl;
@@ -49,6 +53,7 @@ implements ListActivityCtrl, View.OnClickListener
 	public void onNewIntent(Intent intent){
 		setIntent(intent);
 	}
+
 //	public boolean onTouchEvent(MotionEvent me){
 //		if(m_bIsCommnetDisplay_more.getBOOL() || m_bIsCommnetDisplay_search.getBOOL()){
 //			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);	
@@ -56,6 +61,13 @@ implements ListActivityCtrl, View.OnClickListener
 //		super.onTouchEvent(me);
 //		return false;
 //	}
+	public boolean onTouch(View v, MotionEvent event) {
+		if(m_bIsCommnetDisplay_more.getBOOL()){
+			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);	
+		}	
+		return false;
+	}
+	
 	/** Called when the activity is first created. */
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -74,6 +86,8 @@ implements ListActivityCtrl, View.OnClickListener
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.rootviewlist);	
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+        ListView allview = (ListView)findViewById(R.id.rootviewlist_list);
+        allview.setOnTouchListener(this);
         
         m_bIsCommnetDisplay_more = new CommonContainer();
         m_bIsCommnetDisplay_more.setBOOL(false);
@@ -156,13 +170,14 @@ implements ListActivityCtrl, View.OnClickListener
         return super.onKeyDown(keyCode, event); 
     }
 	public void onClick(View view){
+		executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
 		switch(view.getId()){
 		case R.id.toolbar_more_dlg_delete:
-			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
+//			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
 			m_NoteListUICtrl.processDeleteClick(view);
 		    break;
 		case R.id.toolbar_more_dlg_move:
-			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
+//			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
 			m_NoteListUICtrl.processMoveClick(view);
 			break;
 		case R.id.rootviewlist_toolbar_newfolder:
@@ -172,13 +187,13 @@ implements ListActivityCtrl, View.OnClickListener
 			processNewNoteClick(view);
 			break;
 		case R.id.rootviewlist_toolbar_more:
-			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
+//			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
 			break;
 		case R.id.rootviewlist_toolbar_search:
 			processSearchClick(view);
 			break;
 		case R.id.toolbar_more_dlg_setpassword:
-			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
+//			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
 			EncodeSettingDlg();
 			break;
 		default:

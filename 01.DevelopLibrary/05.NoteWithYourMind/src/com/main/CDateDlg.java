@@ -28,6 +28,8 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
 		m_iMonth	=	CommonDefine.g_int_Invalid_Time;
 		m_iDay		=	CommonDefine.g_int_Invalid_Time;
 		
+		m_iType		=	CommonDefine.Remind_Type_Once;
+		
 //		Calendar clCalendar	=	Calendar.getInstance();
 //		clCalendar.setTimeInMillis(System.currentTimeMillis());
 //		m_iYear		=	clCalendar.get(Calendar.YEAR);
@@ -67,6 +69,8 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
         
         wl.x	=	m_iPosX;											
         wl.y	=	m_iPosY;
+        
+        wl.width	=	300;
        
         window.setAttributes(wl);        
    }
@@ -75,6 +79,7 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
         switch( view.getId() )
         {
 	        case R.id.DateCancel:
+	        	saveCancel();
 	        	cancel();
 	            break;
 	        case R.id.DateOK:
@@ -88,6 +93,19 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
 	        	break;
         }
     }
+	
+	public	void	saveCancel()
+	{
+		if( m_iYear  == CommonDefine.g_int_Invalid_Time 
+		 && m_iMonth == CommonDefine.g_int_Invalid_Time
+		 && m_iDay   == CommonDefine.g_int_Invalid_Time)
+		{
+			TextView	DateTxt				=	(TextView)m_context.findViewById(R.id.OnceText);
+			DateTxt.setText( "日期未设定");
+			
+			RemindActivity.m_iType	=	m_iType;
+		}
+	}
 	
 	public	void	saveData( int iYear, int iMonth, int iDay )
 	{
@@ -105,7 +123,7 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
 
 		DateTxt.setText(Integer.toString(iYear) + "年" + Integer.toString( iMonth+1 ) + "月" + Integer.toString(iDay) + "日" + "  " + getDayofWeek(clCalendar));
 		
-		RemindActivity.m_iType	=	CommonDefine.Remind_Type_Once;
+		RemindActivity.m_iType	=	m_iType;
 	}
 	
     String	getDayofWeek( Calendar	clCalendar )

@@ -21,6 +21,8 @@ public class CCountdownDlg extends CommentOutDlg implements View.OnClickListener
 		super(context);
 		m_iHour			=	CommonDefine.g_int_Invalid_Time;
 		m_iMinute		=	CommonDefine.g_int_Invalid_Time;
+		
+		m_iType			=	CommonDefine.Remind_Type_CountDown;
 	}
 	
 	public void setDisplay()
@@ -68,6 +70,7 @@ public class CCountdownDlg extends CommentOutDlg implements View.OnClickListener
         switch( view.getId() )
         {
 	        case R.id.TimeCancel:
+	        	saveCancel();
 	        	cancel();
 	            break;
 	        case R.id.TimeOK:
@@ -80,7 +83,19 @@ public class CCountdownDlg extends CommentOutDlg implements View.OnClickListener
 	        	break;
         }
     }
-	
+    
+    public	void	saveCancel()
+    {
+		if( m_iHour   == CommonDefine.g_int_Invalid_Time 
+		 && m_iMinute == CommonDefine.g_int_Invalid_Time)
+		{
+			TextView	CountDownTxt		=	(TextView)m_context.findViewById(R.id.daojishiTxt);
+			CountDownTxt.setText("未设定倒计时");
+			
+			RemindActivity.m_iType	=	m_iType;
+		}
+    }
+    
 	public	void	saveData( int iHour, int iMinute )
 	{
 		m_iHour		=	iHour;
@@ -93,14 +108,14 @@ public class CCountdownDlg extends CommentOutDlg implements View.OnClickListener
 			m_iHour		=	0;
 			m_iMinute	=	0;
 			
-			CountDownTxt.setText("倒计时已过期!");
+			CountDownTxt.setText("倒计时已过期");
 		}
 		else
 		{
 			CountDownTxt.setText(Integer.toString(iHour) + "小时"+ Integer.toString(iMinute)+"分钟后提醒" );
 		}
-		
-		RemindActivity.m_iType	=	CommonDefine.Remind_Type_CountDown;
+	
+		RemindActivity.m_iType	=	m_iType;
 	}
 
 }

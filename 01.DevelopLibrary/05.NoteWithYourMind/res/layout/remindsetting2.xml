@@ -7,25 +7,6 @@ android:orientation="vertical"
 xmlns:android="http://schemas.android.com/apk/res/android"
 >
 
-	<LinearLayout
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content">
-		<TextView
-		android:id="@+id/RemindType"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_weight="1"
-		>
-		</TextView>
-		<TextView
-		android:id="@+id/RemindStatus"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_weight="1"
-		>
-		</TextView>
-	</LinearLayout>
-
 <!--   "设置提醒" Text的Layout   --> 
 
 	<LinearLayout
@@ -46,7 +27,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		<RadioGroup 
 				android:id="@+id/timeRadioButton"
 				android:layout_width="fill_parent" 
-				android:layout_height="wrap_content">
+				android:layout_height="wrap_content"
+				>
 
 			<RadioButton
 			android:id="@+id/TimeSetting"
@@ -68,14 +50,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 						android:layout_marginLeft="20px"
 						>
 						</TextView>
-						<Button
-						android:id="@+id/TimeSettingBtnImg"
-						android:layout_width="40px"
-						android:layout_height="wrap_content"
-						android:text="修改"
-						android:layout_weight="1"
-						>
-						</Button>
 						
 			</LinearLayout>	
 
@@ -83,6 +57,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			android:id="@+id/daojishi"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
+			android:layout_marginTop="5.0dip" 
 			android:text="倒计时设定 "
 			>
 			</RadioButton>
@@ -97,15 +72,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 				android:layout_weight="5"
 				android:layout_marginLeft="20px"
 				>
-				</TextView>
-				<Button
-				android:id="@+id/daojishiBtnImg"
-				android:layout_width="40px"
-				android:layout_height="wrap_content"
-				android:text="修改"
-				android:layout_weight="1"
-				>
-				</Button>						
+				</TextView>					
 			</LinearLayout>			
 		</RadioGroup>
 <!--   RadioGroup   --> 
@@ -148,19 +115,12 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 				android:layout_marginLeft="20px"
 				>
 				</TextView>
-				<Button
-				android:id="@+id/OnceRemindImg"
-				android:layout_width="40px"
-				android:layout_height="wrap_content"
-				android:text="修改"
-				android:layout_weight="1"
-				>
-				</Button>
 			</LinearLayout>	
 			<RadioButton
 			android:id="@+id/EveryWeek"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_marginTop="5.0dip" 
 			android:text="循环设定 "
 			>
 			</RadioButton>
@@ -227,14 +187,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 					android:layout_weight="1"
 					>
 					</TextView>
-					<Button
-					android:id="@+id/EveryWeekImg"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="修改"
-					android:layout_weight="1"
-					>
-				</Button>
 			</LinearLayout>	
 		</RadioGroup> 
 

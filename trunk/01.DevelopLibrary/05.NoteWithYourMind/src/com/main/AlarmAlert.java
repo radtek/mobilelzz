@@ -96,6 +96,7 @@ public void pauseMediaInteract() {
 	if( null != mp )
 	{
 		mp.pause();
+		vibrator.cancel();
 	}
 }
 
@@ -104,7 +105,6 @@ public void resumeMediaInteract() {
 	// TODO Auto-generated method stub
 	if( null != mp )
 	{
-		mp.start();
 	}
 } 
 }

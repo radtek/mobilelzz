@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -30,11 +31,10 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 	public	static	int			m_iType	=	CommonDefine.g_int_Invalid_ID;
 	
 	//btn
-	Button	btCountdown	=	null;
-	Button	btTime		=	null;
-	Button	btOnceDate	=	null;
-	Button	btWeek		=	null;
-	Button	btMonth		=	null;
+	TextView	btCountdown	=	null;
+	TextView	btTime		=	null;
+	TextView	btOnceDate	=	null;
+	LinearLayout	btWeek		=	null;
 	
 	Button	btCancel	=	null;
 	Button	btOK		=	null;	
@@ -44,8 +44,6 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 	TextView	DateTxt	=	null;
 	
 	boolean		m_bInputflg		=	false;
-	
-	TextView	tvType		=	null;
 	
 	private 	RadioButton 	rbTime,	rbCountdown, rbOnce, rbWeek; 
 	
@@ -63,19 +61,17 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     	      
         m_RadioGroupTime.setOnCheckedChangeListener(mChangeRadioTime);
         m_RadioGroupDate.setOnCheckedChangeListener(mChangeRadioDate);
-        
-        tvType	=	(TextView)findViewById(R.id.RemindType);
-        
-        btTime	=	(Button) findViewById(R.id.TimeSettingBtnImg);
+              
+        btTime	=	(TextView) findViewById(R.id.Time_txt);
         btTime.setOnClickListener(this);
 
-        btCountdown	=	(Button) findViewById(R.id.daojishiBtnImg);
+        btCountdown	=	(TextView) findViewById(R.id.daojishiTxt);
         btCountdown.setOnClickListener(this);
         
-        btOnceDate	=	(Button) findViewById(R.id.OnceRemindImg);
+        btOnceDate	=	(TextView) findViewById(R.id.OnceText);
         btOnceDate.setOnClickListener(this);
         
-        btWeek		=	(Button) findViewById(R.id.EveryWeekImg);
+        btWeek		=	(LinearLayout) findViewById(R.id.weekLayout);
         btWeek.setOnClickListener(this);
         
         btCancel	=	(Button) findViewById(R.id.DisableBtn);
@@ -102,16 +98,16 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     {
     	switch(view.getId())
     	{
-    		case R.id.TimeSettingBtnImg:
+    		case R.id.Time_txt:
     			processSaveTime(view);
     			break;
-    		case R.id.daojishiBtnImg:
+    		case R.id.daojishiTxt:
     			processCountdown(view);
     			break;
-    		case R.id.OnceRemindImg:
+    		case R.id.OnceText:
     			processOnceDate(view);
     			break;
-    		case R.id.EveryWeekImg:
+    		case R.id.weekLayout:
     			processWeek(view);
     			break;
     		case R.id.DisableBtn:
@@ -256,17 +252,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       if ( null != clTemp )		//	取得传入数据非空
       {
       	m_clCRemindInfo	=	clTemp;
-      	
-      	TextView	tvStatus	=	(TextView)findViewById(R.id.RemindStatus);
-      	if( m_clCRemindInfo.m_iRemindAble == CMemoInfo.IsRemind_Able_Yes )
-      	{
-      		tvStatus.setText("启用");
-      	}
-      	else
-      	{
-      		tvStatus.setText("停用");
-      	}
-      	
+      	 	
       	if( CMemoInfo.Ring_On == m_clCRemindInfo.m_iIsRing )
       	{
       		m_cbRing.setChecked(true);
@@ -296,8 +282,6 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     		m_clCDateDlg.hideView( R.id.dateLayout);
     		m_clCWeekDlg.hideView( R.id.weekLayout);
     		m_clCCountdownDlg.showView( R.id.countDownLayout);
-    		
-    		tvType.setText("当前提醒为 : 倒计时提醒");
       	}
       	else if( m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_Week)				//循环提醒
       	{       		
@@ -315,7 +299,6 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     		m_clCWeekDlg.showView( R.id.weekLayout);
     		m_clCCountdownDlg.hideView( R.id.countDownLayout);
     		
-    		tvType.setText("当前提醒为 : 循环提醒");
       	}
       	else if(  m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_Once )				//单次提醒
       	{
@@ -334,7 +317,6 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     		m_clCWeekDlg.hideView( R.id.weekLayout);
     		m_clCCountdownDlg.hideView( R.id.countDownLayout);
       		
-    		tvType.setText("当前提醒为 : 单次提醒");
       	}
       }
       else
@@ -353,33 +335,38 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     {
         public void onCheckedChanged(RadioGroup group, int checkedId)
         { 
+        	
+        	
         	if(checkedId == R.id.TimeSetting)
         	{
-        		if ( !m_bInputflg )
+        		RadioButton	rb	=	(RadioButton)findViewById(checkedId);
+        		if( rb.isChecked())
         		{
-            		m_clCTimeDlg.setDisplay( );
+            		if ( !m_bInputflg )
+            		{
+                		m_clCTimeDlg.setDisplay( );
+            		}
+            		m_clCTimeDlg.showView( R.id.timeLayout);
+            		m_clCCountdownDlg.hideView( R.id.countDownLayout);
         		}
-        		tvType.setText("");
-        		m_clCTimeDlg.showView( R.id.timeLayout);
-        		m_clCCountdownDlg.hideView( R.id.countDownLayout);
-//        		btTime.setVisibility(View.VISIBLE);
-//        		btCountdown.setVisibility(View.GONE);
-
         	}
         	else if(checkedId==R.id.daojishi)
         	{
-        		if ( !m_bInputflg )
+        		RadioButton	rb	=	(RadioButton)findViewById(checkedId);
+        		if( rb.isChecked())
         		{
-            		m_clCCountdownDlg.setDisplay();  			
+        			if ( !m_bInputflg )
+            		{
+                		m_clCCountdownDlg.setDisplay();  			
+            		}
+            		m_clCTimeDlg.hideView( R.id.timeLayout);
+            		m_clCDateDlg.hideView( R.id.dateLayout);
+            		m_clCWeekDlg.hideView( R.id.weekLayout);
+            		m_clCCountdownDlg.showView( R.id.countDownLayout);
+            		rbWeek.setChecked(false);
+            		rbOnce.setChecked(false); 
+            		m_RadioGroupDate.clearCheck();
         		}
-        		m_clCTimeDlg.hideView( R.id.timeLayout);
-        		m_clCDateDlg.hideView( R.id.dateLayout);
-        		m_clCWeekDlg.hideView( R.id.weekLayout);
-        		m_clCCountdownDlg.showView( R.id.countDownLayout);
-        		tvType.setText("当前提醒为 : 倒计时提醒");
-        		
-//        		btTime.setVisibility(View.GONE);
-//        		btCountdown.setVisibility(View.VISIBLE); 
         	}
         }
     };
@@ -387,35 +374,39 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     private RadioGroup.OnCheckedChangeListener mChangeRadioDate = new RadioGroup.OnCheckedChangeListener()
     {
         public void onCheckedChanged(RadioGroup group, int checkedId)
-        { 
+        {      	
         	if(checkedId == R.id.OnceRemind)
         	{
-        		if ( !m_bInputflg )
+        		RadioButton	rb	=	(RadioButton)findViewById(checkedId);
+        		if ( rb.isChecked())
         		{
-            		m_clCDateDlg.setDisplay();     			
+            		if ( !m_bInputflg )
+            		{
+                		m_clCDateDlg.setDisplay();     			
+            		}
+            		m_clCDateDlg.showView( R.id.dateLayout);
+            		m_clCWeekDlg.hideView( R.id.weekLayout);
+            		m_clCCountdownDlg.hideView( R.id.countDownLayout);
+            		rbCountdown.setChecked(false);  
+            		m_RadioGroupTime.clearCheck();
         		}
- //       		m_clCTimeDlg.showView( R.id.timeLayout);
-        		m_clCDateDlg.showView( R.id.dateLayout);
-        		m_clCWeekDlg.hideView( R.id.weekLayout);
-        		m_clCCountdownDlg.hideView( R.id.countDownLayout);
-        		tvType.setText("当前提醒为 : 单次提醒");
-//        		btOnceDate.setVisibility(View.VISIBLE);
-//        		btWeek.setVisibility(View.GONE); 
 
         	}
         	else if(checkedId==R.id.EveryWeek)
         	{
-        		if ( !m_bInputflg )
+        		RadioButton	rb	=	(RadioButton)findViewById(checkedId);
+        		if ( rb.isChecked())
         		{
-            		m_clCWeekDlg.setDisplay( );   			
+            		if ( !m_bInputflg )
+            		{
+                		m_clCWeekDlg.setDisplay( );   			
+            		}
+            		m_clCDateDlg.hideView( R.id.dateLayout);
+            		m_clCWeekDlg.showView( R.id.weekLayout);
+            		m_clCCountdownDlg.hideView( R.id.countDownLayout);
+            		rbCountdown.setChecked(false);   
+            		m_RadioGroupTime.clearCheck();
         		}
- //       		m_clCTimeDlg.showView( R.id.timeLayout);
-        		m_clCDateDlg.hideView( R.id.dateLayout);
-        		m_clCWeekDlg.showView( R.id.weekLayout);
-        		m_clCCountdownDlg.hideView( R.id.countDownLayout);
-        		tvType.setText("当前提醒为 : 循环提醒");
-//        		btWeek.setVisibility(View.VISIBLE);
-//        		btOnceDate.setVisibility(View.GONE);   
         	}
         }
     };

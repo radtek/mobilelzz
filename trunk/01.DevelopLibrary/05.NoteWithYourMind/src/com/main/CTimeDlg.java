@@ -59,10 +59,11 @@ public class CTimeDlg extends CommentOutDlg implements View.OnClickListener
 	{
         switch(view.getId()){
         case R.id.TimeCancel:
+        	saveCancel();
         	cancel();
             break;
         case R.id.TimeOK:
-        	m_iHour	=	m_Tp.getCurrentHour();
+        	m_iHour		=	m_Tp.getCurrentHour();
     		m_iMinute	=	m_Tp.getCurrentMinute();
         	saveData( m_iHour, m_iMinute );
         	cancel();
@@ -72,20 +73,22 @@ public class CTimeDlg extends CommentOutDlg implements View.OnClickListener
        }
     }
 	
+	public	void	saveCancel()
+	{
+		if( m_iHour   == CommonDefine.g_int_Invalid_Time 
+		 && m_iMinute == CommonDefine.g_int_Invalid_Time )
+		{
+			TextView	TimeTxt				=	(TextView)m_context.findViewById(R.id.Time_txt);
+			TimeTxt.setText( "时间未设定");		
+		}
+	}
+	
 	public	void	saveData( int iHour, int iMinute )
 	{
 		m_iHour		=	iHour;
 		m_iMinute	=	iMinute;
 		
 		TextView	TimeTxt				=	(TextView)m_context.findViewById(R.id.Time_txt);
-//		TimeTxt.setText(Integer.toString(iHour) + "小时"+ Integer.toString(iMinute)+"分钟" );
-		TimeTxt.setText(String.format("%02d:%02d", iHour, iMinute) );
-		
-//		if( RemindActivity.m_iType	!=	CommonDefine.Remind_Type_Week )
-//		{
-//			RemindActivity.m_iType	=	CommonDefine.Remind_Type_Once;
-//		}
-
+		TimeTxt.setText(String.format("%02d:%02d", iHour, iMinute) );		
 	}
-
 }

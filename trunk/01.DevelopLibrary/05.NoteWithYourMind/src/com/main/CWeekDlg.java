@@ -23,6 +23,8 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
 		{
 			m_bWeek[ i ]	=	(byte)CommonDefine.g_int_Invalid_Time;
 		}
+		
+		m_iType	=	CommonDefine.Remind_Type_Week;
 	}
 	
 	public void setDisplay()
@@ -79,6 +81,7 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
         	cancel();
             break;
         case R.id.WeekCancel:
+        	saveCancel();
         	cancel();
         	break;
         case R.id.remind_select:
@@ -98,6 +101,11 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
         default:
         }
     }
+	
+	public	void	saveCancel()
+	{
+		RemindActivity.m_iType	=	m_iType;
+	}
 	
 	void	setCheckBoxFlg( boolean bFlg )
     { 	
@@ -155,7 +163,7 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
   			}
   		}
   		
-  		RemindActivity.m_iType	=	CommonDefine.Remind_Type_Week;
+  		RemindActivity.m_iType	=	m_iType;
 	}
 	
 	void	saveData( )
@@ -254,7 +262,7 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
     		WeekTxt[6].setTextColor(Color.WHITE);
     	}
     	
-    	RemindActivity.m_iType	=	CommonDefine.Remind_Type_Week;
+    	RemindActivity.m_iType	=	m_iType;
 
 	}
 }

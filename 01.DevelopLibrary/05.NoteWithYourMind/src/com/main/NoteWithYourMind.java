@@ -865,20 +865,19 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 		
 		if( m_ExtraData_EditNoteID != CMemoInfo.Id_Invalid && null != m_clCRemindInfo )
 		{
-			if( m_clCRemindInfo.m_iRemindAble == CMemoInfo.IsRemind_Able_Yes && m_clCRemindInfo.m_iIsRemind == CMemoInfo.IsRemind_Yes )
+			CRemindInfo _clCRemindInfo	=	new		CRemindInfo( CommonDefine.Remind_Type_Invalid );
+			CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance(this);
+			if( CommonDefine.S_OK == clCRemindOperator.getRemindInfo( NoteWithYourMind.this, m_ExtraData_EditNoteID, _clCRemindInfo ) )
 			{
-				CRemindInfo _clCRemindInfo	=	new		CRemindInfo( CommonDefine.Remind_Type_Invalid );
-				CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance(this);
-				if( CommonDefine.S_OK == clCRemindOperator.getRemindInfo( NoteWithYourMind.this, m_ExtraData_EditNoteID, _clCRemindInfo ) )
+				if ( !m_clCRemindInfo.IsEql( _clCRemindInfo ))
 				{
-					if ( m_clCRemindInfo.Compare( _clCRemindInfo ))
-					{
-						bRet	=	true;
-					}
-				}	
-			}
-
-			
+					bRet	=	true;
+				}
+			}		
+		}
+		else if( m_ExtraData_EditNoteID == CMemoInfo.Id_Invalid && null != m_clCRemindInfo )
+		{
+			bRet	=	true;
 		}
 		
 		return bRet;

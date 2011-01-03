@@ -94,7 +94,7 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 	}
 	
 	public void pauseMediaInteract(){
-		if(clBTStopRecord.isClickable()){
+		if(clBTStopRecord.isEnabled()){
     		if(mMediaPlayer != null && mMediaPlayer.isPlaying()){
     			m_isMediaPausingForPhoneStateChange = true;
     			mPlayThread.suspend();
@@ -105,7 +105,7 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 	}
 	
 	public void resumeMediaInteract(){
-		if(clBTStopRecord.isClickable()){
+		if(clBTStopRecord.isEnabled()){
     		if(mMediaPlayer != null && m_isMediaPausingForPhoneStateChange){
     			mMediaPlayer.start();
     			mPlayThread.resume();
@@ -889,7 +889,7 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 		
 	}
 	private void processSaveClick(View view){
-		if(clBTStopRecord.isClickable()){
+		if(clBTStopRecord.isEnabled()){
     		clBTStopRecord.performClick();
     	}
 		CMemoInfo clNoteInfo = new CMemoInfo(); 
@@ -1055,7 +1055,7 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 	}  
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if ((keyCode == KeyEvent.KEYCODE_BACK)) { 
-        	if(clBTStopRecord.isClickable()){
+        	if(clBTStopRecord.isEnabled()){
         		clBTStopRecord.performClick();
         	}
         	boolean bTextChanged = CheckText();

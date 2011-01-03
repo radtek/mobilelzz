@@ -67,7 +67,7 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 		}	
 		return false;
 	}
-	
+
 	/** Called when the activity is first created. */
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -224,11 +224,7 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 		Intent intent = new Intent(RootViewList.this, SearchResultViewList.class);
 		startActivity(intent);
 	}
-	
-	private void processMoreClick(View view){
 
-	}
-	
 	private void processNewNoteClick(View view){
 		Intent intent = new Intent(RootViewList.this, NoteWithYourMind.class);
 		intent.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_New);

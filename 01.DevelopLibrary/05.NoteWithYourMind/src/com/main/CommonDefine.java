@@ -67,18 +67,24 @@ interface MediaStatusControl{
 }
 class MediaPhoneCallListener extends PhoneStateListener{
 	private ArrayList<MediaStatusControl> m_mediaControl = null;
-	public void setSourceControl(MediaStatusControl mediaControl){
+	public void advise(MediaStatusControl mediaControl){
 		m_mediaControl.add(mediaControl);
 	}
 	public void initSource(){
 		m_mediaControl = new ArrayList<MediaStatusControl>();
+	}
+	public void unadvise(MediaStatusControl mediaControl){
+		m_mediaControl.remove(mediaControl);
 	}
 	public void onCallStateChanged(int state, String incomingNumber){
 		switch(state){
 			case TelephonyManager.CALL_STATE_IDLE:
 				if(m_mediaControl!=null){
 					for(int i = 0; i < m_mediaControl.size(); i++){
-						m_mediaControl.get(i).resumeMediaInteract();
+						MediaStatusControl temp = m_mediaControl.get(i);
+						if(temp!=null){
+							temp.resumeMediaInteract();	
+						}
 					}
 				}
 				break;
@@ -86,7 +92,10 @@ class MediaPhoneCallListener extends PhoneStateListener{
 			case TelephonyManager.CALL_STATE_RINGING:
 				if(m_mediaControl!=null){
 					for(int i = 0; i < m_mediaControl.size(); i++){
-						m_mediaControl.get(i).pauseMediaInteract();
+						MediaStatusControl temp = m_mediaControl.get(i);
+						if(temp!=null){
+							temp.pauseMediaInteract();	
+						}
 					}
 				}
 				break;

@@ -124,6 +124,12 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
     	
 	}
 	
+	public void onDestroy()
+	{
+		super.onDestroy();
+		CommonDefine.getMediaPhoneCallListener(this).unadvise(this);
+	}
+	
 	////////////////////////////////////////////////////////////////////
     /** Called when the activity is first created. */
 	///////////////////////////////onCreateStart///////////////////////////////////////////////////////////////////
@@ -132,7 +138,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
     {
     	super.onCreate(savedInstanceState);
 		setContentView( R.layout.editnote );
-		CommonDefine.getMediaPhoneCallListener(this).setSourceControl(this);
+		CommonDefine.getMediaPhoneCallListener(this).advise(this);
 		m_clCNoteDBCtrl = CommonDefine.getNoteDBCtrl(this);
 		m_NoteInfoFromDB = new CMemoInfo();
 //		m_clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Invalid );

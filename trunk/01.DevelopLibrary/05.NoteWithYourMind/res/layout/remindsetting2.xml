@@ -211,6 +211,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			<LinearLayout
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
 			android:layout_weight="1"
 			>
 				<CheckBox
@@ -226,6 +227,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			<LinearLayout
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
 			android:layout_weight="1"
 			>
 				<CheckBox

@@ -106,7 +106,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 			if(alIDs.size()>0){
     			boolean b = m_clCNoteDBCtrl.Delete(alIDs);
     			if(!b){
-    				Toast toast = Toast.makeText(m_sourceManager, "部分记录删除失败，请确认SD卡是否可用", Toast.LENGTH_LONG);
+    				Toast toast = Toast.makeText(m_sourceManager, "部分记录删除失败\n请确认SD卡是否可用", Toast.LENGTH_LONG);
     				toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
             		toast.show();
     			}

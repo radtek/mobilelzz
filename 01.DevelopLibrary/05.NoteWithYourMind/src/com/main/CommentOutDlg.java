@@ -34,7 +34,7 @@ public class CommentOutDlg extends Dialog
 		View	vw	=	 m_context.findViewById(id);
 		if( null != vw )
 		{
-			vw.setVisibility(View.GONE);
+			vw.setVisibility(View.INVISIBLE);
 		}	
 //		RadioButton	rb	=	(RadioButton)m_context.findViewById(rbId);
 //		if( null != rb )

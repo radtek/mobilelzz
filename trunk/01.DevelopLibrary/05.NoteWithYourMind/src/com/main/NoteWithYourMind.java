@@ -60,9 +60,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 	
 	private CRemindInfo											m_clCRemindInfo	=	null;
 	
-	private boolean 											m_bSDCardExit;
 	private File 												myRecAudioFile = null;
-	private File 												myRecAudioDir = null;
 	private MediaRecorder 										mMediaRecorder01;
 	private boolean												mIsOpenRecordPanel  = false;
 	private boolean 											mIsRecordSound		= false;
@@ -181,23 +179,22 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 		//chronometer.setOnChronometerTickListener(this);
 		//chronometer.setFormat("MM::SS/05:00");
 			
-		//检查是否存在SD卡		
-	    m_bSDCardExit = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);   
-	    if (m_bSDCardExit)
-	    {
-	    	File SdCardDir = Environment.getExternalStorageDirectory();
-	    	String strAppDir = SdCardDir.toString() + CommonDefine.g_strAppFilePath;
-	    	File fAppDir = new File(strAppDir);
-	        if(!fAppDir.exists())
-	        {
-	        	fAppDir.mkdir();
-	        } 
-	        String strAudioDir =  strAppDir+CommonDefine.g_strAudioFilePath;
-	        myRecAudioDir = new File(strAudioDir);
-	        if(!myRecAudioDir.exists()){
-	        	myRecAudioDir.mkdir();
-	        }
-	    }
+//	    m_bSDCardExit = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);   
+//	    if (m_bSDCardExit)
+//	    {
+//	    	File SdCardDir = Environment.getExternalStorageDirectory();
+//	    	String strAppDir = SdCardDir.toString() + CommonDefine.g_strAppFilePath;
+//	    	File fAppDir = new File(strAppDir);
+//	        if(!fAppDir.exists())
+//	        {
+//	        	fAppDir.mkdir();
+//	        } 
+//	        String strAudioDir =  strAppDir+CommonDefine.g_strAudioFilePath;
+//	        myRecAudioDir = new File(strAudioDir);
+//	        if(!myRecAudioDir.exists()){
+//	        	myRecAudioDir.mkdir();
+//	        }
+//	    }
 	    
 	    //进度条
 	    mProgressBar01 = (SeekBar)findViewById(R.id.progress_horizontal);
@@ -352,8 +349,8 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 		etNoteText.scrollBy(0, -100);
 	}
     private void updateVoice(String strAudioFileName){
-    	if(strAudioFileName!=null && m_bSDCardExit ){
-    		myRecAudioFile = new File(myRecAudioDir, strAudioFileName);
+    	if(strAudioFileName!=null && SDCardAccessor.isSDCardAvailable() ){
+    		myRecAudioFile = new File(SDCardAccessor.getAudioDataDir(), strAudioFileName);
     		openVoicePanel();
     	}else{
     		
@@ -575,13 +572,6 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 	//开始录音
 	private void processRecClick(View view)
 	{		
-		if (!m_bSDCardExit)
-        {
-           Toast.makeText(NoteWithYourMind.this, "没有SDCard",Toast.LENGTH_LONG).show();
-           return;
-        }
-  		 
-		 
 		if(myRecAudioFile != null)
 		{
 			//提示用户删除原有录音文件
@@ -608,6 +598,12 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 	}
 	
 	private void RecVoice(){
+		File tempRecAudioDir = SDCardAccessor.getAudioDataDir();
+		if (tempRecAudioDir==null)
+        {
+           Toast.makeText(NoteWithYourMind.this, "没有SDCard",Toast.LENGTH_LONG).show();
+           return;
+        }
 		if(mMediaPlayer != null && mMediaPlayer.isPlaying())
 		{
 			mMediaPlayer.stop();
@@ -627,7 +623,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
         String filename = sdf.format(d);    	        
 
         try {
-			myRecAudioFile = File.createTempFile(filename, ".3gp", myRecAudioDir);
+			myRecAudioFile = File.createTempFile(filename, ".3gp", tempRecAudioDir);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

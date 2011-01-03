@@ -1,9 +1,12 @@
 package com.main;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
@@ -23,8 +26,6 @@ class CommonDefine{
 
 	private static	CNoteDBCtrl				m_clCNoteDBCtrl = null;
 	
-	public static String 					g_strAudioFilePath = "/record";
-	public static String 					g_strAppFilePath = "/note";
 	public final static int					g_iMaxRecTime = 300;
 	
 	public static int 						E_FAIL	= -1;
@@ -61,6 +62,7 @@ class CommonDefine{
 	}
 
 }
+
 interface MediaStatusControl{
 	public void pauseMediaInteract();
 	public void resumeMediaInteract();

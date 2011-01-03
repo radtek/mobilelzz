@@ -1,5 +1,6 @@
 package com.main;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.app.AlarmManager;
@@ -143,17 +144,17 @@ public final class CRemindOperator
     }
     
    
-    public	void	disableRemind( Context context, Integer[] needDeleteIDs )
+    public	void	disableRemind( Context context, ArrayList<DetailInfoOfSelectItem> needDeleteIDs )
     {
     	//将一条提醒设置为无效
     	//由于提醒不能转为Memo，所以该方法对删除和设置为Disable都好用
     	AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
     	
-    	for( int i = 0; i < needDeleteIDs.length; ++i )
+    	for( int i = 0; i < needDeleteIDs.size(); ++i )
     	{
     		Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
-    		MyIntent.putExtra( "id", needDeleteIDs[i] );
-        	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)needDeleteIDs[i], MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
+    		MyIntent.putExtra( "id", needDeleteIDs.get(i).iDBRecID );
+        	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, needDeleteIDs.get(i).iDBRecID, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
         	alarmManager.cancel(pendingIntent);
     	}
 

@@ -182,12 +182,13 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		 * 		有提醒时间，位置2放提醒Icon
 		 * 		有语音内容，位置3放语音Icon
 		 */
-		Button bigIcon = (Button) view.findViewById(R.id.notelistitem_bigicon);
+		View itemV = view.findViewById(R.id.notelistitem);
 		TextView countTV = (TextView) view.findViewById(R.id.notelistitem_count);
 		Button icon1 = (Button) view.findViewById(R.id.notelistitem_icon1);
 		Button icon2 = (Button) view.findViewById(R.id.notelistitem_icon2);
 		if(iTypeValue==CMemoInfo.Type_Folder){
-			bigIcon.setBackgroundResource(R.drawable.notelistitem_bigicon_folder);
+			itemV.setBackgroundColor(Color.argb(255, 255, 251, 198));
+//			bigIcon.setBackgroundResource(R.drawable.notelistitem_bigicon_folder);
 			long Count = CommonDefine.getNoteDBCtrl(m_context).getRecCountInFolder(iIDValue);
 			String strCount = "("+String.valueOf(Count)+")";
 			countTV.setText(strCount);
@@ -207,7 +208,8 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 			}
 		}else{
 			countTV.setText("");
-			bigIcon.setBackgroundResource(R.drawable.notelistitem_bigicon_text);
+			itemV.setBackgroundColor(Color.argb(255, 255, 255, 255));
+//			bigIcon.setBackgroundResource(R.drawable.notelistitem_bigicon_text);
 			int isRemindIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isremind);
 			int isRemindValue = cursor.getInt(isRemindIndex);
 			int isRemindableIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isremindable);

@@ -1,19 +1,29 @@
 package com.main;
 import java.io.File;
+import java.util.ArrayList;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 
+interface SDCardStatusChangedCtrl{
+	public void ChangedAvailable();
+	public void ChangedUnAvailable();
+}
+
 public class SDCardAccessor extends BroadcastReceiver {  
-	  
+	private enum SDCardStatusChanged{
+		SDCardStatusChanged_Available,
+		SDCardStatusChanged_UnAvailable
+	}
     private static boolean m_sdcardAvailable = false;  
     private static boolean m_sdcardAvailabilityDetected = false;  
     private static String m_sdcardDir = null;
     private static final String 					m_strAudioFilePath = "/record";
     private static final String 					m_strAppFilePath = "/note";
     private static File				m_audioDataDir = null;
+    private static ArrayList<SDCardStatusChangedCtrl> m_ctrlList = null;
 //    public static synchronized boolean detectSDCardAvailability() {  
 //        boolean result = false;  
 //        try {  
@@ -27,7 +37,18 @@ public class SDCardAccessor extends BroadcastReceiver {
 //        }  
 //        return result;  
 //    }  
-      
+    public static void advise(SDCardStatusChangedCtrl ctrl){
+    	if(m_ctrlList == null){
+    		m_ctrlList = new ArrayList<SDCardStatusChangedCtrl>();
+    	}else{
+    		m_ctrlList.add(ctrl);
+    	}
+    }
+    public static void unadvise(SDCardStatusChangedCtrl ctrl){
+    	if(m_ctrlList!=null){
+    		m_ctrlList.remove(ctrl);
+    	}
+    }
     /** 
      *  
      * @return SD is available ? 
@@ -52,12 +73,20 @@ public class SDCardAccessor extends BroadcastReceiver {
     	}
     	return m_audioDataDir;
     }
+    public static void deleteAudioDataFile(String audioFileName){
+    	File fp = new File(m_audioDataDir, audioFileName);
+    	fp.delete();
+    	fp = null;
+    }
     public static boolean isSDCardAvailable() {  
         if(!m_sdcardAvailabilityDetected) {  
         	m_sdcardAvailable = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
         	m_sdcardAvailabilityDetected = true;  
-        	if(m_sdcardAvailable && m_sdcardDir==null){
-        		m_sdcardDir = Environment.getExternalStorageDirectory().toString();
+        	if(m_sdcardAvailable ){
+        		if(m_sdcardDir==null){
+        			m_sdcardDir = Environment.getExternalStorageDirectory().toString();	
+        		}
+        		notifyCtrl(SDCardStatusChanged.SDCardStatusChanged_Available);
         	}
         }  
         return  m_sdcardAvailable;  
@@ -70,13 +99,29 @@ public class SDCardAccessor extends BroadcastReceiver {
         m_sdcardAvailabilityDetected = false; 
         if(intent.getAction().equals(Intent.ACTION_MEDIA_MOUNTED)){
         	m_sdcardAvailable = true;
+        	notifyCtrl(SDCardStatusChanged.SDCardStatusChanged_Available);
         	if(m_sdcardDir==null){
         		m_sdcardDir = Environment.getExternalStorageDirectory().toString();
         	}
         }else{
+        	notifyCtrl(SDCardStatusChanged.SDCardStatusChanged_UnAvailable);
         	m_sdcardAvailable = false;
         }
         m_sdcardAvailabilityDetected = true;  
     }  
-  
+    private static void notifyCtrl(SDCardStatusChanged status){
+    	if(m_ctrlList!=null){
+    		int size = m_ctrlList.size();
+        	for(int i = 0; i < size; i++){
+        		SDCardStatusChangedCtrl temp = m_ctrlList.get(i);
+        		if(temp!=null){
+        			if(status == SDCardStatusChanged.SDCardStatusChanged_Available){
+        				temp.ChangedAvailable();
+        			}else{
+        				temp.ChangedUnAvailable();	
+        			}
+        		}
+        	}	
+    	}
+    }
 }  

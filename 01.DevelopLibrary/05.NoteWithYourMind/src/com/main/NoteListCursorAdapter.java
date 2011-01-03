@@ -56,9 +56,11 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 	public class CheckBoxMapItem{
 		int iDBRecID;
 		CheckBox checkBox;
+		View itemView;
 		CheckBoxMapItem(){
 			iDBRecID = CommonDefine.g_int_Invalid_ID;
 			checkBox = null;
+			itemView = null;
 		}
 	}
 	public class ItemDetail{
@@ -262,6 +264,7 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		CheckBoxMapItem mapItem = new CheckBoxMapItem();
 		mapItem.checkBox = cbView;
 		mapItem.iDBRecID = iIDValue;
+		mapItem.itemView = view;
 		m_ListCheckBoxMapItem.put(cbView, mapItem);
 
 		//建立Item控件和对应的DB记录信息的对应关系
@@ -289,7 +292,7 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
     			CheckBoxMapItem mapItem = m_ListCheckBoxMapItem.get(buttonView);
     			if(mapItem!=null){
     				result.iDBRecID = mapItem.iDBRecID;
-    				ItemDetail detail = m_ListItemDetail.get(result.iDBRecID);
+    				ItemDetail detail = m_ListItemDetail.get(mapItem.itemView);
     				if(detail!=null){
     					result.bIsHaveAudioData = detail.bIsHaveAudioData;
     					result.strAudioFileName = detail.strAudioFileName;

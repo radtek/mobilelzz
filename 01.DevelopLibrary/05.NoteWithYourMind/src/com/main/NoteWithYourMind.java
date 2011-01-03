@@ -889,7 +889,9 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 		
 	}
 	private void processSaveClick(View view){
-
+		if(clBTStopRecord.isClickable()){
+    		clBTStopRecord.performClick();
+    	}
 		CMemoInfo clNoteInfo = new CMemoInfo(); 
 		FillTextInfo(clNoteInfo);
 		FillVoiceInfo(clNoteInfo);

@@ -191,6 +191,7 @@ public class CRemindInfo implements Serializable
 			clCalendar.setTimeInMillis(System.currentTimeMillis());
 			
 			long	lCur	=	clCalendar.getTimeInMillis();
+			lCur	+=	( 1000 * 60 );
 			if ( lCur > m_lTime )
 			{
 				bflg	=	false;
@@ -340,6 +341,40 @@ public class CRemindInfo implements Serializable
 		
 		m_iIsRing		=	-1;
 		m_iIsVibrate	=	-1;
+	}
+	
+	boolean		Compare( CRemindInfo _clCRemindInfo )
+	{
+		if( _clCRemindInfo.m_iType != m_iType )
+		{
+			return	false;
+		}
+		
+		if( _clCRemindInfo.m_iIsRing != m_iIsRing || _clCRemindInfo.m_iIsVibrate != m_iIsVibrate )
+		{
+			return	false;
+		}
+		
+		if( _clCRemindInfo.m_iType == CommonDefine.Remind_Type_Week )
+		{
+			int	length		=	m_Week.length;
+			for ( int i = 0; i < length; ++i )
+			{
+				if( m_Week[ i ] !=  _clCRemindInfo.m_Week[ i ] )
+				{
+					return	false;
+				}
+			}
+		}
+		else
+		{
+			if( _clCRemindInfo.m_lTime != m_lTime )
+			{
+				return	false;
+			}
+		}
+		
+		return	true;
 	}
 	
 }

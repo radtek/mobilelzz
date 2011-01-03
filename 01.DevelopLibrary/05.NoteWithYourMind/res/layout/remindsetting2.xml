@@ -237,4 +237,43 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		>
 		</Button>
 	</RelativeLayout>
+	<LinearLayout
+		android:id="@+id/rootviewlist_toolbar"
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:background="@drawable/background_toolbar">
+		<ImageButton
+			android:id="@+id/rootviewlist_toolbar_search"
+			style="@style/ToolBarButton"
+			android:src="@drawable/toolbar_search"/>
+		<ImageButton
+			android:id="@+id/rootviewlist_toolbar_newfolder"
+			style="@style/ToolBarButton"
+			android:src="@drawable/toolbar_newfolder"/>
+		<ImageButton
+			android:id="@+id/rootviewlist_toolbar_newnote"
+			style="@style/ToolBarButton"
+			android:src="@drawable/toolbar_newnote"/>
+		<ImageButton
+			android:id="@+id/rootviewlist_toolbar_more"
+			style="@style/ToolBarButton"
+			android:src="@drawable/toolbar_more"/>
+		<ImageButton
+			android:id="@+id/toolbar_delete"
+			style="@style/ToolBarButton"
+			android:src="@drawable/toolbar_delete"
+			android:visibility="gone"/>
+		<ImageButton
+			android:id="@+id/toolbar_move"
+			style="@style/ToolBarButton"
+			android:src="@drawable/toolbar_move"
+			android:visibility="gone"/>
+		<ImageButton
+			android:id="@+id/toolbar_cancel"
+			style="@style/ToolBarButton"
+			android:src="@drawable/toolbar_cancel"
+			android:visibility="gone"/>
+	</LinearLayout>
 </LinearLayout>

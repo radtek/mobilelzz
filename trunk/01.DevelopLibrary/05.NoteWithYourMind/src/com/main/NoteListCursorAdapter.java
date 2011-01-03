@@ -187,8 +187,7 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		Button icon1 = (Button) view.findViewById(R.id.notelistitem_icon1);
 		Button icon2 = (Button) view.findViewById(R.id.notelistitem_icon2);
 		if(iTypeValue==CMemoInfo.Type_Folder){
-			itemV.setBackgroundColor(Color.argb(255, 255, 251, 198));
-//			bigIcon.setBackgroundResource(R.drawable.notelistitem_bigicon_folder);
+			itemV.setBackgroundResource(R.drawable.notelistitem_folder_background);
 			long Count = CommonDefine.getNoteDBCtrl(m_context).getRecCountInFolder(iIDValue);
 			String strCount = "("+String.valueOf(Count)+")";
 			countTV.setText(strCount);
@@ -208,7 +207,7 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 			}
 		}else{
 			countTV.setText("");
-			itemV.setBackgroundColor(Color.argb(255, 255, 255, 255));
+			itemV.setBackgroundColor(Color.argb(160, 255, 255, 255));
 //			bigIcon.setBackgroundResource(R.drawable.notelistitem_bigicon_text);
 			int isRemindIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isremind);
 			int isRemindValue = cursor.getInt(isRemindIndex);

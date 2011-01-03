@@ -212,7 +212,7 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 			}
 		}else{
 			countTV.setText("");
-			itemV.setBackgroundColor(Color.argb(0, 255, 255, 255));
+			itemV.setBackgroundColor(Color.argb(160, 160, 160, 160));
 			int isRemindValue = getItem(position).iIsRemind;
 			int iVoiceFlag = getItem(position).iIsHaveAudioData;
 			if(isRemindValue == CMemoInfo.IsRemind_Yes){

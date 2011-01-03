@@ -251,17 +251,17 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		android:background="@drawable/background_toolbar">
 		<Button
 			android:id="@+id/DisableBtn"
+			style="@style/ToolBarButton"
 			android:text="停用"
 			android:textSize = "20sp"
-			android:textColor="#00000000"
-			style="@style/ToolBarButton"
+			android:textColor="#000000"
 			/>
 		<Button
 			android:id="@+id/OKBtn"
+			style="@style/ToolBarButton"
 			android:text="启用"
 			android:textSize = "20sp"
-			android:textColor="#00000000"
-			style="@style/ToolBarButton"
+			android:textColor="#000000"
 			/>
 	</LinearLayout>
 </LinearLayout>

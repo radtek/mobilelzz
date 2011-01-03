@@ -938,7 +938,7 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 		final View DialogView = factory.inflate(R.layout.folderlist, null);
 		
 		m_dlgFolderList = new AlertDialog.Builder(this)
-			.setTitle("请选择文件夹")
+			.setTitle("请选择 保存到 的文件夹")
 			.setView(DialogView)
 			.setNegativeButton("取消",new DialogInterface.OnClickListener(){
 				public void onClick(DialogInterface dialog, int i)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="50dp"
+    android:layout_height="60dp"
     android:background="#A0b9b9b9"
     >
 	<Button
@@ -23,6 +23,7 @@
 	android:id="@+id/notelistitem_additionalinfo"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
+	android:layout_centerVertical="true"
 	android:layout_toLeftOf="@id/notelistitem_noteselect"
 	android:layout_alignWithParentIfMissing="true"
 	android:layout_marginRight="5dp"
@@ -73,7 +74,7 @@
 	android:layout_toRightOf="@id/notelistitem_bigicon"
 	android:ellipsize = "end"
 	android:gravity="left|center_vertical"
-	android:textSize="20sp"
+	android:textSize="16sp"
 	android:textColor="#000000"
 	>
 	</TextView>

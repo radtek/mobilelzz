@@ -215,7 +215,7 @@ public final class CRemindOperator
         return	CommonDefine.S_OK;    
     }
     
-    private	int	getRemindInfo( Context context, int id, CRemindInfo _clCRemindInfo )
+    public	int	getRemindInfo( Context context, int id, CRemindInfo _clCRemindInfo )
     {
     	if( null == m_clCNoteDBCtrl )
     	{

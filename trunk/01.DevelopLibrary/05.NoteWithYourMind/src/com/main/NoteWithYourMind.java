@@ -863,6 +863,24 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 	private boolean CheckRemind(){
 		boolean bRet = false;
 		
+		if( m_ExtraData_EditNoteID != CMemoInfo.Id_Invalid && null != m_clCRemindInfo )
+		{
+			if( m_clCRemindInfo.m_iRemindAble == CMemoInfo.IsRemind_Able_Yes && m_clCRemindInfo.m_iIsRemind == CMemoInfo.IsRemind_Yes )
+			{
+				CRemindInfo _clCRemindInfo	=	new		CRemindInfo( CommonDefine.Remind_Type_Invalid );
+				CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance(this);
+				if( CommonDefine.S_OK == clCRemindOperator.getRemindInfo( NoteWithYourMind.this, m_ExtraData_EditNoteID, _clCRemindInfo ) )
+				{
+					if ( m_clCRemindInfo.Compare( _clCRemindInfo ))
+					{
+						bRet	=	true;
+					}
+				}	
+			}
+
+			
+		}
+		
 		return bRet;
 	}
 	private void FillTextInfo(CMemoInfo clNoteInfo){
@@ -892,6 +910,19 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 		if(clBTStopRecord.isEnabled()){
     		clBTStopRecord.performClick();
     	}
+		
+		if( null != m_clCRemindInfo && m_clCRemindInfo.m_iIsRemind == CMemoInfo.IsRemind_Yes && m_clCRemindInfo.m_iRemindAble == CMemoInfo.IsRemind_Able_Yes)
+		{
+			if ( !m_clCRemindInfo.checkTime())
+			{
+	     		Toast toast = Toast.makeText(NoteWithYourMind.this, "时间设定错误，请重新设定!", Toast.LENGTH_SHORT);
+        		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+        		toast.show();  
+        		
+        		return;
+			}
+		}
+		
 		CMemoInfo clNoteInfo = new CMemoInfo(); 
 		FillTextInfo(clNoteInfo);
 		FillVoiceInfo(clNoteInfo);

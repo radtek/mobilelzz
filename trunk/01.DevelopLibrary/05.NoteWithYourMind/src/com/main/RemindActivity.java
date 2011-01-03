@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -278,10 +279,16 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       		m_clCCountdownDlg.saveData( clCDateAndTime.iHour, clCDateAndTime.iMinute ); 
       		rbCountdown.setChecked(true);
       		
-    		m_clCTimeDlg.hideView( R.id.timeLayout);
-    		m_clCDateDlg.hideView( R.id.dateLayout);
-    		m_clCWeekDlg.hideView( R.id.weekLayout);
-    		m_clCCountdownDlg.showView( R.id.countDownLayout);
+    		m_clCTimeDlg.hideView( R.id.timeLayout, R.id.TimeSetting);
+    		m_clCDateDlg.hideView( R.id.dateLayout, R.id.OnceRemind);
+    		m_clCWeekDlg.hideView( R.id.weekLayout, R.id.EveryWeek);
+    		m_clCCountdownDlg.showView( R.id.countDownLayout, R.id.daojishi);
+    		//倒计时提醒 - 设定日期和星期都不可点；设定日期星期和时间变黑
+    		rbOnce.setClickable(false);
+    		rbWeek.setClickable(false);
+    		rbTime.setTextColor(Color.BLACK);
+    		rbOnce.setTextColor(Color.BLACK);
+    		rbWeek.setTextColor(Color.BLACK);
       	}
       	else if( m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_Week)				//循环提醒
       	{       		
@@ -294,10 +301,14 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       		
       		m_clCTimeDlg.saveData(clCDateAndTime.iHour, clCDateAndTime.iMinute);
       		m_clCWeekDlg.setInputSatus ( week );  	
-    		m_clCTimeDlg.showView( R.id.timeLayout);
-    		m_clCDateDlg.hideView( R.id.dateLayout);
-    		m_clCWeekDlg.showView( R.id.weekLayout);
-    		m_clCCountdownDlg.hideView( R.id.countDownLayout);
+    		m_clCTimeDlg.showView( R.id.timeLayout, R.id.TimeSetting );
+    		m_clCDateDlg.hideView( R.id.dateLayout, R.id.OnceRemind);
+    		m_clCWeekDlg.showView( R.id.weekLayout, R.id.EveryWeek);
+    		m_clCCountdownDlg.hideView( R.id.countDownLayout, R.id.daojishi);
+    		
+    		//循环提醒 - 倒计时和日期变黑
+    		rbOnce.setTextColor(Color.BLACK);
+    		rbCountdown.setTextColor(Color.BLACK);
     		
       	}
       	else if(  m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_Once )				//单次提醒
@@ -312,20 +323,23 @@ public class RemindActivity extends Activity	implements View.OnClickListener
       		rbTime.setChecked(true);
       		rbOnce.setChecked(true);
       		
-    		m_clCTimeDlg.showView( R.id.timeLayout);
-    		m_clCDateDlg.showView( R.id.dateLayout);
-    		m_clCWeekDlg.hideView( R.id.weekLayout);
-    		m_clCCountdownDlg.hideView( R.id.countDownLayout);
-      		
+    		m_clCTimeDlg.showView( R.id.timeLayout, R.id.TimeSetting);
+    		m_clCDateDlg.showView( R.id.dateLayout, R.id.OnceRemind);
+    		m_clCWeekDlg.hideView( R.id.weekLayout, R.id.EveryWeek);
+    		m_clCCountdownDlg.hideView( R.id.countDownLayout, R.id.daojishi);
+    		
+    		//单次提醒 - 倒计时和星期变黑
+    		rbCountdown.setTextColor(Color.BLACK);
+    		rbWeek.setTextColor(Color.BLACK);
       	}
       }
       else
       {
         m_clCRemindInfo		=	new		CRemindInfo ( CommonDefine.Remind_Type_Invalid );
-  		m_clCTimeDlg.hideView( R.id.timeLayout);
-		m_clCDateDlg.hideView( R.id.dateLayout);
-		m_clCWeekDlg.hideView( R.id.weekLayout);
-		m_clCCountdownDlg.hideView( R.id.countDownLayout);
+  		m_clCTimeDlg.hideView( R.id.timeLayout, R.id.TimeSetting);
+		m_clCDateDlg.hideView( R.id.dateLayout, R.id.OnceRemind);
+		m_clCWeekDlg.hideView( R.id.weekLayout, R.id.EveryWeek);
+		m_clCCountdownDlg.hideView( R.id.countDownLayout, R.id.daojishi);
       }
       
       m_bInputflg	=	false;
@@ -346,8 +360,16 @@ public class RemindActivity extends Activity	implements View.OnClickListener
             		{
                 		m_clCTimeDlg.setDisplay( );
             		}
-            		m_clCTimeDlg.showView( R.id.timeLayout);
-            		m_clCCountdownDlg.hideView( R.id.countDownLayout);
+            		m_clCTimeDlg.showView( R.id.timeLayout, R.id.TimeSetting);
+            		m_clCCountdownDlg.hideView( R.id.countDownLayout, R.id.daojishi);
+            		
+            		//设定时间 - 星期和日期可点；时间、星期和日期变白；倒计时变黑
+            		rbOnce.setClickable(true);
+            		rbWeek.setClickable(true);
+            		rbTime.setTextColor(Color.WHITE); 
+            		rbOnce.setTextColor(Color.WHITE);           		
+            		rbWeek.setTextColor(Color.WHITE);
+            		rbCountdown.setTextColor(Color.BLACK);
         		}
         	}
         	else if(checkedId==R.id.daojishi)
@@ -359,12 +381,24 @@ public class RemindActivity extends Activity	implements View.OnClickListener
             		{
                 		m_clCCountdownDlg.setDisplay();  			
             		}
-            		m_clCTimeDlg.hideView( R.id.timeLayout);
-            		m_clCDateDlg.hideView( R.id.dateLayout);
-            		m_clCWeekDlg.hideView( R.id.weekLayout);
-            		m_clCCountdownDlg.showView( R.id.countDownLayout);
-            		rbWeek.setChecked(false);
+            		m_clCTimeDlg.hideView( R.id.timeLayout, R.id.TimeSetting);
+            		m_clCDateDlg.hideView( R.id.dateLayout, R.id.OnceRemind);
+            		m_clCWeekDlg.hideView( R.id.weekLayout, R.id.EveryWeek);
+            		m_clCCountdownDlg.showView( R.id.countDownLayout, R.id.daojishi);
+            		
+            		rbWeek.setChecked(false);          		
             		rbOnce.setChecked(false); 
+            		
+            		//倒计时设定 - 星期和日期不可点；时间、星期和日期变黑；倒计时变白
+         		
+            		rbOnce.setClickable(false);          		
+            		rbWeek.setClickable(false);
+            		rbOnce.setTextColor(Color.BLACK);
+            		rbWeek.setTextColor(Color.BLACK);
+            		rbTime.setTextColor(Color.BLACK);
+            		
+            		rbCountdown.setTextColor(Color.WHITE);
+            		
             		m_RadioGroupDate.clearCheck();
         		}
         	}
@@ -384,11 +418,16 @@ public class RemindActivity extends Activity	implements View.OnClickListener
             		{
                 		m_clCDateDlg.setDisplay();     			
             		}
-            		m_clCTimeDlg.showView( R.id.timeLayout);
-            		m_clCDateDlg.showView( R.id.dateLayout);
-            		m_clCWeekDlg.hideView( R.id.weekLayout);
-            		m_clCCountdownDlg.hideView( R.id.countDownLayout);
-            		rbCountdown.setChecked(false);  
+            		m_clCTimeDlg.showView( R.id.timeLayout, R.id.TimeSetting);
+            		m_clCDateDlg.showView( R.id.dateLayout, R.id.OnceRemind);
+            		m_clCWeekDlg.hideView( R.id.weekLayout, R.id.EveryWeek);
+            		m_clCCountdownDlg.hideView( R.id.countDownLayout, R.id.daojishi);
+            		
+            		rbCountdown.setChecked(false); 
+            		
+            		//日期设定 - 星期变黑；日期变白
+            		rbWeek.setTextColor(Color.BLACK);  
+            		rbOnce.setTextColor(Color.WHITE);
             		m_RadioGroupTime.clearCheck();
         		}
 
@@ -402,11 +441,15 @@ public class RemindActivity extends Activity	implements View.OnClickListener
             		{
                 		m_clCWeekDlg.setDisplay( );   			
             		}
-            		m_clCTimeDlg.showView( R.id.timeLayout);
-            		m_clCDateDlg.hideView( R.id.dateLayout);
-            		m_clCWeekDlg.showView( R.id.weekLayout);
-            		m_clCCountdownDlg.hideView( R.id.countDownLayout);
-            		rbCountdown.setChecked(false);   
+            		m_clCTimeDlg.showView( R.id.timeLayout, R.id.TimeSetting);
+            		m_clCDateDlg.hideView( R.id.dateLayout, R.id.OnceRemind);
+            		m_clCWeekDlg.showView( R.id.weekLayout, R.id.EveryWeek);
+            		m_clCCountdownDlg.hideView( R.id.countDownLayout, R.id.daojishi);
+            		rbCountdown.setChecked(false); 
+            		
+            		//星期设定 - 日期变黑；星期变白
+            		rbOnce.setTextColor(Color.BLACK);
+            		rbWeek.setTextColor(Color.WHITE);
             		m_RadioGroupTime.clearCheck();
         		}
         	}

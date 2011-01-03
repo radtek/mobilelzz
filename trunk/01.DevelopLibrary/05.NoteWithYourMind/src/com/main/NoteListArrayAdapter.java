@@ -187,12 +187,12 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 		 * 		有提醒时间，位置2放提醒Icon
 		 * 		有语音内容，位置3放语音Icon
 		 */
-		Button bigIcon = (Button) view.findViewById(R.id.notelistitem_bigicon);
+		View itemV = view.findViewById(R.id.notelistitem);
 		TextView countTV = (TextView) view.findViewById(R.id.notelistitem_count);
 		Button icon1 = (Button) view.findViewById(R.id.notelistitem_icon1);
 		Button icon2 = (Button) view.findViewById(R.id.notelistitem_icon2);
 		if(iTypeValue==CMemoInfo.Type_Folder){
-			bigIcon.setBackgroundResource(R.drawable.notelistitem_bigicon_folder);
+			itemV.setBackgroundResource(R.drawable.notelistitem_folder_background);
 			long Count = CommonDefine.getNoteDBCtrl(m_context).getRecCountInFolder(iIDValue);
 			String strCount = "("+String.valueOf(Count)+")";
 			countTV.setText(strCount);
@@ -212,7 +212,7 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 			}
 		}else{
 			countTV.setText("");
-			bigIcon.setBackgroundResource(R.drawable.notelistitem_bigicon_text);
+			itemV.setBackgroundColor(Color.argb(0, 255, 255, 255));
 			int isRemindValue = getItem(position).iIsRemind;
 			int iVoiceFlag = getItem(position).iIsHaveAudioData;
 			if(isRemindValue == CMemoInfo.IsRemind_Yes){

@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/notelistitem"
     android:layout_width="fill_parent"
     android:layout_height="60dp"
-    android:background="#A0b9b9b9"
+    android:background="#00FFFFFF"
     >
-	<Button
-		android:id="@+id/notelistitem_bigicon"
-		style = "@style/ListItem_Big_IconButton"
-		android:layout_alignParentLeft = "true"
-	/>
 	<CheckBox
 	android:id="@+id/notelistitem_noteselect"
 	android:focusable="false"
@@ -69,9 +66,9 @@
 	android:id="@+id/notelistitem_notetext"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
+	android:layout_marginLeft="5dp"
 	android:layout_centerVertical="true"
 	android:layout_toLeftOf="@id/notelistitem_additionalinfo"
-	android:layout_toRightOf="@id/notelistitem_bigicon"
 	android:ellipsize = "end"
 	android:gravity="left|center_vertical"
 	android:textSize="16sp"

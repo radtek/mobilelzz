@@ -35,7 +35,8 @@ import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
 @SuppressWarnings("unused")
-public class NoteWithYourMind extends Activity implements View.OnClickListener, MediaStatusControl
+public class NoteWithYourMind extends Activity 
+implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 {
 	//前一个Activity的类型
 	public	enum	OperationNoteKindEnum
@@ -113,7 +114,13 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
     	}
 //		Toast.makeText(NoteWithYourMind.this, "挂电话了~~~~",Toast.LENGTH_LONG).show();
 	}
-	
+	public void ChangedAvailable(){
+		
+	}
+	public void ChangedUnAvailable(){
+		
+	}
+
 	public void onResume()
 	{
 		super.onResume();
@@ -126,6 +133,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 	{
 		super.onDestroy();
 		CommonDefine.getMediaPhoneCallListener(this).unadvise(this);
+		SDCardAccessor.unadvise(this);
 	}
 	
 	////////////////////////////////////////////////////////////////////
@@ -137,6 +145,7 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
     	super.onCreate(savedInstanceState);
 		setContentView( R.layout.editnote );
 		CommonDefine.getMediaPhoneCallListener(this).advise(this);
+		SDCardAccessor.advise(this);
 		m_clCNoteDBCtrl = CommonDefine.getNoteDBCtrl(this);
 		m_NoteInfoFromDB = new CMemoInfo();
 //		m_clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Invalid );
@@ -743,16 +752,14 @@ public class NoteWithYourMind extends Activity implements View.OnClickListener, 
 			        mPlayThread = new PlayWatcherThread(1000);
 			        
 			        mPlayThread.start();  
+				}else{
+					Toast.makeText(NoteWithYourMind.this, "语音文件不存在 或者 未插入SD卡",Toast.LENGTH_LONG).show();
 				}
 			}
-				
-
 		}catch (IOException e)
 		{
 			
 		}
-		
-
 	}
 	
 	//删除录音文件

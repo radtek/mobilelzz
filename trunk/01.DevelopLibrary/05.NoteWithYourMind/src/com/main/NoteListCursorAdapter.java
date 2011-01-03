@@ -21,21 +21,36 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.main.R.id;
+
 import android.content.DialogInterface;
 import android.widget.EditText;
 import android.view.Gravity;
 import android.widget.Toast;
 import android.widget.ImageButton;
-
+class DetailInfoOfSelectItem{
+	int iDBRecID;
+	boolean bIsHaveAudioData;
+	String strAudioFileName;
+	DetailInfoOfSelectItem(){
+		iDBRecID = CommonDefine.g_int_Invalid_ID;
+		bIsHaveAudioData = false;
+		strAudioFileName = null;
+	}
+}
 public class NoteListCursorAdapter extends CursorAdapter implements Serializable {
 	private static final long serialVersionUID = -7060210544600464481L;
 	public class ItemSelectResult{
 		int iDBRecID;
 		boolean bIsSelected;
 		int iItemPos;
+		boolean bIsHaveAudioData;
+		String strAudioFileName;
 		ItemSelectResult(){
 			iDBRecID = CommonDefine.g_int_Invalid_ID;
 			bIsSelected = false;
+			bIsHaveAudioData = false;
+			strAudioFileName = null;
 		}
 	}
 	public class CheckBoxMapItem{
@@ -52,12 +67,16 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		boolean bIsFolder;
 		boolean bIsRemind;
 		boolean bIsEncode;
+		boolean bIsHaveAudioData;
+		String strAudioFileName;
 		ItemDetail(){
 			iDBRecID = CommonDefine.g_int_Invalid_ID;
 			vView = null;
 			bIsFolder = false;
 			bIsRemind = false;
 			bIsEncode = false;
+			bIsHaveAudioData = false;
+			strAudioFileName = null;
 		}
 	}
 	private HashMap<String,ItemSelectResult> m_ListItemSelectResult;
@@ -193,6 +212,8 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 			int isRemindableValue = cursor.getInt(isRemindableIndex);
 			int iVoiceFlagIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isHaveAudioData);
 			int iVoiceFlag = cursor.getInt(iVoiceFlagIndex);
+			int iVoiceFileIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_audioDataName);
+			String strAudioFileName = cursor.getString(iVoiceFileIndex);
 			if(isRemindValue == CMemoInfo.IsRemind_Yes){
 				itemdetail.bIsRemind = true;
 				if(isRemindableValue==CMemoInfo.IsEditEnable_Enable){
@@ -202,19 +223,27 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 				}
 				icon1.setVisibility(View.VISIBLE);
 				if(iVoiceFlag == CMemoInfo.IsHaveAudioData_Yes){//for voice
+					itemdetail.bIsHaveAudioData = true;
+					itemdetail.strAudioFileName = strAudioFileName;
 					icon2.setBackgroundResource(R.drawable.notelistitem_icon_voice);
 					icon2.setVisibility(View.VISIBLE);
 				}else{
+					itemdetail.bIsHaveAudioData = false;
+					itemdetail.strAudioFileName = null;
 					icon2.setBackgroundDrawable(null);
 					icon2.setVisibility(View.GONE);
 				}
 			}else{
 				if(iVoiceFlag == CMemoInfo.IsHaveAudioData_Yes){//for voice
+					itemdetail.bIsHaveAudioData = true;
+					itemdetail.strAudioFileName = strAudioFileName;
 					icon1.setBackgroundResource(R.drawable.notelistitem_icon_voice);
 					icon1.setVisibility(View.VISIBLE);
 					icon2.setBackgroundDrawable(null);
 					icon2.setVisibility(View.GONE);
 				}else{
+					itemdetail.bIsHaveAudioData = false;
+					itemdetail.strAudioFileName = null;
 					icon1.setBackgroundDrawable(null);
 					icon2.setBackgroundDrawable(null);
 					icon1.setVisibility(View.GONE);
@@ -260,6 +289,11 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
     			CheckBoxMapItem mapItem = m_ListCheckBoxMapItem.get(buttonView);
     			if(mapItem!=null){
     				result.iDBRecID = mapItem.iDBRecID;
+    				ItemDetail detail = m_ListItemDetail.get(result.iDBRecID);
+    				if(detail!=null){
+    					result.bIsHaveAudioData = detail.bIsHaveAudioData;
+    					result.strAudioFileName = detail.strAudioFileName;
+    				}
     				m_ListItemSelectResult.put(String.valueOf(mapItem.iDBRecID), result);
     			}	        
         	}
@@ -286,15 +320,17 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 	public void setNoteDBCtrl(CNoteDBCtrl clCNoteDBCtrl){
 		m_clCNoteDBCtrl = clCNoteDBCtrl;
 	}
-	public void getSelectItemDBID(ArrayList<Integer> alIDs){
+	public void getSelectItemDBID(ArrayList<DetailInfoOfSelectItem> alIDs){
 		Iterator iter = m_ListItemSelectResult.entrySet().iterator(); 
 		while (iter.hasNext()) { 
 			Map.Entry entry = (Map.Entry) iter.next(); 
-		    
 		    ItemSelectResult val = (ItemSelectResult)entry.getValue(); 
 		    if(val.bIsSelected){
-		    	String key = (String)entry.getKey(); 
-		    	alIDs.add(Integer.valueOf(key));
+		    	DetailInfoOfSelectItem detail = new DetailInfoOfSelectItem();
+		    	detail.iDBRecID = Integer.valueOf((String)entry.getKey());
+		    	detail.bIsHaveAudioData = val.bIsHaveAudioData;
+		    	detail.strAudioFileName = val.strAudioFileName;
+		    	alIDs.add(detail);
 		    }
 		} 
 	}

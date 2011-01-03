@@ -101,13 +101,17 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		else
 		{
 			//delete rec--->
-			ArrayList<Integer> alIDs = new ArrayList<Integer>();
+			ArrayList<DetailInfoOfSelectItem> alIDs = new ArrayList<DetailInfoOfSelectItem>();
 			m_myAdapter.getSelectItemDBID(alIDs);
 			if(alIDs.size()>0){
-				Integer[] needDeleteIDs = (Integer[])alIDs.toArray(new Integer[0]);
-    			m_clCNoteDBCtrl.Delete(needDeleteIDs);
+    			boolean b = m_clCNoteDBCtrl.Delete(alIDs);
+    			if(!b){
+    				Toast toast = Toast.makeText(m_sourceManager, "部分记录删除失败，请确认SD卡是否可用", Toast.LENGTH_LONG);
+    				toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+            		toast.show();
+    			}
 				CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance(m_sourceManager);
-				clCRemindOperator.disableRemind( m_sourceManager, needDeleteIDs );
+				clCRemindOperator.disableRemind( m_sourceManager, alIDs );
 			}
 			Return2TargetList();
 			updateListData(CommonDefine.g_int_Invalid_ID);
@@ -125,7 +129,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		else if(m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem)
 		{
 			m_MoveIn_State = MoveIn_State.MoveIn_SelectFolder;
-			ArrayList<Integer> alIDs = new ArrayList<Integer>();
+			ArrayList<DetailInfoOfSelectItem> alIDs = new ArrayList<DetailInfoOfSelectItem>();
 			m_myAdapter.getSelectItemDBID(alIDs);
 			if(alIDs.size()<=0){
 				m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
@@ -186,7 +190,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 					if(id<0){
 						id = 0;
 					}
-					ArrayList<Integer> alIDs = new ArrayList<Integer>();
+					ArrayList<DetailInfoOfSelectItem> alIDs = new ArrayList<DetailInfoOfSelectItem>();
 					m_myAdapter.getSelectItemDBID(alIDs);
 					Move2Folder(alIDs, (int)id);
             		m_dlgFolderList.cancel();
@@ -460,14 +464,14 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 //			}
 //		}
 //	}
-	private void Move2Folder(ArrayList<Integer> alIDs, int id)
+	private void Move2Folder(ArrayList<DetailInfoOfSelectItem> alIDs, int id)
 	{
 		int count = alIDs.size();
 		CMemoInfo clRec = new CMemoInfo();
 		clRec.iPreId = id;
 		for(int i = 0; i < count; i++ )
 		{
-			int iId = alIDs.get(i);
+			int iId = alIDs.get(i).iDBRecID;
 			clRec.iId = iId;
 			m_clCNoteDBCtrl.Update(clRec);
 		}

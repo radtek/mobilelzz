@@ -73,10 +73,17 @@ public class SDCardAccessor extends BroadcastReceiver {
     	}
     	return m_audioDataDir;
     }
-    public static void deleteAudioDataFile(String audioFileName){
-    	File fp = new File(m_audioDataDir, audioFileName);
-    	fp.delete();
-    	fp = null;
+    public static boolean deleteAudioDataFile(String audioFileName){
+    	boolean bIsDeleteSuccess = false;
+    	if(isSDCardAvailable()){
+        	File fp = new File(m_audioDataDir, audioFileName);
+        	fp.delete();
+        	fp = null;
+        	bIsDeleteSuccess = true;
+    	}else{
+    		bIsDeleteSuccess = false;
+    	}
+    	return bIsDeleteSuccess;
     }
     public static boolean isSDCardAvailable() {  
         if(!m_sdcardAvailabilityDetected) {  

@@ -1,4 +1,5 @@
 package com.main;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.content.ContentValues;
@@ -243,6 +244,36 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 			String[] temp = new String[]{id[i].toString()};
 			m_db.execSQL( "delete from " + DB_TABLE + " where " + KEY_id + "=?", temp );
 		}	
+	}
+	
+	public	boolean Delete( ArrayList<DetailInfoOfSelectItem> alIDs )
+	{
+		boolean bIsAudioFileDeleteFailed = false;
+		boolean bIsHaveFailed = false;
+		int iCnt	=	alIDs.size();
+		for ( int i = 0; i < iCnt; ++i )
+		{
+			DetailInfoOfSelectItem detail = alIDs.get(i);
+			if(detail.bIsHaveAudioData){
+				//delete audio file
+				boolean b = SDCardAccessor.deleteAudioDataFile(detail.strAudioFileName);
+				if(b){
+					String[] temp = new String[]{String.valueOf(detail.iDBRecID)};
+					m_db.execSQL( "delete from " + DB_TABLE + " where " + KEY_id + "=?", temp );
+				}else{
+					if(!bIsHaveFailed){
+						bIsAudioFileDeleteFailed = true;
+						bIsHaveFailed = true;
+					}else{
+						
+					}
+				}
+			}else{
+				String[] temp = new String[]{String.valueOf(detail.iDBRecID)};
+				m_db.execSQL( "delete from " + DB_TABLE + " where " + KEY_id + "=?", temp );
+			}
+		}	
+		return !bIsAudioFileDeleteFailed;
 	}
 	
 	public	int Update( CMemoInfo clCMemoInfo )

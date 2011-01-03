@@ -30,11 +30,11 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
 		
 		m_iType		=	CommonDefine.Remind_Type_Once;
 		
-//		Calendar clCalendar	=	Calendar.getInstance();
-//		clCalendar.setTimeInMillis(System.currentTimeMillis());
-//		m_iYear		=	clCalendar.get(Calendar.YEAR);
-//		m_iMonth	=	clCalendar.get(Calendar.MONTH);
-//		m_iDay		=	clCalendar.get(Calendar.DAY_OF_MONTH);
+		Calendar clCalendar	=	Calendar.getInstance();
+		clCalendar.setTimeInMillis(System.currentTimeMillis());
+		m_iYear		=	clCalendar.get(Calendar.YEAR);
+		m_iMonth	=	clCalendar.get(Calendar.MONTH);
+		m_iDay		=	clCalendar.get(Calendar.DAY_OF_MONTH);
 //		
 //		saveData( m_iYear, m_iMonth, m_iDay );
 	}

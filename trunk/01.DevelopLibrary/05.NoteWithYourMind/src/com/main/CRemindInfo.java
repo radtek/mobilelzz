@@ -176,7 +176,7 @@ public class CRemindInfo implements Serializable
 		clCalendar.set(Calendar.MONTH, iMonth );
 		clCalendar.set(Calendar.DAY_OF_MONTH, iDay );
 		clCalendar.set(Calendar.HOUR_OF_DAY, iHour );
-		clCalendar.set(Calendar.MINUTE, iMinute + 1 );
+		clCalendar.set(Calendar.MINUTE, iMinute );
 		
 		m_lTime	=	clCalendar.getTimeInMillis();
 	}
@@ -191,7 +191,11 @@ public class CRemindInfo implements Serializable
 			clCalendar.setTimeInMillis(System.currentTimeMillis());
 			
 			long	lCur	=	clCalendar.getTimeInMillis();
-			lCur	+=	( 1000 * 60 );
+			if( m_iType == CommonDefine.Remind_Type_CountDown )
+			{
+				lCur	+=	( 1000 * 60 );
+			}
+			
 			if ( lCur > m_lTime )
 			{
 				bflg	=	false;
@@ -343,8 +347,13 @@ public class CRemindInfo implements Serializable
 		m_iIsVibrate	=	-1;
 	}
 	
-	boolean		Compare( CRemindInfo _clCRemindInfo )
+	boolean		IsEql( CRemindInfo _clCRemindInfo )
 	{
+		if( _clCRemindInfo.m_iRemindAble != m_iRemindAble || _clCRemindInfo.m_iIsRemind != m_iIsRemind )
+		{
+			return	false;
+		}
+		
 		if( _clCRemindInfo.m_iType != m_iType )
 		{
 			return	false;

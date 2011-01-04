@@ -11,7 +11,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -89,7 +88,9 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         rbWeek		=	(RadioButton)findViewById(R.id.EveryWeek); 
         
         m_cbRing	=	( CheckBox )findViewById( R.id.RingCB);
+        m_cbRing.setChecked(true);
         m_cbVibrate	=	( CheckBox )findViewById( R.id.VibrateCB);
+        m_cbVibrate.setChecked(true);
 
         //根据从编辑画页传入的数据设置当前Activity的状态
         setInput();

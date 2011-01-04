@@ -64,7 +64,7 @@ public final class CRemindOperator
         		
     			AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
     	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
-    	    	MyIntent.putExtra( "id", _id );
+    	    	MyIntent.putExtra( CommonDefine.ExtraData_EditNoteID, _id );
     	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, _id, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
     	    	alarmManager.set(AlarmManager.RTC_WAKEUP, _clCRemindInfo.m_lTime, pendingIntent);			
 
@@ -72,10 +72,10 @@ public final class CRemindOperator
         	}
         	else if ( CommonDefine.Remind_Type_Week == _clCRemindInfo.m_iType )
         	{   		
-    	    	long firtTime	=	_clCRemindInfo.getFirstCycelRemindTime();
+    	    	long firtTime	=	_clCRemindInfo.getFirstCycelRemindTime( null );
     			AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
     	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
-    	    	MyIntent.putExtra( "id", _id );
+    	    	MyIntent.putExtra( CommonDefine.ExtraData_EditNoteID, _id );
     	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, _id, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT);
     	    	alarmManager.set(AlarmManager.RTC_WAKEUP, firtTime, pendingIntent);				
         	}
@@ -115,11 +115,11 @@ public final class CRemindOperator
 	    }
 	    else if( CommonDefine.Remind_Type_Week == clCRemindInfo.m_iType )		//循环提醒
 	    {
-	    	long	lTime	=	clCRemindInfo.getFirstCycelRemindTime();
+	    	long	lTime	=	clCRemindInfo.getFirstCycelRemindTime( null );
 	    	
 			AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
 	    	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
-	    	MyIntent.putExtra( "id", _id );
+	    	MyIntent.putExtra( CommonDefine.ExtraData_EditNoteID, _id );
 	    	
 	    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, (int)_id, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
 	    	alarmManager.set(AlarmManager.RTC_WAKEUP, lTime, pendingIntent);
@@ -136,7 +136,7 @@ public final class CRemindOperator
     	//对一个提醒进行编辑时调用该方法。
     	AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
     	Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
-    	MyIntent.putExtra( "id", _id );
+    	MyIntent.putExtra( CommonDefine.ExtraData_EditNoteID, _id );
     	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, _id, MyIntent, 0);
     	alarmManager.cancel(pendingIntent);
     	
@@ -153,7 +153,7 @@ public final class CRemindOperator
     	for( int i = 0; i < needDeleteIDs.size(); ++i )
     	{
     		Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
-    		MyIntent.putExtra( "id", needDeleteIDs.get(i).iDBRecID );
+    		MyIntent.putExtra( CommonDefine.ExtraData_EditNoteID, needDeleteIDs.get(i).iDBRecID );
         	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, needDeleteIDs.get(i).iDBRecID, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
         	alarmManager.cancel(pendingIntent);
     	}

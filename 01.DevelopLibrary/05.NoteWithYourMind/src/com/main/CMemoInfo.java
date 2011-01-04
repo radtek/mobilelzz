@@ -1,5 +1,7 @@
 package com.main;
 
+import java.util.Calendar;
+
 public class CMemoInfo {
 	public final static Integer IsEditEnable_Invalid = -1;
 	public final static Integer IsEditEnable_Disable = 0;
@@ -78,6 +80,32 @@ public class CMemoInfo {
 		}
 		iIsHaveAudioData = IsHaveAudioData_Invalid;
 		strAudioFileName = null;
+	}
+	
+	static	String	getTimeForListItem( long _lTime )
+	{
+		String	strTemp	=	null;
+		Calendar clCalendar     =     Calendar. getInstance();		
+		clCalendar.setTimeInMillis(_lTime);
+		
+		Calendar clCalendarCur     =     Calendar. getInstance();
+		clCalendarCur.setTimeInMillis(System.currentTimeMillis());
+		if( clCalendar.get(Calendar.YEAR) == clCalendarCur.get(Calendar.YEAR)
+			&& clCalendar.get(Calendar.MONTH) == clCalendarCur.get(Calendar.MONTH)
+			&& clCalendar.get(Calendar.DAY_OF_MONTH) == clCalendarCur.get(Calendar.DAY_OF_MONTH))
+		{
+			strTemp		=	String.format( "%02d:%02d", clCalendar.get(Calendar.HOUR_OF_DAY), clCalendar.get(Calendar.MINUTE) );
+		}
+		else if( System.currentTimeMillis() - _lTime < CRemindInfo.ONE_WEEK_TIME )
+		{
+			strTemp		=	CDateDlg.getDayofWeek(clCalendar);
+		}
+		else
+		{
+			strTemp		=	String.format( "%04d/%02d/%02d", clCalendar.get(Calendar.YEAR),clCalendar.get(Calendar.DAY_OF_MONTH) + 1, clCalendar.get(Calendar.DAY_OF_MONTH) );
+		}
+		
+		return	strTemp;
 	}
 	
 }

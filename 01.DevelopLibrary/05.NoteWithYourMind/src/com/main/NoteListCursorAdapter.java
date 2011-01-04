@@ -116,6 +116,10 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		CheckBox cbView = (CheckBox) view.findViewById(R.id.notelistitem_noteselect);
 		TextView tV = (TextView)view.findViewById(R.id.notelistitem_notetext);
 		TextView tvDate = (TextView)view.findViewById(R.id.notelistitem_notedate);
+		int	iLastModifyIndex	=	cursor.getColumnIndex(CNoteDBCtrl.KEY_lastmodifytime);
+		long	lLastModify		=	cursor.getLong(iLastModifyIndex);
+		
+		tvDate.setText(CMemoInfo.getTimeForListItem(lLastModify));
 		
 		int iTypeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_type);
 		int iTypeValue = cursor.getInt(iTypeIndex);

@@ -3,6 +3,7 @@ package com.main;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import android.app.Activity;
@@ -398,13 +399,21 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 //    			Time.setText( String.valueOf(clCDateAndTime.iYear) + "/" + String.valueOf(clCDateAndTime.iMonth+1) + "/"
 //    						+ String.valueOf(clCDateAndTime.iDay) + " " + String.valueOf(clCDateAndTime.iHour) + ":" 
 //    						+ String.valueOf(clCDateAndTime.iMinute));
-    			Time.setText( String.format("%04d/%02d/%02d %02d:%02d", clCDateAndTime.iYear, clCDateAndTime.iMonth+1
-    						, clCDateAndTime.iDay, clCDateAndTime.iHour, clCDateAndTime.iMinute));
+                Calendar clCalendar     =     Calendar. getInstance();
+                clCalendar.set(Calendar.YEAR, clCDateAndTime.iYear);
+                clCalendar.set(Calendar.MONTH, clCDateAndTime.iMonth);
+                clCalendar.set(Calendar.DAY_OF_MONTH, clCDateAndTime.iDay);
+
+                
+    			Time.setText( String.format("%04d/%02d/%02d %02d:%02d", clCDateAndTime.iYear, clCDateAndTime.iMonth + 1
+    						, clCDateAndTime.iDay, clCDateAndTime.iHour, clCDateAndTime.iMinute) + " " + CDateDlg.getDayofWeek(clCalendar) );
 	    			   		
 	        }
         	else if( CommonDefine.Remind_Type_Week == clRemindInfo.m_iType )
         	{
-    			for ( int i = 0; i < 7 ; ++i )
+        		boolean		bIsEveryDay	=	true;
+        		
+        		for ( int i = 0; i < 7 ; ++i )
     			{
     				Week[i].setVisibility(View.VISIBLE);
     				if( 1 == clRemindInfo.m_Week[i])
@@ -414,13 +423,27 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
     				else
     				{
     					Week[i].setTextColor(Color.WHITE);
+    					bIsEveryDay	=	false;
     				}
     			}
         		
     			CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
     			clRemindInfo.getWeekTime( clCDateAndTime, null );
- //   			Time.setText( String.valueOf(clCDateAndTime.iHour) + ":" + String.valueOf(clCDateAndTime.iMinute));
-    			Time.setText( String.format("%02d:%02d", clCDateAndTime.iHour, clCDateAndTime.iMinute));
+    			
+        		if( !bIsEveryDay )
+        		{
+     //   			Time.setText( String.valueOf(clCDateAndTime.iHour) + ":" + String.valueOf(clCDateAndTime.iMinute));
+        			Time.setText( String.format("%02d:%02d", clCDateAndTime.iHour, clCDateAndTime.iMinute));			
+        		}
+        		else
+        		{
+        			for ( int i = 0; i < 7 ; ++i )
+        			{
+        				Week[i].setVisibility(View.GONE);
+        			}
+        			Time.setText(String.format( String.format("Ã¿Ìì  %02d:%02d", clCDateAndTime.iHour, clCDateAndTime.iMinute) ));
+        		}
+
     			    		
         	}
         	else

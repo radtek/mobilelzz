@@ -127,7 +127,7 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
 		RemindActivity.m_iType	=	m_iType;
 	}
 	
-    String	getDayofWeek( Calendar	clCalendar )
+    static	String	getDayofWeek( Calendar	clCalendar )
     {
     	String	strTemp	=	null;
     	switch( clCalendar.get(Calendar.DAY_OF_WEEK) )

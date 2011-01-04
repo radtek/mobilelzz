@@ -287,9 +287,9 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     		//倒计时提醒 - 设定日期和星期都不可点；设定日期星期和时间变黑
     		rbOnce.setClickable(false);
     		rbWeek.setClickable(false);
-    		rbTime.setTextColor(Color.BLACK);
-    		rbOnce.setTextColor(Color.BLACK);
-    		rbWeek.setTextColor(Color.BLACK);
+    		rbTime.setTextColor(Color.DKGRAY);
+    		rbOnce.setTextColor(Color.DKGRAY);
+    		rbWeek.setTextColor(Color.DKGRAY);
       	}
       	else if( m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_Week)				//循环提醒
       	{       		
@@ -308,8 +308,8 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     		m_clCCountdownDlg.hideView( R.id.countDownLayout, R.id.daojishi);
     		
     		//循环提醒 - 倒计时和日期变黑
-    		rbOnce.setTextColor(Color.BLACK);
-    		rbCountdown.setTextColor(Color.BLACK);
+    		rbOnce.setTextColor(Color.DKGRAY);
+    		rbCountdown.setTextColor(Color.DKGRAY);
     		
       	}
       	else if(  m_clCRemindInfo.m_iType == CommonDefine.Remind_Type_Once )				//单次提醒
@@ -330,8 +330,8 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     		m_clCCountdownDlg.hideView( R.id.countDownLayout, R.id.daojishi);
     		
     		//单次提醒 - 倒计时和星期变黑
-    		rbCountdown.setTextColor(Color.BLACK);
-    		rbWeek.setTextColor(Color.BLACK);
+    		rbCountdown.setTextColor(Color.DKGRAY);
+    		rbWeek.setTextColor(Color.DKGRAY);
       	}
       }
       else
@@ -370,7 +370,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
             		rbTime.setTextColor(Color.WHITE); 
             		rbOnce.setTextColor(Color.WHITE);           		
             		rbWeek.setTextColor(Color.WHITE);
-            		rbCountdown.setTextColor(Color.BLACK);
+            		rbCountdown.setTextColor(Color.DKGRAY);
         		}
         	}
         	else if(checkedId==R.id.daojishi)
@@ -394,9 +394,9 @@ public class RemindActivity extends Activity	implements View.OnClickListener
          		
             		rbOnce.setClickable(false);          		
             		rbWeek.setClickable(false);
-            		rbOnce.setTextColor(Color.BLACK);
-            		rbWeek.setTextColor(Color.BLACK);
-            		rbTime.setTextColor(Color.BLACK);
+            		rbOnce.setTextColor(Color.DKGRAY);
+            		rbWeek.setTextColor(Color.DKGRAY);
+            		rbTime.setTextColor(Color.DKGRAY);
             		
             		rbCountdown.setTextColor(Color.WHITE);
             		
@@ -427,9 +427,9 @@ public class RemindActivity extends Activity	implements View.OnClickListener
             		rbCountdown.setChecked(false); 
             		
             		//日期设定 - 星期变黑；日期变白
-            		rbWeek.setTextColor(Color.BLACK);  
+            		rbWeek.setTextColor(Color.DKGRAY);  
             		rbOnce.setTextColor(Color.WHITE);
-            		m_RadioGroupTime.clearCheck();
+//            		m_RadioGroupTime.clearCheck();
         		}
 
         	}
@@ -449,9 +449,9 @@ public class RemindActivity extends Activity	implements View.OnClickListener
             		rbCountdown.setChecked(false); 
             		
             		//星期设定 - 日期变黑；星期变白
-            		rbOnce.setTextColor(Color.BLACK);
+            		rbOnce.setTextColor(Color.DKGRAY);
             		rbWeek.setTextColor(Color.WHITE);
-            		m_RadioGroupTime.clearCheck();
+ //           		m_RadioGroupTime.clearCheck();
         		}
         	}
         }

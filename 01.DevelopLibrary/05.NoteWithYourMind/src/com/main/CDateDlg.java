@@ -45,7 +45,12 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
         
         m_dp	=	(DatePicker)findViewById(R.id.DatePicker01);
         setProperty();
-        setTitle("日期设定");
+        Calendar clCalendar     =     Calendar. getInstance();
+        clCalendar.set(Calendar. YEAR, m_iYear );
+        clCalendar.set(Calendar.MONTH, m_iMonth );
+        clCalendar.set(Calendar. DAY_OF_MONTH, m_iDay );
+
+        setTitle(getDayofWeek(clCalendar));
         
         if( CommonDefine.g_int_Invalid_Time != m_iYear 
         &&  CommonDefine.g_int_Invalid_Time != m_iMonth 
@@ -59,6 +64,20 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
         
         Button	btOK		=	(Button)findViewById(R.id.DateOK);
         btOK.setOnClickListener(this);
+        
+        m_dp.init(m_iYear, m_iMonth, m_iDay, new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth)
+            {
+                Calendar clCalendar     =     Calendar. getInstance();
+                clCalendar.set(Calendar. YEAR, year );
+                clCalendar.set(Calendar.MONTH, monthOfYear );
+                clCalendar.set(Calendar. DAY_OF_MONTH, dayOfMonth );
+
+                setTitle(getDayofWeek(clCalendar));
+            }
+        });
+
         
         show(); 
     }

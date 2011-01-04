@@ -42,8 +42,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 				>
 						<TextView
 						android:id="@+id/Time_txt"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
+						android:layout_width="fill_parent"
+						android:layout_height="fill_parent"
 						android:layout_weight="5"
 						android:layout_marginLeft="20px"
 						>
@@ -66,8 +66,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 				android:layout_weight="1">
 				<TextView
 				android:id="@+id/daojishiTxt"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
 				android:layout_weight="5"
 				android:layout_marginLeft="20px"
 				>
@@ -108,8 +108,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 				>
 				<TextView
 				android:id="@+id/OnceText"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent"
 				android:layout_weight="5"
 				android:layout_marginLeft="20px"
 				>
@@ -132,7 +132,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 				<TextView
 					android:id="@+id/MonTxt"
 					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
+					android:layout_height="fill_parent"
 					android:text="周一"
 					android:layout_weight="1"
 					android:layout_marginLeft="20px"
@@ -141,7 +141,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 				<TextView
 					android:id="@+id/TusTxt"
 					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
+					android:layout_height="fill_parent"
 					android:text="周二"
 					android:layout_weight="1"
 					>
@@ -149,7 +149,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 				<TextView
 					android:id="@+id/WedTxt"
 					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
+					android:layout_height="fill_parent"
 					android:text="周三"
 					android:layout_weight="1"
 					>
@@ -157,7 +157,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 				<TextView
 					android:id="@+id/ThrTxt"
 					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
+					android:layout_height="fill_parent"
 					android:text="周四"
 					android:layout_weight="1"
 					>
@@ -165,7 +165,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 				<TextView
 					android:id="@+id/FriTxt"
 					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
+					android:layout_height="fill_parent"
 					android:text="周五"
 					android:layout_weight="1"
 					>
@@ -173,7 +173,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 				<TextView
 					android:id="@+id/SatTxt"
 					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
+					android:layout_height="fill_parent"
 					android:text="周六"
 					android:layout_weight="1"
 					>
@@ -181,7 +181,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 				<TextView
 					android:id="@+id/SunTxt"
 					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
+					android:layout_height="fill_parent"
 					android:text="周日"
 					android:layout_weight="1"
 					>
@@ -217,7 +217,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 				<CheckBox
 				android:id="@+id/RingCB"
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
+				android:layout_height="fill_parent"
 				android:layout_centerHorizontal="true"
 				android:layout_gravity="center_horizontal"
 				android:text="响铃"
@@ -233,7 +233,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 				<CheckBox
 				android:id="@+id/VibrateCB"
 				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
+				android:layout_height="fill_parent"
 				android:layout_centerHorizontal="true"
 				android:layout_gravity="center_horizontal"
 				android:text="震动"

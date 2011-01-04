@@ -70,7 +70,7 @@ public class CWeekDlg extends CommentOutDlg implements View.OnClickListener
         WindowManager.LayoutParams	wl	=	window.getAttributes();
         wl.x		=	m_iPosX;	
         wl.y		=	m_iPosY;	
-        wl.width	=	400;       
+//        wl.width	=	400;       
         window.setAttributes(wl);        
    }
 	public void onClick(View view)

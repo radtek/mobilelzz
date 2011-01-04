@@ -89,7 +89,7 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
         wl.x	=	m_iPosX;											
         wl.y	=	m_iPosY;
         
-        wl.width	=	300;
+//        wl.width	=	300;
        
         window.setAttributes(wl);        
    }

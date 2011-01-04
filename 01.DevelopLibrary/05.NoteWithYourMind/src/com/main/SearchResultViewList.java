@@ -7,6 +7,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +40,7 @@ implements ListActivityCtrl, View.OnClickListener
 
 	ListUICtrlParam m_SearchParam =null;
 	private AlertDialog m_dlgSortTypeList;
+	private	EditText m_ETKeyword ;
 	
 //	public void onNewIntent(Intent intent){
 //		setIntent(intent);
@@ -71,6 +77,33 @@ implements ListActivityCtrl, View.OnClickListener
         ImageButton clBTMemoMore_move = (ImageButton) findViewById(R.id.toolbar_move);
         clBTMemoMore_move.setOnClickListener(this);
         
+        m_ETKeyword = (EditText) findViewById(R.id.search_toolbar_edittext);
+        m_ETKeyword.addTextChangedListener(new TextWatcher(){
+
+            public void afterTextChanged(Editable s) {
+           
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+               
+            }        	
+        	
+			public void onTextChanged(CharSequence s, int start, int before,  int count) {   
+//				updateContacts(s.toString());   
+
+				String strKeyword = m_ETKeyword.getText().toString();
+				
+				m_SearchParam.g_enListType  = ListUICtrlParam.ListTypeEnum.ListType_SearchResultList;
+				m_SearchParam.g_bool_IsTextSearch = true;
+				m_SearchParam.g_str_SearchKey = strKeyword;
+				
+				m_NoteListUICtrl.SetSearchParam( m_SearchParam);
+				m_NoteListUICtrl.updateListData(CommonDefine.g_int_Invalid_ID);
+
+			}   		
+
+
+		}); 		
 	}
 	
 	public void onStop()
@@ -158,7 +191,7 @@ implements ListActivityCtrl, View.OnClickListener
 
 	public void processSortSettingClick(View view){
 
-			final String[] mySortTypes = {"最近修改优先","提醒优先","语音优先","文本优先"};
+			final String[] mySortTypes = {"提醒优先","语音优先","文本优先","最近修改优先"};
 
 			//show folder to select rec--->
 			LayoutInflater factory = LayoutInflater.from(this);
@@ -184,16 +217,16 @@ implements ListActivityCtrl, View.OnClickListener
 
 					switch(arg2){
 					case 0:
-						m_SearchParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_Normal;
-						break;
-					case 1:
 						m_SearchParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_RemindFirst;
 						break;
-					case 2:
+					case 1:
 						m_SearchParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_VoiceFirst;
 						break;
-					case 3:
+					case 2:
 						m_SearchParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_TextFirst;
+						break;
+					case 3:
+						m_SearchParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_Normal;
 						break;
 					default:
 						m_SearchParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_Normal;

@@ -159,7 +159,23 @@ public final class CRemindOperator
     	}
 
     }
-    
+
+    public	void	disableRemind( Context context, ArrayList<Integer> needDeleteIDs )
+    {
+    	//将一条提醒设置为无效
+    	//由于提醒不能转为Memo，所以该方法对删除和设置为Disable都好用
+    	AlarmManager	alarmManager	=	(AlarmManager)context.getSystemService( Context.ALARM_SERVICE );
+    	
+    	for( int i = 0; i < needDeleteIDs.size(); ++i )
+    	{
+    		Intent 			MyIntent		=	new Intent( context, AlarmReceiver.class );
+    		MyIntent.putExtra( CommonDefine.ExtraData_EditNoteID, needDeleteIDs.get(i) );
+        	PendingIntent pendingIntent		=	PendingIntent.getBroadcast( context, needDeleteIDs.get(i), MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
+        	alarmManager.cancel(pendingIntent);
+    	}
+
+    }
+	
     public	int	getRemindInfo( Cursor cur, CRemindInfo _clCRemindInfo )
     {
     	//根据ID从DB中取得提醒信息

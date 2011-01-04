@@ -396,9 +396,10 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
     	Week[6]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx7);
     	
     	TextView	Status	=	(TextView)findViewById(R.id.editnote_remindinfo_status);
+    	Status.setTextColor(Color.WHITE);
     	TextView	CountDownTime	=	(TextView)findViewById(R.id.editnote_remindinfo_nextremind);
-    	
-    	
+    	CountDownTime.setTextColor(Color.WHITE);
+    	Time.setTextColor(Color.WHITE);
     	if(clRemindInfo!=null)
     	{
     		setRemindDisplay(true);
@@ -468,6 +469,14 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
     		else
     		{
     			Status.setText("Õ£”√");
+        		for ( int i = 0; i < 7 ; ++i )
+    			{
+    				Week[i].setTextColor(Color.DKGRAY);
+    				Status.setTextColor(Color.DKGRAY);
+    				Time.setTextColor(Color.DKGRAY);
+    				CountDownTime.setTextColor(Color.DKGRAY);
+    			}
+    			
     		}
     		
     		String	strTemp	=	clRemindInfo.getCountDownBySting();
@@ -537,6 +546,7 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 			{
 				m_clCRemindInfo.m_iRemindAble	=	CMemoInfo.IsRemind_Able_No;
 				Status.setText("Õ£”√");
+				updateTime( m_clCRemindInfo );
 			}
 			else
 			{
@@ -544,6 +554,7 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 				{
 					m_clCRemindInfo.m_iRemindAble	=	CMemoInfo.IsRemind_Able_Yes; 
 					Status.setText("∆Ù”√");
+					updateTime( m_clCRemindInfo );
 				}
 				else
 				{

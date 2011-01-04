@@ -1,12 +1,9 @@
 package com.main;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
@@ -22,6 +19,7 @@ class CommonDefine{
 	public static int 						g_int_Invalid_Time 	= -1;
 	public static int 						g_int_ListItemHeight = 65;
 	public static String 					g_str_PassWord = "";
+	public static String 					ExtraData_EditNoteID        =    "com.main.ExtraData_EditNoteID"; 
 	public static boolean 					g_bool_IsPassWordChecked = false;
 
 	private static	CNoteDBCtrl				m_clCNoteDBCtrl = null;
@@ -37,6 +35,10 @@ class CommonDefine{
 	public static int 						Remind_Type_CountDown	=	1;
 	public static int 						Remind_Type_Week		=	2;
 	public static int 						Remind_Type_Once		=	3;
+	
+	public static int 						WeekInvalid				=	-1;
+	public static int 						WeekNext				=	1;
+	public static int 						WeekCurrent				=	2;
 	
 	private static MediaPhoneCallListener 	m_MediaPhoneCallListener = null;
 	
@@ -193,7 +195,7 @@ class SortByRemindFirst implements  Comparator<CMemoInfo> {
 				
 				clCRemindInfo.setWeekTime( object1 );
 
-				T1	=	clCRemindInfo.getFirstCycelRemindTime();
+				T1	=	clCRemindInfo.getFirstCycelRemindTime( null );
 
 
 			}
@@ -211,7 +213,7 @@ class SortByRemindFirst implements  Comparator<CMemoInfo> {
 				
 				clCRemindInfo.setWeekTime( object2 );
 
-				T2	=	clCRemindInfo.getFirstCycelRemindTime();
+				T2	=	clCRemindInfo.getFirstCycelRemindTime( null );
 			}		
 
 			return (int)( T1 -T2 );

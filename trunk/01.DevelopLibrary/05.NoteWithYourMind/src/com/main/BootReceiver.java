@@ -40,7 +40,7 @@ public class BootReceiver extends BroadcastReceiver {
 					
 					AlarmManager	alarmManager	=	(AlarmManager)ctx.getSystemService( Context.ALARM_SERVICE );
 			    	Intent 			MyIntent		=	new Intent( ctx, AlarmReceiver.class );
-			    	MyIntent.putExtra( "id", iID );
+			    	MyIntent.putExtra( CommonDefine.ExtraData_EditNoteID, iID );
 			    	
 			    	
 			    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(ctx, iID, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT );
@@ -55,11 +55,11 @@ public class BootReceiver extends BroadcastReceiver {
 						continue;
 					}
 					
-					long	lTime	=	clCRemindInfo.getFirstCycelRemindTime();
+					long	lTime	=	clCRemindInfo.getFirstCycelRemindTime( null );
 					
 					AlarmManager	alarmManager	=	(AlarmManager)ctx.getSystemService( Context.ALARM_SERVICE );
 			    	Intent 			MyIntent		=	new Intent( ctx, AlarmReceiver.class );
-			    	MyIntent.putExtra( "id", iID );
+			    	MyIntent.putExtra( CommonDefine.ExtraData_EditNoteID, iID );
 			    	
 			    	PendingIntent pendingIntent		=	PendingIntent.getBroadcast(ctx, iID, MyIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 			    	alarmManager.set( AlarmManager.RTC_WAKEUP, lTime, pendingIntent );	

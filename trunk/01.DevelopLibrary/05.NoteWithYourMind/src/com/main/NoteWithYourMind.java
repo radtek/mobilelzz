@@ -396,9 +396,6 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
     			
     			CDateAndTime	clCDateAndTime	=	new	CDateAndTime();
     			clRemindInfo.getNormalTime( clCDateAndTime );
-//    			Time.setText( String.valueOf(clCDateAndTime.iYear) + "/" + String.valueOf(clCDateAndTime.iMonth+1) + "/"
-//    						+ String.valueOf(clCDateAndTime.iDay) + " " + String.valueOf(clCDateAndTime.iHour) + ":" 
-//    						+ String.valueOf(clCDateAndTime.iMinute));
                 Calendar clCalendar     =     Calendar. getInstance();
                 clCalendar.set(Calendar.YEAR, clCDateAndTime.iYear);
                 clCalendar.set(Calendar.MONTH, clCDateAndTime.iMonth);
@@ -432,7 +429,6 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
     			
         		if( !bIsEveryDay )
         		{
-     //   			Time.setText( String.valueOf(clCDateAndTime.iHour) + ":" + String.valueOf(clCDateAndTime.iMinute));
         			Time.setText( String.format("%02d:%02d", clCDateAndTime.iHour, clCDateAndTime.iMinute));			
         		}
         		else
@@ -442,9 +438,7 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
         				Week[i].setVisibility(View.GONE);
         			}
         			Time.setText(String.format( String.format("Ã¿Ìì  %02d:%02d", clCDateAndTime.iHour, clCDateAndTime.iMinute) ));
-        		}
-
-    			    		
+        		}  			    		
         	}
         	else
         	{

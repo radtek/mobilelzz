@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 
@@ -32,7 +31,7 @@ public class AlarmAlert extends Activity implements MediaStatusControl
 		CommonDefine.getMediaPhoneCallListener(this).advise(this);
 		/* Ìø³öµÄÄÖÁå¾¯Ê¾  */
 		Intent iExtraData = getIntent();
-		int id	=	iExtraData.getIntExtra("id", -1);
+		int id	=	iExtraData.getIntExtra(CommonDefine.ExtraData_EditNoteID, -1);
 		
 		CNoteDBCtrl	clCNoteDBCtrl	=	new	CNoteDBCtrl( AlarmAlert.this );
 		Cursor clCursor	=	clCNoteDBCtrl.getNoteRec(id);

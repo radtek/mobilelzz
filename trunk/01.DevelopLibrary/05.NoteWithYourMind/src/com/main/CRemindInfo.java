@@ -3,8 +3,6 @@ package com.main;
 import java.io.Serializable;
 import java.util.Calendar;
 
-import android.util.Log;
-
 public class CRemindInfo implements Serializable
 {
 
@@ -77,9 +75,42 @@ public class CRemindInfo implements Serializable
 		}
 		else if ( m_iType == CommonDefine.Remind_Type_Week )
 		{
-			long	lTimeTemp	=	getFirstCycelRemindTime();
+			WeekCountDown	clWeekCountDown	=	new	WeekCountDown();
 			
-			strTemp	=	SubCountdownByString( lTimeTemp );
+			long	lTimeTemp	=	getFirstCycelRemindTime( clWeekCountDown );
+			if( clWeekCountDown.iType == CommonDefine.WeekNext )
+			{
+				if( clWeekCountDown.iWeek >= 0 && clWeekCountDown.iWeek <= 6 )
+				{
+					strTemp	=	"下次提醒 : 下周 " + getDayofWeek(clWeekCountDown.iWeek );
+				}
+				
+			}
+			else if ( clWeekCountDown.iType == CommonDefine.WeekCurrent )
+			{
+				if( clWeekCountDown.iWeek >= 0 && clWeekCountDown.iWeek <= 6 )
+				{
+					Calendar clCalendar     =     Calendar. getInstance();
+					clCalendar.setTimeInMillis( lTimeTemp );
+					int	iCurr	=	clCalendar.get(Calendar.DAY_OF_WEEK);
+					-- iCurr;
+					if ( iCurr == clWeekCountDown.iWeek )
+					{
+						strTemp	=	"下次提醒 : 今天 ";
+					}
+					else
+					{
+						strTemp	=	"下次提醒 : 本周 " + getDayofWeek(clWeekCountDown.iWeek );
+					}
+				}
+			}
+			else
+			{
+				//error
+			}
+				
+			
+//			strTemp	=	SubCountdownByString( lTimeTemp );
 		}
 		else
 		{
@@ -239,10 +270,11 @@ public class CRemindInfo implements Serializable
 	
 	//根据当前系统时间，计算取得循环提醒 的第一次要提醒的时间
 	//当提醒到来时再次调用该方法取得下一个提醒的时间
-	public	long	getFirstCycelRemindTime()	
+	public	long	getFirstCycelRemindTime( WeekCountDown _clWeekCountDown )
 	{
-		long	lTimeInnerMax	=	-1;				//返回值
-		long	lTimeInnerMin	=	-1;				//返回值
+		long	lTimeInnerMax	=	-1;				
+		long	lTimeInnerMin	=	-1;
+		long	lTimeInner		=	-1;			//返回值
 		if ( m_iType == CommonDefine.Remind_Type_Week )	
 		{
 			//取得当前时间
@@ -256,6 +288,11 @@ public class CRemindInfo implements Serializable
 			long	lTempTime	=	-1;					//临时变量
 			long	lMinTime	=	Long.MAX_VALUE;		//差值为正的最小时间为下次提醒时间，初始化为整数最大值
 			long	lMaxTime	=	-1;					//差值为负的最小时间为下周的第一个提醒时间，初始化为负数最大值
+			
+			int		iType		=	CommonDefine.g_int_Invalid_ID;
+			int		iWeek	=	CommonDefine.WeekInvalid;
+			int		iWeekNext	=	CommonDefine.WeekInvalid;
+			int		iWeekCurrent	=	CommonDefine.WeekInvalid;
 			
 			byte	bWeekTemp[]	=	new	byte[ 7 ];
 			for( int i = 0; i < 6; ++i )
@@ -291,6 +328,7 @@ public class CRemindInfo implements Serializable
 						 {
 							 lMinTime			=	lMinTemp;	//保存最小的值
 							 lTimeInnerMin		=	lTempTime;
+							 iWeekCurrent		=	i;
 						 }						 
 					 }
 					 else								//在下星期提醒
@@ -300,6 +338,7 @@ public class CRemindInfo implements Serializable
 							 lMaxTime			=	lMinTemp;
 							 lTimeInnerMax		=	lTempTime;
 							 clCalendar.setTimeInMillis(lTimeInnerMax);
+							 iWeekNext			=	i;
 //							 Log.d("RemindInfo:", String.format("%04d/%02d/%02d %02d:%02d DayofWeek:%2d", clCalendar.get(Calendar.YEAR), clCalendar.get(Calendar.MONTH)+1
 //										, clCalendar.get(Calendar.DAY_OF_MONTH), clCalendar.get(Calendar.HOUR_OF_DAY), clCalendar.get(Calendar.MINUTE), clCalendar.get(Calendar.DAY_OF_WEEK)));
 						 }
@@ -311,18 +350,30 @@ public class CRemindInfo implements Serializable
 			{
 				lTimeInnerMax	+=	ONE_WEEK_TIME;
 				
+				iType	=	CommonDefine.WeekNext;
+				iWeek	=	iWeekNext;
 				clCalendar.setTimeInMillis( lTimeInnerMax );
 //				 Log.d("ResultMax", String.format("%04d/%02d/%02d %02d:%02d DayofWeek:%2d", clCalendar.get(Calendar.YEAR), clCalendar.get(Calendar.MONTH)+1
 //							, clCalendar.get(Calendar.DAY_OF_MONTH), clCalendar.get(Calendar.HOUR_OF_DAY), clCalendar.get(Calendar.MINUTE), clCalendar.get(Calendar.DAY_OF_WEEK)));
-				return	lTimeInnerMax;
+				lTimeInner	=	lTimeInnerMax;
 			}
 			else
 			{
 				clCalendar.setTimeInMillis( lTimeInnerMin );
+				iType	=	CommonDefine.WeekCurrent;
+				iWeek	=	iWeekCurrent;
 //				 Log.d("ResultMin",String.format("%04d/%02d/%02d %02d:%02d DayofWeek:%2d", clCalendar.get(Calendar.YEAR), clCalendar.get(Calendar.MONTH)+1
 //							, clCalendar.get(Calendar.DAY_OF_MONTH), clCalendar.get(Calendar.HOUR_OF_DAY), clCalendar.get(Calendar.MINUTE), clCalendar.get(Calendar.DAY_OF_WEEK)));
-				return	lTimeInnerMin;
+				lTimeInner	=	lTimeInnerMin;
 			}
+			
+			if( null != _clWeekCountDown )
+			{
+				_clWeekCountDown.iType	=	iType;
+				_clWeekCountDown.iWeek	=	iWeek;
+			}
+			
+			return	lTimeInner;
 		}
 		
 		return	CommonDefine.E_FAIL;
@@ -386,6 +437,49 @@ public class CRemindInfo implements Serializable
 		return	true;
 	}
 	
+    static	String	getDayofWeek( int iWeek )
+    {
+    	String	strTemp	=	null;
+    	switch( iWeek )
+    	{
+    	case	0:
+    		strTemp	=	"日";
+    		break;
+    	case	1:
+    		strTemp	=	"一";
+    		break;
+    	case	2:
+    		strTemp	=	"二";
+    		break;
+    	case	3:
+    		strTemp	=	"三";
+    		break;
+    	case	4:
+    		strTemp	=	"四";
+    		break;
+    	case	5:
+    		strTemp	=	"五";
+    		break;
+    	case	6:
+    		strTemp	=	"六";
+    		break;
+    	}
+    	
+    	return	strTemp;
+    }
+	
+}
+
+class	WeekCountDown
+{
+	int	iType;	//本周还是下周提醒
+	int	iWeek;	//周几提醒
+	
+	WeekCountDown()
+	{
+		iType	=	CommonDefine.g_int_Invalid_ID;
+		iWeek	=	CommonDefine.g_int_Invalid_ID;
+	}
 }
 
 class CDateAndTime

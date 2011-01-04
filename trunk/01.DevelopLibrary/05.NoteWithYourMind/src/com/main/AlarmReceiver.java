@@ -14,10 +14,10 @@ public class AlarmReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		int id	=	intent.getIntExtra("id", -1);
+		int id	=	intent.getIntExtra(CommonDefine.ExtraData_EditNoteID, -1);
 		
 	    Intent iIntent = new Intent(context, AlarmAlert.class);    
-	    iIntent.putExtra("id", id);
+	    iIntent.putExtra(CommonDefine.ExtraData_EditNoteID, id);
 	    iIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	    context.startActivity( iIntent );
 	    

@@ -361,6 +361,22 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
     private void updateVoice(String strAudioFileName){
     	if(strAudioFileName!=null && SDCardAccessor.isSDCardAvailable() ){
     		myRecAudioFile = new File(SDCardAccessor.getAudioDataDir(), strAudioFileName);
+    		MediaPlayer tempMediaPlayer = new MediaPlayer();
+    		try{
+    			tempMediaPlayer.setDataSource(myRecAudioFile.getAbsolutePath()); //"/sdcard/youchaihua.mp3"
+    			tempMediaPlayer.prepare();
+    			int iCurrentVoiceDataDuration = tempMediaPlayer.getDuration();
+//    			mProgressBar01.setIndeterminate(false);
+			    mProgressBar01.setMax(iCurrentVoiceDataDuration);
+		        mProgressBar01.setProgress(0);
+				int total_sec = iCurrentVoiceDataDuration/1000%60;
+				int total_min = iCurrentVoiceDataDuration/1000/60;
+				mchronometer.setText(String.format("%02d:%02d/%02d:%02d", 0,0,  total_min ,total_sec));
+    		}catch(IOException e){
+    			
+    		}
+    		tempMediaPlayer.release();
+    		tempMediaPlayer=null;
     		openVoicePanel();
     	}else{
     		
@@ -682,13 +698,6 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 				int mMaxTime = CommonDefine.g_iMaxRecTime;
 				for (int i=0;i<mMaxTime+1;i++)
 				{
-				    try 
-				    {
-						Thread.sleep(1000);
-					} catch (InterruptedException e)
-					{
-						e.printStackTrace();
-					}
 					Message m = new Message();
 					m.arg1 = i;
 				    if( i==mMaxTime )
@@ -702,6 +711,13 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 				      m.what = NoteWithYourMind.GUI_THREADING_NOTIFIER;
 				      NoteWithYourMind.this.myMessageHandler.sendMessage(m); 
 				    }   
+				    try 
+				    {
+						Thread.sleep(1000);
+					} catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					}
 				}
 			}
         });
@@ -1006,7 +1022,7 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 			tp.setFakeBoldText(true); 
 			folderList.addHeaderView(tvRootFolder);
 		}
-		Cursor cursorFolderList	=	m_clCNoteDBCtrl.getMemoFolderInRoot();
+		Cursor cursorFolderList	=	m_clCNoteDBCtrl.getFolderInRoot();
 		startManagingCursor(cursorFolderList);
 		if(cursorFolderList.getCount()>0){
 			if(cursorFolderList!=null){
@@ -1045,13 +1061,17 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
     	clNoteInfo.iId = m_ExtraData_EditNoteID;
     	if(m_ExtraData_PreID!=CommonDefine.g_int_Invalid_ID){
     		clNoteInfo.iPreId			=	m_ExtraData_PreID;	
+    	}else{
+    		clNoteInfo.iPreId			=	CMemoInfo.PreId_Root;	
     	}
     	clNoteInfo.iType			=	CMemoInfo.Type_Memo;
     	if(clNoteInfo.strDetail==null || clNoteInfo.strDetail.equals("")){
-    		if(clNoteInfo.iIsRemind == CMemoInfo.IsRemind_Yes){
-    			clNoteInfo.strDetail="提醒***";
-    		}else if(clNoteInfo.iIsHaveAudioData == CMemoInfo.IsHaveAudioData_Yes){
-    			clNoteInfo.strDetail="语音***";
+    		if(clNoteInfo.iIsRemind == CMemoInfo.IsRemind_Yes ||
+    			clNoteInfo.iIsHaveAudioData == CMemoInfo.IsHaveAudioData_Yes ){
+    			Date d = new Date();
+    	        d.toString();
+    	        SimpleDateFormat sdf=new SimpleDateFormat("修改于yyyy/MM/dd kk:mm:ss");
+    	        clNoteInfo.strDetail = sdf.format(d);
     		}else{
     			Toast toast = Toast.makeText(NoteWithYourMind.this, "请输入内容", Toast.LENGTH_SHORT);
         		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
@@ -1076,13 +1096,6 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 			setPriority(MIN_PRIORITY);
 			for (int i=0;i<m_iCurrentVoiceDataDuration+1;i++)
 			{
-			    try 
-			    {
-					sleep(milliseconds);
-				} catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
 				Message m = new Message();
 				m.arg1 = i;
 			    if( i==m_iCurrentVoiceDataDuration  || (!mMediaPlayer.isPlaying() && !m_isMediaPausingForPhoneStateChange))
@@ -1097,6 +1110,13 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 					m.what = NoteWithYourMind.GUI_THREADING_NOTIFIER;
 					NoteWithYourMind.this.myMessageHandler.sendMessage(m); 
 			    }   
+			    try 
+			    {
+					sleep(milliseconds);
+				} catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
 			}
 		}
 	}  

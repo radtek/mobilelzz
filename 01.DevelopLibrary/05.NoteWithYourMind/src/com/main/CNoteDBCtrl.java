@@ -125,35 +125,35 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		return iCount;
 	}
 	
-	public	Cursor	getMemoFolderInRoot()
+	public	Cursor	getFolderInRoot()
 	{
 		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+
-					KEY_type+"=? and "+KEY_isremind+"!=? order by "+KEY_createtime+" desc", 
+					KEY_type+"=? and "+KEY_isremind+"!=? order by "+KEY_lastmodifytime+" desc", 
 					new String[]{String.valueOf(0), String.valueOf(CMemoInfo.Type_Folder), String.valueOf(CMemoInfo.IsRemind_Yes)});
 	}
-	public	Cursor	getRemindFolderInRoot()
-	{
-		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+
-					KEY_type+"=? and "+KEY_isremind+"=? order by "+KEY_createtime+" desc", 
-					new String[]{String.valueOf(0), String.valueOf(CMemoInfo.Type_Folder), String.valueOf(CMemoInfo.IsRemind_Yes)});
-	}
+//	public	Cursor	getRemindFolderInRoot()
+//	{
+//		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+
+//					KEY_type+"=? and "+KEY_isremind+"=? order by "+KEY_createtime+" desc", 
+//					new String[]{String.valueOf(0), String.valueOf(CMemoInfo.Type_Folder), String.valueOf(CMemoInfo.IsRemind_Yes)});
+//	}
 	
-	public	Cursor	getMemosByID( int id )
-	{
-		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+KEY_isremind+"!=? order by "+KEY_type+" asc, "+
-					KEY_createtime+" desc", 
-					new String[]{String.valueOf(id), String.valueOf(CMemoInfo.IsRemind_Yes)});
-	}
-	public	Cursor	getRemindsByID( int id )
-	{
-		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+KEY_isremind+"=? order by "+KEY_type+" asc, "+
-				KEY_createtime+" desc", 
-					new String[]{String.valueOf(id), String.valueOf(CMemoInfo.IsRemind_Yes)});
-	}
+//	public	Cursor	getMemosByID( int id )
+//	{
+//		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+KEY_isremind+"!=? order by "+KEY_type+" asc, "+
+//					KEY_createtime+" desc", 
+//					new String[]{String.valueOf(id), String.valueOf(CMemoInfo.IsRemind_Yes)});
+//	}
+//	public	Cursor	getRemindsByID( int id )
+//	{
+//		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+KEY_isremind+"=? order by "+KEY_type+" asc, "+
+//				KEY_createtime+" desc", 
+//					new String[]{String.valueOf(id), String.valueOf(CMemoInfo.IsRemind_Yes)});
+//	}
 	public	Cursor	getNotesByID( int id )
 	{
 		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? order by "+KEY_type+" asc, "+
-					KEY_createtime+" desc", 
+				KEY_lastmodifytime+" desc", 
 					new String[]{String.valueOf(id)});
 	}
 	
@@ -278,11 +278,20 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		return !bIsAudioFileDeleteFailed;
 	}
 	
+	/*
+	 * 如果要更新的记录是便签，那么在输入参数中必须提供type、preid，
+	 * 用于更新便签所在的文件夹的最后修改时间
+	 */
 	public	int Update( CMemoInfo clCMemoInfo )
 	{
 		Calendar		clCalendar	=	Calendar.getInstance();
 		clCMemoInfo.dLastModifyTime =	clCalendar.getTimeInMillis();
-    	
+		if((clCMemoInfo.iType == CMemoInfo.Type_Memo) && (clCMemoInfo.iPreId!=CMemoInfo.PreId_Root)){
+			CMemoInfo clFolderInfo = new CMemoInfo();
+			clFolderInfo.iId = clCMemoInfo.iPreId;
+			clFolderInfo.iType = CMemoInfo.Type_Folder;
+			Update(clFolderInfo);	
+		}
 		int iEffectedID = CommonDefine.g_int_Invalid_ID;
 		int id = clCMemoInfo.iId;
 		if(id == CommonDefine.g_int_Invalid_ID){

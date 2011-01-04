@@ -164,7 +164,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 				tp.setFakeBoldText(true); 
 				folderList.addHeaderView(tvRootFolder);
 			}
-			Cursor cursorFolderList	=	m_clCNoteDBCtrl.getMemoFolderInRoot();
+			Cursor cursorFolderList	=	m_clCNoteDBCtrl.getFolderInRoot();
 			m_sourceManager.startManagingCursor(cursorFolderList);
 			if(cursorFolderList.getCount()>0){
     			if(cursorFolderList!=null){
@@ -416,7 +416,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 					initPos = i;
 				}
 			}
-			m_targetList.setSelectionFromTop(initPos, 20);
+			m_targetList.setSelectionFromTop(initPos, 50);
 		}
 	}
 	

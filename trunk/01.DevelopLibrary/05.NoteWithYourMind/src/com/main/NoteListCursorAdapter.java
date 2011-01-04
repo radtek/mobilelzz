@@ -188,9 +188,6 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		Button icon2 = (Button) view.findViewById(R.id.notelistitem_icon2);
 		if(iTypeValue==CMemoInfo.Type_Folder){
 			itemV.setBackgroundResource(R.drawable.notelistitem_folder_background);
-			long Count = CommonDefine.getNoteDBCtrl(m_context).getRecCountInFolder(iIDValue);
-			String strCount = "("+String.valueOf(Count)+")";
-			countTV.setText(strCount);
 			itemdetail.bIsFolder = true;
 			if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
 				icon1.setBackgroundResource(R.drawable.notelistitem_icon_lock);
@@ -198,12 +195,16 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 				icon2.setBackgroundDrawable(null);
 				icon2.setVisibility(View.GONE);
 				itemdetail.bIsEncode = true;
+				countTV.setText("");
 			}else{
 				icon1.setBackgroundDrawable(null);
 				icon2.setBackgroundDrawable(null);
 				icon1.setVisibility(View.GONE);
 				icon2.setVisibility(View.GONE);
 				itemdetail.bIsEncode = false;
+				long Count = CommonDefine.getNoteDBCtrl(m_context).getRecCountInFolder(iIDValue);
+				String strCount = "("+String.valueOf(Count)+")";
+				countTV.setText(strCount);
 			}
 		}else{
 			countTV.setText("");

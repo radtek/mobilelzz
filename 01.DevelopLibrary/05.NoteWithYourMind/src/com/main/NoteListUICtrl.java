@@ -473,6 +473,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		{
 			int iId = alIDs.get(i).iDBRecID;
 			clRec.iId = iId;
+			clRec.iType = CMemoInfo.Type_Memo;
 			m_clCNoteDBCtrl.Update(clRec);
 		}
 	}

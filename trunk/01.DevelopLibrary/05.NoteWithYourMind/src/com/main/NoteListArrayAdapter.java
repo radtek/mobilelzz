@@ -3,6 +3,9 @@ package com.main;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +79,7 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 	private View m_DialogView;
 	//private NoteListUICtrl m_NoteListUICtrl;
 	//private String  m_strPassWord;
-	
+	private String  m_SearchKeyWord = "";	
 
     protected LayoutInflater mInflater;
     private static final int mResource = R.layout.notelistitem; 
@@ -256,7 +259,24 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 		//建立Item控件和对应的DB记录信息的对应关系
 		m_ListItemDetail.put(view, itemdetail);
 		
-		tV.setText(sDetail);
+		if( m_SearchKeyWord.length() > 0 ){
+
+			int Pos = sDetail.indexOf(m_SearchKeyWord);
+			int keyLength = m_SearchKeyWord.length();
+
+			if( Pos !=  -1) 
+			{
+				SpannableStringBuilder style=new SpannableStringBuilder(sDetail);
+		        style.setSpan(new ForegroundColorSpan(Color.argb(255, 0, 255, 255)),Pos,(Pos+keyLength),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				tV.setText(style);
+			}else{
+					//error
+			}
+
+		}else{
+			tV.setText(sDetail);
+		}
+
         return view;
     }
 
@@ -301,5 +321,9 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 		return detail.bIsEncode;
 	}
 
+	public void setSearchKeyWord(String str){
+		m_SearchKeyWord = str;
+	}
+	
 }
 

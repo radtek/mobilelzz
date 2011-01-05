@@ -24,6 +24,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -149,7 +150,13 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
     public void onCreate( Bundle savedInstanceState )
     {
     	super.onCreate(savedInstanceState);
-		setContentView( R.layout.editnote );
+		
+		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		setContentView( R.layout.editnote );	
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+		TextView tvTitleText = (TextView) findViewById(R.id.custom_title_text);
+        tvTitleText.setText("±‡º≠±„«©");
+		
 		CommonDefine.getMediaPhoneCallListener(this).advise(this);
 		SDCardAccessor.advise(this);
 		m_clCNoteDBCtrl = CommonDefine.getNoteDBCtrl(this);

@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 public class SearchResultViewList extends Activity 
 implements ListActivityCtrl, View.OnClickListener
 {
@@ -50,16 +51,18 @@ implements ListActivityCtrl, View.OnClickListener
 	{
 		super.onCreate(savedInstanceState);
         m_clCNoteDBCtrl = CommonDefine.getNoteDBCtrl(this);
-        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
-		setContentView(R.layout.searchresultviewlist);	
-        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
-
         
-	m_SearchParam = new ListUICtrlParam();
-   	m_SearchParam.g_enListType = ListUICtrlParam.ListTypeEnum.ListType_SearchResultList;
-    	m_SearchParam.g_bool_IsTextSearch = true;
-	m_SearchParam.g_str_SearchKey = "";	
-	m_SearchParam.g_enSortType= ListUICtrlParam.ListSortTypeEnum.SortType_Normal;	
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+        setContentView(R.layout.searchresultviewlist);	
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+		TextView tvTitleText = (TextView) findViewById(R.id.custom_title_text);
+        tvTitleText.setText("ËÑË÷±ãÇ©");
+        
+		m_SearchParam = new ListUICtrlParam();
+	   	m_SearchParam.g_enListType = ListUICtrlParam.ListTypeEnum.ListType_SearchResultList;
+	    m_SearchParam.g_bool_IsTextSearch = true;
+		m_SearchParam.g_str_SearchKey = "";	
+		m_SearchParam.g_enSortType= ListUICtrlParam.ListSortTypeEnum.SortType_Normal;	
 		
 		ListView list = (ListView) findViewById(R.id.rootviewlist_list);
         m_toolBarLayout = findViewById(R.id.searchresultviewlist_toolbar);

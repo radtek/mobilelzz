@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -51,7 +52,13 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
         setContentView(R.layout.remindsetting2);
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+		TextView tvTitleText = (TextView) findViewById(R.id.custom_title_text);
+        tvTitleText.setText("…Ë∂®Ã·–—");
+        
     	m_clCDateDlg		=	new		CDateDlg( RemindActivity.this);
     	m_clCWeekDlg		=	new		CWeekDlg( RemindActivity.this);
     	m_clCTimeDlg		=	new		CTimeDlg( RemindActivity.this);

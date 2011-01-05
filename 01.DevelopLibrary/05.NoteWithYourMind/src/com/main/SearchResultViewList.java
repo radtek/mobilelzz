@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Spannable;
@@ -70,10 +71,7 @@ implements ListActivityCtrl, View.OnClickListener
         m_toolBarLayout = findViewById(R.id.searchresultviewlist_toolbar);
         m_NoteListUICtrl = new NoteListUICtrl(this, list, m_toolBarLayout, m_SearchParam);
         m_NoteListUICtrl.initializeSource();
-        
-        ImageButton clBTStartSearch = (ImageButton) findViewById(R.id.search_toolbar_btn_search);
-        clBTStartSearch.setOnClickListener(this);        
-		
+           		
         ImageButton clBTSortSetting = (ImageButton) findViewById(R.id.searchresultviewlist_toolbar_SortSetting);
         clBTSortSetting.setOnClickListener(this);
 
@@ -109,6 +107,10 @@ implements ListActivityCtrl, View.OnClickListener
 
 
 		}); 		
+
+		Drawable draw = this.getResources().getDrawable(R.drawable.toolbar_search);     
+		m_ETKeyword.setCompoundDrawablesWithIntrinsicBounds(null, null,draw,null); 
+
 	}
 	
 	public void onStop()
@@ -150,9 +152,6 @@ implements ListActivityCtrl, View.OnClickListener
 		case R.id.searchresultviewlist_toolbar_SortSetting:
 			processSortSettingClick(view);
 		    break;
-		case R.id.search_toolbar_btn_search:	
-			processSortClick();
-			break;
 		case R.id.toolbar_delete:
 			m_NoteListUICtrl.processDeleteClick(view);
 		    break;

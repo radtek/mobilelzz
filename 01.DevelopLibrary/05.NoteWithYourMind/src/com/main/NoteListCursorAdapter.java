@@ -28,65 +28,15 @@ import android.widget.EditText;
 import android.view.Gravity;
 import android.widget.Toast;
 import android.widget.ImageButton;
-class DetailInfoOfSelectItem{
-	int iDBRecID;
-	boolean bIsHaveAudioData;
-	String strAudioFileName;
-	DetailInfoOfSelectItem(){
-		iDBRecID = CommonDefine.g_int_Invalid_ID;
-		bIsHaveAudioData = false;
-		strAudioFileName = null;
-	}
-}
+
 public class NoteListCursorAdapter extends CursorAdapter implements Serializable {
 	private static final long serialVersionUID = -7060210544600464481L;
-	public class ItemSelectResult{
-		int iDBRecID;
-		boolean bIsSelected;
-		int iItemPos;
-		boolean bIsHaveAudioData;
-		String strAudioFileName;
-		ItemSelectResult(){
-			iDBRecID = CommonDefine.g_int_Invalid_ID;
-			bIsSelected = false;
-			bIsHaveAudioData = false;
-			strAudioFileName = null;
-		}
-	}
-	public class CheckBoxMapItem{
-		int iDBRecID;
-		CheckBox checkBox;
-		View itemView;
-		CheckBoxMapItem(){
-			iDBRecID = CommonDefine.g_int_Invalid_ID;
-			checkBox = null;
-			itemView = null;
-		}
-	}
-	public class ItemDetail{
-		int iDBRecID;
-		View vView;
-		boolean bIsFolder;
-		boolean bIsRemind;
-		boolean bIsEncode;
-		boolean bIsHaveAudioData;
-		String strAudioFileName;
-		ItemDetail(){
-			iDBRecID = CommonDefine.g_int_Invalid_ID;
-			vView = null;
-			bIsFolder = false;
-			bIsRemind = false;
-			bIsEncode = false;
-			bIsHaveAudioData = false;
-			strAudioFileName = null;
-		}
-	}
+
 	private HashMap<String,ItemSelectResult> m_ListItemSelectResult;
 	private HashMap<CheckBox,CheckBoxMapItem> m_ListCheckBoxMapItem;
 	private HashMap<View,ItemDetail> m_ListItemDetail;
 	private boolean m_isSelectableStyle = false;
 	private boolean m_isFolderSelectable = true;
-	private Context m_context;
 	private LayoutInflater m_inflater;
 	private Cursor m_cursor;
 	private Calendar m_c;
@@ -94,13 +44,13 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 	private int m_listPreDBID;
 	private int m_isRemind;
 	private View m_DialogView;
+	private AdapterCommonProcess m_AdapterComPro;
 	//private NoteListUICtrl m_NoteListUICtrl;
 	//private String  m_strPassWord;
-	private int m_DBId2BeEdited = CommonDefine.g_int_Invalid_ID;
+//	private int m_DBId2BeEdited = CommonDefine.g_int_Invalid_ID;
 	
 	public NoteListCursorAdapter(Context context, Cursor c) {
 		super(context, c);
-		m_context = context;
 		m_inflater = LayoutInflater.from(context);
 		m_cursor = c;
 		//m_NoteListUICtrl = NoteListUICtrl;
@@ -109,174 +59,17 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		m_ListItemDetail = new HashMap<View,ItemDetail>();
 		m_listPreDBID = CommonDefine.g_int_Invalid_ID;
 		m_isRemind = CommonDefine.g_int_Invalid_ID;
+		m_AdapterComPro = new AdapterCommonProcess(context);
 	}
  
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
 		CheckBox cbView = (CheckBox) view.findViewById(R.id.notelistitem_noteselect);
-		TextView tV = (TextView)view.findViewById(R.id.notelistitem_notetext);
-		TextView tvDate = (TextView)view.findViewById(R.id.notelistitem_notedate);
-		int	iLastModifyIndex	=	cursor.getColumnIndex(CNoteDBCtrl.KEY_lastmodifytime);
-		long	lLastModify		=	cursor.getLong(iLastModifyIndex);
-		
-		tvDate.setText(CMemoInfo.getTimeForListItem(lLastModify));
-		
-		int iTypeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_type);
-		int iTypeValue = cursor.getInt(iTypeIndex);
-		int iDetailIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_detail);
-		String sDetail = cursor.getString(iDetailIndex);
-		
-		ItemDetail itemdetail = new ItemDetail();
-		itemdetail.vView = view;
-		int iIDIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_id);
-		int iIDValue = cursor.getInt(iIDIndex);
-		itemdetail.iDBRecID = iIDValue;
 
-		/*step1更新CheckBox的状态
-		 * 如果是选择状态
-		 * 		如果记录是便签
-		 * 			将日期控件隐藏，将CheckBox显示
-		 * 		如果记录是文件夹
-		 * 			如果文件夹是可选择状态
-		 * 				将日期控件隐藏，将CheckBox显示
-		 * 如果是正常状态
-		 * 		将CheckBox隐藏，将日期控件显示
-		 */
-		int iEncodeIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isencode);
-		int iEncodeFlag = cursor.getInt(iEncodeIndex);
-		if(m_isSelectableStyle){
-			boolean bDisplay = true;
-			if(iTypeValue==CMemoInfo.Type_Folder){
-				if(m_isFolderSelectable){
-					if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
-						bDisplay=false;
-					}else{
-					}
-				}else{
-					bDisplay = false;
-				}
-			}else{
-			}
-			if(bDisplay){
-				cbView.setVisibility(View.VISIBLE);
-				//tvDate.setVisibility(View.GONE);
-				//update CheckBox Status-begin
-				//根据保存的当前记录的选择状态，更新CheckBox
-				ItemSelectResult result = m_ListItemSelectResult.get(String.valueOf(iIDValue));
-				if(result!=null){
-					cbView.setChecked(result.bIsSelected);
-				}else{
-					cbView.setChecked(false);
-				}
-				//update CheckBox Status-end
-			}else{
-				cbView.setVisibility(View.GONE);
-			}
-		}else{
-			cbView.setVisibility(View.GONE);
-			//tvDate.setVisibility(View.VISIBLE);
-		}
-		/*step2更新LittleIcon
-		 * 如果是文件夹
-		 * 		位置1放文件夹Icon
-		 * 		如果设置了查看锁
-		 * 			位置2放锁头Icon
-		 * 如果是便签
-		 * 		有文本内容，位置1放文本Icon
-		 * 		有提醒时间，位置2放提醒Icon
-		 * 		有语音内容，位置3放语音Icon
-		 */
-		View itemV = view.findViewById(R.id.notelistitem);
-		TextView countTV = (TextView) view.findViewById(R.id.notelistitem_count);
-		Button icon1 = (Button) view.findViewById(R.id.notelistitem_icon1);
-		Button icon2 = (Button) view.findViewById(R.id.notelistitem_icon2);
-		if(iTypeValue==CMemoInfo.Type_Folder){
-			itemV.setBackgroundResource(R.drawable.notelistitem_folder_background);
-			itemdetail.bIsFolder = true;
-			if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
-				icon1.setBackgroundResource(R.drawable.notelistitem_icon_lock);
-				icon1.setVisibility(View.VISIBLE);
-				icon2.setBackgroundDrawable(null);
-				icon2.setVisibility(View.GONE);
-				itemdetail.bIsEncode = true;
-				countTV.setText("");
-			}else{
-				icon1.setBackgroundDrawable(null);
-				icon2.setBackgroundDrawable(null);
-				icon1.setVisibility(View.GONE);
-				icon2.setVisibility(View.GONE);
-				itemdetail.bIsEncode = false;
-				long Count = CommonDefine.getNoteDBCtrl(m_context).getRecCountInFolder(iIDValue);
-				String strCount = "("+String.valueOf(Count)+")";
-				countTV.setText(strCount);
-			}
-		}else{
-			countTV.setText("");
-			itemV.setBackgroundColor(Color.argb(160, 255, 255, 255));
-//			bigIcon.setBackgroundResource(R.drawable.notelistitem_bigicon_text);
-			int isRemindIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isremind);
-			int isRemindValue = cursor.getInt(isRemindIndex);
-			int isRemindableIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isremindable);
-			int isRemindableValue = cursor.getInt(isRemindableIndex);
-			int iVoiceFlagIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_isHaveAudioData);
-			int iVoiceFlag = cursor.getInt(iVoiceFlagIndex);
-			int iVoiceFileIndex = cursor.getColumnIndex(CNoteDBCtrl.KEY_audioDataName);
-			String strAudioFileName = cursor.getString(iVoiceFileIndex);
-			if(isRemindValue == CMemoInfo.IsRemind_Yes){
-				itemdetail.bIsRemind = true;
-				if(isRemindableValue==CMemoInfo.IsEditEnable_Enable){
-					icon1.setBackgroundResource(R.drawable.notelistitem_icon_alarm_valid);
-				}else{
-					icon1.setBackgroundResource(R.drawable.notelistitem_icon_alarm_invalid);
-				}
-				icon1.setVisibility(View.VISIBLE);
-				if(iVoiceFlag == CMemoInfo.IsHaveAudioData_Yes){//for voice
-					itemdetail.bIsHaveAudioData = true;
-					itemdetail.strAudioFileName = strAudioFileName;
-					icon2.setBackgroundResource(R.drawable.notelistitem_icon_voice);
-					icon2.setVisibility(View.VISIBLE);
-				}else{
-					itemdetail.bIsHaveAudioData = false;
-					itemdetail.strAudioFileName = null;
-					icon2.setBackgroundDrawable(null);
-					icon2.setVisibility(View.GONE);
-				}
-			}else{
-				if(iVoiceFlag == CMemoInfo.IsHaveAudioData_Yes){//for voice
-					itemdetail.bIsHaveAudioData = true;
-					itemdetail.strAudioFileName = strAudioFileName;
-					icon1.setBackgroundResource(R.drawable.notelistitem_icon_voice);
-					icon1.setVisibility(View.VISIBLE);
-					icon2.setBackgroundDrawable(null);
-					icon2.setVisibility(View.GONE);
-				}else{
-					itemdetail.bIsHaveAudioData = false;
-					itemdetail.strAudioFileName = null;
-					icon1.setBackgroundDrawable(null);
-					icon2.setBackgroundDrawable(null);
-					icon1.setVisibility(View.GONE);
-					icon2.setVisibility(View.GONE);
-				}
-			}
-		}
-		/*step3更新存储数据
-		 * 更新m_ListItemDetail
-		 * 		DBID、Item控件、是否是文件夹、是否是提醒、是否设置查看锁
-		 * 更新m_ListCheckBoxMapItem
-		 * 		DBID、CheckBox控件
-		 */
+		CMemoInfo clMemoInfo = new CMemoInfo();
+		ConvertCursorToMemoInfo.ConvertItem( cursor ,clMemoInfo);
 		
-		//建立CheckBox和DBID的对应关系
-		CheckBoxMapItem mapItem = new CheckBoxMapItem();
-		mapItem.checkBox = cbView;
-		mapItem.iDBRecID = iIDValue;
-		mapItem.itemView = view;
-		m_ListCheckBoxMapItem.put(cbView, mapItem);
-
-		//建立Item控件和对应的DB记录信息的对应关系
-		m_ListItemDetail.put(view, itemdetail);
-		
-		tV.setText(sDetail);
+		m_AdapterComPro.bindView(view,cbView,clMemoInfo,m_isSelectableStyle,m_isFolderSelectable,m_ListCheckBoxMapItem,m_ListItemDetail,m_ListItemSelectResult );
 	}
  
 	@Override
@@ -307,6 +100,7 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
     			}	        
         	}
 		});
+
 		return v;
 	}
 	public void clearSelectResult(){

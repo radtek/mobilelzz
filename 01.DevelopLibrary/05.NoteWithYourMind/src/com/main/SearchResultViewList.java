@@ -57,6 +57,8 @@ implements ListActivityCtrl, View.OnClickListener
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
 		TextView tvTitleText = (TextView) findViewById(R.id.custom_title_text);
         tvTitleText.setText("ËÑË÷±ãÇ©");
+        ImageButton titleBack = (ImageButton) findViewById(R.id.custom_title_back);
+        titleBack.setOnClickListener(this);
         
 		m_SearchParam = new ListUICtrlParam();
 	   	m_SearchParam.g_enListType = ListUICtrlParam.ListTypeEnum.ListType_SearchResultList;
@@ -156,6 +158,9 @@ implements ListActivityCtrl, View.OnClickListener
 		    break;
 		case R.id.toolbar_move:
 			m_NoteListUICtrl.processMoveClick(view);
+			break;
+		case R.id.custom_title_back:
+			this.finish();
 			break;
 		default:
 		}

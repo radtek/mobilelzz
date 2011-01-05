@@ -12,7 +12,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class FolderViewList extends Activity implements ListActivityCtrl
+public class FolderViewList extends Activity 
+				implements ListActivityCtrl, View.OnClickListener
 {
 	public static String ExtraData_FolderDBID = "com.main.ExtraData_DBID";	
 	public static String ExtraData_initListItemDBID		=	"com.main.ExtraData_RootList_initListItemDBID";
@@ -34,6 +35,8 @@ public class FolderViewList extends Activity implements ListActivityCtrl
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.folderviewlist);
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+        ImageButton titleBack = (ImageButton) findViewById(R.id.custom_title_back);
+        titleBack.setOnClickListener(this);
         
 		Intent iExtraData = this.getIntent();
 		m_iFolder_DBID = iExtraData.getIntExtra(ExtraData_FolderDBID, CMemoInfo.Id_Invalid);
@@ -65,7 +68,17 @@ public class FolderViewList extends Activity implements ListActivityCtrl
         	}
         });
 	}
+	public void onClick(View view){
 
+		switch(view.getId()){
+
+		case R.id.custom_title_back:
+			this.finish();
+			break;
+		default:
+		}
+	}
+		
 	public void onStop()
 	{
 		super.onStop();

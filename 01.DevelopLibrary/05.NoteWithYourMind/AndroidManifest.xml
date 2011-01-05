@@ -9,6 +9,7 @@
 			android:theme="@style/NoteTitle"
 			android:launchMode = "singleTask"
 			android:windowSoftInputMode="stateVisible|adjustResize"
+			android:configChanges="orientation|keyboardHidden" 
 			>
 		</activity>
 		<activity android:name=".RootViewList"

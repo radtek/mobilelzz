@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.media.MediaPlayer;
@@ -135,6 +136,10 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 		super.onDestroy();
 		CommonDefine.getMediaPhoneCallListener(this).unadvise(this);
 		SDCardAccessor.unadvise(this);
+	}
+	
+	public void onConfigurationChanged(Configuration newConfig){
+		super.onConfigurationChanged(newConfig); 
 	}
 	
 	////////////////////////////////////////////////////////////////////
@@ -1168,6 +1173,13 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 						NoteWithYourMind.this.finish();
 					}
 				})
+				.setNeutralButton("È¡Ïû", new DialogInterface.OnClickListener()
+                {
+                  public void onClick(DialogInterface dialog, int whichButton)
+                  {
+                	  dialog.cancel();
+                  }
+                })
                 .show();
         		return true;
         	}

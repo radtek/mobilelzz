@@ -290,7 +290,8 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
         		toNew.setClass(m_sourceManager, NoteWithYourMind.class);
         		toNew.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Edit);
         		toNew.putExtra(NoteWithYourMind.ExtraData_EditNoteID, clCMemoInfo.iId );	        			        		
-        		m_sourceManager.startActivity(toNew);
+        		toNew.putExtra(NoteWithYourMind.ExtraData_HighLightWord, m_ListUICtrlParam.g_str_SearchKey);	
+				m_sourceManager.startActivity(toNew);
 
 			}
 

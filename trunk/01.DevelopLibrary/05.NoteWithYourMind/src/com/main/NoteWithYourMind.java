@@ -19,7 +19,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -54,6 +57,8 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 	public static String 										ExtraData_OperationPreID	=	"com.main.ExtraData_OperationPreID";
 	
 	public static String 										ExtraData_RemindSetting	=	"com.main.ExtraData_RemindSetting";
+	public static String 										ExtraData_HighLightWord	=	"com.main.ExtraData_HighLightWord";
+
 	
 	//进行DB操作的类
 	private CNoteDBCtrl 										m_clCNoteDBCtrl = null;
@@ -90,6 +95,7 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 	
 	private AlertDialog 										m_dlgFolderList = null;
 	private ImageButton											clBTAlarm;
+	private String				 								m_ExtraData_HighLightWord = null;
 	///////////////////////onStart////////////////////////////////////////////////
 	public void onNewIntent(Intent intent)
 	{
@@ -127,7 +133,7 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 	public void onResume()
 	{
 		super.onResume();
-		
+	
 		UpdateViewData();
     	
 	}
@@ -270,6 +276,8 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
         mProgressBar01.setOnSeekBarChangeListener(sbLis);
 		/* 构建MediaPlayer对象 */
 		mMediaPlayer		= new MediaPlayer();
+
+
     }
     
     
@@ -286,6 +294,7 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
     	 */
     	Intent iExtraData = getIntent();
 		m_ExtraData_OperationNoteKind	=	(OperationNoteKindEnum)iExtraData.getSerializableExtra(ExtraData_OperationNoteKind);
+		m_ExtraData_HighLightWord	=	(String)iExtraData.getSerializableExtra(ExtraData_HighLightWord);
 		
 		String strDetail = null;
 		String strAudioFileName = null;
@@ -510,10 +519,36 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
     private void updateDetail(String strDetail){
     	EditText EtOnce = (EditText) findViewById(R.id.ET_main_Memo);
     	if(strDetail!=null){
-    		EtOnce.setText( strDetail );
-    	}else{
-    		EtOnce.setText( "" );
-    	}
+			if( m_ExtraData_HighLightWord != null ){
+				if( m_ExtraData_HighLightWord.length() > 0 ){
+					SpannableStringBuilder style=new SpannableStringBuilder(strDetail);
+					int keyLength = m_ExtraData_HighLightWord.length();
+					int MemoLength = strDetail.length();
+					int Pos = 0;
+					int lastFindPos = -keyLength;
+
+					while(( MemoLength-(lastFindPos+keyLength))>= keyLength ){					
+						Pos = strDetail.indexOf(m_ExtraData_HighLightWord,(lastFindPos+keyLength) );
+						if( Pos !=  -1) {						
+							style.setSpan(new ForegroundColorSpan(Color.argb(255, 0, 255, 255)),Pos,(Pos+keyLength),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+							lastFindPos = Pos;
+						}else{
+							break;
+						}
+					}
+						
+					EtOnce.setText(style);
+				}else{
+					EtOnce.setText( strDetail );
+				}
+			}
+			else{
+				EtOnce.setText( strDetail );
+			}
+
+		}else{
+			EtOnce.setText("");
+		}
     	EtOnce.setSelected(false);
     	EtOnce.clearFocus();
     }

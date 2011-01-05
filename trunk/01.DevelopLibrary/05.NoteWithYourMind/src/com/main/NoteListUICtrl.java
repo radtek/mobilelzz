@@ -4,7 +4,6 @@ package com.main;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import com.main.NoteListCursorAdapter.ItemDetail;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -376,7 +375,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 						//cursor×ª»¯ÎªArrayList
 
 						List<CMemoInfo> Items = new ArrayList<CMemoInfo>();
-						ChangeCursorToArrayList( cursor ,Items);
+						ConvertCursorToMemoInfo.ConvertItems( cursor ,Items);
 						
 						if(m_ListUICtrlParam.g_str_SearchKey != ""){
 							FilterArrayListbySearchParam( Items );
@@ -544,88 +543,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 			clDlgChangeFolder.show();
 	}
 
-	private void ChangeCursorToArrayList( Cursor cursor ,List<CMemoInfo> Items)
-	{
-		if ( cursor.getCount() > 0 )
-		{			
-			cursor.moveToFirst();			
-			do
-			{
-				CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-			
-				int		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_id );
-				clCMemoInfo.iId=	cursor.getInt( iColumn );
-				
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_preid );
-				clCMemoInfo.iPreId =	cursor.getInt( iColumn );
 
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_type );
-				clCMemoInfo.iType =	cursor.getInt( iColumn );
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_isremind );
-				clCMemoInfo.iIsRemind =	cursor.getInt( iColumn );
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_remindtime );
-				clCMemoInfo.dRemindTime =	cursor.getLong( iColumn );
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_isremindable );
-				clCMemoInfo.iIsRemindAble =	cursor.getInt( iColumn );
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_remindtype );
-				clCMemoInfo.RemindType =	cursor.getInt( iColumn );
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_createtime );
-				clCMemoInfo.dCreateTime =	cursor.getLong( iColumn );
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_lastmodifytime );
-				clCMemoInfo.dLastModifyTime =	cursor.getLong( iColumn );
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_iseditenable );
-				clCMemoInfo.iIsEditEnable =	cursor.getInt( iColumn );
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_detail );
-				clCMemoInfo.strDetail =	cursor.getString( iColumn );
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_password );
-				clCMemoInfo.strPassword=	cursor.getString( iColumn );			
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_isencode );
-				clCMemoInfo.iIsEncode =	cursor.getInt( iColumn );
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_monday );
-				int iMonday =	cursor.getInt( iColumn );
-				clCMemoInfo.m_Week[ 0 ]	=	(byte)iMonday;
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_tuesday );
-				int iTuesday =	cursor.getInt( iColumn );
-				clCMemoInfo.m_Week[ 1 ]	=	(byte)iTuesday;
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_wednesday );
-				int iWednesday =	cursor.getInt( iColumn );
-				clCMemoInfo.m_Week[ 2 ]	=	(byte)iWednesday;
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_thursday );
-				int iThursday =	cursor.getInt( iColumn );
-				clCMemoInfo.m_Week[ 3 ]	=	(byte)iThursday;
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_friday );
-				int iFriday =	cursor.getInt( iColumn );
-				clCMemoInfo.m_Week[ 4 ]	=	(byte)iFriday;
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_staturday );
-				int iStaturday =	cursor.getInt( iColumn );
-				clCMemoInfo.m_Week[ 5 ]	=	(byte)iStaturday;
-
-				iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_sunday );
-				int iSunday =	cursor.getInt( iColumn );
-				clCMemoInfo.m_Week[ 6 ]	=	(byte)iSunday;	
-
-				Items.add(clCMemoInfo);	
-					
-			}while( cursor.moveToNext() );			
-		}
-
-	}
 
 	private void FilterArrayListbySearchParam( List<CMemoInfo> Items){
 

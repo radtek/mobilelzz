@@ -17,17 +17,17 @@
 		android:layout_alignParentBottom="true"
 		android:background="@drawable/background_toolbar">
 			<ImageButton
-				android:id="@+id/rootviewlist_toolbar_search"
+				android:id="@+id/rootviewlist_toolbar_newnote"
 				style="@style/ToolBarButton"
-				android:src="@drawable/toolbar_search"/>
+				android:src="@drawable/toolbar_newnote"/>
 			<ImageButton
 				android:id="@+id/rootviewlist_toolbar_newfolder"
 				style="@style/ToolBarButton"
 				android:src="@drawable/toolbar_newfolder"/>
 			<ImageButton
-				android:id="@+id/rootviewlist_toolbar_newnote"
+				android:id="@+id/rootviewlist_toolbar_search"
 				style="@style/ToolBarButton"
-				android:src="@drawable/toolbar_newnote"/>
+				android:src="@drawable/toolbar_search"/>
 			<ImageButton
 				android:id="@+id/rootviewlist_toolbar_more"
 				style="@style/ToolBarButton"

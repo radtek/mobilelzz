@@ -2,6 +2,7 @@ package com.main;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class FolderViewList extends Activity implements ListActivityCtrl
 {
@@ -35,6 +37,14 @@ public class FolderViewList extends Activity implements ListActivityCtrl
         
 		Intent iExtraData = this.getIntent();
 		m_iFolder_DBID = iExtraData.getIntExtra(ExtraData_FolderDBID, CMemoInfo.Id_Invalid);
+		Cursor cursor = CommonDefine.getNoteDBCtrl(this).getNoteRec(m_iFolder_DBID);
+		cursor.moveToFirst();
+		int index = cursor.getColumnIndex(CNoteDBCtrl.KEY_detail);
+		m_strFolderName = cursor.getString(index);
+		TextView tvTitleText = (TextView) findViewById(R.id.custom_title_text);
+        tvTitleText.setText(m_strFolderName);
+        cursor.close();
+		
 		ListView list = (ListView) findViewById(R.id.folderviewlist_list);
 		m_toolBarLayout = findViewById(R.id.folderviewlist_toolbar);
 

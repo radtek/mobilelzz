@@ -86,6 +86,9 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.rootviewlist);	
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
+        ImageButton titleBack = (ImageButton) findViewById(R.id.custom_title_back);
+        titleBack.setOnClickListener(this);
+        
         ListView allview = (ListView)findViewById(R.id.rootviewlist_list);
         allview.setOnTouchListener(this);
         
@@ -201,6 +204,9 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 		case R.id.toolbar_more_dlg_setpassword:
 //			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
 			EncodeSettingDlg();
+			break;
+		case R.id.custom_title_back:
+			this.finish();
 			break;
 		default:
 		}

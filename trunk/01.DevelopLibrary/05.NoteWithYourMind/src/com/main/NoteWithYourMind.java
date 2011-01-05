@@ -156,6 +156,8 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
 		TextView tvTitleText = (TextView) findViewById(R.id.custom_title_text);
         tvTitleText.setText("±‡º≠±„«©");
+        ImageButton titleBack = (ImageButton) findViewById(R.id.custom_title_back);
+        titleBack.setOnClickListener(this);
 		
 		CommonDefine.getMediaPhoneCallListener(this).advise(this);
 		SDCardAccessor.advise(this);
@@ -544,6 +546,9 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 			break;
 		case R.id.editnote_remindinfo_alarmIcon:
 			processEnableAlarm( view );
+			break;
+		case R.id.custom_title_back:
+			this.finish();
 			break;
 		default:
 		}

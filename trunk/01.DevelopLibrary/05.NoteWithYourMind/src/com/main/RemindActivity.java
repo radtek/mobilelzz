@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -58,6 +59,8 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);
 		TextView tvTitleText = (TextView) findViewById(R.id.custom_title_text);
         tvTitleText.setText("…Ë∂®Ã·–—");
+        ImageButton titleBack = (ImageButton) findViewById(R.id.custom_title_back);
+        titleBack.setOnClickListener(this);
         
     	m_clCDateDlg		=	new		CDateDlg( RemindActivity.this);
     	m_clCWeekDlg		=	new		CWeekDlg( RemindActivity.this);
@@ -125,7 +128,10 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     			break;
        		case R.id.OKBtn:	
        			processAble( true );
-    			break;   			
+    			break;   
+       		case R.id.custom_title_back:
+    			this.finish();
+    			break;
     		default:
     			break;
     	}

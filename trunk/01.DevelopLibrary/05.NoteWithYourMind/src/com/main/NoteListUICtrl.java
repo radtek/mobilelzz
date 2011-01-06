@@ -99,43 +99,31 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		}	
 		else
 		{
-
+			//delete rec--->
+			ArrayList<DetailInfoOfSelectItem> alIDs = new ArrayList<DetailInfoOfSelectItem>();
 			if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_NormalList){
-				//delete rec--->
-				ArrayList<DetailInfoOfSelectItem> alIDs = new ArrayList<DetailInfoOfSelectItem>();
+
 				m_myAdapter.getSelectItemDBID(alIDs);
-				if(alIDs.size()>0){
-	    			boolean b = m_clCNoteDBCtrl.Delete(alIDs);
-	    			if(!b){
-	    				Toast toast = Toast.makeText(m_sourceManager, "部分记录删除失败\n请确认SD卡是否可用", Toast.LENGTH_LONG);
-	    				toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-	            		toast.show();
-	    			}
-					CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance(m_sourceManager);
-					clCRemindOperator.disableRemind( m_sourceManager, alIDs );
-				}
-				Return2TargetList();
-				updateListData(CommonDefine.g_int_Invalid_ID);
 			}
 			else if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_SearchResultList){
-				//delete rec--->
-/*
-				ArrayList<Integer> alIDs = new ArrayList<Integer>();
 				m_myArrayListAdapter.getSelectItemDBID(alIDs);
-				if(alIDs.size()>0){
-	    			boolean b = m_clCNoteDBCtrl.Delete(alIDs[0]);
-	    			if(!b){
-	    				Toast toast = Toast.makeText(m_sourceManager, "部分记录删除失败\n请确认SD卡是否可用", Toast.LENGTH_LONG);
-	    				toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
-	            		toast.show();
-	    			}
-					CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance(m_sourceManager);
-					clCRemindOperator.disableRemind( m_sourceManager, alIDs );
-				}
-				Return2TargetList();
-				updateListData(CommonDefine.g_int_Invalid_ID);
-*/
+				m_myArrayListAdapter = null;
 			}
+
+			if(alIDs.size()>0){
+    			boolean b = m_clCNoteDBCtrl.Delete(alIDs);
+    			if(!b){
+    				Toast toast = Toast.makeText(m_sourceManager, "部分记录删除失败\n请确认SD卡是否可用", Toast.LENGTH_LONG);
+    				toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+            		toast.show();
+    			}
+				CRemindOperator	clCRemindOperator	=	CRemindOperator.getInstance(m_sourceManager);
+				clCRemindOperator.disableRemind( m_sourceManager, alIDs );
+			}
+			Return2TargetList();
+			updateListData(CommonDefine.g_int_Invalid_ID);
+
+			
 
 		}
 	}
@@ -152,7 +140,14 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		{
 			m_MoveIn_State = MoveIn_State.MoveIn_SelectFolder;
 			ArrayList<DetailInfoOfSelectItem> alIDs = new ArrayList<DetailInfoOfSelectItem>();
-			m_myAdapter.getSelectItemDBID(alIDs);
+			if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_NormalList){
+				m_myAdapter.getSelectItemDBID(alIDs);
+			}
+			else if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_SearchResultList){
+
+				m_myArrayListAdapter.getSelectItemDBID(alIDs);
+			}
+
 			if(alIDs.size()<=0){
 				m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
 				Return2TargetList();
@@ -213,7 +208,15 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 						id = 0;
 					}
 					ArrayList<DetailInfoOfSelectItem> alIDs = new ArrayList<DetailInfoOfSelectItem>();
-					m_myAdapter.getSelectItemDBID(alIDs);
+
+					if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_NormalList){
+						m_myAdapter.getSelectItemDBID(alIDs);
+					}
+					else if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_SearchResultList){
+
+						m_myArrayListAdapter.getSelectItemDBID(alIDs);
+						m_myArrayListAdapter = null;
+					}
 					Move2Folder(alIDs, (int)id);
             		m_dlgFolderList.cancel();
             		Return2TargetList();
@@ -392,10 +395,10 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 							Collections.sort(Items, new SortByVoiceFirst());							
 							break;
 						case SortType_TextFirst:
-							
+							Collections.sort(Items, new SortByTextFirst());	
 							break;
 						default:
-
+							Collections.sort(Items, new SortByLastModifyTime());
 							break;
 						}
 

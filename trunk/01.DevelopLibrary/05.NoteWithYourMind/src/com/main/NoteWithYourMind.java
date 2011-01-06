@@ -293,6 +293,9 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
     	 * 		根据用户在提醒时间设定画页设置的提醒信息，更新便签中的时间
     	 */
     	Intent iExtraData = getIntent();
+    	if(iExtraData==null){
+    		return;
+    	}
 		m_ExtraData_OperationNoteKind	=	(OperationNoteKindEnum)iExtraData.getSerializableExtra(ExtraData_OperationNoteKind);
 		m_ExtraData_HighLightWord	=	(String)iExtraData.getSerializableExtra(ExtraData_HighLightWord);
 		
@@ -380,6 +383,7 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 		
 		ScrollView etNoteText = (ScrollView)findViewById(R.id.editnote_noteinfo_scroll);
 		etNoteText.scrollBy(0, -100);
+		setIntent(null);
 	}
     private void updateVoice(String strAudioFileName){
     	if(strAudioFileName!=null && SDCardAccessor.isSDCardAvailable() ){

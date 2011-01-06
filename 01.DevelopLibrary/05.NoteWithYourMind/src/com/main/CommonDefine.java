@@ -67,6 +67,21 @@ class CommonDefine{
 		return m_MediaPhoneCallListener;
 	}
 
+	static public void  PrepareProc(CMemoInfo object){
+
+		if(object.iIsRemind == CMemoInfo.IsRemind_Invalid ){
+			object.iIsRemind = CMemoInfo.IsRemind_No;
+		}
+
+		if(object.iIsEncode == CMemoInfo.IsEncode_Invalid ){
+			object.iIsEncode = CMemoInfo.IsEncode_No;
+		}
+		if(object.iIsHaveAudioData == CMemoInfo.IsHaveAudioData_Invalid ){
+			object.iIsHaveAudioData = CMemoInfo.IsHaveAudioData_No;
+		}
+
+	}
+	
 }
 
 interface MediaStatusControl{
@@ -162,138 +177,154 @@ class SortByRemindFirst implements  Comparator<CMemoInfo> {
 
 	public int  compare(CMemoInfo object1, CMemoInfo object2) {
 
+		CommonDefine.PrepareProc(object1);
+		CommonDefine.PrepareProc(object2);		
 
-		if(0 != CompareByRemindFirst(object1,object2)){
-			return CompareByRemindFirst(object1,object2);	
+		if(object1.iIsRemind != object2.iIsRemind ){
+			return (object1.iIsRemind - object2.iIsRemind);	
+		}
+		else if( object1.iIsRemind == CMemoInfo.IsRemind_No ){
+			return (int)(object2.dLastModifyTime - object1.dLastModifyTime);
+		}
+		else if( object1.iIsRemind == CMemoInfo.IsRemind_Yes){
+
+			if(object1.iIsRemindAble != object2.iIsRemindAble ){
+				return (object2.iIsRemindAble - object1.iIsRemindAble);	
+			}
+			else if( object1.iIsRemindAble == CMemoInfo.IsRemind_Able_No){
+				return (int)(object2.dLastModifyTime - object1.dLastModifyTime);
+			}
+			else if( object1.iIsRemindAble == CMemoInfo.IsRemind_Able_Yes){
+				return (CompareByRemindTime(object1, object2));
+			}
 		}
 
-		return CompareByRemindTime(object1,object2);	
+		return 0;	
 
-	}
-	private int  CompareByRemindFirst(CMemoInfo object1, CMemoInfo object2) {
-		return ( object1.iIsRemind - object2.iIsRemind );	
 	}
 		
 	private int  CompareByRemindTime(CMemoInfo object1, CMemoInfo object2) {
-		if(( object1.iIsRemind!=CMemoInfo.IsRemind_No )
-			&& ( object2.iIsRemind!=CMemoInfo.IsRemind_No )){
-			return 0;
+
+		long T1=0;
+		long T2=0;
+			
+		if(( object1.RemindType == CommonDefine.Remind_Type_CountDown )
+			||( object1.RemindType == CommonDefine.Remind_Type_Once ))
+		{
+
+			T1	=	object1.dRemindTime;
+
 		}
+		else if( object1.RemindType == CommonDefine.Remind_Type_Week ){
 
-		if(( object1.iIsRemindAble!=CMemoInfo.IsRemind_Able_No )
-			&& ( object2.iIsRemindAble!=CMemoInfo.IsRemind_Able_No )){
+			CRemindInfo	clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Week );
+			
+			clCRemindInfo.setWeekTime( object1 );
 
-			long T1=0;
-			long T2=0;
-				
-			if(( object1.RemindType == CommonDefine.Remind_Type_CountDown )
-				||( object1.RemindType == CommonDefine.Remind_Type_Once ))
-			{
+			T1	=	clCRemindInfo.getFirstCycelRemindTime( null );
 
-				T1	=	object1.dRemindTime;
-
-			}
-			else if( object1.RemindType == CommonDefine.Remind_Type_Week ){
-
-				CRemindInfo	clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Week );
-				
-				clCRemindInfo.setWeekTime( object1 );
-
-				T1	=	clCRemindInfo.getFirstCycelRemindTime( null );
-
-
-			}
-
-			if(( object2.RemindType == CommonDefine.Remind_Type_CountDown )
-				||( object2.RemindType == CommonDefine.Remind_Type_Once ))
-			{
-
-				T2	=	object2.dRemindTime;
-
-			}
-			else if( object2.RemindType == CommonDefine.Remind_Type_Week ){
-
-				CRemindInfo	clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Week );
-				
-				clCRemindInfo.setWeekTime( object2 );
-
-				T2	=	clCRemindInfo.getFirstCycelRemindTime( null );
-			}		
-
-			return (int)( T1 -T2 );
 
 		}
 
-		return ( object2.iIsRemindAble - object1.iIsRemindAble );	
-	}
+		if(( object2.RemindType == CommonDefine.Remind_Type_CountDown )
+			||( object2.RemindType == CommonDefine.Remind_Type_Once ))
+		{
 
+			T2	=	object2.dRemindTime;
 
-}
-
-
-//通过提醒时间排序，最近的提醒时间最优，排在最上面!!!!!!!!!!???????
-class SortByRemindTime implements  Comparator<CMemoInfo> {
-
-	public int  compare(CMemoInfo object1, CMemoInfo object2) {
-		return 0;	
-	}
-}
-
-//通过便签创建时间排序，最新的创建的，排在最上面
-class SortByCreateTime implements  Comparator<CMemoInfo> {
-
-	public int  compare(CMemoInfo object1, CMemoInfo object2) {
-		long temp = object1.dCreateTime - object2.dCreateTime;
-		if( temp < 0){
-			return 1;			
-		}else if( temp > 0){
-			return -1;			
-		}else {
-			return 0;			
 		}
+		else if( object2.RemindType == CommonDefine.Remind_Type_Week ){
+
+			CRemindInfo	clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Week );
+			
+			clCRemindInfo.setWeekTime( object2 );
+
+			T2	=	clCRemindInfo.getFirstCycelRemindTime( null );
+		}		
+
+		return (int)( T1 -T2 );
+
+
 	}
+
+
+		
 }
+
 
 //通过便签修改时间排序，最新的修改的，排在最上面
 class SortByLastModifyTime implements  Comparator<CMemoInfo> {
 
 	public int  compare(CMemoInfo object1, CMemoInfo object2) {
-		long temp = object1.dLastModifyTime - object2.dLastModifyTime;
-		if( temp < 0){
-			return 1;			
-		}else if( temp > 0){
-			return -1;			
-		}else {
-			return 0;			
-		}
-	}
-}
 
-//通过提醒类型排序，循环提醒最优，排在最上面   功能暂时不启用
-class SortByRemindType implements  Comparator<CMemoInfo> {
+		return (int)(object2.dLastModifyTime - object1.dLastModifyTime);	
 
-	public int  compare(CMemoInfo object1, CMemoInfo object2) {
-		return 0;	
 	}
+
 }
 
 
-//通过是否是加密排序，加密最优，排在最上面
-class SortByEncodeFirst implements  Comparator<CMemoInfo> {
-
-	public int  compare(CMemoInfo object1, CMemoInfo object2) {
-		return ( object1.iIsEncode - object2.iIsEncode );	
-	}
-}
-
-
-//通过是否有语音排序，带语音最优，排在最上面 ？？？
 class SortByVoiceFirst implements  Comparator<CMemoInfo> {
 
 	public int  compare(CMemoInfo object1, CMemoInfo object2) {
+
+		CommonDefine.PrepareProc(object1);
+		CommonDefine.PrepareProc(object2);
+
+		if(object1.iIsHaveAudioData != object2.iIsHaveAudioData ){
+			return (object2.iIsHaveAudioData - object1.iIsHaveAudioData);	
+		}
+		else if( object1.iIsHaveAudioData == CMemoInfo.IsHaveAudioData_No ){
+			return (int)(object2.dLastModifyTime - object1.dLastModifyTime);
+		}
+		else if( object1.iIsHaveAudioData == CMemoInfo.IsHaveAudioData_Yes){
+			return (int)(object2.dLastModifyTime - object1.dLastModifyTime);
+		}
 		return 0;	
 	}
 }
+
+class SortByTextFirst implements  Comparator<CMemoInfo> {
+
+	public int  compare(CMemoInfo object1, CMemoInfo object2) {
+
+		CommonDefine.PrepareProc(object1);
+		CommonDefine.PrepareProc(object2);
+
+		int mask1=weighting(object1);
+		int mask2=weighting(object2);
+
+		if( (mask1 ==0) && (mask2 ==0)){
+			//都是文本
+			return (int)(object2.dLastModifyTime - object1.dLastModifyTime);
+		}
+		if(( (mask1 ==0) && (mask2 !=0))
+			||( (mask1 !=0) && (mask2 ==0)))
+		{
+			//一个是文本，一个不是文本
+			return (mask1 - mask2);
+		}
+		else{
+			//都不是文本			
+			return (int)(object2.dLastModifyTime - object1.dLastModifyTime);
+		}
+
+	}
+
+	private int weighting( CMemoInfo object ){
+
+		int mask = 0;
+		if( object.iIsRemind == CMemoInfo.IsRemind_Yes){
+			mask |= 0x00000001;
+		}
+		if( object.iIsHaveAudioData == CMemoInfo.IsHaveAudioData_Yes ){
+			mask |= 0x00000010;
+		}	
+
+		return mask;
+	}
+}
+	
 
 class ConvertCursorToMemoInfo {
 

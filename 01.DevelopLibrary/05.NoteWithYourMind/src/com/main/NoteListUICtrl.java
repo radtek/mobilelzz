@@ -51,7 +51,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 	private View m_toolBarLayout;
 	public Activity m_sourceManager;
 	private NoteListArrayAdapter m_myAdapter;
-	private NoteListArrayAdapter  m_myArrayListAdapter;
+//	private NoteListArrayAdapter  m_myArrayListAdapter;
 	
 	//private String m_strPassWord;
 
@@ -61,7 +61,6 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		m_ListUICtrlParam = CtrlParam;
 		m_toolBarLayout = toolBarLayout;
 		m_myAdapter = null;
-		m_myArrayListAdapter = null;
 		m_clCNoteDBCtrl = CommonDefine.getNoteDBCtrl(sourceManager);
 	}
 	
@@ -70,7 +69,6 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		m_targetList = null;
 		m_toolBarLayout = null;
 		m_myAdapter = null;
-		m_myArrayListAdapter = null;
 		m_dlgFolderList = null;
 		m_dlgSortTypeList = null;
 	}
@@ -101,15 +99,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		{
 			//delete rec--->
 			ArrayList<DetailInfoOfSelectItem> alIDs = new ArrayList<DetailInfoOfSelectItem>();
-			if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_NormalList){
-
-				m_myAdapter.getSelectItemDBID(alIDs);
-			}
-			else if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_SearchResultList){
-				m_myArrayListAdapter.getSelectItemDBID(alIDs);
-				m_myArrayListAdapter = null;
-			}
-
+			m_myAdapter.getSelectItemDBID(alIDs);
 			if(alIDs.size()>0){
     			boolean b = m_clCNoteDBCtrl.Delete(alIDs);
     			if(!b){
@@ -140,14 +130,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		{
 			m_MoveIn_State = MoveIn_State.MoveIn_SelectFolder;
 			ArrayList<DetailInfoOfSelectItem> alIDs = new ArrayList<DetailInfoOfSelectItem>();
-			if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_NormalList){
-				m_myAdapter.getSelectItemDBID(alIDs);
-			}
-			else if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_SearchResultList){
-
-				m_myArrayListAdapter.getSelectItemDBID(alIDs);
-			}
-
+			m_myAdapter.getSelectItemDBID(alIDs);
 			if(alIDs.size()<=0){
 				m_MoveIn_State = MoveIn_State.MoveIn_Invalid;
 				Return2TargetList();
@@ -208,15 +191,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 						id = 0;
 					}
 					ArrayList<DetailInfoOfSelectItem> alIDs = new ArrayList<DetailInfoOfSelectItem>();
-
-					if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_NormalList){
-						m_myAdapter.getSelectItemDBID(alIDs);
-					}
-					else if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_SearchResultList){
-
-						m_myArrayListAdapter.getSelectItemDBID(alIDs);
-						m_myArrayListAdapter = null;
-					}
+					m_myAdapter.getSelectItemDBID(alIDs);
 					Move2Folder(alIDs, (int)id);
             		m_dlgFolderList.cancel();
             		Return2TargetList();
@@ -541,9 +516,6 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		if(m_myAdapter!=null){
 			m_myAdapter.clearSelectResult();	
 		}
-		if(m_myArrayListAdapter!=null){
-			m_myArrayListAdapter.clearSelectResult();	
-		}
 		//update toolbar
 		updateToolBar();
 	}
@@ -623,8 +595,6 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 	}
 
 	public void SetSearchParam(  ListUICtrlParam CtrlParam ){
-
 		m_ListUICtrlParam = CtrlParam;
-		m_myArrayListAdapter = null;		
 	}
 }

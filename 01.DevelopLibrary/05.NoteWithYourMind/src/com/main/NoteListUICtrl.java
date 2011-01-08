@@ -58,7 +58,8 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 	NoteListUICtrl(Activity sourceManager, ListView target, View toolBarLayout,ListUICtrlParam CtrlParam){
 		m_sourceManager = sourceManager;
 		m_targetList = target;
-		m_ListUICtrlParam = CtrlParam;
+		m_ListUICtrlParam = new ListUICtrlParam();
+		m_ListUICtrlParam.copy(CtrlParam);
 		m_toolBarLayout = toolBarLayout;
 		m_myAdapter = null;
 		m_clCNoteDBCtrl = CommonDefine.getNoteDBCtrl(sourceManager);
@@ -439,6 +440,11 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 					m_myAdapter.setFolderSelectable(true);
 				}
 				m_myAdapter.updateCursor();
+				if(m_ListUICtrlParam.g_str_SearchKey != ""){
+					m_myAdapter.filterListByKeyWord(m_ListUICtrlParam.g_str_SearchKey);
+				}
+				
+				m_myAdapter.sortData(m_ListUICtrlParam.g_enSortType);
 				m_myAdapter.notifyDataSetChanged();
 			}
 
@@ -595,6 +601,13 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 	}
 
 	public void SetSearchParam(  ListUICtrlParam CtrlParam ){
-		m_ListUICtrlParam = CtrlParam;
+		m_myAdapter.updateCursor();
+		if(m_ListUICtrlParam.g_str_SearchKey != ""){
+			m_myAdapter.filterListByKeyWord(m_ListUICtrlParam.g_str_SearchKey);
+		}
+		
+		m_myAdapter.sortData(m_ListUICtrlParam.g_enSortType);
+		m_myAdapter.notifyDataSetChanged();
+		m_ListUICtrlParam.copy(CtrlParam);
 	}
 }

@@ -92,7 +92,7 @@ implements ListActivityCtrl, View.OnClickListener
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-               
+            	
             }        	
         	
 			public void onTextChanged(CharSequence s, int start, int before,  int count) {   
@@ -130,9 +130,17 @@ implements ListActivityCtrl, View.OnClickListener
 	}
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if ((keyCode == KeyEvent.KEYCODE_BACK)) { 
+			boolean bIsConsumed = false;
         	if(CommonDefine.g_enToolbarStatus!=CommonDefine.ToolbarStatusEnum.ToolbarStatus_Normal){
             	m_NoteListUICtrl.processCancelClick(null);
-                return true;	
+            	bIsConsumed = true;	
+        	}
+        	if(!m_ETKeyword.getText().toString().equals("")){
+        		m_ETKeyword.setText("");
+        		bIsConsumed = true;
+        	}
+        	if(bIsConsumed){
+        		return true;
         	}else{
         		return super.onKeyDown(keyCode, event); 
         	}

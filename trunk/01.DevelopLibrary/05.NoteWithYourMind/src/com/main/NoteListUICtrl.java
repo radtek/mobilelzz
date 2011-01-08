@@ -218,62 +218,37 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 				((View)cb).performClick();
 			}
 		}else{
+			NoteListArrayAdapter LA = (NoteListArrayAdapter)arg0.getAdapter();
 
-			if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_NormalList){
-				
-				NoteListCursorAdapter LA = (NoteListCursorAdapter)arg0.getAdapter();
-				Cursor cur = LA.getCursor();
-				cur.moveToPosition(arg2);
-				int iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_type);
-				int iValue = cur.getInt(iIndex);
-				iIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_id);
-				int iIDValue = cur.getInt(iIndex);
-				if(iValue == CMemoInfo.Type_Folder){
-					boolean bIntent = true;
-					int iEncodeIndex = cur.getColumnIndex(CNoteDBCtrl.KEY_isencode);
-					int iEncodeValue = cur.getInt(iEncodeIndex);
-					if(iEncodeValue==CMemoInfo.IsEncode_Yes){
-						if(!CommonDefine.g_bool_IsPassWordChecked){
-							confirmPassword(iIDValue);
-							bIntent = false;
-						}
-					}else{
+			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+			clCMemoInfo = LA.getItem(arg2);
+			if(clCMemoInfo.iType == CMemoInfo.Type_Folder){
+				boolean bIntent = true;
+				if(clCMemoInfo.iIsEncode==CMemoInfo.IsEncode_Yes){
+					if(!CommonDefine.g_bool_IsPassWordChecked){
+						confirmPassword(clCMemoInfo.iId);
+						bIntent = false;
 					}
-					if(bIntent){
-						Intent intent = new Intent();
-						intent.setClass(m_sourceManager, FolderViewList.class);							
-						intent.putExtra(FolderViewList.ExtraData_FolderDBID, iIDValue);
-						m_sourceManager.startActivity(intent);
-					}
-				}else if(iValue == CMemoInfo.Type_Memo){
-					Intent toNew = new Intent();
-	        		toNew.setClass(m_sourceManager, NoteWithYourMind.class);
-	        		toNew.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Edit);
-	        		toNew.putExtra(NoteWithYourMind.ExtraData_EditNoteID, iIDValue);
-	        			        		
-	        		m_sourceManager.startActivity(toNew);
 				}else{
-					
 				}
-
-			}
-			else if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_SearchResultList){
-
-				NoteListArrayAdapter LA = (NoteListArrayAdapter)arg0.getAdapter();
-
-				CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-				clCMemoInfo = LA.getItem(arg2);
-			
+				if(bIntent){
+					Intent intent = new Intent();
+					intent.setClass(m_sourceManager, FolderViewList.class);							
+					intent.putExtra(FolderViewList.ExtraData_FolderDBID, clCMemoInfo.iId);
+					m_sourceManager.startActivity(intent);
+				}
+			}else if(clCMemoInfo.iType == CMemoInfo.Type_Memo){
 				Intent toNew = new Intent();
         		toNew.setClass(m_sourceManager, NoteWithYourMind.class);
         		toNew.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Edit);
-        		toNew.putExtra(NoteWithYourMind.ExtraData_EditNoteID, clCMemoInfo.iId );	        			        		
-        		toNew.putExtra(NoteWithYourMind.ExtraData_HighLightWord, m_ListUICtrlParam.g_str_SearchKey);	
-				m_sourceManager.startActivity(toNew);
-
+        		toNew.putExtra(NoteWithYourMind.ExtraData_EditNoteID, clCMemoInfo.iId);
+        		if(!m_ListUICtrlParam.g_str_SearchKey.equals("")){
+        			toNew.putExtra(NoteWithYourMind.ExtraData_HighLightWord, m_ListUICtrlParam.g_str_SearchKey);
+        		}
+        		m_sourceManager.startActivity(toNew);
+			}else{
+				
 			}
-
-
 		}
 	}
 	public void initializeSource(){

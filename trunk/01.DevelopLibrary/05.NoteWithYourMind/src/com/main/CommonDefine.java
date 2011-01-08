@@ -168,6 +168,7 @@ class ListUICtrlParam{
 		SortType_RemindFirst,
 		SortType_VoiceFirst,
 		SortType_TextFirst,
+		SortType_ForRootList,
 		SortType_Invalid,
 	}
 
@@ -258,6 +259,68 @@ class SortByRemindFirst implements  Comparator<CMemoInfo> {
 
 
 		
+}
+
+class SortForRootList implements  Comparator<CMemoInfo> {
+
+	public int  compare(CMemoInfo object1, CMemoInfo object2) {
+		int iRet = 0;
+		CommonDefine.PrepareProc(object1);
+		CommonDefine.PrepareProc(object2);		
+		if(object1.iType == CMemoInfo.Type_Folder && object2.iType == CMemoInfo.Type_Folder){
+			iRet = object1.strDetail.compareTo(object2.strDetail);
+		}else if(object1.iType == CMemoInfo.Type_Memo && object2.iType == CMemoInfo.Type_Memo){
+			
+		}else{
+			iRet = object1.iType == CMemoInfo.Type_Folder ? -1:1;
+		}
+		return iRet;
+
+	}
+		
+	private int  CompareByRemindTime(CMemoInfo object1, CMemoInfo object2) {
+
+		long T1=0;
+		long T2=0;
+			
+		if(( object1.RemindType == CommonDefine.Remind_Type_CountDown )
+			||( object1.RemindType == CommonDefine.Remind_Type_Once ))
+		{
+
+			T1	=	object1.dRemindTime;
+
+		}
+		else if( object1.RemindType == CommonDefine.Remind_Type_Week ){
+
+			CRemindInfo	clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Week );
+			
+			clCRemindInfo.setWeekTime( object1 );
+
+			T1	=	clCRemindInfo.getFirstCycelRemindTime( null );
+
+
+		}
+
+		if(( object2.RemindType == CommonDefine.Remind_Type_CountDown )
+			||( object2.RemindType == CommonDefine.Remind_Type_Once ))
+		{
+
+			T2	=	object2.dRemindTime;
+
+		}
+		else if( object2.RemindType == CommonDefine.Remind_Type_Week ){
+
+			CRemindInfo	clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Week );
+			
+			clCRemindInfo.setWeekTime( object2 );
+
+			T2	=	clCRemindInfo.getFirstCycelRemindTime( null );
+		}		
+
+		return (int)( T1 -T2 );
+
+
+	}
 }
 
 

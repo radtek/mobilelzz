@@ -99,6 +99,9 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 		case SortType_TextFirst:
 			Collections.sort(m_arrayItems, new SortByTextFirst());	
 			break;
+		case SortType_ForRootList:
+			Collections.sort(m_arrayItems, new SortForRootList());	
+			break;
 		default:
 //			Collections.sort(m_arrayItems, new SortByLastModifyTime());
 			break;

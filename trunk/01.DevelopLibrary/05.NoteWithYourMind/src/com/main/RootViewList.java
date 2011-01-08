@@ -105,6 +105,7 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
         UICtrlParam = new ListUICtrlParam();
 		UICtrlParam.g_enListType = ListUICtrlParam.ListTypeEnum.ListType_NormalList;
 		UICtrlParam.g_int_PreID= CMemoInfo.PreId_Root;
+		UICtrlParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_ForRootList;
 		
         m_NoteListUICtrl = new NoteListUICtrl(this, list, m_toolBarLayout,UICtrlParam );
         m_NoteListUICtrl.initializeSource();

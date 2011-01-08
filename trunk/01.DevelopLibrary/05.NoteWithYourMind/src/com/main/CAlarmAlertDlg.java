@@ -205,6 +205,17 @@ public class CAlarmAlertDlg extends Dialog implements View.OnClickListener , Med
 	
 	void	sudProcessAgain( long _lMinute )
 	{
+		  if( CMemoInfo.Ring_On == m_iIsRing )
+		  {
+	    	  mp.stop();
+	    	  mp.release();	  
+		  }
+		  
+		  if ( CMemoInfo.Vibrate_On == m_iIsVibrate )
+		  {
+			  vibrator.cancel();
+		  }
+		
 		Calendar clCalendar     =     Calendar.getInstance();
         clCalendar.setTimeInMillis(System.currentTimeMillis());
         

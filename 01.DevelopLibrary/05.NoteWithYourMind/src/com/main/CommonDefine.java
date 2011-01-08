@@ -1,5 +1,7 @@
 package com.main;
 
+import java.io.UnsupportedEncodingException;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -262,63 +264,21 @@ class SortByRemindFirst implements  Comparator<CMemoInfo> {
 }
 
 class SortForRootList implements  Comparator<CMemoInfo> {
-
+	private Comparator cmp = Collator.getInstance(java.util.Locale.CHINA);
 	public int  compare(CMemoInfo object1, CMemoInfo object2) {
 		int iRet = 0;
 		CommonDefine.PrepareProc(object1);
 		CommonDefine.PrepareProc(object2);		
 		if(object1.iType == CMemoInfo.Type_Folder && object2.iType == CMemoInfo.Type_Folder){
-			iRet = object1.strDetail.compareTo(object2.strDetail);
+//			iRet = object1.strDetail.compareTo(object2.strDetail);
+//			iRet = cmp.compare(object1.strDetail, object2.strDetail);
+			iRet = HanZiStringCompare.compare(object1.strDetail, object2.strDetail, "gb2312");
 		}else if(object1.iType == CMemoInfo.Type_Memo && object2.iType == CMemoInfo.Type_Memo){
 			
 		}else{
 			iRet = object1.iType == CMemoInfo.Type_Folder ? -1:1;
 		}
 		return iRet;
-
-	}
-		
-	private int  CompareByRemindTime(CMemoInfo object1, CMemoInfo object2) {
-
-		long T1=0;
-		long T2=0;
-			
-		if(( object1.RemindType == CommonDefine.Remind_Type_CountDown )
-			||( object1.RemindType == CommonDefine.Remind_Type_Once ))
-		{
-
-			T1	=	object1.dRemindTime;
-
-		}
-		else if( object1.RemindType == CommonDefine.Remind_Type_Week ){
-
-			CRemindInfo	clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Week );
-			
-			clCRemindInfo.setWeekTime( object1 );
-
-			T1	=	clCRemindInfo.getFirstCycelRemindTime( null );
-
-
-		}
-
-		if(( object2.RemindType == CommonDefine.Remind_Type_CountDown )
-			||( object2.RemindType == CommonDefine.Remind_Type_Once ))
-		{
-
-			T2	=	object2.dRemindTime;
-
-		}
-		else if( object2.RemindType == CommonDefine.Remind_Type_Week ){
-
-			CRemindInfo	clCRemindInfo	=	new	CRemindInfo( CommonDefine.Remind_Type_Week );
-			
-			clCRemindInfo.setWeekTime( object2 );
-
-			T2	=	clCRemindInfo.getFirstCycelRemindTime( null );
-		}		
-
-		return (int)( T1 -T2 );
-
 
 	}
 }
@@ -504,3 +464,38 @@ class ConvertCursorToMemoInfo {
 	}	
 
 }
+class HanZiStringCompare {  
+    public static int compare(String s1, String s2, String charset) {  
+    	int iRet = 0;
+        char[] c1 = s1.toCharArray();
+        char[] c2 = s2.toCharArray(); 
+        int length = c1.length > c2.length? c2.length:c1.length;
+        int i = 0;
+        for ( ; i < length - 1; i++) {  
+        	iRet = getHexString(String.valueOf(c1[i]), charset)  
+            .compareTo(  
+                    getHexString(String.valueOf(c2[i]),  
+                            charset));
+            if ( iRet != 0) {  
+                break;
+            }  
+        }  
+        if(i == length){
+        	iRet = c1.length > c2.length? 1:-1;
+        }
+        return iRet;  
+    }  
+    public static String getHexString(String s, String charset) {  
+        byte[] b = null;  
+        StringBuffer sb = new StringBuffer();  
+        try {  
+            b = s.getBytes(charset);  
+        } catch (UnsupportedEncodingException e) {  
+            e.printStackTrace();  
+        }  
+        for (int i = 0; i < b.length; i++) {  
+            sb.append(Integer.toHexString(b[i] & 0xFF));  
+        }  
+        return sb.toString();  
+    }  
+}  

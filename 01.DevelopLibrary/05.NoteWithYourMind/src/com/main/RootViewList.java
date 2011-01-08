@@ -49,6 +49,7 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 	
 	private View m_vMoreAnim = null;
 	private ListUICtrlParam  UICtrlParam;
+	private boolean m_bIsListInit = false;
 	
 	public void onNewIntent(Intent intent){
 		setIntent(intent);
@@ -109,6 +110,7 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 		
         m_NoteListUICtrl = new NoteListUICtrl(this, list, m_toolBarLayout,UICtrlParam );
         m_NoteListUICtrl.initializeSource();
+        m_bIsListInit = true;
         
         ImageButton clBTMemoNewFolder = (ImageButton) findViewById(R.id.rootviewlist_toolbar_newfolder);
 		clBTMemoNewFolder.setOnClickListener(this);
@@ -137,17 +139,18 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 	public void onResume()
 	{
 		super.onResume();
+		int initListItemDBID = CommonDefine.g_int_Invalid_ID;
 		Intent extra = getIntent();
 		if(extra!=null){
-			int initListItemDBID = extra.getIntExtra(ExtraData_initListItemDBID, CommonDefine.g_int_Invalid_ID);
-			if(initListItemDBID!=CommonDefine.g_int_Invalid_ID){
-				m_NoteListUICtrl.updateListData(initListItemDBID);
-			}else{
-				
-			}
+			initListItemDBID = extra.getIntExtra(ExtraData_initListItemDBID, CommonDefine.g_int_Invalid_ID);
 			setIntent(null);
 		}else{
 			
+		}
+		if(m_bIsListInit){
+			m_bIsListInit = false;
+		}else{
+			m_NoteListUICtrl.updateListData(initListItemDBID);
 		}
 	}
 	public void onDestroy()

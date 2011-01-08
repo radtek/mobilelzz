@@ -27,7 +27,9 @@ public class FolderViewList extends Activity
 	private ListUICtrlParam  UICtrlParam;
 	
 	/** Called when the activity is first created. */
-	
+	public void onNewIntent(Intent intent){
+		setIntent(intent);
+	}
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);

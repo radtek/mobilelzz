@@ -12,10 +12,12 @@ import android.widget.TextView;
 class DetailInfoOfSelectItem{
 	int iDBRecID;
 	boolean bIsHaveAudioData;
+	boolean bIsFolder;
 	String strAudioFileName;
 	DetailInfoOfSelectItem(){
 		iDBRecID = CommonDefine.g_int_Invalid_ID;
 		bIsHaveAudioData = false;
+		bIsFolder = false;
 		strAudioFileName = null;
 	}
 }
@@ -25,11 +27,13 @@ class ItemSelectResult{
 	boolean bIsSelected;
 	int iItemPos;
 	boolean bIsHaveAudioData;
+	boolean bIsFolder;
 	String strAudioFileName;
 	ItemSelectResult(){
 		iDBRecID = CommonDefine.g_int_Invalid_ID;
 		bIsSelected = false;
 		bIsHaveAudioData = false;
+		bIsFolder = false;
 		strAudioFileName = null;
 	}
 }

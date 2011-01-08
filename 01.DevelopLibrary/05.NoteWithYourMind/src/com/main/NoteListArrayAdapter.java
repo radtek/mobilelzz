@@ -137,6 +137,7 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
     				if(detail!=null){
     					result.bIsHaveAudioData = detail.bIsHaveAudioData;
     					result.strAudioFileName = detail.strAudioFileName;
+    					result.bIsFolder = detail.bIsFolder;
     				}
     				m_ListItemSelectResult.put(String.valueOf(mapItem.iDBRecID), result);
     			}	        
@@ -194,6 +195,7 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 		    	detail.iDBRecID = Integer.valueOf((String)entry.getKey());
 		    	detail.bIsHaveAudioData = val.bIsHaveAudioData;
 		    	detail.strAudioFileName = val.strAudioFileName;
+		    	detail.bIsFolder = val.bIsFolder;
 		    	alIDs.add(detail);
 		    }
 		} 

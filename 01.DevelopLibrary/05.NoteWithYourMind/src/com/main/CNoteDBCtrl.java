@@ -253,12 +253,22 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	
 	public	boolean Delete( ArrayList<DetailInfoOfSelectItem> alIDs )
 	{
-		boolean bIsAudioFileDeleteFailed = false;
 		boolean bIsHaveFailed = false;
 		int iCnt	=	alIDs.size();
 		for ( int i = 0; i < iCnt; ++i )
 		{
 			DetailInfoOfSelectItem detail = alIDs.get(i);
+			if(detail.bIsFolder){
+				boolean b = deleteAdditionalFile(detail.iDBRecID);
+				if(!b){
+					if(!bIsHaveFailed){
+						bIsHaveFailed = true;
+					}else{
+						
+					}
+					continue;
+				}
+			}
 			if(detail.bIsHaveAudioData){
 				//delete audio file
 				boolean b = SDCardAccessor.deleteAudioDataFile(detail.strAudioFileName);
@@ -267,7 +277,6 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 					m_db.execSQL( "delete from " + DB_TABLE + " where " + KEY_id + "=?", temp );
 				}else{
 					if(!bIsHaveFailed){
-						bIsAudioFileDeleteFailed = true;
 						bIsHaveFailed = true;
 					}else{
 						
@@ -278,7 +287,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 				m_db.execSQL( "delete from " + DB_TABLE + " where " + KEY_id + "=?", temp );
 			}
 		}	
-		return !bIsAudioFileDeleteFailed;
+		return !bIsHaveFailed;
 	}
 	
 	/*
@@ -402,5 +411,31 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		}
 		
 		return iEffectedID;
+	}
+	private boolean deleteAdditionalFile(int iDBRecID){
+		boolean bIsHaveFailed = false;
+		Cursor cur = getNotesByID(iDBRecID);
+		if(cur.getCount()>0){
+			cur.moveToFirst();
+			do{
+				int index = cur.getColumnIndex(CNoteDBCtrl.KEY_isHaveAudioData);
+				int value = cur.getInt(index);
+				if(value == CMemoInfo.IsHaveAudioData_Yes){
+					index = cur.getColumnIndex(CNoteDBCtrl.KEY_audioDataName);
+					String filename = cur.getString(index);
+					boolean b = SDCardAccessor.deleteAudioDataFile(filename);
+					if(b){
+					}else{
+						if(!bIsHaveFailed){
+							bIsHaveFailed = true;
+						}else{
+							
+						}
+					}
+				}
+			}while(cur.moveToNext());
+		}
+		cur.close();
+		return !bIsHaveFailed;
 	}
 }

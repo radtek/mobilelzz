@@ -1,4 +1,5 @@
 package com.main;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -7,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 
 
 public class CNoteDBCtrl extends SQLiteOpenHelper {
@@ -87,7 +89,11 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 		super( context, DB_NAME, null, DB_VERSION);
 		m_db	=	this.getWritableDatabase();
 	}
-
+	public File getDataBaseFile(){
+//		File data = Environment.getDataDirectory();
+//		String filepath = m_db.getPath()+DB_NAME;
+		return new File(m_db.getPath());
+	}
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL( DB_CREATE );	

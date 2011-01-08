@@ -83,42 +83,55 @@ public class CAlarmAlertDlg extends Dialog implements View.OnClickListener , Med
             m_iIsRing		=	_iIsRing;
             m_iIsVibrate	=	_iIsVibrate;
             m_id			=	_id;
+            
+            int	iRingTemp	=	-1;
+            int	iVibrate	=	-1;
         	
         	AudioManager audio = (AudioManager) m_Activity.getSystemService(Context.AUDIO_SERVICE);
             switch (audio.getRingerMode())
             {
             case AudioManager.RINGER_MODE_SILENT: 			//无声，不震动
-            		m_iIsRing		=	CMemoInfo.Ring_Off;
-            		m_iIsVibrate	=	CMemoInfo.Vibrate_Off;
+            	iRingTemp	=	CMemoInfo.Ring_Off;
+            	iVibrate	=	CMemoInfo.Vibrate_Off;
             		break;
             case AudioManager.RINGER_MODE_VIBRATE:			//无声，震动
-            		m_iIsRing		=	CMemoInfo.Ring_Off;	
-            		m_iIsVibrate	=	CMemoInfo.Vibrate_On;
+            	iRingTemp	=	CMemoInfo.Ring_Off;	
+            	iVibrate	=	CMemoInfo.Vibrate_On;
             		break;
             case AudioManager.RINGER_MODE_NORMAL:			//有声，震动    		
-            		m_iIsRing		=	CMemoInfo.Ring_On;
-            		m_iIsVibrate	=	CMemoInfo.Vibrate_On;
+            	iRingTemp	=	CMemoInfo.Ring_On;
+            	iVibrate	=	CMemoInfo.Vibrate_On;
             		break;
         		default:
         			break;
             	
             }
             
-    		if( CMemoInfo.Ring_On == m_iIsRing )
+    		if( CMemoInfo.Ring_On == m_iIsRing &&  iRingTemp == CMemoInfo.Ring_On )
     		{
     		    mp =MediaPlayer.create(m_Activity, R.raw.bks);
     		    mp.start();
+    		    m_iIsRing	=	CMemoInfo.Ring_On;
+    		}
+    		else
+    		{
+    			m_iIsRing	=	CMemoInfo.Ring_Off;
     		}
     		
-    		if ( CMemoInfo.Vibrate_On == m_iIsVibrate )
+    		if ( CMemoInfo.Vibrate_On == m_iIsVibrate && iVibrate == CMemoInfo.Vibrate_On )
     		{
     		    vibrator = (Vibrator) m_Activity.getSystemService(android.content.Context.VIBRATOR_SERVICE); 
     		    long[] pattern = {1000, 1000, 1000, 500};
     		    if( null != vibrator )
     		    {
     		    	vibrator.vibrate( pattern, 0 );
-    		    }		   
-    		}  
+    		    }	
+    		    m_iIsVibrate	=	CMemoInfo.Vibrate_On;
+    		} 
+    		else
+    		{
+    			m_iIsVibrate	=	CMemoInfo.Vibrate_Off;
+    		}
         }
           
         show(); 

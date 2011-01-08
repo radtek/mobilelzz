@@ -63,9 +63,9 @@ implements ListActivityCtrl, View.OnClickListener
         
 		m_SearchParam = new ListUICtrlParam();
 	   	m_SearchParam.g_enListType = ListUICtrlParam.ListTypeEnum.ListType_SearchResultList;
-	    m_SearchParam.g_bool_IsTextSearch = true;
+//	    m_SearchParam.g_bool_IsTextSearch = true;
 		m_SearchParam.g_str_SearchKey = "";	
-		m_SearchParam.g_enSortType= ListUICtrlParam.ListSortTypeEnum.SortType_Normal;	
+		m_SearchParam.g_enSortType= ListUICtrlParam.ListSortTypeEnum.SortType_LastModify;	
 		
 		ListView list = (ListView) findViewById(R.id.rootviewlist_list);
         m_toolBarLayout = findViewById(R.id.searchresultviewlist_toolbar);
@@ -75,10 +75,10 @@ implements ListActivityCtrl, View.OnClickListener
         ImageButton clBTSortSetting = (ImageButton) findViewById(R.id.searchresultviewlist_toolbar_SortSetting);
         clBTSortSetting.setOnClickListener(this);
 
-        ImageButton clBTMemoMore_delete = (ImageButton) findViewById(R.id.toolbar_delete);
-        clBTMemoMore_delete.setOnClickListener(this);
-        ImageButton clBTMemoMore_move = (ImageButton) findViewById(R.id.toolbar_move);
-        clBTMemoMore_move.setOnClickListener(this);
+//        ImageButton clBTMemoMore_delete = (ImageButton) findViewById(R.id.toolbar_delete);
+//        clBTMemoMore_delete.setOnClickListener(this);
+//        ImageButton clBTMemoMore_move = (ImageButton) findViewById(R.id.toolbar_move);
+//        clBTMemoMore_move.setOnClickListener(this);
         
         m_ETKeyword = (EditText) findViewById(R.id.search_toolbar_edittext);
         m_ETKeyword.addTextChangedListener(new TextWatcher(){
@@ -97,7 +97,7 @@ implements ListActivityCtrl, View.OnClickListener
 				String strKeyword = m_ETKeyword.getText().toString();
 				
 				m_SearchParam.g_enListType  = ListUICtrlParam.ListTypeEnum.ListType_SearchResultList;
-				m_SearchParam.g_bool_IsTextSearch = true;
+//				m_SearchParam.g_bool_IsTextSearch = true;
 				m_SearchParam.g_str_SearchKey = strKeyword;
 				
 				m_NoteListUICtrl.SetSearchParam( m_SearchParam);
@@ -152,12 +152,12 @@ implements ListActivityCtrl, View.OnClickListener
 		case R.id.searchresultviewlist_toolbar_SortSetting:
 			processSortSettingClick(view);
 		    break;
-		case R.id.toolbar_delete:
-			m_NoteListUICtrl.processDeleteClick(view);
-		    break;
-		case R.id.toolbar_move:
-			m_NoteListUICtrl.processMoveClick(view);
-			break;
+//		case R.id.toolbar_delete:
+//			m_NoteListUICtrl.processDeleteClick(view);
+//		    break;
+//		case R.id.toolbar_move:
+//			m_NoteListUICtrl.processMoveClick(view);
+//			break;
 		case R.id.custom_title_back:
 			this.finish();
 			break;
@@ -185,7 +185,7 @@ implements ListActivityCtrl, View.OnClickListener
 		String strKeyword = Keyword.getText().toString();
 		
 		m_SearchParam.g_enListType  = ListUICtrlParam.ListTypeEnum.ListType_SearchResultList;
-		m_SearchParam.g_bool_IsTextSearch = true;
+//		m_SearchParam.g_bool_IsTextSearch = true;
 		m_SearchParam.g_str_SearchKey = strKeyword;
 		
 		m_NoteListUICtrl.SetSearchParam( m_SearchParam);
@@ -233,10 +233,10 @@ implements ListActivityCtrl, View.OnClickListener
 						m_SearchParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_TextFirst;
 						break;
 					case 3:
-						m_SearchParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_Normal;
+						m_SearchParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_LastModify;
 						break;
 					default:
-						m_SearchParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_Normal;
+						m_SearchParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_Invalid;
 						break;
 					}
 					processSortClick();

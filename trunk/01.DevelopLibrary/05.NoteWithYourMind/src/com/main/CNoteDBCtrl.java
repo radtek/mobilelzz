@@ -128,8 +128,8 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	public	Cursor	getFolderInRoot()
 	{
 		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? and "+
-					KEY_type+"=? and "+KEY_isremind+"!=? order by "+KEY_lastmodifytime+" desc", 
-					new String[]{String.valueOf(0), String.valueOf(CMemoInfo.Type_Folder), String.valueOf(CMemoInfo.IsRemind_Yes)});
+					KEY_type+"=? order by "+KEY_detail+" asc", 
+					new String[]{String.valueOf(0), String.valueOf(CMemoInfo.Type_Folder) });
 	}
 //	public	Cursor	getRemindFolderInRoot()
 //	{
@@ -152,6 +152,9 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 //	}
 	public	Cursor	getNotesByID( int id )
 	{
+//		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_type+"="+String.valueOf(CMemoInfo.Type_Folder)+" union "+
+//				"select * from "+DB_TABLE+" where "+KEY_type+"="+String.valueOf(CMemoInfo.Type_Memo), 
+//				null);
 		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_preid+"=? order by "+KEY_type+" asc, "+
 				KEY_lastmodifytime+" desc", 
 					new String[]{String.valueOf(id)});

@@ -142,11 +142,11 @@ class ListUICtrlParam{
 	ListUICtrlParam(){
 		g_bool_IsRemindSearch = false;
 		g_bool_IsVoiceSearch = false;
-		g_bool_IsTextSearch = false;
+//		g_bool_IsTextSearch = false;
 		g_str_SearchKey = "";
 		g_int_PreID = -1;
 		g_enListType = ListTypeEnum.ListType_NormalList;
-		g_enSortType = ListSortTypeEnum.SortType_Normal;
+		g_enSortType = ListSortTypeEnum.SortType_Invalid;
 	}
 	public	enum	ListTypeEnum
 	{
@@ -156,10 +156,11 @@ class ListUICtrlParam{
 
 	public	enum	ListSortTypeEnum
 	{
-		SortType_Normal,
+		SortType_LastModify,
 		SortType_RemindFirst,
 		SortType_VoiceFirst,
 		SortType_TextFirst,
+		SortType_Invalid,
 	}
 
 	public ListTypeEnum g_enListType;
@@ -169,7 +170,7 @@ class ListUICtrlParam{
 	
 	public boolean g_bool_IsRemindSearch;
 	public boolean g_bool_IsVoiceSearch;
-	public boolean g_bool_IsTextSearch;	
+//	public boolean g_bool_IsTextSearch;	
 	public String g_str_SearchKey;
 }
 

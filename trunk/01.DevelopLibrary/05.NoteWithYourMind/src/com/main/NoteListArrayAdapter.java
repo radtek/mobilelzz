@@ -20,6 +20,7 @@ import android.app.AlertDialog;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -40,6 +41,7 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 	private boolean m_isFolderSelectable = true;
 	private LayoutInflater m_inflater;
 	private Calendar m_c;
+	private Cursor m_cursor;
 	private CNoteDBCtrl m_clCNoteDBCtrl;
 	private int m_listPreDBID;
 	private int m_isRemind;
@@ -49,14 +51,17 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 //	private int m_DBId2BeEdited = CommonDefine.g_int_Invalid_ID;	
 	private String  m_SearchKeyWord = "";
 	private AdapterCommonProcess m_AdapterComPro;	
+	
+	private List<CMemoInfo> m_arrayItems;
 
     private static final int mResource = R.layout.notelistitem; 
 
-    public NoteListArrayAdapter(Context context, List<CMemoInfo> items) {
+    public NoteListArrayAdapter(Context context, Cursor cur, List<CMemoInfo> items) {
 
         super(context, mResource, items);
 		m_inflater = LayoutInflater.from(context);
-
+		m_cursor = cur;
+		m_arrayItems = items;
 		m_ListItemSelectResult = new HashMap<String,ItemSelectResult>();
 		m_ListCheckBoxMapItem = new HashMap<CheckBox,CheckBoxMapItem>();
 		m_ListItemDetail = new HashMap<View,ItemDetail>();
@@ -65,6 +70,40 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 		m_AdapterComPro = new AdapterCommonProcess(context);
 		
 	}
+    
+    /*
+     * 将Cursor中的数据转换到Array中
+     */
+    public void initData(){
+    	ConvertCursorToMemoInfo.ConvertItems( m_cursor , m_arrayItems);
+    }
+    
+	public void updateCursor(){
+		m_cursor.deactivate();
+		m_cursor.requery();
+		m_arrayItems.clear();
+		ConvertCursorToMemoInfo.ConvertItems( m_cursor , m_arrayItems);
+	}
+    
+    public void sortData(ListUICtrlParam.ListSortTypeEnum enSortType){
+    	switch(enSortType){
+		case SortType_LastModify:
+			Collections.sort(m_arrayItems, new SortByLastModifyTime());
+			break;
+		case SortType_RemindFirst:
+			Collections.sort(m_arrayItems, new SortByRemindFirst());
+			break;
+		case SortType_VoiceFirst:
+			Collections.sort(m_arrayItems, new SortByVoiceFirst());							
+			break;
+		case SortType_TextFirst:
+			Collections.sort(m_arrayItems, new SortByTextFirst());	
+			break;
+		default:
+//			Collections.sort(m_arrayItems, new SortByLastModifyTime());
+			break;
+		}
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -113,8 +152,19 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
     }
 
 
-	public void setSearchKeyWord(String str){
+	public void filterListByKeyWord(String str){
 		m_SearchKeyWord = str;
+
+		int Count = m_arrayItems.size();
+		for(int i=Count-1;i>=0;i--)
+		{			
+			CMemoInfo clCMemoInfo	= m_arrayItems.get(i);
+			String sDetail=clCMemoInfo.strDetail;
+			if( sDetail.indexOf(str) ==  -1) 
+			{
+				m_arrayItems.remove(i);
+			}
+		}
 	}
 
 	public void clearSelectResult(){
@@ -165,5 +215,6 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 		ItemDetail detail = m_ListItemDetail.get(view);
 		return detail.bIsEncode;
 	}	
+	
 }
 

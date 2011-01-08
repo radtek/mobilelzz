@@ -50,7 +50,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 	private ListUICtrlParam m_ListUICtrlParam;
 	private View m_toolBarLayout;
 	public Activity m_sourceManager;
-	private NoteListCursorAdapter m_myAdapter;
+	private NoteListArrayAdapter m_myAdapter;
 	private NoteListArrayAdapter  m_myArrayListAdapter;
 	
 	//private String m_strPassWord;
@@ -335,23 +335,123 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		}
 	}
 	
+//	public void updateListData(int initListItemDBID){
+//
+//		if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_NormalList){
+//
+//			/*如果是普通的List，使用preID到DB里进行检索, 用CursorAdapter与ListView进行绑定*/
+//			if(m_myAdapter==null){
+//					/*使用preID到DB里进行检索, 用CursorAdapter与ListView进行绑定*/
+//				if( m_ListUICtrlParam.g_int_PreID != CMemoInfo.Id_Invalid){
+//					Cursor cursor = m_clCNoteDBCtrl.getNotesByID(m_ListUICtrlParam.g_int_PreID);
+//					m_sourceManager.startManagingCursor(cursor);
+//					m_myAdapter = new NoteListCursorAdapter(m_sourceManager, cursor);
+//					m_targetList.setAdapter(m_myAdapter);
+//				}else{
+//					//error
+//				}	
+//
+//
+//			}else{
+//				if(m_bIsDelete || m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
+//	    			m_myAdapter.setSelectableStyle(true);
+//				}else{
+//					m_myAdapter.setSelectableStyle(false);
+//				}
+//				if(m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
+//					m_myAdapter.setFolderSelectable(false);
+//				}else{
+//					m_myAdapter.setFolderSelectable(true);
+//				}
+//				m_myAdapter.updateCursor();
+//				m_myAdapter.notifyDataSetChanged();
+//			}
+//
+//
+//		}
+//		else{
+//				if(m_myArrayListAdapter==null){
+////					if( m_ListUICtrlParam.g_bool_IsTextSearch )
+//					{
+//						Cursor cursor = m_clCNoteDBCtrl.getAllNotEncodeMemo();
+//						m_sourceManager.startManagingCursor(cursor);
+//						List<CMemoInfo> Items = new ArrayList<CMemoInfo>();
+//						m_myArrayListAdapter = new NoteListArrayAdapter( m_sourceManager, cursor, Items);
+//						m_myArrayListAdapter.initData();
+//						if(m_ListUICtrlParam.g_str_SearchKey != ""){
+//							m_myArrayListAdapter.filterListByKeyWord(m_ListUICtrlParam.g_str_SearchKey);
+//						}
+//						
+//						m_myArrayListAdapter.sortData(m_ListUICtrlParam.g_enSortType);
+//						m_targetList.setAdapter(m_myArrayListAdapter);					
+//					}
+////					else{
+////							//功能暂不开发
+////					}
+//
+//				}else{
+//
+//					if(m_bIsDelete || m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
+//		    			m_myArrayListAdapter.setSelectableStyle(true);
+//					}else{
+//						m_myArrayListAdapter.setSelectableStyle(false);
+//					}
+//					if(m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
+//						m_myArrayListAdapter.setFolderSelectable(false);
+//					}else{
+//						m_myArrayListAdapter.setFolderSelectable(true);
+//					}
+//
+//					m_myArrayListAdapter.notifyDataSetChanged();
+//
+//				}
+//
+//		}
+//
+//
+//		if(initListItemDBID!=CommonDefine.g_int_Invalid_ID){
+//			/*
+//			 * 查找initListItemDBID对应的pos
+//			 * 移动list光标到pos
+//			 */
+//			int initPos = CommonDefine.g_int_Invalid_ID;
+//			int count = m_myAdapter.getCount();
+//			for(int i = 0; i < count; i++ ){
+//				if(initListItemDBID == m_myAdapter.getItemId(i)){
+//					initPos = i;
+//				}
+//			}
+//			m_targetList.setSelectionFromTop(initPos, 50);
+//		}
+//	}
+	
 	public void updateListData(int initListItemDBID){
-
-		if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_NormalList){
 
 			/*如果是普通的List，使用preID到DB里进行检索, 用CursorAdapter与ListView进行绑定*/
 			if(m_myAdapter==null){
 					/*使用preID到DB里进行检索, 用CursorAdapter与ListView进行绑定*/
-				if( m_ListUICtrlParam.g_int_PreID != CMemoInfo.Id_Invalid){
-					Cursor cursor = m_clCNoteDBCtrl.getNotesByID(m_ListUICtrlParam.g_int_PreID);
-					m_sourceManager.startManagingCursor(cursor);
-					m_myAdapter = new NoteListCursorAdapter(m_sourceManager, cursor);
-					m_targetList.setAdapter(m_myAdapter);
+				
+				Cursor cursor=null;
+				if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_NormalList){
+					if( m_ListUICtrlParam.g_int_PreID != CMemoInfo.Id_Invalid){
+						cursor = m_clCNoteDBCtrl.getNotesByID(m_ListUICtrlParam.g_int_PreID);
+					}else{
+						//error
+					}	
 				}else{
-					//error
-				}	
-
-
+					cursor = m_clCNoteDBCtrl.getAllNotEncodeMemo();
+				}
+				
+				m_sourceManager.startManagingCursor(cursor);
+				List<CMemoInfo> Items = new ArrayList<CMemoInfo>();
+				m_myAdapter = new NoteListArrayAdapter( m_sourceManager, cursor, Items);
+				m_myAdapter.initData();
+				if(m_ListUICtrlParam.g_str_SearchKey != ""){
+					m_myAdapter.filterListByKeyWord(m_ListUICtrlParam.g_str_SearchKey);
+				}
+				
+				m_myAdapter.sortData(m_ListUICtrlParam.g_enSortType);
+				m_targetList.setAdapter(m_myAdapter);	
 			}else{
 				if(m_bIsDelete || m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
 	    			m_myAdapter.setSelectableStyle(true);
@@ -367,67 +467,43 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 				m_myAdapter.notifyDataSetChanged();
 			}
 
-
-		}
-		else{
-				if(m_myArrayListAdapter==null){
-					if( m_ListUICtrlParam.g_bool_IsTextSearch )
-					{
-						Cursor cursor = m_clCNoteDBCtrl.getAllNotEncodeMemo();
-						m_sourceManager.startManagingCursor(cursor);
-						//cursor转化为ArrayList
-
-						List<CMemoInfo> Items = new ArrayList<CMemoInfo>();
-						ConvertCursorToMemoInfo.ConvertItems( cursor ,Items);
-						
-						if(m_ListUICtrlParam.g_str_SearchKey != ""){
-							FilterArrayListbySearchParam( Items );
-						}
-
-						switch(m_ListUICtrlParam.g_enSortType){
-						case SortType_Normal:
-							Collections.sort(Items, new SortByLastModifyTime());
-							break;
-						case SortType_RemindFirst:
-							Collections.sort(Items, new SortByRemindFirst());
-							break;
-						case SortType_VoiceFirst:
-							Collections.sort(Items, new SortByVoiceFirst());							
-							break;
-						case SortType_TextFirst:
-							Collections.sort(Items, new SortByTextFirst());	
-							break;
-						default:
-							Collections.sort(Items, new SortByLastModifyTime());
-							break;
-						}
-
-						m_myArrayListAdapter = new NoteListArrayAdapter( m_sourceManager,  Items);
-						m_myArrayListAdapter.setSearchKeyWord(m_ListUICtrlParam.g_str_SearchKey);						
-						m_targetList.setAdapter(m_myArrayListAdapter);
-					}
-					else{
-							//功能暂不开发
-					}
-
-				}else{
-
-					if(m_bIsDelete || m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
-		    			m_myArrayListAdapter.setSelectableStyle(true);
-					}else{
-						m_myArrayListAdapter.setSelectableStyle(false);
-					}
-					if(m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
-						m_myArrayListAdapter.setFolderSelectable(false);
-					}else{
-						m_myArrayListAdapter.setFolderSelectable(true);
-					}
-
-					m_myArrayListAdapter.notifyDataSetChanged();
-
-				}
-
-		}
+//				if(m_myArrayListAdapter==null){
+////					if( m_ListUICtrlParam.g_bool_IsTextSearch )
+//					{
+//						Cursor cursor = m_clCNoteDBCtrl.getAllNotEncodeMemo();
+//						m_sourceManager.startManagingCursor(cursor);
+//						List<CMemoInfo> Items = new ArrayList<CMemoInfo>();
+//						m_myArrayListAdapter = new NoteListArrayAdapter( m_sourceManager, cursor, Items);
+//						m_myArrayListAdapter.initData();
+//						if(m_ListUICtrlParam.g_str_SearchKey != ""){
+//							m_myArrayListAdapter.filterListByKeyWord(m_ListUICtrlParam.g_str_SearchKey);
+//						}
+//						
+//						m_myArrayListAdapter.sortData(m_ListUICtrlParam.g_enSortType);
+//						m_targetList.setAdapter(m_myArrayListAdapter);					
+//					}
+////					else{
+////							//功能暂不开发
+////					}
+//
+//				}else{
+//
+//					if(m_bIsDelete || m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
+//		    			m_myArrayListAdapter.setSelectableStyle(true);
+//					}else{
+//						m_myArrayListAdapter.setSelectableStyle(false);
+//					}
+//					if(m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
+//						m_myArrayListAdapter.setFolderSelectable(false);
+//					}else{
+//						m_myArrayListAdapter.setFolderSelectable(true);
+//					}
+//
+//					m_myArrayListAdapter.notifyDataSetChanged();
+//
+//				}
+//
+//		}
 
 
 		if(initListItemDBID!=CommonDefine.g_int_Invalid_ID){
@@ -544,22 +620,6 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 				})
 				.create();
 			clDlgChangeFolder.show();
-	}
-
-
-
-	private void FilterArrayListbySearchParam( List<CMemoInfo> Items){
-
-		int Count = Items.size();
-		for(int i=Count-1;i>=0;i--)
-		{			
-			CMemoInfo clCMemoInfo	= Items.get(i);
-			String sDetail=clCMemoInfo.strDetail;
-			if( sDetail.indexOf(m_ListUICtrlParam.g_str_SearchKey) ==  -1) 
-			{
-				Items.remove(i);
-			}
-		}
 	}
 
 	public void SetSearchParam(  ListUICtrlParam CtrlParam ){

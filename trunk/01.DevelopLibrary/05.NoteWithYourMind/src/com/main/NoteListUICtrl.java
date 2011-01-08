@@ -602,11 +602,11 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 
 	public void SetSearchParam(  ListUICtrlParam CtrlParam ){
 		m_myAdapter.updateCursor();
-		if(m_ListUICtrlParam.g_str_SearchKey != ""){
-			m_myAdapter.filterListByKeyWord(m_ListUICtrlParam.g_str_SearchKey);
+		if(CtrlParam.g_str_SearchKey != ""){
+			m_myAdapter.filterListByKeyWord(CtrlParam.g_str_SearchKey);
 		}
 		
-		m_myAdapter.sortData(m_ListUICtrlParam.g_enSortType);
+		m_myAdapter.sortData(CtrlParam.g_enSortType);
 		m_myAdapter.notifyDataSetChanged();
 		m_ListUICtrlParam.copy(CtrlParam);
 	}

@@ -84,7 +84,11 @@ implements ListActivityCtrl, View.OnClickListener
         m_ETKeyword.addTextChangedListener(new TextWatcher(){
 
             public void afterTextChanged(Editable s) {
-           
+            	String strKeyword = m_ETKeyword.getText().toString();
+				m_SearchParam.g_enListType  = ListUICtrlParam.ListTypeEnum.ListType_SearchResultList;
+				m_SearchParam.g_str_SearchKey = strKeyword;
+				m_NoteListUICtrl.SetSearchParam( m_SearchParam);
+				m_NoteListUICtrl.updateListData(CommonDefine.g_int_Invalid_ID);
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -92,20 +96,8 @@ implements ListActivityCtrl, View.OnClickListener
             }        	
         	
 			public void onTextChanged(CharSequence s, int start, int before,  int count) {   
-//				updateContacts(s.toString());   
-
-				String strKeyword = m_ETKeyword.getText().toString();
 				
-				m_SearchParam.g_enListType  = ListUICtrlParam.ListTypeEnum.ListType_SearchResultList;
-//				m_SearchParam.g_bool_IsTextSearch = true;
-				m_SearchParam.g_str_SearchKey = strKeyword;
-				
-				m_NoteListUICtrl.SetSearchParam( m_SearchParam);
-				m_NoteListUICtrl.updateListData(CommonDefine.g_int_Invalid_ID);
-
 			}   		
-
-
 		}); 		
 
 		Drawable draw = this.getResources().getDrawable(R.drawable.toolbar_search);     

@@ -77,7 +77,9 @@ public class SDCardAccessor extends BroadcastReceiver {
     	boolean bIsDeleteSuccess = false;
     	if(isSDCardAvailable()){
         	File fp = new File(m_audioDataDir, audioFileName);
-        	fp.delete();
+        	if(fp.exists()){
+        		fp.delete();	
+        	}
         	fp = null;
         	bIsDeleteSuccess = true;
     	}else{

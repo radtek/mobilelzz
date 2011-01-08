@@ -1,5 +1,6 @@
 package com.main;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.text.DateFormat.Field;
 import java.util.Calendar;
@@ -84,6 +85,9 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 		}
     	curPassWord.close();
         
+    	File fp = m_clCNoteDBCtrl.getDataBaseFile();
+    	SDCardAccessor.copyDataBaseFile(this, fp);
+    	
         requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.rootviewlist);	
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.custom_title);

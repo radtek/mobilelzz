@@ -1,5 +1,11 @@
 package com.main;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 import android.content.BroadcastReceiver;
@@ -21,6 +27,8 @@ public class SDCardAccessor extends BroadcastReceiver {
     private static boolean m_sdcardAvailabilityDetected = false;  
     private static String m_sdcardDir = null;
     private static final String 					m_strAudioFilePath = "/record";
+    private static final String 					m_strBackupFilePath = "/backup";
+    private static final String 					m_strBackupDataBase = "note.db";
     private static final String 					m_strAppFilePath = "/note";
     private static File				m_audioDataDir = null;
     private static ArrayList<SDCardStatusChangedCtrl> m_ctrlList = null;
@@ -48,6 +56,55 @@ public class SDCardAccessor extends BroadcastReceiver {
     	if(m_ctrlList!=null){
     		m_ctrlList.remove(ctrl);
     	}
+    }
+    public static void copyDataBaseFile(Context context, File fpSource){
+    	if(isSDCardAvailable()){
+    		try{
+    			
+    			String strAppDir = m_sdcardDir + m_strAppFilePath;
+    	    	File fAppDir = new File(strAppDir);
+    	        if(!fAppDir.exists())
+    	        {
+    	        	fAppDir.mkdir();
+    	        } 
+    	        String strBackupDir =  strAppDir+m_strBackupFilePath;
+    	        File backupDir = new File(strBackupDir);
+    	        if(!backupDir.exists()){
+    	        	backupDir.mkdir();
+    	        }
+    	        File fpTarget = new File(strBackupDir, m_strBackupDataBase);
+        		if(fpTarget.exists()){
+        			fpTarget.delete();
+        		}
+    			fpTarget.createNewFile();
+    			FileChannel src = new FileInputStream(fpSource).getChannel();
+
+    			FileChannel dst = new FileOutputStream(fpTarget).getChannel();
+
+    			dst.transferFrom(src, 0, src.size());
+
+    			src.close();
+
+    			dst.close();
+//        		copy(context, fpSource, fpTarget);
+    		}catch(IOException e){
+    			
+    		}
+    	}
+    }
+    public static void copy(Context context, File src, File dst) throws IOException {
+//        InputStream in = new FileInputStream(src);
+//        OutputStream out = new FileOutputStream(dst);
+    	InputStream in = context.openFileInput(src.getAbsolutePath());
+    	OutputStream out = new FileOutputStream(dst);
+        // Transfer bytes from in to out
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        in.close();
+        out.close();
     }
     /** 
      *  

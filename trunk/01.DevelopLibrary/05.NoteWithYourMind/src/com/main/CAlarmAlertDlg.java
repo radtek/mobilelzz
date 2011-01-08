@@ -71,7 +71,12 @@ public class CAlarmAlertDlg extends Dialog implements View.OnClickListener , Med
 			m_Activity.finish();
 			return;
         }
-        if ( CommonDefine.iWorking	!=	sp.getInt(CommonDefine.ExtraData_Remind_Flg, -1) )
+        
+        
+        SharedPreferences R_Sp	= m_Activity.getSharedPreferences(CommonDefine.ExtraData_Remind_File, Context.MODE_WORLD_READABLE);	
+        int iTemp	= R_Sp.getInt(CommonDefine.ExtraData_Remind_Flg, -1);
+        
+        if ( CommonDefine.iWorking	!=	iTemp )
         {
         	sp.edit().putInt(CommonDefine.ExtraData_Remind_Flg, CommonDefine.iWorking);
         	sp.edit().commit();

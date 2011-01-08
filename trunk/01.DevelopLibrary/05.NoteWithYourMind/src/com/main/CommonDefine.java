@@ -148,6 +148,14 @@ class ListUICtrlParam{
 		g_enListType = ListTypeEnum.ListType_NormalList;
 		g_enSortType = ListSortTypeEnum.SortType_Invalid;
 	}
+	public void copy(ListUICtrlParam source){
+		g_bool_IsRemindSearch = source.g_bool_IsRemindSearch;
+		g_bool_IsVoiceSearch = source.g_bool_IsVoiceSearch;
+		g_str_SearchKey = source.g_str_SearchKey;
+		g_int_PreID = source.g_int_PreID;
+		g_enListType = source.g_enListType;
+		g_enSortType = source.g_enSortType;
+	}
 	public	enum	ListTypeEnum
 	{
 		ListType_NormalList,          //通过指定PreID，来提供PreID对应的子List

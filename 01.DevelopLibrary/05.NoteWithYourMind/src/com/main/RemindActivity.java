@@ -142,6 +142,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         if ((keyCode == KeyEvent.KEYCODE_BACK))
         { 
         	Intent intent = new Intent(RemindActivity.this, NoteWithYourMind.class);
+        	intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, m_clCRemindInfo );
         	intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
         	startActivity(intent);
         	return true;
@@ -178,7 +179,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     	if( m_iType != CommonDefine.Remind_Type_CountDown && ( CommonDefine.g_int_Invalid_Time == m_clCTimeDlg.m_iHour 
     			|| CommonDefine.g_int_Invalid_Time == m_clCTimeDlg.m_iMinute ) )
     	{
-    		Toast toast = Toast.makeText(RemindActivity.this, "时间设定错误，请重新设定!", Toast.LENGTH_SHORT);
+    		Toast toast = Toast.makeText(RemindActivity.this, "时间以过期，请重新设定!", Toast.LENGTH_SHORT);
     		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
     		toast.show(); 
     		return;

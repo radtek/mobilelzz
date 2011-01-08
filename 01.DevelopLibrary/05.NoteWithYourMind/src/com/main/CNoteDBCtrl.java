@@ -47,7 +47,7 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 	private static final String	DB_TABLE				= "Notes";
 	private static final String	DB_TABLE_PassWord		= "PassWord";
 	// Êý¾Ý¿â°æ±¾
-	private static final int	DB_VERSION		= 3;
+	private static final int	DB_VERSION		= 4;
 	
 	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" 
 												+ KEY_id 				+ " INTEGER PRIMARY KEY AUTOINCREMENT," 

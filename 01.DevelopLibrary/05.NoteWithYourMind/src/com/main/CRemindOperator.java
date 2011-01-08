@@ -55,7 +55,7 @@ public final class CRemindOperator
         	{
         		if ( clCalendar.getTimeInMillis() > _clCRemindInfo.m_lTime )
         		{
-            		Toast toast = Toast.makeText(context, "提醒时间不正确，请重新设置!", Toast.LENGTH_SHORT);
+            		Toast toast = Toast.makeText(context, "提醒已过期，请重新设置!", Toast.LENGTH_SHORT);
             		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
             		toast.show();	
             		
@@ -227,6 +227,14 @@ public final class CRemindOperator
         index		=	cur.getColumnIndex( CNoteDBCtrl.KEY_sunday );
         int iSunday			=	cur.getInt( index );
         _clCRemindInfo.m_Week[ 6 ]	=	(byte)iSunday;
+        
+        index		=	cur.getColumnIndex( CNoteDBCtrl.KEY_isRing );
+        int isRing			=	cur.getInt( index );
+        _clCRemindInfo.m_iIsRing	=	isRing;
+        
+        index		=	cur.getColumnIndex( CNoteDBCtrl.KEY_isVibrate );
+        int isVibrate			=	cur.getInt( index );
+        _clCRemindInfo.m_iIsVibrate	=	isVibrate;
         
         return	CommonDefine.S_OK;    
     }

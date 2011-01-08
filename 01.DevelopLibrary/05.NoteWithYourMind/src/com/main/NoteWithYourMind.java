@@ -412,23 +412,24 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
     }
     private void updateTime(CRemindInfo clRemindInfo){
     	
-    	TextView	Week[]	=	new	TextView[ 7 ];
-    	TextView	Time	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx0);
-    	Week[0]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx1);
-    	Week[1]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx2);
-    	Week[2]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx3);
-    	Week[3]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx4);
-    	Week[4]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx5);
-    	Week[5]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx6);
-    	Week[6]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx7);
-    	
-    	TextView	Status	=	(TextView)findViewById(R.id.editnote_remindinfo_status);
-    	Status.setTextColor(Color.WHITE);
-    	TextView	CountDownTime	=	(TextView)findViewById(R.id.editnote_remindinfo_nextremind);
-    	CountDownTime.setTextColor(Color.WHITE);
-    	Time.setTextColor(Color.WHITE);
-    	if(clRemindInfo!=null)
+    	if(clRemindInfo!=null && clRemindInfo.m_iIsRemind == CMemoInfo.IsRemind_Yes )
     	{
+        	TextView	Week[]	=	new	TextView[ 7 ];
+        	TextView	Time	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx0);
+        	Week[0]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx1);
+        	Week[1]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx2);
+        	Week[2]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx3);
+        	Week[3]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx4);
+        	Week[4]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx5);
+        	Week[5]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx6);
+        	Week[6]	=	(TextView)findViewById(R.id.editnote_remindinfo_remindsettingdata_tx7);
+        	
+        	TextView	Status	=	(TextView)findViewById(R.id.editnote_remindinfo_status);
+        	Status.setTextColor(Color.WHITE);
+        	TextView	CountDownTime	=	(TextView)findViewById(R.id.editnote_remindinfo_nextremind);
+        	CountDownTime.setTextColor(Color.WHITE);
+        	Time.setTextColor(Color.WHITE);
+    		
     		setRemindDisplay(true);
     		if ( CommonDefine.Remind_Type_CountDown == clRemindInfo.m_iType ||  CommonDefine.Remind_Type_Once == clRemindInfo.m_iType )
         	{

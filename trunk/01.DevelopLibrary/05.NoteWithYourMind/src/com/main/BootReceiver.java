@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 
 
@@ -15,6 +16,13 @@ public class BootReceiver extends BroadcastReceiver {
     {
     	
 		CNoteDBCtrl	clCNoteDBCtrl	=	new	CNoteDBCtrl( ctx );
+		
+		SharedPreferences	sp = ctx.getSharedPreferences(CommonDefine.ExtraData_Remind_File, Context.MODE_WORLD_WRITEABLE); 
+		if( null != sp )
+		{
+			sp.edit().putInt(CommonDefine.ExtraData_Remind_Flg, CommonDefine.iNotWorking);
+			sp.edit().commit();
+		}
 
 		Cursor clCursor	=	clCNoteDBCtrl.getRemindInfo();	
 		if ( !clCursor.moveToFirst() )

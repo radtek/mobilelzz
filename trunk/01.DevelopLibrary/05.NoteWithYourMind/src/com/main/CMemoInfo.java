@@ -99,6 +99,7 @@ public class CMemoInfo {
 		else if( System.currentTimeMillis() - _lTime < CRemindInfo.ONE_WEEK_TIME )
 		{
 			strTemp		=	CDateDlg.getDayofWeek(clCalendar);
+			strTemp.replace("ÐÇÆÚ","±¾ÖÜ");
 		}
 		else
 		{

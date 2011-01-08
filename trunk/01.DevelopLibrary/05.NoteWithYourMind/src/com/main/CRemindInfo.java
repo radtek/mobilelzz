@@ -77,10 +77,14 @@ public class CRemindInfo implements Serializable
 		{
 			WeekCountDown	clWeekCountDown	=	new	WeekCountDown();
 			
-			long	lTimeTemp	=	getFirstCycelRemindTime( clWeekCountDown );
+			getFirstCycelRemindTime( clWeekCountDown );
 			if( clWeekCountDown.iType == CommonDefine.WeekNext )
 			{
-				if( clWeekCountDown.iWeek >= 0 && clWeekCountDown.iWeek <= 6 )
+				if( clWeekCountDown.iWeek == 0 )
+				{
+					strTemp	=	"下次提醒 : 本周 日 ";
+				}		
+				else if( clWeekCountDown.iWeek >= 0 && clWeekCountDown.iWeek <= 6 )
 				{
 					strTemp	=	"下次提醒 : 下周 " + getDayofWeek(clWeekCountDown.iWeek );
 				}
@@ -91,7 +95,7 @@ public class CRemindInfo implements Serializable
 				if( clWeekCountDown.iWeek >= 0 && clWeekCountDown.iWeek <= 6 )
 				{
 					Calendar clCalendar     =     Calendar. getInstance();
-					clCalendar.setTimeInMillis( lTimeTemp );
+					clCalendar.setTimeInMillis( System.currentTimeMillis() );
 					int	iCurr	=	clCalendar.get(Calendar.DAY_OF_WEEK);
 					-- iCurr;
 					if ( iCurr == clWeekCountDown.iWeek )

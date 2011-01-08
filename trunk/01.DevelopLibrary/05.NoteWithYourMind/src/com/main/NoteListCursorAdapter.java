@@ -1,19 +1,5 @@
 package com.main;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CursorAdapter;
-import android.widget.TextView;
-import android.widget.Button;
-import android.widget.TimePicker;
-import android.app.AlertDialog;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,13 +7,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.main.R.id;
-
-import android.content.DialogInterface;
-import android.widget.EditText;
-import android.view.Gravity;
-import android.widget.Toast;
-import android.widget.ImageButton;
+import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CursorAdapter;
+import android.widget.TextView;
 
 public class NoteListCursorAdapter extends CursorAdapter implements Serializable {
 	private static final long serialVersionUID = -7060210544600464481L;

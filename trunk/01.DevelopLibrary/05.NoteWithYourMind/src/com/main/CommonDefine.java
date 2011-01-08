@@ -26,6 +26,8 @@ class CommonDefine{
 	public static int 						g_int_ListItemHeight = 65;
 	public static String 					g_str_PassWord = "";
 	public static String 					ExtraData_EditNoteID        =    "com.main.ExtraData_EditNoteID"; 
+	public static String 					ExtraData_Remind_Flg        =    "com.main.ExtraData_Remind_Flg"; 
+	public static String 					ExtraData_Remind_File		=    "com.main.ExtraData_Remind_File"; 
 	public static boolean 					g_bool_IsPassWordChecked = false;
 
 	private static	CNoteDBCtrl				m_clCNoteDBCtrl = null;
@@ -45,6 +47,17 @@ class CommonDefine{
 	public static int 						WeekInvalid				=	-1;
 	public static int 						WeekNext				=	1;
 	public static int 						WeekCurrent				=	2;
+	
+	public static long 						Minute_5					=	1000 * 60 * 5;
+	public static long 						Minute_10					=	1000 * 60 * 10;
+	public static long 						Minute_15					=	1000 * 60 * 15;
+	public static long 						Minute_20					=	1000 * 60 * 20;
+	public static long 						Minute_30					=	1000 * 60 * 30;
+	public static long 						Minute_60					=	1000 * 60 * 60;
+	public static long 						Minute_120					=	1000 * 60 * 120;
+	
+	public static int 						iWorking					=	1;
+	public static int 						iNotWorking					=	0;
 	
 	private static MediaPhoneCallListener 	m_MediaPhoneCallListener = null;
 	

@@ -43,7 +43,7 @@ implements ListActivityCtrl, View.OnClickListener
 	ListUICtrlParam m_SearchParam =null;
 	private AlertDialog m_dlgSortTypeList;
 	private	EditText m_ETKeyword ;
-	
+	private boolean m_bIsListInit = false;
 //	public void onNewIntent(Intent intent){
 //		setIntent(intent);
 //	}
@@ -71,6 +71,7 @@ implements ListActivityCtrl, View.OnClickListener
         m_toolBarLayout = findViewById(R.id.searchresultviewlist_toolbar);
         m_NoteListUICtrl = new NoteListUICtrl(this, list, m_toolBarLayout, m_SearchParam);
         m_NoteListUICtrl.initializeSource();
+        m_bIsListInit = true;
            		
         ImageButton clBTSortSetting = (ImageButton) findViewById(R.id.searchresultviewlist_toolbar_SortSetting);
         clBTSortSetting.setOnClickListener(this);
@@ -123,6 +124,11 @@ implements ListActivityCtrl, View.OnClickListener
 //		}else{
 			
 //		}
+		if(m_bIsListInit){
+			m_bIsListInit = false;
+		}else{
+			m_NoteListUICtrl.updateListData(CommonDefine.g_int_Invalid_ID);
+		}
 	}
 	public void onDestroy()
 	{

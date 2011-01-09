@@ -78,8 +78,9 @@ public class CAlarmAlertDlg extends Dialog implements View.OnClickListener , Med
         
         if ( CommonDefine.iWorking	!=	iTemp )
         {
-        	sp.edit().putInt(CommonDefine.ExtraData_Remind_Flg, CommonDefine.iWorking);
-        	sp.edit().commit();
+        	SharedPreferences.Editor editor = sp.edit();
+        	editor.putInt(CommonDefine.ExtraData_Remind_Flg, CommonDefine.iWorking);
+        	editor.commit();
             m_iIsRing		=	_iIsRing;
             m_iIsVibrate	=	_iIsVibrate;
             m_id			=	_id;
@@ -209,8 +210,9 @@ public class CAlarmAlertDlg extends Dialog implements View.OnClickListener , Med
 				break;
 			}
 			dialog.cancel(); 
-			sp.edit().putInt(CommonDefine.ExtraData_Remind_Flg, CommonDefine.iNotWorking);
-			sp.edit().commit();
+			SharedPreferences.Editor editor = sp.edit();
+        	editor.putInt(CommonDefine.ExtraData_Remind_Flg, CommonDefine.iNotWorking);
+        	editor.commit();
 			m_Activity.finish();
 		} 
 		}).show();//œ‘ æ∂‘ª∞øÚ 
@@ -289,8 +291,9 @@ public class CAlarmAlertDlg extends Dialog implements View.OnClickListener , Med
 		  {
 			  vibrator.cancel();
 		  }
-		  sp.edit().putInt(CommonDefine.ExtraData_Remind_Flg, CommonDefine.iNotWorking);
-		  sp.edit().commit();
+		  SharedPreferences.Editor editor = sp.edit();
+	      	editor.putInt(CommonDefine.ExtraData_Remind_Flg, CommonDefine.iNotWorking);
+	      	editor.commit();
 		  m_Activity.finish();
 	}
 	

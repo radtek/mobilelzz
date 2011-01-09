@@ -84,6 +84,11 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 		m_arrayItems.clear();
 		ConvertCursorToMemoInfo.ConvertItems( m_cursor , m_arrayItems);
 	}
+	
+	public long getItemId(int i){
+		int iDBID = m_arrayItems.get(i).iId;
+		return iDBID;
+	}
     
     public void sortData(ListUICtrlParam.ListSortTypeEnum enSortType){
     	switch(enSortType){

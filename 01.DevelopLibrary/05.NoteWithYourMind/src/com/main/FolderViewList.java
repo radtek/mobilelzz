@@ -110,14 +110,19 @@ public class FolderViewList extends Activity
 		if(m_bIsListInit){
 			m_bIsListInit = false;
 		}else{
-			m_iFolder_DBID = extra.getIntExtra(ExtraData_FolderDBID, CMemoInfo.Id_Invalid);
-			Cursor cursor = CommonDefine.getNoteDBCtrl(this).getNoteRec(m_iFolder_DBID);
-			cursor.moveToFirst();
-			int index = cursor.getColumnIndex(CNoteDBCtrl.KEY_detail);
-			m_strFolderName = cursor.getString(index);
-			TextView tvTitleText = (TextView) findViewById(R.id.custom_title_text);
-	        tvTitleText.setText(m_strFolderName);
-	        cursor.close();
+			if(extra!=null){
+				m_iFolder_DBID = extra.getIntExtra(ExtraData_FolderDBID, CMemoInfo.Id_Invalid);
+				if(m_iFolder_DBID!=CommonDefine.g_int_Invalid_ID){
+					Cursor cursor = CommonDefine.getNoteDBCtrl(this).getNoteRec(m_iFolder_DBID);
+					cursor.moveToFirst();
+					int index = cursor.getColumnIndex(CNoteDBCtrl.KEY_detail);
+					m_strFolderName = cursor.getString(index);
+					TextView tvTitleText = (TextView) findViewById(R.id.custom_title_text);
+			        tvTitleText.setText(m_strFolderName);
+			        cursor.close();
+				}
+			}
+			
 			m_NoteListUICtrl.updateListData(initListItemDBID);
 		}
 		setIntent(null);

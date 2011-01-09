@@ -23,7 +23,7 @@ public class FolderViewList extends Activity
 	private int m_iFolder_DBID = CommonDefine.g_int_Invalid_ID;
 	private NoteListUICtrl m_NoteListUICtrl;
 	private View m_toolBarLayout;
-
+	private boolean m_bIsListInit = false;
 	private ListUICtrlParam  UICtrlParam;
 	
 	/** Called when the activity is first created. */
@@ -59,6 +59,8 @@ public class FolderViewList extends Activity
 		
         m_NoteListUICtrl = new NoteListUICtrl(this, list, m_toolBarLayout,UICtrlParam );
         m_NoteListUICtrl.initializeSource();
+        m_bIsListInit = true;
+        
         ImageButton clBTMemoNewNote = (ImageButton) findViewById(R.id.folderviewlist_toolbar_newnote);
         clBTMemoNewNote.setOnClickListener(new Button.OnClickListener(){
         	public void onClick(View v)
@@ -100,17 +102,25 @@ public class FolderViewList extends Activity
 	{
 		super.onResume();
 		Intent extra = getIntent();
+		int initListItemDBID = CommonDefine.g_int_Invalid_ID;
 		if(extra!=null){
-			int initListItemDBID = extra.getIntExtra(ExtraData_initListItemDBID, CommonDefine.g_int_Invalid_ID);
-			if(initListItemDBID!=CommonDefine.g_int_Invalid_ID){
-				m_NoteListUICtrl.updateListData(initListItemDBID);
-			}else{
-				
-			}
-			setIntent(null);
+			initListItemDBID = extra.getIntExtra(ExtraData_initListItemDBID, CommonDefine.g_int_Invalid_ID);
 		}else{
-			
 		}
+		if(m_bIsListInit){
+			m_bIsListInit = false;
+		}else{
+			m_iFolder_DBID = extra.getIntExtra(ExtraData_FolderDBID, CMemoInfo.Id_Invalid);
+			Cursor cursor = CommonDefine.getNoteDBCtrl(this).getNoteRec(m_iFolder_DBID);
+			cursor.moveToFirst();
+			int index = cursor.getColumnIndex(CNoteDBCtrl.KEY_detail);
+			m_strFolderName = cursor.getString(index);
+			TextView tvTitleText = (TextView) findViewById(R.id.custom_title_text);
+	        tvTitleText.setText(m_strFolderName);
+	        cursor.close();
+			m_NoteListUICtrl.updateListData(initListItemDBID);
+		}
+		setIntent(null);
 	}
 	public void onDestroy()
 	{

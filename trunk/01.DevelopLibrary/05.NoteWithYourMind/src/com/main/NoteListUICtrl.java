@@ -378,89 +378,50 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 	
 	public void updateListData(int initListItemDBID){
 
-			/*如果是普通的List，使用preID到DB里进行检索, 用CursorAdapter与ListView进行绑定*/
-			if(m_myAdapter==null){
-					/*使用preID到DB里进行检索, 用CursorAdapter与ListView进行绑定*/
-				
-				Cursor cursor=null;
-				if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_NormalList){
-					if( m_ListUICtrlParam.g_int_PreID != CMemoInfo.Id_Invalid){
-						cursor = m_clCNoteDBCtrl.getNotesByID(m_ListUICtrlParam.g_int_PreID);
-					}else{
-						//error
-					}	
+		/*如果是普通的List，使用preID到DB里进行检索, 用CursorAdapter与ListView进行绑定*/
+		if(m_myAdapter==null){
+				/*使用preID到DB里进行检索, 用CursorAdapter与ListView进行绑定*/
+			
+			Cursor cursor=null;
+			if(m_ListUICtrlParam.g_enListType == ListUICtrlParam.ListTypeEnum.ListType_NormalList){
+				if( m_ListUICtrlParam.g_int_PreID != CMemoInfo.Id_Invalid){
+					cursor = m_clCNoteDBCtrl.getNotesByID(m_ListUICtrlParam.g_int_PreID);
 				}else{
-					cursor = m_clCNoteDBCtrl.getAllNotEncodeMemo();
-				}
-				
-				m_sourceManager.startManagingCursor(cursor);
-				List<CMemoInfo> Items = new ArrayList<CMemoInfo>();
-				m_myAdapter = new NoteListArrayAdapter( m_sourceManager, cursor, Items);
-				m_myAdapter.initData();
-				if(m_ListUICtrlParam.g_str_SearchKey != ""){
-					m_myAdapter.filterListByKeyWord(m_ListUICtrlParam.g_str_SearchKey);
-				}
-				
-				m_myAdapter.sortData(m_ListUICtrlParam.g_enSortType);
-				m_targetList.setAdapter(m_myAdapter);	
+					//error
+				}	
 			}else{
-				if(m_bIsDelete || m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
-	    			m_myAdapter.setSelectableStyle(true);
-				}else{
-					m_myAdapter.setSelectableStyle(false);
-				}
-				if(m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
-					m_myAdapter.setFolderSelectable(false);
-				}else{
-					m_myAdapter.setFolderSelectable(true);
-				}
-				m_myAdapter.updateCursor();
-				if(m_ListUICtrlParam.g_str_SearchKey != ""){
-					m_myAdapter.filterListByKeyWord(m_ListUICtrlParam.g_str_SearchKey);
-				}
-				
-				m_myAdapter.sortData(m_ListUICtrlParam.g_enSortType);
-				m_myAdapter.notifyDataSetChanged();
+				cursor = m_clCNoteDBCtrl.getAllNotEncodeMemo();
 			}
-
-//				if(m_myArrayListAdapter==null){
-////					if( m_ListUICtrlParam.g_bool_IsTextSearch )
-//					{
-//						Cursor cursor = m_clCNoteDBCtrl.getAllNotEncodeMemo();
-//						m_sourceManager.startManagingCursor(cursor);
-//						List<CMemoInfo> Items = new ArrayList<CMemoInfo>();
-//						m_myArrayListAdapter = new NoteListArrayAdapter( m_sourceManager, cursor, Items);
-//						m_myArrayListAdapter.initData();
-//						if(m_ListUICtrlParam.g_str_SearchKey != ""){
-//							m_myArrayListAdapter.filterListByKeyWord(m_ListUICtrlParam.g_str_SearchKey);
-//						}
-//						
-//						m_myArrayListAdapter.sortData(m_ListUICtrlParam.g_enSortType);
-//						m_targetList.setAdapter(m_myArrayListAdapter);					
-//					}
-////					else{
-////							//功能暂不开发
-////					}
-//
-//				}else{
-//
-//					if(m_bIsDelete || m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
-//		    			m_myArrayListAdapter.setSelectableStyle(true);
-//					}else{
-//						m_myArrayListAdapter.setSelectableStyle(false);
-//					}
-//					if(m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
-//						m_myArrayListAdapter.setFolderSelectable(false);
-//					}else{
-//						m_myArrayListAdapter.setFolderSelectable(true);
-//					}
-//
-//					m_myArrayListAdapter.notifyDataSetChanged();
-//
-//				}
-//
-//		}
-
+			
+			m_sourceManager.startManagingCursor(cursor);
+			List<CMemoInfo> Items = new ArrayList<CMemoInfo>();
+			m_myAdapter = new NoteListArrayAdapter( m_sourceManager, cursor, Items);
+			m_myAdapter.initData();
+			if(m_ListUICtrlParam.g_str_SearchKey != ""){
+				m_myAdapter.filterListByKeyWord(m_ListUICtrlParam.g_str_SearchKey);
+			}
+			
+			m_myAdapter.sortData(m_ListUICtrlParam.g_enSortType);
+			m_targetList.setAdapter(m_myAdapter);	
+		}else{
+			if(m_bIsDelete || m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
+    			m_myAdapter.setSelectableStyle(true);
+			}else{
+				m_myAdapter.setSelectableStyle(false);
+			}
+			if(m_MoveIn_State == MoveIn_State.MoveIn_SelectMoveItem){
+				m_myAdapter.setFolderSelectable(false);
+			}else{
+				m_myAdapter.setFolderSelectable(true);
+			}
+			m_myAdapter.updateCursor();
+			if(m_ListUICtrlParam.g_str_SearchKey != ""){
+				m_myAdapter.filterListByKeyWord(m_ListUICtrlParam.g_str_SearchKey);
+			}
+			
+			m_myAdapter.sortData(m_ListUICtrlParam.g_enSortType);
+			m_myAdapter.notifyDataSetChanged();
+		}
 
 		if(initListItemDBID!=CommonDefine.g_int_Invalid_ID){
 			/*

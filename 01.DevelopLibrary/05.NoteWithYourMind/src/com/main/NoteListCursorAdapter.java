@@ -59,7 +59,7 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
 		CMemoInfo clMemoInfo = new CMemoInfo();
 		ConvertCursorToMemoInfo.ConvertItem( cursor ,clMemoInfo);
 		
-		m_AdapterComPro.bindView(view,cbView,clMemoInfo,m_isSelectableStyle,m_isFolderSelectable,m_ListCheckBoxMapItem,m_ListItemDetail,m_ListItemSelectResult );
+		m_AdapterComPro.bindView(view,cbView,clMemoInfo,null,m_isSelectableStyle,m_isFolderSelectable,m_ListCheckBoxMapItem,m_ListItemDetail,m_ListItemSelectResult );
 	}
  
 	@Override

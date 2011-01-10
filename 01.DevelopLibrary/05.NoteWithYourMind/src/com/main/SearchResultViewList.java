@@ -165,7 +165,19 @@ implements ListActivityCtrl, View.OnClickListener
 //			m_NoteListUICtrl.processMoveClick(view);
 //			break;
 		case R.id.custom_title_back:
-			this.finish();
+			String strKeyword = m_ETKeyword.getText().toString();		
+			if( strKeyword != "" ){
+				strKeyword = "";
+				m_ETKeyword.setText(strKeyword);
+				m_SearchParam.g_enListType  = ListUICtrlParam.ListTypeEnum.ListType_SearchResultList;
+				m_SearchParam.g_str_SearchKey = strKeyword;
+				m_NoteListUICtrl.SetSearchParam( m_SearchParam);
+				m_NoteListUICtrl.updateListData(CommonDefine.g_int_Invalid_ID);				
+
+			}else{
+				this.finish();
+			}
+
 			break;
 		default:
 		}

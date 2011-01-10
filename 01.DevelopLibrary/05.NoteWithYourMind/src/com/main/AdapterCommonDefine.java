@@ -3,6 +3,9 @@ import java.util.HashMap;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -77,7 +80,7 @@ class AdapterCommonProcess{
 	}
 
 	
-	public void bindView ( View view ,CheckBox cbView,CMemoInfo clMemoInfo ,boolean isSelectableStyle,boolean isFolderSelectable,HashMap<CheckBox,CheckBoxMapItem> ListCheckBoxMapItem ,	HashMap<View,ItemDetail> ListItemDetail, HashMap<String,ItemSelectResult> ListItemSelectResult){
+	public void bindView ( View view ,CheckBox cbView,CMemoInfo clMemoInfo ,String  strSearchKeyWord, boolean isSelectableStyle,boolean isFolderSelectable,HashMap<CheckBox,CheckBoxMapItem> ListCheckBoxMapItem ,	HashMap<View,ItemDetail> ListItemDetail, HashMap<String,ItemSelectResult> ListItemSelectResult){
 
 		TextView tV = (TextView)view.findViewById(R.id.notelistitem_notetext);
 		TextView tvDate = (TextView)view.findViewById(R.id.notelistitem_notedate);
@@ -240,8 +243,33 @@ class AdapterCommonProcess{
 		//建立Item控件和对应的DB记录信息的对应关系
 		ListItemDetail.put(view, itemdetail);
 		
-		tV.setText(sDetail);
-		
+		if( strSearchKeyWord != null ){
+			if( strSearchKeyWord.length() > 0 ){
+				SpannableStringBuilder style=new SpannableStringBuilder(sDetail);
+				int keyLength = strSearchKeyWord.length();
+				int MemoLength = sDetail.length();
+				int Pos = 0;
+				int lastFindPos = -keyLength;
+
+				while(( MemoLength-(lastFindPos+keyLength))>= keyLength ){					
+					Pos = sDetail.indexOf(strSearchKeyWord,(lastFindPos+keyLength) );
+					if( Pos !=  -1) {						
+						style.setSpan(new ForegroundColorSpan(Color.argb(255, 0, 255, 255)),Pos,(Pos+keyLength),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+						lastFindPos = Pos;
+					}else{
+						break;
+					}
+				}
+					
+				tV.setText(style);
+			}else{
+				tV.setText( sDetail );
+			}
+		}
+		else{
+			tV.setText( sDetail );
+		}
+
 		return ;
 	}
 	

@@ -27,7 +27,7 @@ class CommonDefine{
 	public static String 					g_str_PassWord = "";
 	public static String 					ExtraData_EditNoteID        =    "com.main.ExtraData_EditNoteID"; 
 	public static String 					ExtraData_Remind_Flg        =    "com.main.ExtraData_Remind_Flg"; 
-	public static String 					ExtraData_Remind_File		=    "com.main.ExtraData_Remind_File"; 
+	public static String 					ExtraData_Remind_File		=    "ExtraData_Remind_File"; 
 	public static boolean 					g_bool_IsPassWordChecked = false;
 
 	private static	CNoteDBCtrl				m_clCNoteDBCtrl = null;

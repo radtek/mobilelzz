@@ -176,4 +176,35 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
     	
     	return	strTemp;
     }
+    
+    static	String	getDayofWeek2( Calendar	clCalendar )
+    {
+    	String	strTemp	=	null;
+    	switch( clCalendar.get(Calendar.DAY_OF_WEEK) )
+    	{
+    	case	1:
+    		strTemp	=	"本周日";
+    		break;
+    	case	2:
+    		strTemp	=	"本周一";
+    		break;
+    	case	3:
+    		strTemp	=	"本周二";
+    		break;
+    	case	4:
+    		strTemp	=	"本周三";
+    		break;
+    	case	5:
+    		strTemp	=	"本周四";
+    		break;
+    	case	6:
+    		strTemp	=	"本周五";
+    		break;
+    	case	7:
+    		strTemp	=	"本周六";
+    		break;
+    	}
+    	
+    	return	strTemp;
+    }
 }

@@ -28,10 +28,10 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 	private		CCountdownDlg	m_clCCountdownDlg	=	null;
 	
 	private		CheckBox		m_cbRing		=	null;
-	private		CheckBox		m_cbVibrate	=	null;
+	private		CheckBox		m_cbVibrate		=	null;
 	private 	RadioGroup 		m_RadioGroupTime;
 	private 	RadioGroup 		m_RadioGroupDate;
-	public	static	int			m_iType	=	CommonDefine.g_int_Invalid_ID;
+	public	static	int			m_iType			=	CommonDefine.g_int_Invalid_ID;
 	
 	//btn
 	TextView	btCountdown	=	null;
@@ -44,7 +44,7 @@ public class RemindActivity extends Activity	implements View.OnClickListener
 	
 	TextView	TimeTxt	=	null;
 	TextView	CountDownTxt	=	null;
-	TextView	DateTxt	=	null;
+	TextView	DateTxt			=	null;
 	
 	boolean		m_bInputflg		=	false;
 	

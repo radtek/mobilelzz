@@ -96,10 +96,10 @@ public class CMemoInfo {
 		{
 			strTemp		=	String.format( "%02d:%02d", clCalendar.get(Calendar.HOUR_OF_DAY), clCalendar.get(Calendar.MINUTE) );
 		}
-		else if( System.currentTimeMillis() - _lTime < CRemindInfo.ONE_WEEK_TIME )
+		else if( clCalendar.get(Calendar.YEAR) == clCalendarCur.get(Calendar.YEAR) 
+			&& clCalendar.get(Calendar.WEEK_OF_YEAR) == clCalendarCur.get(Calendar.WEEK_OF_YEAR))
 		{
-			strTemp		=	CDateDlg.getDayofWeek(clCalendar);
-			strTemp.replace("ÐÇÆÚ","±¾ÖÜ");
+			strTemp		=	CDateDlg.getDayofWeek2(clCalendar);
 		}
 		else
 		{

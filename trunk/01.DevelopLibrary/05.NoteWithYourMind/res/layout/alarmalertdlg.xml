@@ -21,6 +21,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		android:singleLine="true" 
 		>
 		</TextView>
+		<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		>
 		<Button
 		android:id="@+id/RemindAgainBt"
 		android:layout_width="fill_parent"
@@ -41,6 +45,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_marginRight="40px"
 		android:text="关闭">
 		</Button>
+		</LinearLayout>
 		</LinearLayout>
 </LinearLayout>
 

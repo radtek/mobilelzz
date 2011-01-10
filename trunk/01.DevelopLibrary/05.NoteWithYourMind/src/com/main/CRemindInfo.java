@@ -183,7 +183,7 @@ public class CRemindInfo implements Serializable
 		
 		m_lTime	=	clCalendar.getTimeInMillis();
 		
-		m_lTime	+=	( ( iHour * 60 + iMinute + 1 ) * 60 ) * 1000;
+		m_lTime	+=	( ( iHour * 60 + iMinute ) * 60 ) * 1000;
 	}
 	
 	public	void	getCutDownTime( CDateAndTime clCDateAndTime )

@@ -20,10 +20,11 @@ public class BootReceiver extends BroadcastReceiver {
 		SharedPreferences	sp = ctx.getSharedPreferences(CommonDefine.ExtraData_Remind_File, Context.MODE_WORLD_WRITEABLE); 
 		if( null != sp )
 		{
-			sp.edit().putInt(CommonDefine.ExtraData_Remind_Flg, CommonDefine.iNotWorking);
-			sp.edit().commit();
+	      	SharedPreferences.Editor editor = sp.edit();
+	    	editor.putInt(CommonDefine.ExtraData_Remind_Flg, CommonDefine.iWorking);
+	    	editor.commit();
 		}
-
+		
 		Cursor clCursor	=	clCNoteDBCtrl.getRemindInfo();	
 		if ( !clCursor.moveToFirst() )
 		{

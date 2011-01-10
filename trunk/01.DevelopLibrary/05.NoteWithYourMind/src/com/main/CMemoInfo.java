@@ -103,7 +103,7 @@ public class CMemoInfo {
 		}
 		else
 		{
-			strTemp		=	String.format( "%04d/%02d/%02d", clCalendar.get(Calendar.YEAR),clCalendar.get(Calendar.DAY_OF_MONTH) + 1, clCalendar.get(Calendar.DAY_OF_MONTH) );
+			strTemp		=	String.format( "%04d/%02d/%02d", clCalendar.get(Calendar.YEAR),clCalendar.get(Calendar.MONTH) + 1, clCalendar.get(Calendar.DAY_OF_MONTH) );
 		}
 		
 		return	strTemp;

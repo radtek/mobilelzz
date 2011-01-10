@@ -170,6 +170,17 @@ public class CAlarmAlertDlg extends Dialog implements View.OnClickListener , Med
 	
 	void	processAgain()
 	{
+		  if( CMemoInfo.Ring_On == m_iIsRing )
+		  {
+	    	  mp.stop();
+	    	  mp.release();	  
+		  }
+		  
+		  if ( CMemoInfo.Vibrate_On == m_iIsVibrate )
+		  {
+			  vibrator.cancel();
+		  }
+		
 		final String[] AgainTypes = {"5分钟后","10分钟后","15分钟后","20分钟后","30分钟后","1小时后","2小时后"};
 		new AlertDialog.Builder(m_Activity) 
 		.setTitle("请选择再次提醒的时间") 
@@ -220,17 +231,6 @@ public class CAlarmAlertDlg extends Dialog implements View.OnClickListener , Med
 	
 	void	sudProcessAgain( long _lMinute )
 	{
-		  if( CMemoInfo.Ring_On == m_iIsRing )
-		  {
-	    	  mp.stop();
-	    	  mp.release();	  
-		  }
-		  
-		  if ( CMemoInfo.Vibrate_On == m_iIsVibrate )
-		  {
-			  vibrator.cancel();
-		  }
-		
 		Calendar clCalendar     =     Calendar.getInstance();
         clCalendar.setTimeInMillis(System.currentTimeMillis());
         

@@ -154,7 +154,7 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 
 		clMemoInfo	=getItem(position);	
 		
-		m_AdapterComPro.bindView(view,cbView,clMemoInfo,m_isSelectableStyle,m_isFolderSelectable,m_ListCheckBoxMapItem,m_ListItemDetail,m_ListItemSelectResult );
+		m_AdapterComPro.bindView(view,cbView,clMemoInfo,m_SearchKeyWord,m_isSelectableStyle,m_isFolderSelectable,m_ListCheckBoxMapItem,m_ListItemDetail,m_ListItemSelectResult );
 
 
         return view;

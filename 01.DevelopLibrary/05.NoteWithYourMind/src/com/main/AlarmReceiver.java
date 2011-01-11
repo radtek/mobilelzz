@@ -15,14 +15,18 @@ public class AlarmReceiver extends BroadcastReceiver
 	public void onReceive(Context context, Intent intent)
 	{
 		int id	=	intent.getIntExtra(CommonDefine.ExtraData_EditNoteID, -1);
+		if ( -1 == id )
+		{
+			return;
+		}
+		
+	    //更新提醒状态
+	    CRemindOperator	clCRemindOperator	=	  CRemindOperator.getInstance(context);  
+	    clCRemindOperator.alarmAlert(context, id );
 		
 	    Intent iIntent = new Intent(context, AlarmAlert.class);    
 	    iIntent.putExtra(CommonDefine.ExtraData_EditNoteID, id);
 	    iIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	    context.startActivity( iIntent );
-	    
-	    //更新提醒状态
-	    CRemindOperator	clCRemindOperator	=	  CRemindOperator.getInstance(context);  
-	    clCRemindOperator.alarmAlert(context, id );
 	}
 }

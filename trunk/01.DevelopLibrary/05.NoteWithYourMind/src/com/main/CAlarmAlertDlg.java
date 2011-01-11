@@ -49,7 +49,7 @@ public class CAlarmAlertDlg extends Dialog implements View.OnClickListener , Med
 	
 	public void setDisplay( String	_Detail, int _id, int _iIsRing, int _iIsVibrate )
 	{
-        setContentView( R.layout.alarmalertdlg );
+//        setContentView( R.layout.alarmalertdlg );
         CommonDefine.getMediaPhoneCallListener(m_Activity).advise(this);
         setProperty();
 
@@ -278,9 +278,7 @@ public class CAlarmAlertDlg extends Dialog implements View.OnClickListener , Med
     }
 	
 	void	processClose()
-	{
-		CommonDefine.getMediaPhoneCallListener(m_Activity).unadvise(this);
-		
+	{	
 		  if( CMemoInfo.Ring_On == m_iIsRing )
 		  {
 	    	  mp.stop();

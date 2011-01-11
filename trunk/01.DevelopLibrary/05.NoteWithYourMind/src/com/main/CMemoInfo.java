@@ -81,7 +81,7 @@ public class CMemoInfo {
 		iIsHaveAudioData = IsHaveAudioData_Invalid;
 		strAudioFileName = null;
 	}
-	
+	 
 	static	String	getTimeForListItem( long _lTime )
 	{
 		String	strTemp	=	null;
@@ -99,7 +99,11 @@ public class CMemoInfo {
 		else if( clCalendar.get(Calendar.YEAR) == clCalendarCur.get(Calendar.YEAR) 
 			&& clCalendar.get(Calendar.WEEK_OF_YEAR) == clCalendarCur.get(Calendar.WEEK_OF_YEAR))
 		{
-			strTemp		=	CDateDlg.getDayofWeek2(clCalendar);
+			if( 1 != clCalendar.get(Calendar.DAY_OF_WEEK))
+			{
+				strTemp		=	CDateDlg.getDayofWeek2(clCalendar);
+			}
+			
 		}
 		else
 		{

@@ -65,9 +65,7 @@ public class CCountdownDlg extends CommentOutDlg implements View.OnClickListener
         
         wl.x		=	m_iPosX;											
         wl.y		=	m_iPosX;		
-//        wl.width	=	300;
-        
-       
+             
         window.setAttributes( wl );        
    }
     public void onClick(View view)

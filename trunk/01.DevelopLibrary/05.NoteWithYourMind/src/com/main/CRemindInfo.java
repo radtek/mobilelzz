@@ -178,8 +178,8 @@ public class CRemindInfo implements Serializable
 	{
 		Calendar clCalendar	=	Calendar.getInstance();
 		clCalendar.setTimeInMillis(System.currentTimeMillis());
-		clCalendar.set(Calendar.SECOND, 0 );
-		clCalendar.set(Calendar.MILLISECOND, 0 );
+//		clCalendar.set(Calendar.SECOND, 0 );
+//		clCalendar.set(Calendar.MILLISECOND, 0 );
 		
 		m_lTime	=	clCalendar.getTimeInMillis();
 		
@@ -194,10 +194,10 @@ public class CRemindInfo implements Serializable
 		long	lCur	=	clCalendar.getTimeInMillis();
 		long	lTemp	=	m_lTime	-	lCur;
 		
-		clCDateAndTime.iHour	=	new	Integer((int)(lTemp / 1000 / 60/ 60 ));
+		clCDateAndTime.iHour	=	(int)(lTemp / 1000 / 60/ 60 );
 		lTemp   -=	( clCDateAndTime.iHour * 1000 * 60 * 60 );
 		
-		clCDateAndTime.iMinute	=	new	Integer((int)( lTemp / 1000 / 60 ));
+		clCDateAndTime.iMinute	=	(int)( lTemp / 1000 / 60 ) + 1;
 	}
 	
 	public	void	setNormalTime( int iHour, int iMinute, int iYear, int iMonth, int iDay )
@@ -226,10 +226,10 @@ public class CRemindInfo implements Serializable
 			clCalendar.setTimeInMillis(System.currentTimeMillis());
 			
 			long	lCur	=	clCalendar.getTimeInMillis();
-			if( m_iType == CommonDefine.Remind_Type_CountDown )
-			{
-				lCur	+=	( 1000 * 60 );
-			}
+//			if( m_iType == CommonDefine.Remind_Type_CountDown )
+//			{
+//				lCur	+=	( 1000 * 60 );
+//			}
 			
 			if ( lCur > m_lTime )
 			{

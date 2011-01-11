@@ -402,11 +402,11 @@ public class CNoteDBCtrl extends SQLiteOpenHelper {
 				cv.put(KEY_audioDataName, clCMemoInfo.strAudioFileName);
 			}
 			
-			if ( -1 != clCMemoInfo.iIsHaveAudioData)
+			if ( -1 != clCMemoInfo.iRing)
 			{
 				cv.put(KEY_isRing, clCMemoInfo.iRing);
 			}
-			if ( -1 != clCMemoInfo.iIsHaveAudioData)
+			if ( -1 != clCMemoInfo.iVibrate)
 			{
 				cv.put(KEY_isVibrate, clCMemoInfo.iVibrate);
 			}

@@ -176,7 +176,7 @@ public class CDateDlg extends CommentOutDlg implements View.OnClickListener
     	
     	return	strTemp;
     }
-    
+     
     static	String	getDayofWeek2( Calendar	clCalendar )
     {
     	String	strTemp	=	null;

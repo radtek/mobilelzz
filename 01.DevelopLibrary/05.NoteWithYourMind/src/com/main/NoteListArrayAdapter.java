@@ -205,9 +205,20 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 		    }
 		} 
 	}
-	public boolean isFolder(View view){
-		ItemDetail detail = m_ListItemDetail.get(view);
-		return detail.bIsFolder;
+	public boolean isFolder(int position){
+//		ItemDetail detail = m_ListItemDetail.get(view);
+
+		boolean bRet = false;
+
+		CMemoInfo clMemoInfo = new CMemoInfo();
+
+		clMemoInfo	=getItem(position);
+
+		if(clMemoInfo.iType == CMemoInfo.Type_Folder){
+			bRet = true;
+		}
+		
+		return bRet;
 	}
 //	public int getListPreDBID(){
 //		return m_listPreDBID;
@@ -216,14 +227,27 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 //		return m_isRemind;
 //	}
 
-	public int getListDBID(View view){
-		ItemDetail detail = m_ListItemDetail.get(view);
-		return detail.iDBRecID;
+	public int getListDBID(int position){
+
+		CMemoInfo clMemoInfo = new CMemoInfo();
+
+		clMemoInfo	=getItem(position);
+		
+		return clMemoInfo.iId;
 	}
 
-	public boolean getListIsEncode(View view){
-		ItemDetail detail = m_ListItemDetail.get(view);
-		return detail.bIsEncode;
+	public boolean getListIsEncode(int position){
+
+		boolean bRet = false;
+
+		CMemoInfo clMemoInfo = new CMemoInfo();
+
+		clMemoInfo	=getItem(position);
+
+		if(clMemoInfo.iIsEncode == CMemoInfo.IsEncode_Yes){
+			bRet = true;
+		}
+		return bRet;
 	}	
 	
 }

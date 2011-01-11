@@ -387,18 +387,20 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 //		}
 //		return true;
 //	}
-	public void onCreateContextMenu(ContextMenu menu, View v,  
-            ContextMenuInfo menuInfo) {  
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {  
 		super.onCreateContextMenu(menu, v, menuInfo); 
 
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
-		if(m_NoteListUICtrl.isFolder(((ListView)v).getChildAt(info.position))){
+		if(m_NoteListUICtrl.isFolder( info.position)){
 			menu.add(0, 0, 0, "修改名称");  
-			if(m_NoteListUICtrl.getListIsEncode(((ListView)v).getChildAt(info.position))){
+			if(m_NoteListUICtrl.getListIsEncode(info.position)){
 				menu.add(0, 1, 0, "取消查看锁"); 
 			}else{
 				menu.add(0, 1, 0, "设置查看锁"); 
 			}
+		}
+		else{
+
 		}
 		
 	}  
@@ -421,8 +423,8 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 		//	首先取得list上对应文件夹名称 设置dialog上文本框内显示旧文件夹名  
 		Cursor cursorFolderList = null;	
 		String oldfolderName =""; 
-		ListView list = (ListView) findViewById(R.id.rootviewlist_list);
-		m_iContextMenu_DBID = m_NoteListUICtrl.getListDBID(((ListView)list).getChildAt(info.position));
+//		ListView list = (ListView) findViewById(R.id.rootviewlist_list);
+		m_iContextMenu_DBID = m_NoteListUICtrl.getListDBID(info.position);
 		
 		cursorFolderList = m_clCNoteDBCtrl.getNoteRec(m_iContextMenu_DBID);
 		if(cursorFolderList.getCount()>0){
@@ -481,8 +483,8 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 		//	首先取得list上对应文件夹的加密现状:已加密?未加密?
 		Cursor cursorFolderList = null;	
 		int iEncodeFlag = CMemoInfo.IsEncode_No;
-		ListView list = (ListView) findViewById(R.id.rootviewlist_list);
-		m_iContextMenu_DBID = m_NoteListUICtrl.getListDBID(((ListView)list).getChildAt(info.position));
+//		ListView list = (ListView) findViewById(R.id.rootviewlist_list);
+		m_iContextMenu_DBID = m_NoteListUICtrl.getListDBID(info.position);
 		
 		cursorFolderList = m_clCNoteDBCtrl.getNoteRec(m_iContextMenu_DBID);
        	startManagingCursor(cursorFolderList);

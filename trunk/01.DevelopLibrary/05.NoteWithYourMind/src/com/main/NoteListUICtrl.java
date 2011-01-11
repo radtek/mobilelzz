@@ -439,16 +439,16 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		}
 	}
 	
-	public boolean isFolder(View view){
-		return m_myAdapter.isFolder(view);
+	public boolean isFolder(int Position){
+		return m_myAdapter.isFolder(Position);
 	}
 	
-	public boolean getListIsEncode(View view){
-		return m_myAdapter.getListIsEncode(view);
+	public boolean getListIsEncode(int Position){
+		return m_myAdapter.getListIsEncode(Position);
 	}
 	
-	public int getListDBID(View view){
-		return m_myAdapter.getListDBID(view);
+	public int getListDBID(int Position){
+		return m_myAdapter.getListDBID(Position);
 	}
 	
 	private void Return2TargetList()

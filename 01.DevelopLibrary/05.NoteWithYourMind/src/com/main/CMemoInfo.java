@@ -81,7 +81,7 @@ public class CMemoInfo {
 		iIsHaveAudioData = IsHaveAudioData_Invalid;
 		strAudioFileName = null;
 	}
-	 
+	
 	static	String	getTimeForListItem( long _lTime )
 	{
 		String	strTemp	=	null;

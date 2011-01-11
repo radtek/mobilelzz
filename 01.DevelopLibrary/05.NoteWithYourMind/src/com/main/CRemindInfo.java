@@ -178,8 +178,8 @@ public class CRemindInfo implements Serializable
 	{
 		Calendar clCalendar	=	Calendar.getInstance();
 		clCalendar.setTimeInMillis(System.currentTimeMillis());
-//		clCalendar.set(Calendar.SECOND, 0 );
-//		clCalendar.set(Calendar.MILLISECOND, 0 );
+		clCalendar.set(Calendar.SECOND, 0 );
+		clCalendar.set(Calendar.MILLISECOND, 0 );
 		
 		m_lTime	=	clCalendar.getTimeInMillis();
 		

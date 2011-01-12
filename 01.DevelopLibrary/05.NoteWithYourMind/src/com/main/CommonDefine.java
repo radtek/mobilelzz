@@ -198,10 +198,11 @@ class ListUICtrlParam{
 	public String g_str_SearchKey;
 }
 
-class SortByRemindFirst implements  Comparator<CMemoInfo> {
+class SortByRemindFirst implements  Comparator<ArrayListItem> {
 
-	public int  compare(CMemoInfo object1, CMemoInfo object2) {
-
+	public int  compare(ArrayListItem item1, ArrayListItem item2) {
+		CMemoInfo object1  = item1.clDBRecInfo;
+		CMemoInfo object2  = item2.clDBRecInfo;
 		CommonDefine.PrepareProc(object1);
 		CommonDefine.PrepareProc(object2);		
 
@@ -276,9 +277,11 @@ class SortByRemindFirst implements  Comparator<CMemoInfo> {
 		
 }
 
-class SortForRootList implements  Comparator<CMemoInfo> {
+class SortForRootList implements  Comparator<ArrayListItem> {
 	private Comparator cmp = Collator.getInstance(java.util.Locale.CHINA);
-	public int  compare(CMemoInfo object1, CMemoInfo object2) {
+	public int  compare(ArrayListItem item1, ArrayListItem item2) {
+		CMemoInfo object1  = item1.clDBRecInfo;
+		CMemoInfo object2  = item2.clDBRecInfo;
 		int iRet = 0;
 		CommonDefine.PrepareProc(object1);
 		CommonDefine.PrepareProc(object2);		
@@ -298,9 +301,11 @@ class SortForRootList implements  Comparator<CMemoInfo> {
 
 
 //通过便签修改时间排序，最新的修改的，排在最上面
-class SortByLastModifyTime implements  Comparator<CMemoInfo> {
+class SortByLastModifyTime implements  Comparator<ArrayListItem> {
 
-	public int  compare(CMemoInfo object1, CMemoInfo object2) {
+	public int  compare(ArrayListItem item1, ArrayListItem item2) {
+		CMemoInfo object1  = item1.clDBRecInfo;
+		CMemoInfo object2  = item2.clDBRecInfo;
 
 		return (int)(object2.dLastModifyTime - object1.dLastModifyTime);	
 
@@ -309,10 +314,11 @@ class SortByLastModifyTime implements  Comparator<CMemoInfo> {
 }
 
 
-class SortByVoiceFirst implements  Comparator<CMemoInfo> {
+class SortByVoiceFirst implements  Comparator<ArrayListItem> {
 
-	public int  compare(CMemoInfo object1, CMemoInfo object2) {
-
+	public int  compare(ArrayListItem item1, ArrayListItem item2) {
+		CMemoInfo object1  = item1.clDBRecInfo;
+		CMemoInfo object2  = item2.clDBRecInfo;
 		CommonDefine.PrepareProc(object1);
 		CommonDefine.PrepareProc(object2);
 
@@ -329,10 +335,11 @@ class SortByVoiceFirst implements  Comparator<CMemoInfo> {
 	}
 }
 
-class SortByTextFirst implements  Comparator<CMemoInfo> {
+class SortByTextFirst implements  Comparator<ArrayListItem> {
 
-	public int  compare(CMemoInfo object1, CMemoInfo object2) {
-
+	public int  compare(ArrayListItem item1, ArrayListItem item2) {
+		CMemoInfo object1  = item1.clDBRecInfo;
+		CMemoInfo object2  = item2.clDBRecInfo;
 		CommonDefine.PrepareProc(object1);
 		CommonDefine.PrepareProc(object2);
 
@@ -373,18 +380,17 @@ class SortByTextFirst implements  Comparator<CMemoInfo> {
 
 class ConvertCursorToMemoInfo {
 
-	static public void ConvertItems( Cursor cursor ,List<CMemoInfo> Items)
+	static public void ConvertItems( Cursor cursor ,List<ArrayListItem> Items)
 	{
 		if ( cursor.getCount() > 0 )
 		{			
 			cursor.moveToFirst();			
 			do
 			{
-				CMemoInfo clCMemoInfo	=	new	CMemoInfo();
+				ArrayListItem clItem	=	new	ArrayListItem();
+				ConvertItem(cursor,clItem.clDBRecInfo);
 
-				ConvertItem(cursor,clCMemoInfo);
-
-				Items.add(clCMemoInfo);	
+				Items.add(clItem);	
 					
 			}while( cursor.moveToNext() );			
 		}

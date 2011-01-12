@@ -1,42 +1,34 @@
 package com.main;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
-import android.widget.Button;
-import android.widget.TimePicker;
-import android.app.AlertDialog;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
-import android.content.DialogInterface;
-import android.widget.EditText;
-import android.view.Gravity;
-import android.widget.Toast;
-import android.widget.ImageButton;
+import android.content.Context;
+import android.database.Cursor;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
-public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
+class ArrayListItem{
+	CMemoInfo clDBRecInfo;
+	boolean bIsSelected;
+	ArrayListItem(){
+		clDBRecInfo = new CMemoInfo();
+		bIsSelected = false;
+	}
+}
 
-	private HashMap<String,ItemSelectResult> m_ListItemSelectResult;
+public class NoteListArrayAdapter extends ArrayAdapter<ArrayListItem> {
+
 	private HashMap<CheckBox,CheckBoxMapItem> m_ListCheckBoxMapItem;
-	private HashMap<View,ItemDetail> m_ListItemDetail;
 	private boolean m_isSelectableStyle = false;
 	private boolean m_isFolderSelectable = true;
 	private LayoutInflater m_inflater;
@@ -52,19 +44,17 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 	private String  m_SearchKeyWord = "";
 	private AdapterCommonProcess m_AdapterComPro;	
 	
-	private List<CMemoInfo> m_arrayItems;
+	private List<ArrayListItem> m_arrayItems;
 
     private static final int mResource = R.layout.notelistitem; 
 
-    public NoteListArrayAdapter(Context context, Cursor cur, List<CMemoInfo> items) {
+    public NoteListArrayAdapter(Context context, Cursor cur, List<ArrayListItem> items) {
 
         super(context, mResource, items);
 		m_inflater = LayoutInflater.from(context);
 		m_cursor = cur;
 		m_arrayItems = items;
-		m_ListItemSelectResult = new HashMap<String,ItemSelectResult>();
 		m_ListCheckBoxMapItem = new HashMap<CheckBox,CheckBoxMapItem>();
-		m_ListItemDetail = new HashMap<View,ItemDetail>();
 		m_listPreDBID = CommonDefine.g_int_Invalid_ID;
 		m_isRemind = CommonDefine.g_int_Invalid_ID;
 		m_AdapterComPro = new AdapterCommonProcess(context);
@@ -86,7 +76,7 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 	}
 	
 	public long getItemId(int i){
-		int iDBID = m_arrayItems.get(i).iId;
+		int iDBID = m_arrayItems.get(i).clDBRecInfo.iId;
 		return iDBID;
 	}
     
@@ -123,24 +113,10 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
     		cbView.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
     			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
             	{
-    				ItemSelectResult result = new ItemSelectResult();
-            		if(isChecked)
-            		{
-            			result.bIsSelected = true;        			
-            		}else{
-            			result.bIsSelected = false;        
-            		}
-            		//根据CheckBox和DBID的对应关系，更新DBID的选择状态
         			CheckBoxMapItem mapItem = m_ListCheckBoxMapItem.get(buttonView);
         			if(mapItem!=null){
-        				result.iDBRecID = mapItem.iDBRecID;
-        				ItemDetail detail = m_ListItemDetail.get(mapItem.itemView);
-        				if(detail!=null){
-        					result.bIsHaveAudioData = detail.bIsHaveAudioData;
-        					result.strAudioFileName = detail.strAudioFileName;
-        					result.bIsFolder = detail.bIsFolder;
-        				}
-        				m_ListItemSelectResult.put(String.valueOf(mapItem.iDBRecID), result);
+        				ArrayListItem clItem	=getItem(mapItem.iPosition);
+        				clItem.bIsSelected  = isChecked;
         			}	        
             	}
     		});
@@ -148,9 +124,14 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
             view = convertView;
         }
 //		CMemoInfo clMemoInfo = new CMemoInfo();
-		CMemoInfo clMemoInfo	=getItem(position);	
+        ArrayListItem clItem	=getItem(position);	
+        CheckBox cbView = (CheckBox) view.findViewById(R.id.notelistitem_noteselect);
+		CheckBoxMapItem mapItem = new CheckBoxMapItem();
+		mapItem.checkBox = cbView;
+		mapItem.iPosition = position;
+		m_ListCheckBoxMapItem.put(cbView, mapItem);
 		
-		m_AdapterComPro.bindView(view,clMemoInfo,m_SearchKeyWord,m_isSelectableStyle,m_isFolderSelectable,m_ListCheckBoxMapItem,m_ListItemDetail,m_ListItemSelectResult );
+		m_AdapterComPro.bindView(view,clItem,m_SearchKeyWord,m_isSelectableStyle,m_isFolderSelectable);
 
         return view;
     }
@@ -162,7 +143,7 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 		int Count = m_arrayItems.size();
 		for(int i=Count-1;i>=0;i--)
 		{			
-			CMemoInfo clCMemoInfo	= m_arrayItems.get(i);
+			CMemoInfo clCMemoInfo	= m_arrayItems.get(i).clDBRecInfo;
 			String sDetail=clCMemoInfo.strDetail;
 			if( sDetail.indexOf(str) ==  -1) 
 			{
@@ -172,7 +153,11 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 	}
 
 	public void clearSelectResult(){
-		m_ListItemSelectResult.clear();
+		int count = m_arrayItems.size();
+		for(int i = 0; i < count; i++){
+			ArrayListItem item = m_arrayItems.get(i);
+			item.bIsSelected = false;
+		}
 	}
 
 	public void setSelectableStyle(boolean bEnable){
@@ -186,28 +171,36 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 		m_clCNoteDBCtrl = clCNoteDBCtrl;
 	}
 	public void getSelectItemDBID(ArrayList<DetailInfoOfSelectItem> alIDs){
-		Iterator iter = m_ListItemSelectResult.entrySet().iterator(); 
-		while (iter.hasNext()) { 
-			Map.Entry entry = (Map.Entry) iter.next(); 
-		    ItemSelectResult val = (ItemSelectResult)entry.getValue(); 
-		    if(val.bIsSelected){
-		    	DetailInfoOfSelectItem detail = new DetailInfoOfSelectItem();
-		    	detail.iDBRecID = Integer.valueOf((String)entry.getKey());
-		    	detail.bIsHaveAudioData = val.bIsHaveAudioData;
-		    	detail.strAudioFileName = val.strAudioFileName;
-		    	detail.bIsFolder = val.bIsFolder;
+		int count = m_arrayItems.size();
+		for(int i = 0; i < count; i++){
+			ArrayListItem item = m_arrayItems.get(i);
+			if(item.bIsSelected){
+				DetailInfoOfSelectItem detail = new DetailInfoOfSelectItem();
+		    	detail.iDBRecID = item.clDBRecInfo.iId;
+		    	detail.bIsHaveAudioData = item.clDBRecInfo.iIsHaveAudioData == CMemoInfo.IsHaveAudioData_Yes?true:false;
+		    	detail.strAudioFileName = item.clDBRecInfo.strAudioFileName;
+		    	detail.bIsFolder = item.clDBRecInfo.iType == CMemoInfo.Type_Folder?true:false;
 		    	alIDs.add(detail);
-		    }
-		} 
+			}
+		}
+		
+//		Iterator iter = m_ListItemSelectResult.entrySet().iterator(); 
+//		while (iter.hasNext()) { 
+//			Map.Entry entry = (Map.Entry) iter.next(); 
+//		    ItemSelectResult val = (ItemSelectResult)entry.getValue(); 
+//		    if(val.bIsSelected){
+//		    	DetailInfoOfSelectItem detail = new DetailInfoOfSelectItem();
+//		    	detail.iDBRecID = Integer.valueOf((String)entry.getKey());
+//		    	detail.bIsHaveAudioData = val.bIsHaveAudioData;
+//		    	detail.strAudioFileName = val.strAudioFileName;
+//		    	detail.bIsFolder = val.bIsFolder;
+//		    	alIDs.add(detail);
+//		    }
+//		} 
 	}
 	public boolean isFolder(int position){
-//		ItemDetail detail = m_ListItemDetail.get(view);
-
 		boolean bRet = false;
-
-		CMemoInfo clMemoInfo = new CMemoInfo();
-
-		clMemoInfo	=getItem(position);
+		CMemoInfo clMemoInfo	=getItem(position).clDBRecInfo;
 
 		if(clMemoInfo.iType == CMemoInfo.Type_Folder){
 			bRet = true;
@@ -223,21 +216,14 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
 //	}
 
 	public int getListDBID(int position){
-
-		CMemoInfo clMemoInfo = new CMemoInfo();
-
-		clMemoInfo	=getItem(position);
+		CMemoInfo clMemoInfo	=getItem(position).clDBRecInfo;
 		
 		return clMemoInfo.iId;
 	}
 
 	public boolean getListIsEncode(int position){
-
 		boolean bRet = false;
-
-		CMemoInfo clMemoInfo = new CMemoInfo();
-
-		clMemoInfo	=getItem(position);
+		CMemoInfo clMemoInfo	=getItem(position).clDBRecInfo;
 
 		if(clMemoInfo.iIsEncode == CMemoInfo.IsEncode_Yes){
 			bRet = true;

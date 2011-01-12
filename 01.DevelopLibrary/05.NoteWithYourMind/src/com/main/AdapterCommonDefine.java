@@ -25,49 +25,49 @@ class DetailInfoOfSelectItem{
 	}
 }
 
-class ItemSelectResult{
-	int iDBRecID;
-	boolean bIsSelected;
-	int iItemPos;
-	boolean bIsHaveAudioData;
-	boolean bIsFolder;
-	String strAudioFileName;
-	ItemSelectResult(){
-		iDBRecID = CommonDefine.g_int_Invalid_ID;
-		bIsSelected = false;
-		bIsHaveAudioData = false;
-		bIsFolder = false;
-		strAudioFileName = null;
-	}
-}
+//class ItemSelectResult{
+//	int iDBRecID;
+//	boolean bIsSelected;
+//	int iItemPos;
+//	boolean bIsHaveAudioData;
+//	boolean bIsFolder;
+//	String strAudioFileName;
+//	ItemSelectResult(){
+//		iDBRecID = CommonDefine.g_int_Invalid_ID;
+//		bIsSelected = false;
+//		bIsHaveAudioData = false;
+//		bIsFolder = false;
+//		strAudioFileName = null;
+//	}
+//}
 class CheckBoxMapItem{
-	int iDBRecID;
+	int iPosition;
 	CheckBox checkBox;
-	View itemView;
+//	View itemView;
 	CheckBoxMapItem(){
-		iDBRecID = CommonDefine.g_int_Invalid_ID;
+		iPosition = CommonDefine.g_int_Invalid_ID;
 		checkBox = null;
-		itemView = null;
+//		itemView = null;
 	}
 }
-class ItemDetail{
-	int iDBRecID;
-	View vView;
-	boolean bIsFolder;
-	boolean bIsRemind;
-	boolean bIsEncode;
-	boolean bIsHaveAudioData;
-	String strAudioFileName;
-	ItemDetail(){
-		iDBRecID = CommonDefine.g_int_Invalid_ID;
-		vView = null;
-		bIsFolder = false;
-		bIsRemind = false;
-		bIsEncode = false;
-		bIsHaveAudioData = false;
-		strAudioFileName = null;
-	}
-}
+//class ItemDetail{
+//	int iDBRecID;
+//	View vView;
+//	boolean bIsFolder;
+//	boolean bIsRemind;
+//	boolean bIsEncode;
+//	boolean bIsHaveAudioData;
+//	String strAudioFileName;
+//	ItemDetail(){
+//		iDBRecID = CommonDefine.g_int_Invalid_ID;
+//		vView = null;
+//		bIsFolder = false;
+//		bIsRemind = false;
+//		bIsEncode = false;
+//		bIsHaveAudioData = false;
+//		strAudioFileName = null;
+//	}
+//}
 
 class AdapterCommonProcess{
 
@@ -80,15 +80,14 @@ class AdapterCommonProcess{
 	}
 
 	
-	public void bindView ( View view , CMemoInfo clMemoInfo ,
-			String  strSearchKeyWord, boolean isSelectableStyle,boolean isFolderSelectable,
-			HashMap<CheckBox,CheckBoxMapItem> ListCheckBoxMapItem ,	
-			HashMap<View,ItemDetail> ListItemDetail, 
-			HashMap<String,ItemSelectResult> ListItemSelectResult){
+	public void bindView ( View view , ArrayListItem clItem,
+			String  strSearchKeyWord, boolean isSelectableStyle,boolean isFolderSelectable
+			){
 		CheckBox cbView = (CheckBox) view.findViewById(R.id.notelistitem_noteselect);
+		
 		TextView tV = (TextView)view.findViewById(R.id.notelistitem_notetext);
 		TextView tvDate = (TextView)view.findViewById(R.id.notelistitem_notedate);
-
+		CMemoInfo clMemoInfo = clItem.clDBRecInfo;
 		long	lLastModify		=	clMemoInfo.dLastModifyTime;
 		
 		tvDate.setText(CMemoInfo.getTimeForListItem(lLastModify));
@@ -97,10 +96,7 @@ class AdapterCommonProcess{
 
 		String sDetail = clMemoInfo.strDetail;;
 		
-		ItemDetail itemdetail = new ItemDetail();
-		itemdetail.vView = view;
 		int iIDValue = clMemoInfo.iId;
-		itemdetail.iDBRecID = iIDValue;
 
 		/*step1更新CheckBox的状态
 		 * 如果是选择状态
@@ -114,7 +110,6 @@ class AdapterCommonProcess{
 		 */
 		int iEncodeFlag = clMemoInfo.iIsEncode;
 
-		
 		if(isSelectableStyle){
 			boolean bDisplay = true;
 			if(iTypeValue==CMemoInfo.Type_Folder){
@@ -130,22 +125,13 @@ class AdapterCommonProcess{
 			}
 			if(bDisplay){
 				cbView.setVisibility(View.VISIBLE);
-				//tvDate.setVisibility(View.GONE);
-				//update CheckBox Status-begin
-				//根据保存的当前记录的选择状态，更新CheckBox
-				ItemSelectResult result = ListItemSelectResult.get(String.valueOf(iIDValue));
-				if(result!=null){
-					cbView.setChecked(result.bIsSelected);
-				}else{
-					cbView.setChecked(false);
-				}
-				//update CheckBox Status-end
+				cbView.setChecked(clItem.bIsSelected);
+				
 			}else{
 				cbView.setVisibility(View.GONE);
 			}
 		}else{
 			cbView.setVisibility(View.GONE);
-			//tvDate.setVisibility(View.VISIBLE);
 		}
 		/*step2更新LittleIcon
 		 * 如果是文件夹
@@ -163,20 +149,17 @@ class AdapterCommonProcess{
 		Button icon2 = (Button) view.findViewById(R.id.notelistitem_icon2);
 		if(iTypeValue==CMemoInfo.Type_Folder){
 			itemV.setBackgroundResource(R.drawable.notelistitem_folder_background);
-			itemdetail.bIsFolder = true;
 			if(iEncodeFlag==CMemoInfo.IsEncode_Yes){
 				icon1.setBackgroundResource(R.drawable.notelistitem_icon_lock);
 				icon1.setVisibility(View.VISIBLE);
 				icon2.setBackgroundDrawable(null);
 				icon2.setVisibility(View.GONE);
-				itemdetail.bIsEncode = true;
 				countTV.setText("");
 			}else{
 				icon1.setBackgroundDrawable(null);
 				icon2.setBackgroundDrawable(null);
 				icon1.setVisibility(View.GONE);
 				icon2.setVisibility(View.GONE);
-				itemdetail.bIsEncode = false;
 				long Count = CommonDefine.getNoteDBCtrl(m_context).getRecCountInFolder(iIDValue);
 				String strCount = "("+String.valueOf(Count)+")";
 				countTV.setText(strCount);
@@ -194,7 +177,6 @@ class AdapterCommonProcess{
 			String strAudioFileName = clMemoInfo.strAudioFileName;
 
 			if(isRemindValue == CMemoInfo.IsRemind_Yes){
-				itemdetail.bIsRemind = true;
 				if(isRemindableValue==CMemoInfo.IsEditEnable_Enable){
 					icon1.setBackgroundResource(R.drawable.notelistitem_icon_alarm_valid);
 				}else{
@@ -202,27 +184,19 @@ class AdapterCommonProcess{
 				}
 				icon1.setVisibility(View.VISIBLE);
 				if(iVoiceFlag == CMemoInfo.IsHaveAudioData_Yes){//for voice
-					itemdetail.bIsHaveAudioData = true;
-					itemdetail.strAudioFileName = strAudioFileName;
 					icon2.setBackgroundResource(R.drawable.notelistitem_icon_voice);
 					icon2.setVisibility(View.VISIBLE);
 				}else{
-					itemdetail.bIsHaveAudioData = false;
-					itemdetail.strAudioFileName = null;
 					icon2.setBackgroundDrawable(null);
 					icon2.setVisibility(View.GONE);
 				}
 			}else{
 				if(iVoiceFlag == CMemoInfo.IsHaveAudioData_Yes){//for voice
-					itemdetail.bIsHaveAudioData = true;
-					itemdetail.strAudioFileName = strAudioFileName;
 					icon1.setBackgroundResource(R.drawable.notelistitem_icon_voice);
 					icon1.setVisibility(View.VISIBLE);
 					icon2.setBackgroundDrawable(null);
 					icon2.setVisibility(View.GONE);
 				}else{
-					itemdetail.bIsHaveAudioData = false;
-					itemdetail.strAudioFileName = null;
 					icon1.setBackgroundDrawable(null);
 					icon2.setBackgroundDrawable(null);
 					icon1.setVisibility(View.GONE);
@@ -236,16 +210,7 @@ class AdapterCommonProcess{
 		 * 更新m_ListCheckBoxMapItem
 		 * 		DBID、CheckBox控件
 		 */
-		
-		//建立CheckBox和DBID的对应关系
-		CheckBoxMapItem mapItem = new CheckBoxMapItem();
-		mapItem.checkBox = cbView;
-		mapItem.iDBRecID = iIDValue;
-		mapItem.itemView = view;
-		ListCheckBoxMapItem.put(cbView, mapItem);
 
-		//建立Item控件和对应的DB记录信息的对应关系
-		ListItemDetail.put(view, itemdetail);
 		
 		if( strSearchKeyWord != null ){
 			if( strSearchKeyWord.length() > 0 ){

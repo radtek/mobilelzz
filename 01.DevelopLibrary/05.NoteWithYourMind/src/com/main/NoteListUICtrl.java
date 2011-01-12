@@ -219,9 +219,8 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 			}
 		}else{
 			NoteListArrayAdapter LA = (NoteListArrayAdapter)arg0.getAdapter();
-
-			CMemoInfo clCMemoInfo	=	new	CMemoInfo();
-			clCMemoInfo = LA.getItem(arg2);
+			ArrayListItem clItem = LA.getItem(arg2);
+			CMemoInfo clCMemoInfo = clItem.clDBRecInfo;
 			if(clCMemoInfo.iType == CMemoInfo.Type_Folder){
 				boolean bIntent = true;
 				if(clCMemoInfo.iIsEncode==CMemoInfo.IsEncode_Yes){
@@ -394,7 +393,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 			}
 			
 			m_sourceManager.startManagingCursor(cursor);
-			List<CMemoInfo> Items = new ArrayList<CMemoInfo>();
+			List<ArrayListItem> Items = new ArrayList<ArrayListItem>();
 			m_myAdapter = new NoteListArrayAdapter( m_sourceManager, cursor, Items);
 			m_myAdapter.initData();
 			if(m_ListUICtrlParam.g_str_SearchKey != ""){

@@ -119,43 +119,38 @@ public class NoteListArrayAdapter extends ArrayAdapter<CMemoInfo> {
         View view;
         if (convertView == null) {
             view = m_inflater.inflate(mResource, parent, false);
+            CheckBox cbView = (CheckBox) view.findViewById(R.id.notelistitem_noteselect);
+    		cbView.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
+    			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            	{
+    				ItemSelectResult result = new ItemSelectResult();
+            		if(isChecked)
+            		{
+            			result.bIsSelected = true;        			
+            		}else{
+            			result.bIsSelected = false;        
+            		}
+            		//根据CheckBox和DBID的对应关系，更新DBID的选择状态
+        			CheckBoxMapItem mapItem = m_ListCheckBoxMapItem.get(buttonView);
+        			if(mapItem!=null){
+        				result.iDBRecID = mapItem.iDBRecID;
+        				ItemDetail detail = m_ListItemDetail.get(mapItem.itemView);
+        				if(detail!=null){
+        					result.bIsHaveAudioData = detail.bIsHaveAudioData;
+        					result.strAudioFileName = detail.strAudioFileName;
+        					result.bIsFolder = detail.bIsFolder;
+        				}
+        				m_ListItemSelectResult.put(String.valueOf(mapItem.iDBRecID), result);
+        			}	        
+            	}
+    		});
         } else {
             view = convertView;
         }
-
-		CheckBox cbView = (CheckBox) view.findViewById(R.id.notelistitem_noteselect);
-		cbView.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener(){
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-        	{
-				ItemSelectResult result = new ItemSelectResult();
-        		if(isChecked)
-        		{
-        			result.bIsSelected = true;        			
-        		}else{
-        			result.bIsSelected = false;        
-        		}
-        		//根据CheckBox和DBID的对应关系，更新DBID的选择状态
-    			CheckBoxMapItem mapItem = m_ListCheckBoxMapItem.get(buttonView);
-    			if(mapItem!=null){
-    				result.iDBRecID = mapItem.iDBRecID;
-    				ItemDetail detail = m_ListItemDetail.get(mapItem.itemView);
-    				if(detail!=null){
-    					result.bIsHaveAudioData = detail.bIsHaveAudioData;
-    					result.strAudioFileName = detail.strAudioFileName;
-    					result.bIsFolder = detail.bIsFolder;
-    				}
-    				m_ListItemSelectResult.put(String.valueOf(mapItem.iDBRecID), result);
-    			}	        
-        	}
-		});
-
-
-		CMemoInfo clMemoInfo = new CMemoInfo();
-
-		clMemoInfo	=getItem(position);	
+//		CMemoInfo clMemoInfo = new CMemoInfo();
+		CMemoInfo clMemoInfo	=getItem(position);	
 		
-		m_AdapterComPro.bindView(view,cbView,clMemoInfo,m_SearchKeyWord,m_isSelectableStyle,m_isFolderSelectable,m_ListCheckBoxMapItem,m_ListItemDetail,m_ListItemSelectResult );
-
+		m_AdapterComPro.bindView(view,clMemoInfo,m_SearchKeyWord,m_isSelectableStyle,m_isFolderSelectable,m_ListCheckBoxMapItem,m_ListItemDetail,m_ListItemSelectResult );
 
         return view;
     }

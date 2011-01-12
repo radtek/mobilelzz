@@ -80,8 +80,12 @@ class AdapterCommonProcess{
 	}
 
 	
-	public void bindView ( View view ,CheckBox cbView,CMemoInfo clMemoInfo ,String  strSearchKeyWord, boolean isSelectableStyle,boolean isFolderSelectable,HashMap<CheckBox,CheckBoxMapItem> ListCheckBoxMapItem ,	HashMap<View,ItemDetail> ListItemDetail, HashMap<String,ItemSelectResult> ListItemSelectResult){
-
+	public void bindView ( View view , CMemoInfo clMemoInfo ,
+			String  strSearchKeyWord, boolean isSelectableStyle,boolean isFolderSelectable,
+			HashMap<CheckBox,CheckBoxMapItem> ListCheckBoxMapItem ,	
+			HashMap<View,ItemDetail> ListItemDetail, 
+			HashMap<String,ItemSelectResult> ListItemSelectResult){
+		CheckBox cbView = (CheckBox) view.findViewById(R.id.notelistitem_noteselect);
 		TextView tV = (TextView)view.findViewById(R.id.notelistitem_notetext);
 		TextView tvDate = (TextView)view.findViewById(R.id.notelistitem_notedate);
 

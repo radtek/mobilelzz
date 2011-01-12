@@ -54,12 +54,12 @@ public class NoteListCursorAdapter extends CursorAdapter implements Serializable
  
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-		CheckBox cbView = (CheckBox) view.findViewById(R.id.notelistitem_noteselect);
+//		CheckBox cbView = (CheckBox) view.findViewById(R.id.notelistitem_noteselect);
 
 		CMemoInfo clMemoInfo = new CMemoInfo();
 		ConvertCursorToMemoInfo.ConvertItem( cursor ,clMemoInfo);
 		
-		m_AdapterComPro.bindView(view,cbView,clMemoInfo,null,m_isSelectableStyle,m_isFolderSelectable,m_ListCheckBoxMapItem,m_ListItemDetail,m_ListItemSelectResult );
+		m_AdapterComPro.bindView(view,clMemoInfo,null,m_isSelectableStyle,m_isFolderSelectable,m_ListCheckBoxMapItem,m_ListItemDetail,m_ListItemSelectResult );
 	}
  
 	@Override

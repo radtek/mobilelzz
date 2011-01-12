@@ -61,40 +61,75 @@
 	android:id="@+id/toolbar_more_dlg"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
-	android:orientation="horizontal"
+	android:orientation="vertical"
 	android:background="@drawable/toolbar_more_dlg"
 	android:layout_gravity="right|bottom"
 	android:layout_marginBottom="52dp"
 	android:layout_marginRight="5dp"
 	android:visibility="gone"
 	>
-		<Button
-		  android:id="@+id/toolbar_more_dlg_delete"
-		  android:layout_width="wrap_content"
-		  android:layout_height="wrap_content"
-		  android:layout_marginLeft="5dp"
-		  android:layout_marginRight="5dp"
-		  android:layout_marginTop="5dp"
-		  android:background="@drawable/toolbar_more_delete"
-		/>
-		<Button
-		  android:id="@+id/toolbar_more_dlg_move"
-		  android:layout_width="wrap_content"
-		  android:layout_height="wrap_content"
-		  android:layout_marginLeft="5dp"
-		  android:layout_marginRight="5dp"
-		  android:layout_marginTop="5dp"
-		  android:background="@drawable/toolbar_more_move"
-		/>
-		<Button
-		  android:id="@+id/toolbar_more_dlg_setpassword"
-		  android:layout_width="wrap_content"
-		  android:layout_height="wrap_content"
-		  android:layout_marginLeft="5dp"
-		  android:layout_marginRight="5dp"
-		  android:layout_marginTop="5dp"
-		  android:background="@drawable/toolbar_more_lock"
-		/>
-
+		<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/toolbar_more_dlg_Line1"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		>
+			<Button
+			  android:id="@+id/toolbar_more_dlg_delete"
+			  android:layout_width="wrap_content"
+			  android:layout_height="wrap_content"
+			  android:layout_marginLeft="5dp"
+			  android:layout_marginRight="5dp"
+			  android:layout_marginTop="5dp"
+			  android:background="@drawable/toolbar_more_delete"
+			/>
+			<Button
+			  android:id="@+id/toolbar_more_dlg_move"
+			  android:layout_width="wrap_content"
+			  android:layout_height="wrap_content"
+			  android:layout_marginLeft="5dp"
+			  android:layout_marginRight="5dp"
+			  android:layout_marginTop="5dp"
+			  android:background="@drawable/toolbar_more_move"
+			/>
+			<Button
+			  android:id="@+id/toolbar_more_dlg_setpassword"
+			  android:layout_width="wrap_content"
+			  android:layout_height="wrap_content"
+			  android:layout_marginLeft="5dp"
+			  android:layout_marginRight="5dp"
+			  android:layout_marginTop="5dp"
+			  android:background="@drawable/toolbar_more_lock"
+			/>
+		</LinearLayout>
+		<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/toolbar_more_dlg_Line2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		>
+			<Button
+			  android:id="@+id/toolbar_more_dlg_import"
+			  android:layout_width="wrap_content"
+			  android:layout_height="wrap_content"
+			  android:layout_marginLeft="5dp"
+			  android:layout_marginRight="5dp"
+			  android:layout_marginTop="5dp"
+			  android:text="导入"
+			  android:textSize="50sp"
+			/>
+			<Button
+			  android:id="@+id/toolbar_more_dlg_export"
+			  android:layout_width="wrap_content"
+			  android:layout_height="wrap_content"
+			  android:layout_marginLeft="5dp"
+			  android:layout_marginRight="5dp"
+			  android:layout_marginTop="5dp"
+			  android:text="导出"
+			  android:textSize="50sp"
+			/>
+		</LinearLayout>
 	</LinearLayout>
 </FrameLayout>

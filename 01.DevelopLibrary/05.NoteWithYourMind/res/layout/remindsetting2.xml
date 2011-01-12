@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+		android:id="@+id/editnote_noteinfo_scroll"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:scrollbars="vertical"
+		android:fillViewport="true"
+		xmlns:android="http://schemas.android.com/apk/res/android"
+>
 <LinearLayout
 android:id="@+id/widget28"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
 android:orientation="vertical"
-xmlns:android="http://schemas.android.com/apk/res/android"
+
 >
 
 <!--   "设置提醒" Text的Layout   --> 
@@ -272,3 +280,4 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 			/>
 	</LinearLayout>
 </LinearLayout>
+</ScrollView>

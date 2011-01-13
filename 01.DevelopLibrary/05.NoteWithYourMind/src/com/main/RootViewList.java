@@ -52,6 +52,8 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 	private ListUICtrlParam  UICtrlParam;
 	private boolean m_bIsListInit = false;
 	
+	private static final int RequestCode_NewNote =		0x201;
+	
 	public void onNewIntent(Intent intent){
 		setIntent(intent);
 	}
@@ -63,6 +65,18 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 //		super.onTouchEvent(me);
 //		return false;
 //	}
+	
+	protected void onActivityResult(int requestCode, int resultCode,  
+            Intent data){ 
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode){  
+			case RequestCode_NewNote:  
+//				setResult(RESULT_OK, i);  
+				setIntent(data);
+				break;
+		}  
+	}  
+	
 	public boolean onTouch(View v, MotionEvent event) {
 		if(m_bIsCommnetDisplay_more.getBOOL()){
 			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);	
@@ -243,7 +257,7 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 		Intent intent = new Intent(RootViewList.this, NoteWithYourMind.class);
 		intent.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_New);
 		intent.putExtra(NoteWithYourMind.ExtraData_OperationPreID, CMemoInfo.PreId_Root);
-		startActivity(intent);
+		startActivityForResult(intent, RequestCode_NewNote);
 	}
 	
 	private void processNewFolderClick(View view){
@@ -333,11 +347,11 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 		m_NoteListUICtrl.updateListData(id);
 		
 	}
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inf = getMenuInflater();
-		inf.inflate(R.menu.menu_listctrl, menu);
-		return true;
-	}
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		MenuInflater inf = getMenuInflater();
+//		inf.inflate(R.menu.menu_listctrl, menu);
+//		return true;
+//	}
 	
 //	public boolean onOptionsItemSelected(MenuItem item) {
 //		switch (item.getItemId()) {

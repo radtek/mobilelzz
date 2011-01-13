@@ -7,7 +7,6 @@
 		<activity android:name=".NoteWithYourMind"
 			android:label="@string/app_name"
 			android:theme="@style/NoteTitle"
-			android:launchMode = "singleTask"
 			android:windowSoftInputMode="stateVisible|adjustResize"
 			android:configChanges="orientation|keyboardHidden" 
 			>
@@ -26,17 +25,17 @@
 		<activity android:name=".FolderViewList"
 			android:label="@string/app_name"
 			android:theme="@style/NoteTitle"
-			android:launchMode = "singleTask">    	
+			>    	
 		</activity>
 		<activity android:name=".SearchResultViewList"
 			android:label="@string/app_name"
 			android:theme="@style/NoteTitle"
-			android:launchMode = "singleTask">    	
+			>    	
 		</activity>
 		<activity android:name=".RemindActivity"
 		  android:label="@string/app_name"
 		  android:theme="@style/NoteTitle"
-		  android:launchMode = "singleTask">
+		  >
 		</activity>
 		<activity android:name=".AlarmAlert"
 		android:label="@string/app_name">

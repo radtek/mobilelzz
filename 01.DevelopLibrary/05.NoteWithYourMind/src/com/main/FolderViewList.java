@@ -25,8 +25,19 @@ public class FolderViewList extends Activity
 	private View m_toolBarLayout;
 	private boolean m_bIsListInit = false;
 	private ListUICtrlParam  UICtrlParam;
-	
+	private static final int RequestCode_NewNote =		0x202;
 	/** Called when the activity is first created. */
+	
+	protected void onActivityResult(int requestCode, int resultCode,  
+            Intent data){ 
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode){  
+			case RequestCode_NewNote:  
+//				setResult(RESULT_OK, i);  
+				setIntent(data);
+				break;
+		}  
+	}  
 	public void onNewIntent(Intent intent){
 		setIntent(intent);
 	}
@@ -62,15 +73,7 @@ public class FolderViewList extends Activity
         m_bIsListInit = true;
         
         ImageButton clBTMemoNewNote = (ImageButton) findViewById(R.id.folderviewlist_toolbar_newnote);
-        clBTMemoNewNote.setOnClickListener(new Button.OnClickListener(){
-        	public void onClick(View v)
-        	{  			
-        		Intent intent = new Intent(FolderViewList.this, NoteWithYourMind.class);
-        		intent.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_New);
-        		intent.putExtra(NoteWithYourMind.ExtraData_OperationPreID, m_iFolder_DBID);
-        		startActivity(intent);
-        	}
-        });
+        clBTMemoNewNote.setOnClickListener(this);
 	}
 	public void onClick(View view){
 
@@ -79,8 +82,17 @@ public class FolderViewList extends Activity
 		case R.id.custom_title_back:
 			this.finish();
 			break;
+		case R.id.folderviewlist_toolbar_newnote:	
+			processNewNoteClick(view);
+			break;
 		default:
 		}
+	}
+	private void processNewNoteClick(View view){
+		Intent intent = new Intent(this, NoteWithYourMind.class);
+		intent.putExtra(NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_New);
+		intent.putExtra(NoteWithYourMind.ExtraData_OperationPreID, m_iFolder_DBID);
+		startActivityForResult(intent, RequestCode_NewNote);
 	}
 		
 	public void onStop()

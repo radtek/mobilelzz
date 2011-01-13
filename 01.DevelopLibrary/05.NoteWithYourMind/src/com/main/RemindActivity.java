@@ -143,8 +143,9 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         { 
         	Intent intent = new Intent(RemindActivity.this, NoteWithYourMind.class);
         	intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, m_clCRemindInfo );
-        	intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
-        	startActivity(intent);
+//        	intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
+        	setResult(RESULT_OK, intent);
+        	this.finish();
         	return true;
         } 
         return super.onKeyDown(keyCode, event); 
@@ -234,9 +235,10 @@ public class RemindActivity extends Activity	implements View.OnClickListener
         		m_clCRemindInfo.m_iIsRemind		=	CMemoInfo.IsRemind_Yes;
         		Intent intent = new Intent(RemindActivity.this, NoteWithYourMind.class);  
         		intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, m_clCRemindInfo );
-        		intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
+//        		intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
         		
-        		startActivity(intent);	
+        		setResult(RESULT_OK, intent);	
+        		this.finish();
         	}
         	else
         	{
@@ -251,9 +253,10 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     		m_clCRemindInfo.m_iIsRemind		=	CMemoInfo.IsRemind_Yes;
     		Intent intent = new Intent(RemindActivity.this, NoteWithYourMind.class);  
     		intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, m_clCRemindInfo );
-    		intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
+//    		intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
     		
-    		startActivity(intent);			
+    		setResult(RESULT_OK, intent);		
+    		this.finish();
     	}
     }
     

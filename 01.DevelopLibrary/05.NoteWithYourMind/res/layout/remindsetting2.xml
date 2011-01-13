@@ -1,268 +1,277 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-		android:id="@+id/editnote_noteinfo_scroll"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:scrollbars="vertical"
-		android:fillViewport="true"
-		xmlns:android="http://schemas.android.com/apk/res/android"
->
+
 <LinearLayout
 android:id="@+id/widget28"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
 android:orientation="vertical"
-
+xmlns:android="http://schemas.android.com/apk/res/android"
 >
-
-<!--   "设置提醒" Text的Layout   --> 
-
-	<LinearLayout
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:layout_weight="3"
-	android:orientation="vertical">
-		<TextView
-		android:id="@+id/widget40"
-		android:layout_width="wrap_content"
+	<ScrollView
+		android:id="@+id/editnote_noteinfo_scroll"
+		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="时间设定"
-		>
-		</TextView>
-		<RadioGroup 
-				android:id="@+id/timeRadioButton"
-				android:layout_width="fill_parent" 
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				>
-			<RadioButton
-			android:id="@+id/TimeSetting"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:text="时间点设定 "
-			>
-			</RadioButton>
-			<LinearLayout
-				android:id="@+id/timeLayout"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				>
-						<TextView
-						android:id="@+id/Time_txt"
-						android:layout_width="fill_parent"
-						android:layout_height="fill_parent"
-						android:layout_weight="5"
-						android:layout_marginLeft="20px"
-						android:textSize="25sp"
-						android:gravity="center"
-						>
-						</TextView>
-						
-			</LinearLayout>	
-
-			<RadioButton
-			android:id="@+id/daojishi"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="5dip" 
-			android:text="倒计时设定 "
-			>
-			</RadioButton>
-			<LinearLayout
-				android:id="@+id/countDownLayout"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:layout_weight="1">
-				<TextView
-				android:id="@+id/daojishiTxt"
-				android:layout_width="fill_parent"
-				android:layout_height="fill_parent"
-				android:textSize="25sp"
-				android:layout_weight="5"
-				android:layout_marginLeft="20px"
-				android:gravity="center"
-				>
-				</TextView>					
-			</LinearLayout>			
-		</RadioGroup>
-	</LinearLayout>
+		android:scrollbars="vertical"
+		android:fillViewport="true"
+		android:layout_weight = "1"
+	>
+	<LinearLayout
+	android:id="@+id/widget66"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	
+	>
+	<!--   "设置提醒" Text的Layout   --> 
 		
-<!--   日期设定开始   --> 
-	<LinearLayout
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:layout_weight="5"
-	android:orientation="vertical"
-	>
-		<TextView
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:text="日期设定"
-		>
-		</TextView>
-		<RadioGroup 
-				android:id="@+id/dateRadioButton"
-				android:layout_width="fill_parent" 
-				android:layout_height="wrap_content"
-				android:layout_weight="1">
-			<RadioButton
-			android:id="@+id/OnceRemind"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="单次设定 "
-			>
-			</RadioButton>
-			<LinearLayout
-				android:id="@+id/dateLayout"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				>
-				<TextView
-				android:id="@+id/OnceText"
-				android:layout_width="fill_parent"
-				android:layout_height="fill_parent"
-				android:layout_weight="5"
-				android:layout_marginLeft="20px"
-				android:gravity="center"
-				android:textSize="25sp"
-				>
-				</TextView>
-			</LinearLayout>	
-			<RadioButton
-			android:id="@+id/EveryWeek"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="5.0dip" 
-			android:text="循环设定 "
-			>
-			</RadioButton>
-			<LinearLayout
-				android:id="@+id/weekLayout"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:layout_weight="1"
-			>
-				<TextView
-					android:id="@+id/MonTxt"
-					android:layout_width="wrap_content"
-					android:layout_height="fill_parent"
-					android:text="周一"
-					android:layout_weight="1"
-					android:layout_marginLeft="20px"
-					>
-				</TextView>
-				<TextView
-					android:id="@+id/TusTxt"
-					android:layout_width="wrap_content"
-					android:layout_height="fill_parent"
-					android:text="周二"
-					android:layout_weight="1"
-					>
-				</TextView>
-				<TextView
-					android:id="@+id/WedTxt"
-					android:layout_width="wrap_content"
-					android:layout_height="fill_parent"
-					android:text="周三"
-					android:layout_weight="1"
-					>
-				</TextView>
-				<TextView
-					android:id="@+id/ThrTxt"
-					android:layout_width="wrap_content"
-					android:layout_height="fill_parent"
-					android:text="周四"
-					android:layout_weight="1"
-					>
-				</TextView>
-				<TextView
-					android:id="@+id/FriTxt"
-					android:layout_width="wrap_content"
-					android:layout_height="fill_parent"
-					android:text="周五"
-					android:layout_weight="1"
-					>
-				</TextView>
-				<TextView
-					android:id="@+id/SatTxt"
-					android:layout_width="wrap_content"
-					android:layout_height="fill_parent"
-					android:text="周六"
-					android:layout_weight="1"
-					>
-				</TextView>
-				<TextView
-					android:id="@+id/SunTxt"
-					android:layout_width="wrap_content"
-					android:layout_height="fill_parent"
-					android:text="周日"
-					android:layout_weight="1"
-					>
-				</TextView>
-			</LinearLayout>	
-		</RadioGroup> 
-	</LinearLayout>
-<!--   日期设定结束   --> 
-	<LinearLayout
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content"
-	android:layout_weight="2"
-	android:orientation="vertical"
-	>
-		<TextView
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:text="提醒方式设定"
-		>
-		</TextView>
 		<LinearLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:layout_weight="1"
+		android:layout_weight="3"
+		android:orientation="vertical">
+			<TextView
+			android:id="@+id/widget40"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="时间设定"
+			>
+			</TextView>
+			<RadioGroup 
+					android:id="@+id/timeRadioButton"
+					android:layout_width="fill_parent" 
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					>
+				<RadioButton
+				android:id="@+id/TimeSetting"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="时间点设定 "
+				>
+				</RadioButton>
+				<LinearLayout
+					android:id="@+id/timeLayout"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					>
+							<TextView
+							android:id="@+id/Time_txt"
+							android:layout_width="fill_parent"
+							android:layout_height="fill_parent"
+							android:layout_weight="5"
+							android:layout_marginLeft="20px"
+							android:textSize="25sp"
+							android:gravity="center"
+							>
+							</TextView>
+							
+				</LinearLayout>	
+
+				<RadioButton
+				android:id="@+id/daojishi"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="5dip" 
+				android:text="倒计时设定 "
+				>
+				</RadioButton>
+				<LinearLayout
+					android:id="@+id/countDownLayout"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:layout_weight="1">
+					<TextView
+					android:id="@+id/daojishiTxt"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent"
+					android:textSize="25sp"
+					android:layout_weight="5"
+					android:layout_marginLeft="20px"
+					android:gravity="center"
+					>
+					</TextView>					
+				</LinearLayout>			
+			</RadioGroup>
+		</LinearLayout>
+			
+	<!--   日期设定开始   --> 
+		<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="5"
+		android:orientation="vertical"
 		>
-			<LinearLayout
-			android:layout_width="wrap_content"
+			<TextView
+			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:gravity="center_horizontal"
+			android:text="日期设定"
+			>
+			</TextView>
+			<RadioGroup 
+					android:id="@+id/dateRadioButton"
+					android:layout_width="fill_parent" 
+					android:layout_height="wrap_content"
+					android:layout_weight="1">
+				<RadioButton
+				android:id="@+id/OnceRemind"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="单次设定 "
+				>
+				</RadioButton>
+				<LinearLayout
+					android:id="@+id/dateLayout"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					>
+					<TextView
+					android:id="@+id/OnceText"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent"
+					android:layout_weight="5"
+					android:layout_marginLeft="20px"
+					android:gravity="center"
+					android:textSize="25sp"
+					>
+					</TextView>
+				</LinearLayout>	
+				<RadioButton
+				android:id="@+id/EveryWeek"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="5.0dip" 
+				android:text="循环设定 "
+				>
+				</RadioButton>
+				<LinearLayout
+					android:id="@+id/weekLayout"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+				>
+					<TextView
+						android:id="@+id/MonTxt"
+						android:layout_width="wrap_content"
+						android:layout_height="fill_parent"
+						android:text="周一"
+						android:layout_weight="1"
+						android:layout_marginLeft="20px"
+						>
+					</TextView>
+					<TextView
+						android:id="@+id/TusTxt"
+						android:layout_width="wrap_content"
+						android:layout_height="fill_parent"
+						android:text="周二"
+						android:layout_weight="1"
+						>
+					</TextView>
+					<TextView
+						android:id="@+id/WedTxt"
+						android:layout_width="wrap_content"
+						android:layout_height="fill_parent"
+						android:text="周三"
+						android:layout_weight="1"
+						>
+					</TextView>
+					<TextView
+						android:id="@+id/ThrTxt"
+						android:layout_width="wrap_content"
+						android:layout_height="fill_parent"
+						android:text="周四"
+						android:layout_weight="1"
+						>
+					</TextView>
+					<TextView
+						android:id="@+id/FriTxt"
+						android:layout_width="wrap_content"
+						android:layout_height="fill_parent"
+						android:text="周五"
+						android:layout_weight="1"
+						>
+					</TextView>
+					<TextView
+						android:id="@+id/SatTxt"
+						android:layout_width="wrap_content"
+						android:layout_height="fill_parent"
+						android:text="周六"
+						android:layout_weight="1"
+						>
+					</TextView>
+					<TextView
+						android:id="@+id/SunTxt"
+						android:layout_width="wrap_content"
+						android:layout_height="fill_parent"
+						android:text="周日"
+						android:layout_weight="1"
+						>
+					</TextView>
+				</LinearLayout>	
+			</RadioGroup> 
+		</LinearLayout>
+	<!--   日期设定结束   --> 
+		<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="2"
+		android:orientation="vertical"
+		android:visibility="gone"
+		>
+			<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="提醒方式设定"
+			>
+			</TextView>
+			<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
 			android:layout_weight="1"
 			>
-				<CheckBox
-				android:id="@+id/RingCB"
+				<LinearLayout
 				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
-				android:layout_centerHorizontal="true"
-				android:layout_gravity="center_horizontal"
-				android:text="响铃"
+				android:layout_height="wrap_content"
+				android:gravity="center_horizontal"
+				android:layout_weight="1"
 				>
-				</CheckBox>
-			</LinearLayout>
-			<LinearLayout
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:gravity="center_horizontal"
-			android:layout_weight="1"
-			>
-				<CheckBox
-				android:id="@+id/VibrateCB"
+					<CheckBox
+					android:id="@+id/RingCB"
+					android:layout_width="wrap_content"
+					android:layout_height="fill_parent"
+					android:layout_centerHorizontal="true"
+					android:layout_gravity="center_horizontal"
+					android:text="响铃"
+					>
+					</CheckBox>
+				</LinearLayout>
+				<LinearLayout
 				android:layout_width="wrap_content"
-				android:layout_height="fill_parent"
-				android:layout_centerHorizontal="true"
-				android:layout_gravity="center_horizontal"
-				android:text="震动"
+				android:layout_height="wrap_content"
+				android:gravity="center_horizontal"
+				android:layout_weight="1"
 				>
-				</CheckBox>
+					<CheckBox
+					android:id="@+id/VibrateCB"
+					android:layout_width="wrap_content"
+					android:layout_height="fill_parent"
+					android:layout_centerHorizontal="true"
+					android:layout_gravity="center_horizontal"
+					android:text="震动"
+					>
+					</CheckBox>
+				</LinearLayout>
 			</LinearLayout>
 		</LinearLayout>
 	</LinearLayout>
+	</ScrollView>
 	<LinearLayout
 		android:id="@+id/remindsetting_toolbar"
 		android:orientation="horizontal"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
 		android:background="@drawable/background_toolbar">
 		<Button
 			android:id="@+id/DisableBtn"
@@ -280,4 +289,3 @@ android:orientation="vertical"
 			/>
 	</LinearLayout>
 </LinearLayout>
-</ScrollView>

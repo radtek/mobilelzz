@@ -3,6 +3,8 @@ package com.main;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -130,23 +132,25 @@ public class RemindActivity extends Activity	implements View.OnClickListener
        			processAble( true );
     			break;   
        		case R.id.custom_title_back:
+       			processBackKey(view);
     			this.finish();
     			break;
     		default:
     			break;
     	}
     }
-    
+    private void processBackKey(View view)
+	{
+		Intent intent = new Intent(RemindActivity.this, NoteWithYourMind.class);
+    	intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, m_clCRemindInfo );
+//    	intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
+    	setResult(RESULT_OK, intent);
+	}
     public boolean onKeyDown(int keyCode, KeyEvent event) 
     {
         if ((keyCode == KeyEvent.KEYCODE_BACK))
         { 
-        	Intent intent = new Intent(RemindActivity.this, NoteWithYourMind.class);
-        	intent.putExtra( NoteWithYourMind.ExtraData_RemindSetting, m_clCRemindInfo );
-//        	intent.putExtra( NoteWithYourMind.ExtraData_OperationNoteKind, NoteWithYourMind.OperationNoteKindEnum.OperationNoteKind_Update );
-        	setResult(RESULT_OK, intent);
-        	this.finish();
-        	return true;
+        	processBackKey(null);
         } 
         return super.onKeyDown(keyCode, event); 
     } 

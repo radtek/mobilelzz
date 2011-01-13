@@ -48,8 +48,8 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 	public	enum	OperationNoteKindEnum
 	{
 		OperationNoteKind_New,
-		OperationNoteKind_Edit,
-		OperationNoteKind_Update
+		OperationNoteKind_Edit
+//		OperationNoteKind_Update
 	}
 	
 	public static String 										ExtraData_EditNoteID		=	"com.main.ExtraData_EditNoteID";
@@ -97,6 +97,24 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 	private ImageButton											clBTAlarm;
 	private String				 								m_ExtraData_HighLightWord = null;
 	///////////////////////onStart////////////////////////////////////////////////
+	private static final int RequestCode_RemindSetting =		0x301;
+	protected void onActivityResult(int requestCode, int resultCode,  
+            Intent data){ 
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode){  
+			case RequestCode_RemindSetting:  
+				CRemindInfo	clTemp	=	( CRemindInfo )data.getSerializableExtra( ExtraData_RemindSetting );
+				if( null != clTemp && CMemoInfo.IsRemind_Yes == clTemp.m_iIsRemind )
+				{
+					setRemindDisplay(true);
+					m_clCRemindInfo	=	clTemp;
+				}
+				
+				updateTime( clTemp );
+				break;
+		}  
+	}  
+	
 	public void onNewIntent(Intent intent)
 	{
 		setIntent(intent);
@@ -369,17 +387,17 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 			//Ω´”Ô“Ù…Ë÷√Œ™ø’
 			updateVoice(null);
 		}
-		else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Update )
-		{
-			CRemindInfo	clTemp	=	( CRemindInfo )iExtraData.getSerializableExtra( ExtraData_RemindSetting );
-			if( null != clTemp && CMemoInfo.IsRemind_Yes == clTemp.m_iIsRemind )
-			{
-				setRemindDisplay(true);
-				m_clCRemindInfo	=	clTemp;
-			}
-			
-			updateTime( clTemp );
-		}
+//		else if ( m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_Update )
+//		{
+//			CRemindInfo	clTemp	=	( CRemindInfo )iExtraData.getSerializableExtra( ExtraData_RemindSetting );
+//			if( null != clTemp && CMemoInfo.IsRemind_Yes == clTemp.m_iIsRemind )
+//			{
+//				setRemindDisplay(true);
+//				m_clCRemindInfo	=	clTemp;
+//			}
+//			
+//			updateTime( clTemp );
+//		}
 		
 		ScrollView etNoteText = (ScrollView)findViewById(R.id.editnote_noteinfo_scroll);
 		etNoteText.scrollBy(0, -100);
@@ -625,12 +643,12 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 	
 	private void processSetRemindClick(View view){
 		Intent intent = new Intent();
-		intent.setClass(NoteWithYourMind.this, RemindActivity.class);
+		intent.setClass(this, RemindActivity.class);
 		if( ( m_clCRemindInfo != null ) && ( m_clCRemindInfo.m_iType != CommonDefine.Remind_Type_Invalid ) )
 		{
 			intent.putExtra( ExtraData_RemindSetting, m_clCRemindInfo ); 
 		}
-		startActivity(intent);
+		startActivityForResult(intent, RequestCode_RemindSetting);
 	}
 	
 	/*--------------------------------------------------------------------------------------
@@ -1032,11 +1050,10 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 		clCRemindOperator.processRemind(this, _id, m_clCRemindInfo);
 		
 		if(_id != CommonDefine.E_FAIL){
+			Intent intent = new Intent();
 			if(clNoteInfo.iPreId==CMemoInfo.PreId_Root){
-				Intent intent = new Intent();
 				intent.putExtra(RootViewList.ExtraData_initListItemDBID, _id);
-				intent.setClass(this, RootViewList.class);
-				startActivity(intent);
+				setResult(RESULT_OK, intent);
 			}else{
 				int valueEncode = CommonDefine.g_int_Invalid_ID;
 				Cursor cr = m_clCNoteDBCtrl.getNoteRec(clNoteInfo.iPreId);
@@ -1047,17 +1064,14 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 					cr.close();
 				}
 				if(valueEncode==CMemoInfo.IsEncode_Yes){
-					Intent intent = new Intent();
 					intent.putExtra(RootViewList.ExtraData_initListItemDBID, clNoteInfo.iPreId);
-					intent.setClass(this, RootViewList.class);
-					startActivity(intent);
 				}else{
-					Intent intent = new Intent();
 					intent.putExtra(FolderViewList.ExtraData_initListItemDBID, _id);
 					intent.putExtra(FolderViewList.ExtraData_FolderDBID, clNoteInfo.iPreId);
-					intent.setClass(this, FolderViewList.class);
-					startActivity(intent);
 				}
+			}
+			if(m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New){
+				setResult(RESULT_OK, intent);  
 			}
 			this.finish();	
 		}

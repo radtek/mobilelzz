@@ -432,9 +432,11 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 			for(int i = 0; i < count; i++ ){
 				if(initListItemDBID == m_myAdapter.getItemId(i)){
 					initPos = i;
+					break;
 				}
 			}
-			m_targetList.setSelectionFromTop(initPos, 50);
+			m_targetList.setSelectionFromTop(initPos, 30);
+//			m_targetList.setSelection(initPos);
 		}
 	}
 	

@@ -7,11 +7,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
+import android.util.Log;
 
 interface SDCardStatusChangedCtrl{
 	public void ChangedAvailable();
@@ -189,5 +191,60 @@ public class SDCardAccessor extends BroadcastReceiver {
         		}
         	}	
     	}
+    }
+    
+    static List<String> fl = new ArrayList<String>();
+    
+    public static	List<String> getMyFile()
+    {
+    	//局部变量 记录文件路径
+    	List<String> it=new ArrayList<String>();
+    	
+    	//指定文件目录
+    	String	StrPath	=	Environment.getExternalStorageDirectory().toString();
+    	File f=new File( StrPath );
+    	
+    	//递归
+    	getFileList(f);
+    	
+    	//递归完毕，提出全局量fl里面的内容
+    	for(int i = 0; i < fl.size(); i++)
+    	{
+    	  it.add(fl.get(i));
+    	}
+    	
+    	return it;
+    }
+    
+  //递归函数
+    public static void getFileList(File file)
+    {
+    //列出指定路径下所有文件
+       File[] files = file.listFiles();
+
+    //遍历当前各个文件
+       for(int i = 0; i < files.length; i++)
+       {
+         File f = files[i];
+         if(f.isFile())
+         {
+    //如果是文件，则检查其扩展名是否为想要的图片类型
+//           if(getImageFile(f.getPath()))
+//           {
+//
+//    //是，则添加进全局量
+//             fl.add(f.getPath());
+//           }
+        	 String	strFile	=	f.getPath();
+        	 Log.d("File:", strFile );
+         }else if(f.isDirectory())
+         {
+
+    //不是文件，而是文件夹，进一步检查这个文件夹下面文件
+           getFileList(f);
+      	 String	strFolder	=	f.getPath();
+    	 Log.d("Folder:", strFolder );
+         }
+       }
     }
 }  

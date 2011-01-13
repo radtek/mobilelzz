@@ -606,12 +606,64 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 			processEnableAlarm( view );
 			break;
 		case R.id.custom_title_back:
-			this.finish();
+			boolean b = processBackKey(view);
+			if(!b){
+				this.finish();
+			}
 			break;
 		default:
 		}
 	}
-	
+	private boolean processBackKey(View view)
+	{
+		boolean bIsChanged = false;
+		if(clBTStopRecord.isEnabled()){
+    		clBTStopRecord.performClick();
+    	}
+    	boolean bTextChanged = CheckText();
+    	boolean bVoiceChanged = CheckVoice();
+    	boolean bRemindChanged = CheckRemind();
+    	String strMess = "有未保存内容：";
+    	if(bTextChanged){
+    		strMess += "文本 ";
+    	}
+    	if(bVoiceChanged){
+    		strMess += "语音 ";
+    	}
+    	if(bRemindChanged){
+    		strMess += "提醒 ";
+    	}
+    	if(bTextChanged||bVoiceChanged||bRemindChanged){
+    		new AlertDialog.Builder(this)
+            //.setIcon(R.drawable.clock)
+            .setTitle("保存提示")
+            .setMessage(strMess)
+            .setPositiveButton("保存",
+             new DialogInterface.OnClickListener()
+            {
+              public void onClick(DialogInterface dialog, int whichButton)
+              {
+            	  m_SaveBT.performClick();
+              }
+            })
+            .setNegativeButton("不保存",new DialogInterface.OnClickListener(){
+				public void onClick(DialogInterface dialog, int i)
+				{
+					NoteWithYourMind.this.finish();
+				}
+			})
+			.setNeutralButton("取消", new DialogInterface.OnClickListener()
+            {
+              public void onClick(DialogInterface dialog, int whichButton)
+              {
+            	  dialog.cancel();
+              }
+            })
+            .show();
+    		bIsChanged = true;
+    	}
+    	return bIsChanged;
+	}
 	private void processEnableAlarm(View view)
 	{
 		if( null != m_clCRemindInfo )
@@ -1204,49 +1256,8 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 	}  
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if ((keyCode == KeyEvent.KEYCODE_BACK)) { 
-        	if(clBTStopRecord.isEnabled()){
-        		clBTStopRecord.performClick();
-        	}
-        	boolean bTextChanged = CheckText();
-        	boolean bVoiceChanged = CheckVoice();
-        	boolean bRemindChanged = CheckRemind();
-        	String strMess = "有未保存内容：";
-        	if(bTextChanged){
-        		strMess += "文本 ";
-        	}
-        	if(bVoiceChanged){
-        		strMess += "语音 ";
-        	}
-        	if(bRemindChanged){
-        		strMess += "提醒 ";
-        	}
-        	if(bTextChanged||bVoiceChanged||bRemindChanged){
-        		new AlertDialog.Builder(this)
-                //.setIcon(R.drawable.clock)
-                .setTitle("保存提示")
-                .setMessage(strMess)
-                .setPositiveButton("保存",
-                 new DialogInterface.OnClickListener()
-                {
-                  public void onClick(DialogInterface dialog, int whichButton)
-                  {
-                	  m_SaveBT.performClick();
-                  }
-                })
-                .setNegativeButton("不保存",new DialogInterface.OnClickListener(){
-					public void onClick(DialogInterface dialog, int i)
-					{
-						NoteWithYourMind.this.finish();
-					}
-				})
-				.setNeutralButton("取消", new DialogInterface.OnClickListener()
-                {
-                  public void onClick(DialogInterface dialog, int whichButton)
-                  {
-                	  dialog.cancel();
-                  }
-                })
-                .show();
+        	boolean bIsChanged = processBackKey(null);
+        	if(bIsChanged){
         		return true;
         	}
         } 

@@ -44,6 +44,17 @@ implements ListActivityCtrl, View.OnClickListener
 	private AlertDialog m_dlgSortTypeList;
 	private	EditText m_ETKeyword ;
 	private boolean m_bIsListInit = false;
+	
+	private static final int RequestCode_EditNote =		0x401;
+	protected void onActivityResult(int requestCode, int resultCode,  
+            Intent data){ 
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode){  
+			case RequestCode_EditNote:  
+				setIntent(data);
+				break;
+		}  
+	}  
 //	public void onNewIntent(Intent intent){
 //		setIntent(intent);
 //	}
@@ -69,7 +80,7 @@ implements ListActivityCtrl, View.OnClickListener
 		
 		ListView list = (ListView) findViewById(R.id.rootviewlist_list);
         m_toolBarLayout = findViewById(R.id.searchresultviewlist_toolbar);
-        m_NoteListUICtrl = new NoteListUICtrl(this, list, m_toolBarLayout, m_SearchParam);
+        m_NoteListUICtrl = new NoteListUICtrl(this, list, m_toolBarLayout, m_SearchParam, RequestCode_EditNote);
         m_NoteListUICtrl.initializeSource();
         m_bIsListInit = true;
            		
@@ -113,22 +124,19 @@ implements ListActivityCtrl, View.OnClickListener
 	public void onResume()
 	{
 		super.onResume();
-//		Intent extra = getIntent();
-//		if(extra!=null){
-//			int initListItemDBID = extra.getIntExtra(ExtraData_initListItemDBID, CommonDefine.g_int_Invalid_ID);
-//			if(initListItemDBID!=CommonDefine.g_int_Invalid_ID){
-//				m_NoteListUICtrl.updateListData(initListItemDBID);
-//			}else{
-				
-//			}
-//		}else{
+		Intent extra = getIntent();
+		int initListItemDBID = CommonDefine.g_int_Invalid_ID;
+		if(extra!=null){
+			initListItemDBID = extra.getIntExtra(ExtraData_initListItemDBID, CommonDefine.g_int_Invalid_ID);
+		}else{
 			
-//		}
+		}
 		if(m_bIsListInit){
 			m_bIsListInit = false;
 		}else{
-			m_NoteListUICtrl.updateListData(CommonDefine.g_int_Invalid_ID);
+			m_NoteListUICtrl.updateListData(initListItemDBID);
 		}
+		setIntent(null);
 	}
 	public void onDestroy()
 	{

@@ -26,6 +26,7 @@ public class FolderViewList extends Activity
 	private boolean m_bIsListInit = false;
 	private ListUICtrlParam  UICtrlParam;
 	private static final int RequestCode_NewNote =		0x202;
+	private static final int RequestCode_EditNote =		0x204;
 	/** Called when the activity is first created. */
 	
 	protected void onActivityResult(int requestCode, int resultCode,  
@@ -33,6 +34,7 @@ public class FolderViewList extends Activity
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode){  
 			case RequestCode_NewNote:  
+			case RequestCode_EditNote:
 //				setResult(RESULT_OK, i);  
 				setIntent(data);
 				break;
@@ -68,7 +70,7 @@ public class FolderViewList extends Activity
 		UICtrlParam.g_enListType = ListUICtrlParam.ListTypeEnum.ListType_NormalList;
 		UICtrlParam.g_int_PreID= m_iFolder_DBID;
 		
-        m_NoteListUICtrl = new NoteListUICtrl(this, list, m_toolBarLayout,UICtrlParam );
+        m_NoteListUICtrl = new NoteListUICtrl(this, list, m_toolBarLayout,UICtrlParam, RequestCode_EditNote );
         m_NoteListUICtrl.initializeSource();
         m_bIsListInit = true;
         

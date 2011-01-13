@@ -53,7 +53,7 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 	private boolean m_bIsListInit = false;
 	
 	private static final int RequestCode_NewNote =		0x201;
-	
+	private static final int RequestCode_EditNote =		0x203;
 	public void onNewIntent(Intent intent){
 		setIntent(intent);
 	}
@@ -70,7 +70,8 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
             Intent data){ 
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode){  
-			case RequestCode_NewNote:  
+			case RequestCode_NewNote:
+			case RequestCode_EditNote:
 //				setResult(RESULT_OK, i);  
 				setIntent(data);
 				break;
@@ -126,7 +127,7 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 		UICtrlParam.g_int_PreID= CMemoInfo.PreId_Root;
 		UICtrlParam.g_enSortType = ListUICtrlParam.ListSortTypeEnum.SortType_ForRootList;
 		
-        m_NoteListUICtrl = new NoteListUICtrl(this, list, m_toolBarLayout,UICtrlParam );
+        m_NoteListUICtrl = new NoteListUICtrl(this, list, m_toolBarLayout,UICtrlParam, RequestCode_EditNote );
         m_NoteListUICtrl.initializeSource();
         m_bIsListInit = true;
         

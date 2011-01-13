@@ -1122,9 +1122,7 @@ implements View.OnClickListener, MediaStatusControl, SDCardStatusChangedCtrl
 					intent.putExtra(FolderViewList.ExtraData_FolderDBID, clNoteInfo.iPreId);
 				}
 			}
-			if(m_ExtraData_OperationNoteKind == OperationNoteKindEnum.OperationNoteKind_New){
-				setResult(RESULT_OK, intent);  
-			}
+			setResult(RESULT_OK, intent);  
 			this.finish();	
 		}
 		

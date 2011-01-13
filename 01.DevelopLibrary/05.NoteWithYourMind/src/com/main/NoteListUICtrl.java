@@ -51,11 +51,13 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 	private View m_toolBarLayout;
 	public Activity m_sourceManager;
 	private NoteListArrayAdapter m_myAdapter;
+	private int m_requestEditNoteCode;
 //	private NoteListArrayAdapter  m_myArrayListAdapter;
 	
 	//private String m_strPassWord;
 
-	NoteListUICtrl(Activity sourceManager, ListView target, View toolBarLayout,ListUICtrlParam CtrlParam){
+	NoteListUICtrl(Activity sourceManager, ListView target, View toolBarLayout,
+			ListUICtrlParam CtrlParam, int requestEditNoteCode){
 		m_sourceManager = sourceManager;
 		m_targetList = target;
 		m_ListUICtrlParam = new ListUICtrlParam();
@@ -63,6 +65,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
 		m_toolBarLayout = toolBarLayout;
 		m_myAdapter = null;
 		m_clCNoteDBCtrl = CommonDefine.getNoteDBCtrl(sourceManager);
+		m_requestEditNoteCode = requestEditNoteCode;
 	}
 	
 	public void releaseSource(){
@@ -244,7 +247,7 @@ class NoteListUICtrl  implements View.OnClickListener, AdapterView.OnItemClickLi
         		if(!m_ListUICtrlParam.g_str_SearchKey.equals("")){
         			toNew.putExtra(NoteWithYourMind.ExtraData_HighLightWord, m_ListUICtrlParam.g_str_SearchKey);
         		}
-        		m_sourceManager.startActivity(toNew);
+        		m_sourceManager.startActivityForResult(toNew, m_requestEditNoteCode);
 			}else{
 				
 			}

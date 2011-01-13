@@ -10,8 +10,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 
-
-public class CNoteDBCtrl extends SQLiteOpenHelper {
+//SDSQLiteOpenHelper
+public class CNoteDBCtrl extends  SQLiteOpenHelper{
 
 	public static final String	KEY_id					= "_id";												
 	public static final String	KEY_preid				= "preid";											

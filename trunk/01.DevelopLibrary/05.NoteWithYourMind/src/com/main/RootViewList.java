@@ -145,7 +145,9 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
         clBTMemoMore_move.setOnClickListener(this);
         Button clBTMemoMore_SetPassword = (Button) findViewById(R.id.toolbar_more_dlg_setpassword);
         clBTMemoMore_SetPassword.setOnClickListener(this);
-        
+        Button clBTMemoMore_Export = (Button) findViewById(R.id.toolbar_more_dlg_export);
+        clBTMemoMore_Export.setOnClickListener(this);
+		
         ImageButton clBTMemoSearch = (ImageButton) findViewById(R.id.rootviewlist_toolbar_search);
         clBTMemoSearch.setOnClickListener(this);
 
@@ -210,6 +212,9 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 //			executeAnimation(m_vMoreAnim, R.anim.commentout, R.anim.commenthide, m_bIsCommnetDisplay_more);
 			m_NoteListUICtrl.processMoveClick(view);
 			break;
+		case R.id.toolbar_more_dlg_export:
+			processExportClick(view);
+			break;
 		case R.id.rootviewlist_toolbar_newfolder:
 			processNewFolderClick(view);
 			break;
@@ -260,7 +265,21 @@ implements OnTouchListener, ListActivityCtrl, View.OnClickListener
 		intent.putExtra(NoteWithYourMind.ExtraData_OperationPreID, CMemoInfo.PreId_Root);
 		startActivityForResult(intent, RequestCode_NewNote);
 	}
-	
+
+	private void processExportClick(View view){
+
+		boolean  bSDCardAvailable = false;
+		bSDCardAvailable = SDCardAccessor.isSDCardAvailable();
+
+		if( !bSDCardAvailable ){
+			Toast toast = Toast.makeText(RootViewList.this, "Î´¼ì²âµ½SD¿¨", Toast.LENGTH_SHORT);
+    		toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL, 0, 0 );
+    		toast.show();
+		}else{
+			Intent intent = new Intent(RootViewList.this, ExportView.class);
+			startActivity(intent);
+		}
+	}		
 	private void processNewFolderClick(View view){
 		PopUpNewFolderDlg();
 	}

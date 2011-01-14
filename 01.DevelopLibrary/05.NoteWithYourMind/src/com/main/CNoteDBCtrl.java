@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 
+//SQLiteOpenHelper
 //SDSQLiteOpenHelper
 public class CNoteDBCtrl extends  SQLiteOpenHelper{
 
@@ -40,16 +41,17 @@ public class CNoteDBCtrl extends  SQLiteOpenHelper{
 	
 	public static final String	KEY_isRing				= "isring";
 	public static final String	KEY_isVibrate			= "isvibrate";
+	public static final String	KEY_uuid				= "uuid";
 	
 	public static final String	KEY_rec_count_in_folder = "reccountinfolder";
 	// 数据库名称为data
-	private static final String	DB_NAME			= "NoteWithYourMind.db";
+	public static final String	DB_NAME			= "NoteWithYourMind.db";
 	
 	// 数据库表名
-	private static final String	DB_TABLE				= "Notes";
+	public static final String	DB_TABLE				= "Notes";
 	private static final String	DB_TABLE_PassWord		= "PassWord";
 	// 数据库版本
-	private static final int	DB_VERSION		= 4;
+	public static final int	DB_VERSION		= 5;
 	
 	private static final String	DB_CREATE		= "CREATE TABLE  if not exists " + DB_TABLE + " (" 
 												+ KEY_id 				+ " INTEGER PRIMARY KEY AUTOINCREMENT," 
@@ -74,6 +76,7 @@ public class CNoteDBCtrl extends  SQLiteOpenHelper{
 												+ KEY_sunday 			+ " INTERGER,"
 												+ KEY_isHaveAudioData	+ " INTERGER,"
 												+ KEY_audioDataName		+ " TEXT,"
+												+ KEY_uuid				+ " TEXT,"
 												+ KEY_isRing			+ " INTERGER,"
 												+ KEY_isVibrate			+ " INTERGER"
 												+ ")";
@@ -171,6 +174,11 @@ public class CNoteDBCtrl extends  SQLiteOpenHelper{
 		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_id+"=?", new String[]{String.valueOf(id)});
 	}
 	
+	public	Cursor	selectRecByuuid( String strUUID )
+	{
+		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_uuid+"=?", new String[]{strUUID});
+	}
+	
 	public	Cursor	getRemindInfo()
 	{
 		return	m_db.rawQuery("select * from "+DB_TABLE+" where "+KEY_isremind+"=? and "+KEY_isremindable+"=?", new String[]{String.valueOf(CMemoInfo.IsRemind_Yes),String.valueOf(CMemoInfo.IsRemind_Able_Yes)} );
@@ -239,6 +247,17 @@ public class CNoteDBCtrl extends  SQLiteOpenHelper{
 		initialValues.put(KEY_sunday, clCMemoInfo.m_Week[6]);
 		initialValues.put(KEY_isHaveAudioData, clCMemoInfo.iIsHaveAudioData);
 		initialValues.put(KEY_audioDataName, clCMemoInfo.strAudioFileName);
+		
+		if( clCMemoInfo.strUUID == null )
+		{
+			String logid = java.util.UUID.randomUUID().toString();
+			initialValues.put(KEY_uuid, logid);
+		}
+		else
+		{
+			initialValues.put(KEY_uuid, clCMemoInfo.strUUID );
+		}
+
 		
 		initialValues.put(KEY_isRing, clCMemoInfo.iRing);
 		initialValues.put(KEY_isVibrate, clCMemoInfo.iVibrate);
@@ -360,6 +379,12 @@ public class CNoteDBCtrl extends  SQLiteOpenHelper{
 			{
 				cv.put(KEY_password, clCMemoInfo.strPassword);
 			}
+			
+			if ( null != clCMemoInfo.strUUID )
+			{
+				cv.put(KEY_uuid, clCMemoInfo.strUUID);
+			}
+					
 			if ( -1 != clCMemoInfo.iIsEncode)
 			{
 				cv.put(KEY_isencode, clCMemoInfo.iIsEncode.toString());

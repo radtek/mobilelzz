@@ -56,6 +56,7 @@ public class CMemoInfo {
 	Integer		iRing;
 	Integer		iIsHaveAudioData;
 	String		strAudioFileName;
+	String		strUUID;
 	CMemoInfo()
 	{
 		iId				=	-1;
@@ -80,6 +81,7 @@ public class CMemoInfo {
 		}
 		iIsHaveAudioData = IsHaveAudioData_Invalid;
 		strAudioFileName = null;
+		strUUID	=	null;
 	}
 	
 	static	String	getTimeForListItem( long _lTime )

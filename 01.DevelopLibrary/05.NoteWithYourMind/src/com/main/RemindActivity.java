@@ -269,6 +269,8 @@ public class RemindActivity extends Activity	implements View.OnClickListener
     private	void	setInput()
     {
 //    	SDCardAccessor.getMyFile();
+ //   	SDCardAccessor.Import(this, CNoteDBCtrl.DB_NAME);
+    	 
     	
       Intent iExtraData = getIntent();
       CRemindInfo	clTemp	=	(CRemindInfo)iExtraData.getSerializableExtra(NoteWithYourMind.ExtraData_RemindSetting);

@@ -479,6 +479,9 @@ class ConvertCursorToMemoInfo {
 
 		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_isVibrate );
 		clCMemoInfo.iVibrate =	cursor.getInt( iColumn );
+		
+		iColumn		=	cursor.getColumnIndex( CNoteDBCtrl.KEY_uuid );
+		clCMemoInfo.strUUID =	cursor.getString( iColumn );
 							
 	}	
 
